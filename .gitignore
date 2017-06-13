@@ -5,7 +5,7 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
-*.dll
+# *.dll  decided to keep Windows .dll with apps to prevent DLL HELL.
 
 # Compiled Static libraries
 *.a
