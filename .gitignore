@@ -3,7 +3,7 @@
 *.obj
 
 # Compiled Dynamic libraries
-*.so
+# *.so   decided to keep linux .so with apps so user doesn't have to manually install them.
 *.dylib
 # *.dll  decided to keep Windows .dll with apps to prevent DLL HELL.
 
