@@ -64,7 +64,7 @@ Edit the dub.sdl (add the dependencies and sourceFiles).  Just copy a previous o
 
 
 +/
-	
+
 /+
 Executables only look in certain directories for a DLL. Windows will search the following
 locations in order for your DLL:
@@ -264,23 +264,24 @@ void main(char[][] args)
     {
 	    string relDmdPath = r"./../Linux/dmd-2.071.0/linux/bin64:./../../Linux/dmd-2.071.0/linux/bin64:";
 	    string relDubPath = r"./../Windows/dub:./../../Windows/dub:";
+      string    dllPath = r"./../../linux/dynamiclibraries:";
     }
     else version(Windows)
     {
 	    //pragma(lib, r".\..\Windows\Windows Kits\10\Lib\10.0.10150.0\ucrt\x64");  // not allowed as statement
 	    string relDmdPath = r".\..\Windows\D\dmd2\windows\bin;.\..\..\Windows\D\dmd2\windows\bin;";
 	    string relDubPath = r".\..\Windows\dub;.\..\..\Windows\dub;";
-		string   dllPath  = r".\..\..\Windows\dynamiclibraries;";    // needed for glfw3.dll
-		dllPath = r".\..\..\Windows\VisualStudio\VC\redist\x64\Microsoft.VC140.CRT;" ~ dllPath;
+		  string   dllPath  = r".\..\..\Windows\dynamiclibraries;";    // needed for glfw3.dll
+		  dllPath = r".\..\..\Windows\VisualStudio\VC\redist\x64\Microsoft.VC140.CRT;" ~ dllPath;
 
 		/+ Microsoft quote "LIB, if defined. The LINK tools uses the LIB path when
 		   searching for an object or library (example, libucrt.lib) +/
 
 	    environment["LIB"] = r".\..\..\Windows\Windows Kits\10\Lib\10.0.14393.0\ucrt\x64";
-		
-		// The value of DFLAGS environment variable  is treated as if it were 
+
+		// The value of DFLAGS environment variable  is treated as if it were
 		// appended to the command line to dmd.exe.
-		
+
 		environment["DFLAGS"] = r"-I..\"; // to common import modules
 
 		//set LINKCMD64=C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\amd64\link.ex
@@ -301,8 +302,9 @@ void main(char[][] args)
         version(Windows)
             envPath = relDmdPath ~ relDubPath ~ dllPath ~ envPath;
         else
-            envPath = relDmdPath ~ relDubPath ~ envPath;
-		writeln("new path = ", envPath);
+            envPath = relDmdPath ~ relDubPath ~ dllPath ~ envPath;  // maybe call these soPath
+
+		  writeln("new path = ", envPath);
 
 	    environment["PATH"] = envPath;  // Update with new DMD and DUB paths
 
