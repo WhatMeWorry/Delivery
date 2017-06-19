@@ -265,6 +265,10 @@ void main(char[][] args)
 	    string relDmdPath = r"./../Linux/dmd-2.071.0/linux/bin64:./../../Linux/dmd-2.071.0/linux/bin64:";
 	    string relDubPath = r"./../Windows/dub:./../../Windows/dub:";
       string    dllPath = r"./../../linux/dynamiclibraries:";
+
+      //LD_LIBRARY_PATH=/usr/local/lib
+      //export LD_LIBRARY_PATH
+      environment["LD_LIBRARY_PATH"] = r"./../../linux/dynamiclibraries:";
     }
     else version(Windows)
     {
