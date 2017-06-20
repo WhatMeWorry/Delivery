@@ -4,7 +4,7 @@
 
 # Compiled Dynamic libraries
 # *.so   decided to keep linux .so with apps so user doesn't have to manually install them.
-*.dylib
+# *.dylib packing dynamic libaries with the apps
 # *.dll  decided to keep Windows .dll with apps to prevent DLL HELL.
 
 # Compiled Static libraries
