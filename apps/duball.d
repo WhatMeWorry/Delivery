@@ -180,7 +180,7 @@ auto splitUpPaths(string envPath)
 {
     version(linux)
         auto paths = std.algorithm.iteration.splitter(envPath, ':');  // Linux uses colon
-    else version(Windows)
+    else version(Win64)
         auto paths = std.algorithm.iteration.splitter(envPath, ';');  // Windows uses semi-colons;
     else version(OSX)
         auto paths = std.algorithm.iteration.splitter(envPath, ':');  // MacOS uses colon
@@ -207,7 +207,7 @@ void main(char[][] args)
     }
     else version(Windows)
     {
-        if (((os != OS.win32) & (os != OS.win64)) | (progName != r"..\duball.exe"))
+        if ((os != OS.win64) | (progName != r"..\duball.exe"))
            writeln("FAILURE: os = ", os, "  progName = ", progName);
     }
     else version(OSX)
@@ -264,19 +264,18 @@ void main(char[][] args)
     {
 	    string relDmdPath = r"./../Linux/dmd-2.071.0/linux/bin64:./../../Linux/dmd-2.071.0/linux/bin64:";
 	    string relDubPath = r"./../Windows/dub:./../../Windows/dub:";
-      string    dllPath = r"./../../linux/dynamiclibraries:";
+        string    dllPath = r"./../../linux/dynamiclibraries:";
 
       //LD_LIBRARY_PATH=/usr/local/lib
       //export LD_LIBRARY_PATH
       environment["LD_LIBRARY_PATH"] = r"./../../linux/dynamiclibraries:";
-    }
-    else version(Windows)
+    } else version(Win64)
     {
 	    //pragma(lib, r".\..\Windows\Windows Kits\10\Lib\10.0.10150.0\ucrt\x64");  // not allowed as statement
 	    string relDmdPath = r".\..\Windows\D\dmd2\windows\bin;.\..\..\Windows\D\dmd2\windows\bin;";
 	    string relDubPath = r".\..\Windows\dub;.\..\..\Windows\dub;";
-		  string   dllPath  = r".\..\..\Windows\dynamiclibraries;";    // needed for glfw3.dll
-		  dllPath = r".\..\..\Windows\VisualStudio\VC\redist\x64\Microsoft.VC140.CRT;" ~ dllPath;
+        string   dllPath  = r".\..\..\windows\dynamiclibraries;";    // needed for glfw3.dll
+        dllPath = r".\..\..\Windows\VisualStudio\VC\redist\x64\Microsoft.VC140.CRT;" ~ dllPath;
 
 		/+ Microsoft quote "LIB, if defined. The LINK tools uses the LIB path when
 		   searching for an object or library (example, libucrt.lib) +/
@@ -286,17 +285,18 @@ void main(char[][] args)
 		// The value of DFLAGS environment variable  is treated as if it were
 		// appended to the command line to dmd.exe.
 
-		environment["DFLAGS"] = r"-I..\"; // to common import modules
+		environment["DFLAGS"] = `-I..\`;
 
-		//set LINKCMD64=C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\amd64\link.ex
-    }
-    else version(OSX)
+		// set LINKCMD64=C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\amd64\link.ex
+	} else version(OSX)
     {
 		string relDmdPath = r"./../MacOS/D/osx/bin:./../../MacOS/D/osx/bin:";
-	  string relDubPath = r"./../MacOS/dub:./../../MacOS/dub:" ~ r"./../../MacOS/dynamiclibraries:";
-    // Dynamic (.dylib) libs can be placed at a nonstandard location in your file system, but only in
-    // one of these environment variables: LD_LIBRARY_PATH, DYLD_FALLBACK_LIBRARY_PATH, or LD_LIBRARY_PATH
+        string relDubPath = r"./../MacOS/dub:./../../MacOS/dub:" ~ r"./../../MacOS/dynamiclibraries:";
+        // Dynamic (.dylib) libs can be placed at a nonstandard location in your file system, but only in
+        // one of these environment variables: LD_LIBRARY_PATH, DYLD_FALLBACK_LIBRARY_PATH, or LD_LIBRARY_PATH
+        string  dllPath  = r"./../../macos/dynamiclibraries:"; 
 
+         environment["LD_LIBRARY_PATH"] = r"./../../macos/dynamiclibraries:";       
     }
 
 

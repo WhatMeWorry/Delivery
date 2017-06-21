@@ -8,6 +8,7 @@ import std.stdio; //  : writeln, writefln;
 import derelict.opengl3.gl3;
 import derelict.glfw3.glfw3;
 import std.process;
+//import derelict_libraries;
 
 /+
 There's a specific mapping between OpenGL version and supported GLSL version:
@@ -48,7 +49,7 @@ void main(string[] argv)
     // inseparably linked, the object pointer is used as both a context and window handle.
 
 
-    auto window = glfwCreateWindow(800, 600, "Shaders", null, null);
+    auto window = glfwCreateWindow(800, 600, "not used", null, null);
     if(!window)
         throw new Exception("Window Creation Failed.");
 

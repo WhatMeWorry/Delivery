@@ -89,6 +89,9 @@ ShouldThrow myMissingSymCallBackASSIMP3( string symbolName )
 //auto load_libraries()
 void load_libraries()
 {
+
+    writeln("ENTERING LOAD_LIBRARIES");
+    
     DerelictGLFW3.load();   // must be loaded before OpenGL so a context can be created
 
 	writeln("GLFW3 library loaded");
@@ -103,12 +106,14 @@ void load_libraries()
     // Set all the required options for GLFW
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);    // Lenovo Tiny PCs are at openGL 4.2    Lian Li PC-33B is OpenGL 4.4
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);    // iMac 27" are at opengl 4.1
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
     // Create an OpenGL context with another library (in this case, GLFW 3)
 
-    auto window = glfwCreateWindow(800, 600, "Context Window", null, null);
+    auto window = glfwCreateWindow(800, 600, "Temp Context Window", null, null);
+
+    writeln("window = ", window);
 
     if (!window)
         throw new Exception("Window Creation Failed.");	
