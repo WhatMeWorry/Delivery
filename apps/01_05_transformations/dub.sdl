@@ -23,6 +23,7 @@ dependency "derelict-assimp3" version="~>1.3.0"
 // Or you could copy it around into the source directory of any project that 
 // uses it and dub will compile it automatically
 
+
 sourceFiles "../common/package.d"
 sourceFiles "../common/camera.d"
 sourceFiles "../common/cameraModule.d"
@@ -37,5 +38,8 @@ sourceFiles "../common/timer.d"
 sourceFiles "../common/vertex_data.d"
 sourceFiles "../common/mesh.d"
 sourceFiles "../common/model.d"
+
+
+//sourceFiles "../common/"
 
 targetPath "./bin"
