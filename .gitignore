@@ -11,6 +11,9 @@
 *.a
 *.lib
 
+# Ignore contents of all `bin` directories.  That is, store no executables.
+/apps/*/bin/*
+
 # Executables
 *.exe
 
