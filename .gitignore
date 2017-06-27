@@ -12,6 +12,7 @@
 *.lib
 
 # Ignore contents of all `bin` directories.  That is, store no executables.
+!/apps/*/bin
 /apps/*/bin/*
 
 # Executables  (superceded by more generic /apps/*/bin/*)
