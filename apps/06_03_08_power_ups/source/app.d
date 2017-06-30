@@ -82,8 +82,36 @@ void main(string[] argv)
     load_libraries();
 	
     auto winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_08_power_ups", null, null);
+
+    // The created window, framebuffer and context may differ from what you requested. Query the actual values
+    // by using glfwGetWindowSize, and glfwGetFramebufferSize
+
+
+    writeln("breakout.width = ", breakout.width);
+    writeln("breakout.height = ", breakout.height);
+
+
+
+    int fbw;
+    int fbh;
+    glfwGetFramebufferSize(winMain, &fbw, &fbh);
+
+    writeln("Framebuffer size width = ", fbw);
+    writeln("Framebuffer size height = ", fbh);
+
+    int ww;
+    int wh;
+    glfwGetWindowSize(winMain, &ww, &wh);
+
+    writeln("Window size width = ", ww);
+    writeln("Window size height = ", wh);
+
+
+
 		
     glfwMakeContextCurrent(winMain); 
+
+    showMonitorVideoMode();
 
     // you must set the callbacks after creating the window
     glfwSetKeyCallback(winMain, &onInternalKeyEvent);	
@@ -92,8 +120,17 @@ void main(string[] argv)
     glfwSetInputMode(winMain, GLFW_CURSOR, GLFW_CURSOR_NORMAL);	
 	
     // Define the viewport dimensions
-    glViewport(0, 0, breakout.width, breakout.height);
+    glViewport(0, 0, breakout.width, breakout.height);  // replaced with glfwGetFramebufferSize()
+                                                          // for Mac OS.
 
+    int w;
+    int h;
+    glfwGetFramebufferSize(winMain, &w, &h);
+
+    //glViewport(0, 0, w, h);
+
+    writeln("width = ", breakout.width, "  ", w);
+    writeln("heigh = ", breakout.height, "  ", h);
     // Set OpenGL options
     glEnable(GL_CULL_FACE);
     glEnable(GL_BLEND);

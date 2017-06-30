@@ -36,4 +36,5 @@ sourceFiles "../common/vertex_data.d"
 sourceFiles "../common/mesh.d"
 sourceFiles "../common/model.d"
 
+
 targetPath "./bin"

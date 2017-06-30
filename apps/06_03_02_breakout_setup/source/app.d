@@ -19,10 +19,10 @@ import derelict.freeimage.freeimage;
 import derelict.opengl3.gl3;
 import derelict.glfw3.glfw3;
 
-enum bool particulate = true;
-enum bool effects     = true;
-enum bool powUps      = true;
-enum bool audio       = true;
+enum bool particulate = false;
+enum bool effects     = false;
+enum bool powUps      = false;
+enum bool audio       = false;
 enum bool screenText  = false;
 
 SoundSystem soundSys;  // Structure containing audio functionality

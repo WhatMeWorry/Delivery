@@ -18,8 +18,8 @@ import derelict.glfw3.glfw3;
 
 enum bool particulate = false;
 enum bool effects     = false;
-enum bool powUps      = true;
-enum bool audio       = true;
+enum bool powUps      = false;
+enum bool audio       = false;
 enum bool screenText  = false;
 
 SoundSystem soundSys;  // Structure containing audio functionality
@@ -56,7 +56,13 @@ void main(string[] argv)
     glfwSetInputMode(winMain, GLFW_CURSOR, GLFW_CURSOR_NORMAL);	
 	
     // Define the viewport dimensions
-    glViewport(0, 0, breakout.width, breakout.height);
+    //glViewport(0, 0, breakout.width, breakout.height);  // replaced with glfwGetFramebufferSize()
+                                                          // for Mac OS.
+
+    int w;
+    int h;
+    glfwGetFramebufferSize(winMain, &w, &h);
+    glViewport(0, 0, w, h);
 
     // Set OpenGL options
     glEnable(GL_CULL_FACE);
