@@ -38,6 +38,7 @@ sourceFiles "../common/timer.d"
 sourceFiles "../common/vertex_data.d"
 sourceFiles "../common/mesh.d"
 sourceFiles "../common/model.d"
+sourceFiles "../common/monitor.d"
 
 
 //sourceFiles "../common/"
