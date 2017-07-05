@@ -40,7 +40,15 @@ void main(char[][] args)
                                Config.none,
                                null);
 					+/
-                    auto pid = spawnShell(`..\duball.exe run --arch=x86_64 --force`);
+                    version(Windows)  
+                    {
+                        auto pid = spawnShell(`..\duball.exe run --arch=x86_64 --force`);    
+                    } 
+                    else  // OSX or Linux
+                    {
+                        auto pid = spawnShell(`../duball run --arch=x86_64 --force`);
+                    }          
+                    
                     wait(pid);
                     scope(exit)
                     {
