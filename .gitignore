@@ -2,6 +2,9 @@
 *.o
 *.obj
 
+# Allow Wavefront .obj geometry definition files 
+!/models/*.obj  
+
 # Compiled Dynamic libraries
 # *.so   decided to keep linux .so with apps so user doesn't have to manually install them.
 # *.dylib packing dynamic libaries with the apps
