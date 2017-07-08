@@ -23,7 +23,7 @@ void main(string[] argv)
 {
 	load_libraries();
 	
-	auto winMain = glfwCreateWindow(width, height, "Coordinate System 3D Rotating Cube", null, null);
+	auto winMain = glfwCreateWindow(width, height, "01_06_coord_systems_rotate", null, null);
 	
 	glfwMakeContextCurrent(winMain); 
 	

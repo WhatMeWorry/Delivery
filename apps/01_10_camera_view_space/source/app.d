@@ -26,7 +26,7 @@ void main(string[] argv)
 {
 	load_libraries();
 	
-	auto winMain = glfwCreateWindow(width, height, "Camera View Space", null, null);
+	auto winMain = glfwCreateWindow(width, height, "01_10_camera_view_space", null, null);
 	
 	glfwMakeContextCurrent(winMain); 
  

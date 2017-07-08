@@ -41,7 +41,7 @@ void do_movement(Event event)
     // Camera controls
     GLfloat magnify = 10; 	
     //if (keys[GLFW_KEY_W])
-	writeln("INSIDE do_movement ================================================================");
+	
     if (event.keyboard.key == Key.w)	
         camera.ProcessKeyboard(Camera_Movement.FORWARD, (deltaTime * magnify));
     if (event.keyboard.key == Key.s)
@@ -131,7 +131,7 @@ void main(string[] argv)
     //auto winMain = load_libraries();
 	load_libraries();
 	
-	auto winMain = glfwCreateWindow(800, 600, "02_01_Lighting_Colors", null, null);
+	auto winMain = glfwCreateWindow(800, 600, "02_01_lighting_colors", null, null);
 	
 	glfwMakeContextCurrent(winMain); 
  

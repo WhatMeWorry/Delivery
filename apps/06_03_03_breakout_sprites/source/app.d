@@ -31,7 +31,7 @@ void main(string[] argv)
 	
     load_libraries();
 	
-    auto winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_03_render_sprites", null, null);
+    auto winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_03_breakout_sprites", null, null);
 		
     glfwMakeContextCurrent(winMain); 
 

@@ -2,7 +2,7 @@
 
 module runall;
 
-import std.file;
+import std.file : isDir, getcwd, dirEntries, SpanMode, chdir;
 import std.stdio;
 import std.algorithm.comparison : cmp;
 import std.process : Config, spawnProcess, wait, spawnShell;

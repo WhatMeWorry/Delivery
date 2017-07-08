@@ -46,7 +46,7 @@ void main(string[] argv)
 	
     load_libraries();
 	
-    auto winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_05_03_collision_resolution", null, null);
+    auto winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_05_03_collide_resolution", null, null);
 		
     glfwMakeContextCurrent(winMain); 
 

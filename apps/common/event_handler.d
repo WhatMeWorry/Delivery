@@ -214,16 +214,16 @@ struct Cursor
 static this() 
 {
     // the beginning operations of the module
-    //maxSize = 24;
-    	
-	writeln("queue = ", queue);
+
+   	writeln("maxSize of even queue = ", maxSize);
+	//writeln("queue = ", queue);
 }
 
 static ~this() 
 {
     // the final operations of the module
-    writeln("maxSize = ", maxSize);	 // don't see it, if Ctrl^C in console
-                                     // see it, if close App Window	
+    writeln("Inside static ~this() of module ", __MODULE__); // don't see it, if Ctrl^C in console
+                                                             // see it, if close App Window normally	
 }
 
 
@@ -301,6 +301,16 @@ Degenerate Case 2: Queue is full. In this case, E(nter) will be "immediately beh
 
 
 +/  
+
+class TryException : Exception
+{
+    this(string msg, string file = __FILE__, size_t line = __LINE__) 
+    {
+        super(msg, file, line);
+    }
+}
+
+
  
 bool isDirectlyBehind(long first, long second)
 {
@@ -366,7 +376,7 @@ struct CircularQueue
 	}		
 }
 
-immutable uint maxSize = 32;
+immutable uint maxSize = 9;
 
 CircularQueue queue;
 	
@@ -408,8 +418,9 @@ extern(C) void onKeyEvent(GLFWwindow* window, int key, int scancode, int action,
             //writeln("queue is full");	
         }			
 	}
-	catch
+	catch(Exception e)
 	{
+        //throw new TryException("The try block failed: ");
     }
 }
 
@@ -433,8 +444,9 @@ extern(C) void onCursorEnterLeave(GLFWwindow* window, int entered) nothrow
             //writeln("queue is full");
         }			
     }
-	catch
+	catch(Exception e)
 	{
+        // how to handle e?    
     }	
 }
  
@@ -457,7 +469,7 @@ extern(C) void onMouseButton(GLFWwindow* window, int button, int action, int mod
 			//writeln("cursorState = ", queue.eventIn.cursorState, " entered at = ", queue.enter-1);
         }						
     }
-	catch
+	catch(Exception e)
 	{
     }	
 }	
@@ -489,7 +501,7 @@ extern(C) void onMouseButton(GLFWwindow* window, int button, int action, int mod
 			//writeln("cursorState = ", queue.eventIn.cursorState, " entered at = ", queue.enter-1);
         }						
     }
-	catch
+	catch(Exception e)
 	{
     }	
 }	
@@ -509,7 +521,7 @@ extern(C) void onFrameBufferResize(GLFWwindow* window, int width, int height) no
 		
         queue.eventIn.frameBufferSize.width = width;
         queue.eventIn.frameBufferSize.height = height;
-		    //writeln("Before Q Add  leave = ", queue.leave, "  enter = ", queue.enter);		
+        //writeln("Before Q Add  leave = ", queue.leave, "  enter = ", queue.enter);		
         if (queue.enterOrLeave(Motion.Entering))
 		{
 		    //writeln("After Q Add  leave = ", queue.leave, "  enter = ", queue.enter);		
@@ -519,7 +531,7 @@ extern(C) void onFrameBufferResize(GLFWwindow* window, int width, int height) no
             //writeln("============= QUEUE NOT ADDED TO ===============");
 		}		
     }
-	catch
+	catch(Exception e)
 	{
     }	
 }	
@@ -548,10 +560,13 @@ void handleEvent(GLFWwindow* window)
 		{
             //writeln("frameBufferSize Event = ");
             //glfwSetWindowSize(window, eve.frameBufferSize.width, eve.frameBufferSize.height);   
+            writeln("eve.frameBufferSize.width ", eve.frameBufferSize.width);
+            writeln("eve.frameBufferSize.height ", eve.frameBufferSize.height);
+            writeln("Before glViewport");
             glViewport(0, 0, eve.frameBufferSize.width, eve.frameBufferSize.height);
 		    //writeln("leave = ", queue.leave);
 		    //writeln("enter = ", queue.enter);		
-			//writeAndPause("pause");			
+			writeAndPause("pause");			
         }		
     }
     else

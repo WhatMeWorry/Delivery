@@ -58,7 +58,7 @@ void main(string[] argv)
 {
 	load_libraries();
 	
-	auto winMain = glfwCreateWindow(width, height, "Camera View Space Walk Around", null, null);
+	auto winMain = glfwCreateWindow(width, height, "01_10_walk_around", null, null);
 	
 	glfwMakeContextCurrent(winMain); 
  

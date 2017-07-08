@@ -20,7 +20,7 @@ void main(string[] argv)
 {
 	load_libraries();
 	
-	auto winMain = glfwCreateWindow(800, 600, "Transformations", null, null);
+	auto winMain = glfwCreateWindow(800, 600, "01_05_transformations", null, null);
 	
 	glfwMakeContextCurrent(winMain); 
 	

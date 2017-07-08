@@ -139,5 +139,5 @@ void main(string[] argv)
 
     glfwDestroyWindow(window); // The window contest is only need for the .reload() funcion.
 
-    executeShell("pause");
+    //executeShell("pause");
 }

@@ -14,8 +14,8 @@
 # Ignore contents of all `bin` directories.  That is, store no executables.
 /apps/*/bin/*
 
-# Executables  (superceded by more generic /apps/*/bin/*)
-# *.exe
+# Executables  (Linux and Mac OS handled by more generic /apps/*/bin/*)
+*.exe
 
 # DUB
 .dub

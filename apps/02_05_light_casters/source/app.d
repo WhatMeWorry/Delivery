@@ -108,7 +108,7 @@ void main(string[] argv)
  
     load_libraries();
 	
-    auto winMain = glfwCreateWindow(800, 600, "02_05_lighting_casters", null, null);
+    auto winMain = glfwCreateWindow(800, 600, "02_05_light_casters", null, null);
 	
     glfwMakeContextCurrent(winMain); 
 	

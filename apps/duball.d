@@ -7,8 +7,9 @@ module duball;
 
 // We are using Visual Studio 2015 which is presently the most current
 
-version(Windows)
-    pragma(lib, r".\..\Windows\Windows Kits\10\Lib\10.0.14393.0\ucrt\x64\libucrt");
+//version(Windows)
+    //pragma(lib, `.\..\Windows\Windows Kits\10\Lib\10.0.14393.0\ucrt\x64\libucrt`);
+    //pragma(lib, `C:\Program Files (x86)\Windows Kits\10\Lib\10.0.14393.0\ucrt\x64\libucrt.lib`);
 
 // Procedure for using this tool to create a new project
 /+
@@ -256,7 +257,7 @@ void main(char[][] args)
 
     string envPath = environment["PATH"];  // get the environment variable PATH.
 
-    writeln(" The environment variable $PATH on this machine is: ", envPath);
+    //writeln(" The environment variable $PATH on this machine is: ", envPath);
 
     auto paths = splitUpPaths(envPath);
 
@@ -302,18 +303,18 @@ void main(char[][] args)
 
 	if ((!canFind(envPath, relDmdPath)) | (!canFind(envPath, relDubPath)) | (!canFind(envPath, dllPath)))
 	{
-	    writeln("CANT FIND PATHS ===========================");
+	    //writeln("CANT FIND PATHS ===========================");
         version(Windows)
             envPath = relDmdPath ~ relDubPath ~ dllPath ~ envPath;
         else
             envPath = relDmdPath ~ relDubPath ~ dllPath ~ envPath;  // maybe call these soPath
 
-		  writeln("new path = ", envPath);
+		//writeln("new path = ", envPath);
 
 	    environment["PATH"] = envPath;  // Update with new DMD and DUB paths
 
 		envPath = environment["PATH"];    // get the environment variable PATH.
-		writeln("added new paths = ", envPath);
+		//writeln("added new paths = ", envPath);
     }
 
 
@@ -325,9 +326,12 @@ void main(char[][] args)
 
     paths = splitUpPaths(envPath);
 
-	writeln("\n","The PATH env variable now has paths:");
+	//writeln("\n","The PATH env variable now has paths:");
     foreach(path; paths)
-        writeln("   ",path);
+    {
+        //writeln("   ",path);
+    }
+     
 
     // auto res = execute(["dub", "help"]);
     // writeln("after dub", res.output);

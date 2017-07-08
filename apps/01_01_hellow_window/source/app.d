@@ -45,7 +45,7 @@ void main(char[][] args)
 
 	load_libraries();
 
-    auto window = glfwCreateWindow(width, height, "Hello Window", null, null);
+    auto window = glfwCreateWindow(width, height, "01_01_hello_window", null, null);
     glfwMakeContextCurrent(window);
 
     // Game loop

@@ -24,7 +24,7 @@ void main(string[] argv)
 {
 	load_libraries();
 	
-	auto winMain = glfwCreateWindow(width, height, "Coordinate Systems 3D", null, null);
+	auto winMain = glfwCreateWindow(width, height, "01_06_coord_systems_3d", null, null);
 	
 	glfwMakeContextCurrent(winMain); 
 

@@ -133,7 +133,7 @@ void main(string[] argv)
     //auto winMain = load_libraries();
 	load_libraries();
 	
-	auto winMain = glfwCreateWindow(800, 600, "Camera View Space Movement Speed", null, null);
+	auto winMain = glfwCreateWindow(800, 600, "01_10_movement_speed", null, null);
 	
 	glfwMakeContextCurrent(winMain); 
  

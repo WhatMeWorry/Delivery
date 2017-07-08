@@ -18,7 +18,7 @@ void main(string[] argv)
 {
 	load_libraries();
 	
-	auto winMain = glfwCreateWindow(800, 600, "Textures", null, null);
+	auto winMain = glfwCreateWindow(800, 600, "01_04_textures", null, null);
 	
 	glfwMakeContextCurrent(winMain); 
 	
