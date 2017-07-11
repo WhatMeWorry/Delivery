@@ -81,8 +81,15 @@ alias lengthInBytes    = arrayByteSize;
 void writeAndPause(string s)
 {
     writeln(s);
-    writeln("--- Press any key to continue ---");
-    executeShell("pause");
+    version(Windows)
+    {                                   // pause command prints out
+        executeShell("pause");          // "Press any key to continue..."
+    }
+    else // Mac OS or Linux
+    {
+        writeln("Press any key to continue...");
+        executeShell(`read -n1 -r`);    // -p option did not work
+    }
 }
 
 
