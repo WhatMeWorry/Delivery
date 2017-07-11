@@ -6,6 +6,7 @@ import std.file : isDir, getcwd, dirEntries, SpanMode, chdir;
 import std.stdio;
 import std.algorithm.comparison : cmp;
 import std.process : Config, spawnProcess, wait, spawnShell;
+import std.regex: regex, matchFirst;
 
 void main(char[][] args)
 {
@@ -14,7 +15,10 @@ void main(char[][] args)
     foreach (string i; dirEntries("", SpanMode.shallow))
     {
         writeln(i);
-        if (isDir(i))
+
+        immutable auto m = matchFirst(i, regex(`^\d\d_`));
+
+        if (isDir(i) && !m.empty)   // must be a directory with name begining with: xx_ where x = [0..9]
         {
             writeln("Directory: ", i);
             //string binDir = i ~ `\source`;
