@@ -16,7 +16,7 @@ void main(char[][] args)
     {
         writeln(i);
 
-        immutable auto m = matchFirst(i, regex(`^\d\d_`));
+        auto m = matchFirst(i, regex(`^\d\d_`));
 
         if (isDir(i) && !m.empty)   // must be a directory with name begining with: xx_ where x = [0..9]
         {
