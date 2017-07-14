@@ -229,7 +229,7 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
 
         glfwPollEvents();  // Check if any events have been activiated (key pressed, mouse
                            // moved etc.) and call corresponding response functions 
-						   
+        						   
         Event even;						   
 		if (getNextEvent(winMain, even))
         {

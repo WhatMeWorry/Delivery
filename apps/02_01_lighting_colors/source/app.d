@@ -85,8 +85,11 @@ void moveCamera(Event event)
 
 extern(C) void onWindowResize(GLFWwindow* window, int width, int height) nothrow
 {
-    glfwSetWindowSize(window, width, height);   
-    glViewport(0, 0, width, height);
+    //glfwSetWindowSize(window, width, height);
+    //glViewport(0, 0, width, height);
+    int pixelWidth, pixelHeight;
+    glfwGetFramebufferSize(window, &pixelWidth, &pixelHeight);  
+    glViewport(0, 0, pixelWidth, pixelHeight);
 	//writeln("Inside onWindowResize");
 }
 
@@ -140,7 +143,9 @@ void main(string[] argv)
             glfwSetKeyCallback(winMain, &onKeyEvent);
       glfwSetCursorPosCallback(winMain, &onCursorPosition);
      glfwSetWindowSizeCallback(winMain, &onWindowResize);
+glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     glfwSetCursorEnterCallback(winMain, &onCursorEnterLeave);  // triggered when cursor enters or leaves the window
+
 
     Shader[] lightingShaders =
     [
@@ -160,7 +165,7 @@ void main(string[] argv)
     writeln("lampShader = ", lampShader);
 
 	// Define the viewport dimensions
-    glViewport(0, 0, width, height);
+    //glViewport(0, 0, width, height);
 	
     // OpenGL options
     glEnable(GL_DEPTH_TEST);	
@@ -214,7 +219,6 @@ void main(string[] argv)
 
         glfwPollEvents();  // Check if any events have been activiated (key pressed, mouse
                            // moved etc.) and call corresponding response functions 
-
         Event event;						   
         if (getNextEvent(winMain, event))
         {
@@ -234,8 +238,7 @@ void main(string[] argv)
             {			
                 processMouse(event.cursor.position.x, event.cursor.position.y);
             }							
-        }						   
-						   
+        }						   			   
 
 
         // Clear the colorbuffer

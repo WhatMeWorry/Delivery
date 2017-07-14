@@ -269,7 +269,7 @@ enter = 1
 
 Main Algorithm:
 
-for entering the queue (producer)
+for entering the queue (producing)
 WRITE (on current E index value), then advance index E
 for leaving the queue (consuming)
 advance index L, then READ
@@ -376,9 +376,30 @@ struct CircularQueue
 	}		
 }
 
-immutable uint maxSize = 9;
+immutable uint maxSize = 1024;
 
 CircularQueue queue;
+
+//===================================== ON Events ========================================
+
+
+// Trigger             GLFW Activation
+/+   
+onKeyEvent           glfwSetKeyCallback
+onCursorEnterLeave   glfwSetCursorEnterCallback
+onMouseButton        glfwSetMouseButtonCallback
+onCursorPosition     glfwSetCusorPosCallback
+?????????            glfwSetWindowSizeCallback
+onFrameBufferResize  glfwSetFramebufferSizeCallback
+onWindowMovement     glfwSetWindowPosCallback
++/
+
+/+
+Window coordinates are relative to the monitor and/or the window and are given in artificial units that do not necessarily 
+correspond to real screen pixels. This is especially the case when dpi scaling is activated (for example, on Macs with retina display).
+Framebuffer sizes are, in contrast to the window coordinates, given in pixels in order to match OpenGLs requirements for glViewport.
+Note, that on some systems window coordinates and pixel coordinates can be the same but this is not necessarily true.
++/
 	
 extern(C) void onKeyEvent(GLFWwindow* window, int key, int scancode, int action, int modifier) nothrow
 {
@@ -506,7 +527,13 @@ extern(C) void onMouseButton(GLFWwindow* window, int button, int action, int mod
     }	
 }	
  
- 
+ /+
+ extern(C) void onWindowMovement(...)
+ {
+
+ }
++/
+
 extern(C) void onFrameBufferResize(GLFWwindow* window, int width, int height) nothrow
 {
     try  // try is needed because of the nothrow
@@ -515,9 +542,14 @@ extern(C) void onFrameBufferResize(GLFWwindow* window, int width, int height) no
         //writeln("Inside onFrameBufferResize ");
 		//writeln("frame width = ", width, "  frame height = ", height);
 		
-		int scrWidth, scrHeight;
-        glfwGetWindowSize(window, &scrWidth, &scrHeight);
-		//writeln("ScrWidth = ", scrWidth, "  scrHeight = ", scrHeight);		
+		int srcWidth, srcHeight;
+        glfwGetWindowSize(window, &srcWidth, &srcHeight);
+        writeln("Inside FrameBufferResize but lets look at screen coordinates");
+		writeln("Screen Coordinates: srcWidth = ", srcWidth, "  srcHeight = ", srcHeight);
+
+		int pixelWidth, pixelHeight;
+		glfwGetFramebufferSize(window, &pixelWidth, &pixelHeight);
+        writeln("Pixels size: pixelWidth = ", pixelWidth, "  pixelHeight = ", pixelHeight);		
 		
         queue.eventIn.frameBufferSize.width = width;
         queue.eventIn.frameBufferSize.height = height;
@@ -563,10 +595,18 @@ void handleEvent(GLFWwindow* window)
             writeln("eve.frameBufferSize.width ", eve.frameBufferSize.width);
             writeln("eve.frameBufferSize.height ", eve.frameBufferSize.height);
             writeln("Before glViewport");
+
+			/+ 
+            Do not pass the window size to glViewport or other pixel-based OpenGL calls. The 
+            window size is in screen coordinates, not pixels. Use the framebuffer size, which 
+            is in pixels, for pixel-based calls.
+            +/
             glViewport(0, 0, eve.frameBufferSize.width, eve.frameBufferSize.height);
+
+
 		    //writeln("leave = ", queue.leave);
 		    //writeln("enter = ", queue.enter);		
-			writeAndPause("pause");			
+			//writeAndPause("pause");			
         }		
     }
     else

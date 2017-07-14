@@ -92,8 +92,10 @@ void main(string[] argv)
     glfwSetInputMode(winMain, GLFW_CURSOR, GLFW_CURSOR_NORMAL);	
 	
     // Define the viewport dimensions
-    glViewport(0, 0, breakout.width, breakout.height);  // replaced with glfwGetFramebufferSize()
-                                                          // for Mac OS.
+
+    int pixelWidth, pixelHeight;
+    glfwGetFramebufferSize(winMain, &pixelWidth, &pixelHeight);  
+    glViewport(0, 0, pixelWidth, pixelHeight);
 
 
   //===============================================================

@@ -119,9 +119,10 @@ void main(string[] argv)
            glfwSetKeyCallback(winMain, &onInternalKeyEvent);
         glfwSetScrollCallback(winMain, &mouseScrollWheel_callback);
     glfwSetWindowSizeCallback(winMain, &onWindowResize);
+glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);    
 	 
     // Define the viewport dimensions
-    glViewport(0, 0, width, height);
+    //glViewport(0, 0, width, height);
 
     // Setup OpenGL options
     glEnable(GL_DEPTH_TEST);
@@ -203,6 +204,8 @@ void main(string[] argv)
 
         glfwPollEvents();  // Check if any events have been activiated (key pressed, mouse
                            // moved etc.) and call corresponding response functions 
+        handleEvent(winMain);
+                           
         do_movement();
 
         // Clear the colorbuffer

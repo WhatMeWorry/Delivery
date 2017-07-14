@@ -79,8 +79,11 @@ void do_movement()
 
 extern(C) void onWindowResize(GLFWwindow* window, int width, int height) nothrow
 {
-    glfwSetWindowSize(window, width, height);   
-    glViewport(0, 0, width, height);
+    //glfwSetWindowSize(window, width, height);
+    //glViewport(0, 0, width, height);
+    int pixelWidth, pixelHeight;
+    glfwGetFramebufferSize(window, &pixelWidth, &pixelHeight);  
+    glViewport(0, 0, pixelWidth, pixelHeight);
 }
 
 
@@ -112,13 +115,11 @@ void main(string[] argv)
 	
     // you must set the callbacks after creating the window
 	   
-     glfwSetCursorPosCallback(winMain, &mouse_callback); 
-           glfwSetKeyCallback(winMain, &onInternalKeyEvent);
-        glfwSetScrollCallback(winMain, &mouseScrollWheel_callback);
-    glfwSetWindowSizeCallback(winMain, &onWindowResize);
-	 
-    // Define the viewport dimensions
-    glViewport(0, 0, width, height);
+      glfwSetCursorPosCallback(winMain, &mouse_callback); 
+            glfwSetKeyCallback(winMain, &onInternalKeyEvent);
+         glfwSetScrollCallback(winMain, &mouseScrollWheel_callback);
+     glfwSetWindowSizeCallback(winMain, &onWindowResize);
+glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);    
 
     // Setup OpenGL options
     glEnable(GL_DEPTH_TEST);
@@ -204,6 +205,8 @@ void main(string[] argv)
         glfwPollEvents();  // Check if any events have been activiated (key pressed, mouse
                            // moved etc.) and call corresponding response functions 
         do_movement();
+
+        handleEvent(winMain);
 
         // Clear the colorbuffer
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
