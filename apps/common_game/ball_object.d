@@ -19,7 +19,7 @@ public:
     // Ball state	
     GLfloat   radius;
     GLboolean stuck;
-    static if (powUps)	
+    static if (__traits(compiles,powUps) && powUps)	
     {
     GLboolean sticky;
     GLboolean passThrough;
@@ -32,7 +32,7 @@ public:
         super(pos, vec2(radius*2, radius*2), sprite, vec3(1.0f), velocity);
         this.radius = radius;
         this.stuck = true; 
-        static if (powUps)	
+        static if (__traits(compiles,powUps) && powUps)	
         {
         this.sticky = false;
         this.passThrough = false;
@@ -77,7 +77,7 @@ public:
         this.position = position;
         this.velocity = velocity;
         this.stuck = true;
-        static if (powUps)
+        static if (__traits(compiles,powUps) && powUps)
         {
         this.sticky = GL_FALSE;
         this.passThrough = GL_FALSE;      

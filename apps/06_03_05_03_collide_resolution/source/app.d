@@ -1,5 +1,5 @@
 
-module app;
+module app;  // 06_03_05_03_collide_resolution
 
 import common;
 import common_game;
@@ -50,6 +50,12 @@ void main(string[] argv)
 		
     glfwMakeContextCurrent(winMain); 
 
+              //glfwSetKeyCallback(winMain, &onKeyEvent);
+          glfwSetCursorPosCallback(winMain, &onCursorPosition);
+	    glfwSetMouseButtonCallback(winMain, &onMouseButton);
+    glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);	
+        glfwSetCursorEnterCallback(winMain, &onCursorEnterLeave);            
+
     // you must set the callbacks after creating the window
     glfwSetKeyCallback(winMain, &onInternalKeyEvent);	
 	
@@ -94,6 +100,8 @@ void main(string[] argv)
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
         glfwPollEvents();
+
+        handleEvent(winMain);         
 
         deltaTime = 0.001f;
         // Manage user input

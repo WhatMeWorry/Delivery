@@ -88,7 +88,7 @@ extern(C) void onWindowResize(GLFWwindow* window, int width, int height) nothrow
 
 
 // Window dimensions
-const GLuint width = 800, height = 600;
+const GLuint  = 800, height = 600;
 
 
 
@@ -122,7 +122,7 @@ void main(string[] argv)
 glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);    
 	 
     // Define the viewport dimensions
-    //glViewport(0, 0, width, height);
+    //glViewport(0, 0, , height);
 
     // Setup OpenGL options
     glEnable(GL_DEPTH_TEST);

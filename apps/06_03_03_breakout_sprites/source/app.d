@@ -35,6 +35,14 @@ void main(string[] argv)
 		
     glfwMakeContextCurrent(winMain); 
 
+    // you must set the callbacks after creating the window
+ 
+                glfwSetKeyCallback(winMain, &onKeyEvent);
+          glfwSetCursorPosCallback(winMain, &onCursorPosition);
+	    glfwSetMouseButtonCallback(winMain, &onMouseButton);
+    glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);	
+        glfwSetCursorEnterCallback(winMain, &onCursorEnterLeave);    
+
     // GLFW Options
     glfwSetInputMode(winMain, GLFW_CURSOR, GLFW_CURSOR_NORMAL);	
 
@@ -103,6 +111,8 @@ void main(string[] argv)
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
         glfwPollEvents();
+
+        handleEvent(winMain);
 
         deltaTime = 0.001f;
         // Manage user input

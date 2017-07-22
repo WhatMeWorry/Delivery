@@ -100,7 +100,7 @@ NOTE:  MUST HAVE CONNECTIONS TO INTERNET
 Build duball on ========== Windows ==========
 ..\Windows\D\dmd2\windows\bin\dmd.exe -m64 duball.d    // Always assume 64 bit (for simplicity)
 Build Project on Windows
-E:\projects\01_01_hello_window>..\duball.exe run --verbose --arch=x86_64 --force
+E:\projects\01_01_hello_window>..\duball.exe run --force --arch=x86_64 --verbose
 
 Build duball on ========== Linux ==========
 ./../Linux/dmd-2.071.0/linux/bin64/dmd duball.d
@@ -286,7 +286,7 @@ void main(char[][] args)
 		// The value of DFLAGS environment variable  is treated as if it were
 		// appended to the command line to dmd.exe.
 
-		environment["DFLAGS"] = `-I..\`;
+		environment["DFLAGS"] = `-I..\  -I..\common  -I..\common_game`;
 
 		// set LINKCMD64=C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\amd64\link.ex
 	} else version(OSX)

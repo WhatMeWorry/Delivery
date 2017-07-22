@@ -2,6 +2,7 @@
 module app;  // 01_05_transformations
 
 import common;
+import common_game;
 
 import std.stdio;   // writeln
 import gl3n.linalg; // mat4

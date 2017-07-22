@@ -1,10 +1,21 @@
 
 module event_handler;
 
+
+
+
 import derelict.opengl3.gl3;
 import derelict.glfw3.glfw3; 
 import std.stdio;
 import mytoolbox;
+
+
+//import common_game.game;
+import app;  // for bool enum effects 
+import game;  // needed for postProc
+import post_processor;  // needed for new PostProcessor
+import common_game;     // needed for  resource_manager.ResMgr.getShader("effects")
+import resource_manager;  // needed for  resource_manager.ResMgr.getShader("effects")
 
 enum EventType
 {
@@ -14,7 +25,7 @@ enum EventType
 	windowSize,
 	frameBufferSize,
 	windowFocus,
-	cursorEnterLeave,
+	cursorInOrOut,
 	cursorPosition,
     mouseScroll,
     mouseButton,
@@ -179,7 +190,7 @@ enum Action
 	Repeat   = GLFW_REPEAT
 }
 
-enum State
+enum CursorState
 {
     In,
     Out
@@ -328,12 +339,16 @@ struct CircularQueue
 	
 	__gshared uint leave = 0;  // the index in queue of next entity to exit queue
     __gshared uint enter = 1;  // the index in queue of next entity to enter queue
-	
-	Event eventOut;  //saves off the event taken out of the queue so 
-	                 // that the event is definitely saved off within the synchronized period
-    Event eventIn;					 	
 
-    // Modulus operator is  "%" which is the remainder of dividing 'first' by 'second'	first % second
+	// queue is empty when leave index is right behind (index is one less) the enter index.
+	
+	Event eventOut;  // saves off the event taken out of the queue so 
+	                 // that the event is definitely saved off within the synchronized period
+					 // Since event processing can vary so much in tine, we put the event into
+					 // eventOut so that the queue can be freed up to process incoming events.
+    Event eventIn;   // Not so critical as eventOut, but implement for symmetry  					 	
+
+    // Modulus operator is "%" which is the remainder of dividing 'first' by 'second'	first % second
 	// Could replace in advance function, but potential for overflow?  Decided to keep as is.
 	
     void advance(ref uint x)
@@ -342,11 +357,11 @@ struct CircularQueue
             x = 0;
 		else
 		    x++;
-   }
+    }
    
     bool enterOrLeave(Motion move)
     {
-	    synchronized
+	    synchronized   // lock everything down when an event enters or exists.
 	    {
             if(move == Motion.Leaving)
             {	
@@ -355,6 +370,7 @@ struct CircularQueue
 				    //writeln("Queue is empty leave = ", leave, " enter = ", enter);
                     return false;
                 }
+
                 advance(leave);	  // There is an event go to it	
 	            eventOut = queue.events[queue.leave];
                 return true;				
@@ -366,11 +382,12 @@ struct CircularQueue
 				    //writeln("Queue is full enter = ", enter, " leave = ", leave);
                     return false;				
                 }
+
 				queue.events[queue.enter] = eventIn;	
-				
 	            advance(enter);    // advance to new open slot
                 return true;
             }
+            assert(0);  // should never get here
         } 
         assert(0);  // should never get here		
 	}		
@@ -378,7 +395,7 @@ struct CircularQueue
 
 immutable uint maxSize = 1024;
 
-CircularQueue queue;
+CircularQueue  queue;
 
 //===================================== ON Events ========================================
 
@@ -429,14 +446,15 @@ extern(C) void onKeyEvent(GLFWwindow* window, int key, int scancode, int action,
         {
             //writeln("Super key pressed");
 			queue.eventIn.keyboard.modifier.superKey = true;
-        }		
+        }
+
         if (queue.enterOrLeave(Motion.Entering))
 		{
-			//writeln("key = ", queue.eventIn.keyboard.key, " entered at = ", queue.enter-1);
+			writeln("key = ", queue.eventIn.keyboard.key, " entered at = ", queue.enter-1);
         }
         else
         {
-            //writeln("queue is full");	
+            writeln("queue is full");	
         }			
 	}
 	catch(Exception e)
@@ -450,11 +468,11 @@ extern(C) void onCursorEnterLeave(GLFWwindow* window, int entered) nothrow
 {
     try  // try is needed because of the nothrow
 	{
-        queue.eventIn.type = EventType.cursorEnterLeave;		
+        queue.eventIn.type = EventType.cursorInOrOut;		
         if(entered)
-            queue.eventIn.cursor.state = State.In;    
+            queue.eventIn.cursor.state = CursorState.In;    
         else
-            queue.eventIn.cursor.state = State.Out;
+            queue.eventIn.cursor.state = CursorState.Out;
 			
         if (queue.enterOrLeave(Motion.Entering))
         {
@@ -549,7 +567,9 @@ extern(C) void onFrameBufferResize(GLFWwindow* window, int width, int height) no
 
 		int pixelWidth, pixelHeight;
 		glfwGetFramebufferSize(window, &pixelWidth, &pixelHeight);
-        writeln("Pixels size: pixelWidth = ", pixelWidth, "  pixelHeight = ", pixelHeight);		
+        writeln("Pixels size: pixelWidth = ", pixelWidth, "  pixelHeight = ", pixelHeight);	
+
+        writeln("width passed in = ", width, "  height passed in = ", height);				
 		
         queue.eventIn.frameBufferSize.width = width;
         queue.eventIn.frameBufferSize.height = height;
@@ -584,7 +604,7 @@ void handleEvent(GLFWwindow* window)
 		    if (eve.keyboard.key == Key.escape)
 		        glfwSetWindowShouldClose(window, GLFW_TRUE);
         }
-        if (eve.type == EventType.cursorEnterLeave)
+        if (eve.type == EventType.cursorInOrOut)
 		{
             //writeln("eve.cursorState = ", eve.cursorState);
         }
@@ -602,6 +622,15 @@ void handleEvent(GLFWwindow* window)
             is in pixels, for pixel-based calls.
             +/
             glViewport(0, 0, eve.frameBufferSize.width, eve.frameBufferSize.height);
+
+			static if (__traits(compiles, effects) && effects)
+            {
+                postProc.postProcWidth =  eve.frameBufferSize.width;
+                postProc.postProcHeight =  eve.frameBufferSize.height; 
+				postProc = new PostProcessor(resource_manager.ResMgr.getShader("effects"),
+                                             postProc.postProcWidth, postProc.postProcHeight);  
+            }
+
 
 
 		    //writeln("leave = ", queue.leave);

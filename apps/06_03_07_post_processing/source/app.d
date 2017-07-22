@@ -1,4 +1,4 @@
-module app;
+module app;  // 06_03_07_post_processing
 
 import common;
 import common_game;
@@ -75,6 +75,8 @@ Something really important here is a bit of compiler magic: once the code path i
 
 +/
 
+
+
 void main(string[] argv)
 {
     Game breakout = new Game(800, 600);  // originally (800, 600)  // (1600, 1200) for 4K monitors
@@ -86,13 +88,18 @@ void main(string[] argv)
     glfwMakeContextCurrent(winMain); 
 
     // you must set the callbacks after creating the window
+          glfwSetCursorPosCallback(winMain, &onCursorPosition);
+	    glfwSetMouseButtonCallback(winMain, &onMouseButton);
+    glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);	
+        glfwSetCursorEnterCallback(winMain, &onCursorEnterLeave);            
+
+     // you must set the callbacks after creating the window
     glfwSetKeyCallback(winMain, &onInternalKeyEvent);	
-	
     // GLFW Options
     glfwSetInputMode(winMain, GLFW_CURSOR, GLFW_CURSOR_NORMAL);	
 	
     // Define the viewport dimensions
-
+/+
     int pixelWidth, pixelHeight;
     glfwGetFramebufferSize(winMain, &pixelWidth, &pixelHeight);  
     glViewport(0, 0, pixelWidth, pixelHeight);
@@ -117,19 +124,19 @@ void main(string[] argv)
 
     writeln("Window size width = ", ww);
     writeln("Window size height = ", wh);
-
++/
     showMonitorVideoMode();
 
     //===============================================================
 
 
 
-
+/+
     int w;
     int h;
     glfwGetFramebufferSize(winMain, &w, &h);
     //glViewport(0, 0, w, h);
-
++/
     // Set OpenGL options
     glEnable(GL_CULL_FACE);
     glEnable(GL_BLEND);
@@ -159,6 +166,8 @@ void main(string[] argv)
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
         glfwPollEvents();
+
+        handleEvent(winMain);           
 
         deltaTime = 0.001f;
         // Manage user input

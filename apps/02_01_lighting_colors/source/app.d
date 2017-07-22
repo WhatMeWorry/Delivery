@@ -230,7 +230,7 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
                     do_movement(event);				
                     //moveCamera(event);
             }
-            if (event.type == EventType.cursorEnterLeave)
+            if (event.type == EventType.cursorInOrOut)
             {			
                 //enableCursor(event);
             }

@@ -1,9 +1,17 @@
 
 module app;  // 01_04_textures
 
-import common;
+//import common;
+import shaders;
+import texturefuncs;
+import mytoolbox;
+import derelict_libraries;
+import event_handler;
+
+import common_game;
 
 import std.stdio;  // writeln
+//import gl3n.linalg; // vec3 mat4
 
 import derelict.util.loader;
 import derelict.util.sharedlib;

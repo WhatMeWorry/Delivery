@@ -64,8 +64,16 @@ void main(string[] argv)
     playSound(soundSys, 0 );	
 	
     auto winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_09_audio", null, null);
-		
+
+
     glfwMakeContextCurrent(winMain); 
+
+
+    // you must set the callbacks after creating the window
+          glfwSetCursorPosCallback(winMain, &onCursorPosition);
+	    glfwSetMouseButtonCallback(winMain, &onMouseButton);
+    glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);	
+        glfwSetCursorEnterCallback(winMain, &onCursorEnterLeave);
 
     // you must set the callbacks after creating the window
     glfwSetKeyCallback(winMain, &onInternalKeyEvent);	
@@ -107,6 +115,8 @@ void main(string[] argv)
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
         glfwPollEvents();
+
+        handleEvent(winMain);
 
         deltaTime = 0.001f;
         // Manage user input

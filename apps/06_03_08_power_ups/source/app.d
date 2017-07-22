@@ -87,34 +87,21 @@ void main(string[] argv)
     // by using glfwGetWindowSize, and glfwGetFramebufferSize
 
 
-    writeln("breakout.width = ", breakout.width);
-    writeln("breakout.height = ", breakout.height);
-
-
-
-    int fbw;
-    int fbh;
-    glfwGetFramebufferSize(winMain, &fbw, &fbh);
-
-    writeln("Framebuffer size width = ", fbw);
-    writeln("Framebuffer size height = ", fbh);
-
-    int ww;
-    int wh;
-    glfwGetWindowSize(winMain, &ww, &wh);
-
-    writeln("Window size width = ", ww);
-    writeln("Window size height = ", wh);
-
-
 
 		
     glfwMakeContextCurrent(winMain); 
+
+        // you must set the callbacks after creating the window
+          glfwSetCursorPosCallback(winMain, &onCursorPosition);
+	    glfwSetMouseButtonCallback(winMain, &onMouseButton);
+    glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);	
+        glfwSetCursorEnterCallback(winMain, &onCursorEnterLeave);
 
     showMonitorVideoMode();
 
     // you must set the callbacks after creating the window
     glfwSetKeyCallback(winMain, &onInternalKeyEvent);	
+	
 	
     // GLFW Options
     glfwSetInputMode(winMain, GLFW_CURSOR, GLFW_CURSOR_NORMAL);	
@@ -163,6 +150,8 @@ void main(string[] argv)
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
         glfwPollEvents();
+
+        handleEvent(winMain);         
 
         deltaTime = 0.001f;
         // Manage user input

@@ -63,8 +63,8 @@ public:
     // State
     ShaderBreakout postProcShader;
     Texture2D      texas;
-    GLuint         width; 
-    GLuint         height;
+    GLuint         postProcWidth; 
+    GLuint         postProcHeight;
     // Options
     GLboolean      confuse;
     GLboolean      chaos;
@@ -82,8 +82,8 @@ public:
         postProcShader = shader;
         texas = new Texture2D;
 		writeln("texas just allocated");
-        this.width = width;
-        this.height = height; 		
+        this.postProcWidth = width;
+        this.postProcHeight = height; 		
         confuse = GL_FALSE;
         chaos = GL_FALSE;
         shake = GL_FALSE;	
@@ -180,7 +180,7 @@ public:
         // Now resolve multisampled color-buffer into intermediate FBO to store to texture
         glBindFramebuffer(GL_READ_FRAMEBUFFER, this.MSFBO);
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, this.FBO);
-        glBlitFramebuffer(0, 0, this.width, this.height, 0, 0, this.width, this.height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        glBlitFramebuffer(0, 0, this.postProcWidth, this.postProcHeight, 0, 0, this.postProcWidth, this.postProcHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST);
         glBindFramebuffer(GL_FRAMEBUFFER, 0); // Binds both READ and WRITE framebuffer to default framebuffer
     }	
 	

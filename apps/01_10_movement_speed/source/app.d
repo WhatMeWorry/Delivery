@@ -93,7 +93,7 @@ void moveCamera(Event event)
 
 void enableCursor(Event event)
 {
-    if (event.cursor.state == State.In)
+    if (event.cursor.state == CursorState.In)
     {
         // The cursor entered the client area of the window
         globalCameraPos   = cameraPos;
@@ -229,26 +229,39 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
 
         glfwPollEvents();  // Check if any events have been activiated (key pressed, mouse
                            // moved etc.) and call corresponding response functions 
-        						   
+
+        //handleEvent(winMain);  // handleEvent will empty the queue so getNexEvent will never have anything to process     
+
         Event even;						   
 		if (getNextEvent(winMain, even))
         {
             if (even.type == EventType.keyboard)
             {
 		        if (even.keyboard.key == Key.escape)
-		            glfwSetWindowShouldClose(winMain, GLFW_TRUE);
-                else					
+                {
+                    glfwSetWindowShouldClose(winMain, GLFW_TRUE);
+                }                  
+                else
+                {
                     moveCamera(even);
+                }					
             }
-            if (even.type == EventType.cursorEnterLeave)
+            if (even.type == EventType.cursorInOrOut)
             {			
                 enableCursor(even);
             }
             if (even.type == EventType.cursorPosition)
             {			
                 processMouse(even.cursor.position.x, even.cursor.position.y);
-            }				
-        }						   
+            }
+            if (even.type == EventType.frameBufferSize)
+		    {
+                int pixelWidth, pixelHeight;
+                glfwGetFramebufferSize(winMain, &pixelWidth, &pixelHeight);  
+                glViewport(0, 0, pixelWidth, pixelHeight);
+            }
+        }	
+
 						   
         // Render
         

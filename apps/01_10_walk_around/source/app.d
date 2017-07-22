@@ -156,6 +156,9 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
 
         glfwPollEvents();  // Check if any events have been activiated (key pressed, mouse
                            // moved etc.) and call corresponding response functions 
+
+        //handleEvent(winMain);  // handleEvent will empty the queue so getNexEvent will never have anything to process
+
         Event even;						   
         if (getNextEvent(winMain, even))
         {
@@ -165,6 +168,12 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
                     glfwSetWindowShouldClose(winMain, GLFW_TRUE);
                 else					
                     moveCamera(even);
+            }
+            if (even.type == EventType.frameBufferSize)
+		    {
+                int pixelWidth, pixelHeight;
+                glfwGetFramebufferSize(winMain, &pixelWidth, &pixelHeight);  
+                glViewport(0, 0, pixelWidth, pixelHeight);
             }
         }
         // Render

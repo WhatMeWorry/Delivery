@@ -82,7 +82,9 @@ void writeAndPause(string s)
 {
     writeln(s);
     version(Windows)
-    {                                   // pause command prints out
+    {  
+        writeln("Before executeShell");
+                                        // pause command prints out
         executeShell("pause");          // "Press any key to continue..."
     }
     else // Mac OS or Linux

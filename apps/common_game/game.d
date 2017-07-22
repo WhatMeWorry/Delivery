@@ -84,23 +84,32 @@ GLfloat           shakeTime = 0.0f;
 // Combines all game-related data into a single class for
 // easy access to each of the components and manageability.
 
+
 class Game
 {
 public:
     // Game state
     GameState   state;	
-    static GLboolean[512] keys;
-    GLuint      width, height;
+    static      GLboolean[512] keys;
+    GLuint      width; 
+    GLuint      height;
 
     GameLevel[] levels;
     GLuint      currentLevel;
 	
-    static if (powUps)
+    static if (__traits(compiles,powUps) && powUps)
     {
-    PowerUp[] powerUps;
+        PowerUp[] powerUps;
     }
+    
+    /+
+    static if (__traits(compiles,crap) && crap)
+    {
+    GLuint  width;
+    }
+    +/
 	
-    static if (screenText)
+    static if (__traits(compiles, screenText) && screenText)
     {
     GLuint  lives;
     }
@@ -112,7 +121,7 @@ public:
         this.width = width; 
         this.height = height; 
 		
-        static if (screenText)
+        static if (__traits(compiles, screenText) && screenText)
         {
         lives = 3;			
         }
@@ -358,7 +367,7 @@ public:
 
         // ..\common_game\game.d(371,21): Error: module particles is not an expression
         // particles conflicted with module particles.d   Had to pick another flag variable name
-        static if (particulate)   // inject code only if using post processor effects
+        static if (__traits(compiles, particulate) && particulate)   // inject code only if using post processor effects
         {										   
         resource_manager.ResMgr.loadShader("source/VertexShaderParticle.glsl", 
                                            "source/FragmentShaderParticle.glsl", 
@@ -366,14 +375,14 @@ public:
         } 
        
 		
-        static if (effects)   // inject code only if using post processor effects
+        static if (__traits(compiles, effects) && effects)   // inject code only if using post processor effects
         {
         resource_manager.ResMgr.loadShader("source/VertexShaderEffects.glsl", 
                                            "source/FragmentShaderEffects.glsl", 
                                            null, "effects");											   
         }
 		
-        static if (screenText)
+        static if (__traits(compiles, screenText) && screenText)
         {
             textRend = new TextRenderer(this.width, this.height);
 			writeln("textRend.textShader.ID = ", textRend.textShader.ID);
@@ -400,7 +409,7 @@ public:
 
         // ResourceManager::GetShader("particle").Use().SetInteger("sprite", 0);
 
-        static if (particulate)	
+        static if (__traits(compiles, particulate) && particulate)	
         {		
         ShaderBreakout sB2 = resource_manager.ResMgr.getShader("particle");
         sB2.use();
@@ -490,18 +499,19 @@ public:
 
         renderer = new SpriteRenderer(resource_manager.ResMgr.getShader("sprite"));
 
-        static if (particulate)
+        static if (__traits(compiles, particulate) && particulate)
         {		
         partGen = new ParticleGenerator(resource_manager.ResMgr.getShader("particle"), 
                                         resource_manager.ResMgr.getTexture("particle"), 
                                         500);
         }
 
-        static if (effects)		
+        static if (__traits(compiles, effects) && effects)		
         {
 		// BAD BUG: this makes a new local scope variable called postProc.  Not the module scope 
         //PostProcessor postProc = new PostProcessor(resource_manager.ResMgr.getShader("effects"),
         //                                           this.width, this.height); 
+        writeln("this.width = ", this.width, " this.height = ", this.height);
         postProc = new PostProcessor(resource_manager.ResMgr.getShader("effects"),
                                      this.width, this.height);  		
         }		
@@ -624,13 +634,13 @@ public:
         // Update objects
 		ball.move(dt, this.width);
 
-        static if (particulate)
+        static if (__traits(compiles, particulate) && particulate)
         {		
         partGen.update(dt, ball, 1, vec2(ball.radius / 2));       // Update particles		
         }
 		
         // Update PowerUps
-        static if (powUps)
+        static if (__traits(compiles,powUps) && powUps)
         {				
         this.updatePowerUps(dt);
         }		
@@ -638,7 +648,7 @@ public:
         // Check for collisions
         this.doCollisions_03();
 		
-        static if (effects)  // only include this code block if using game effects      
+        static if (__traits(compiles, effects) && effects)  // only include this code block if using game effects      
         {		
         if (shakeTime > 0.0f)
         {
@@ -651,7 +661,7 @@ public:
         // Check loss condition
         if (ball.position.y >= this.height) // Did ball reach bottom edge?
         {
-            static if (screenText)
+            static if (__traits(compiles, screenText) && screenText)
             {  		
             this.lives--;
 			// Did the player lose all his lives? : Game over
@@ -680,6 +690,7 @@ public:
     {
         if(this.state == GameState.GAME_ACTIVE)
         {
+            writeln("this.width = ", this.width, " this.height = ", this.height);
             renderer.drawSprite(resource_manager.ResMgr.getTexture("background"), 
                                 vec2(0, 0), 
                                 vec2(this.width, this.height),
@@ -701,7 +712,7 @@ public:
     {
         if(this.state == GameState.GAME_ACTIVE)
         {
-            static if (effects)
+            static if (__traits(compiles, effects) && effects)
             {
             postProc.beginRender();
             }
@@ -718,20 +729,20 @@ public:
             ulong len = this.levels[0].bricks.length;				
             this.levels[this.currentLevel].drawLevel(renderer);
 
-            static if (particulate)	
+            static if (__traits(compiles, particulate) && particulate)	
             {			
             partGen.draw();
             }
 			
             ball.draw(renderer);	
 
-            static if (effects)
+            static if (__traits(compiles, effects) && effects)
             {	
             postProc.endRender();	
             postProc.render(glfwGetTime());
             }	
 
-            static if (powUps)	
+            static if (__traits(compiles,powUps) && powUps)	
             {
                 foreach(pup; powerUps)	
                 {
@@ -739,7 +750,7 @@ public:
                         pup.draw(renderer);					
                 }				
             }
-            static if (screenText)	
+            static if (__traits(compiles, screenText) && screenText)	
             {
                 string str = "Lives: " ~ to!string(this.lives);
                 textRend.renderText(str, 10.0f, 550.0f, 1.0);	
@@ -813,9 +824,9 @@ public:
                     if (!box.isSolid)   // is box is destructable 
                     {
                         box.destroyed = true;
-                        static if (powUps)						
+                        static if (__traits(compiles,powUps) && powUps)						
                             this.spawnPowerUps(box);
-                        static if (audio)						
+                        static if (__traits(compiles, audio) && audio)						
                             //playSound(FMOD_LOOP_OFF, soundSys.system, "../audio/bleep.mp3");	
                             playSound(soundSys, 1 );							
                     }
@@ -823,7 +834,7 @@ public:
                     {
                         shakeTime = 0.05f;
                         postProc.shake = true;
-                        static if (audio)						
+                        static if (__traits(compiles, audio) && audio)						
                             playSound(soundSys, 2 );													
                     }
 							
@@ -860,7 +871,7 @@ public:
         }
 		
         // Also check collisions on PowerUps and if so, activate them	
-        static if (powUps)
+        static if (__traits(compiles,powUps) && powUps)
         {
         foreach (ref pow; this.powerUps)
         {
@@ -874,7 +885,7 @@ public:
                     activatePowerUp(pow);
                     pow.destroyed = GL_TRUE;
                     pow.activated = GL_TRUE;
-                    static if (audio)						
+                    static if (__traits(compiles, audio) && audio)						
                         playSound(soundSys, 3 );																	
                 }
             }
@@ -908,11 +919,11 @@ public:
 			
             // If Sticky powerup is activated, also stick ball to paddle once 
             // new velocity vectors were calculated
-            static if (powUps)	
+            static if (__traits(compiles,powUps) && powUps)	
             {			
             ball.stuck = ball.sticky;
             }
-            static if (audio)
+            static if (__traits(compiles, audio) && audio)
             {			
                 playSound(soundSys, 4 );
             }				
@@ -1080,7 +1091,7 @@ function RectCircleColliding(circle, rect) {
         return cast (Direction) best_match;
     }   
 
-    static if (powUps)
+    static if (__traits(compiles,powUps) && powUps)
     {		
 	
     GLboolean shouldSpawn(GLuint chances)
