@@ -88,7 +88,8 @@ extern(C) void onWindowResize(GLFWwindow* window, int width, int height) nothrow
 
 
 // Window dimensions
-const GLuint  = 800, height = 600;
+enum  width = 800;
+enum  height = 600;
 
 
 
