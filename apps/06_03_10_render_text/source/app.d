@@ -49,6 +49,7 @@ TextRenderer textRend;
 
 TextRenderingSystem textRenderSys;	// works
 
+GLFWwindow* winMain;  // need to make global so post_processor can acces winMain;  Kludge.
 
 void main(string[] argv)
 {
@@ -71,7 +72,7 @@ void main(string[] argv)
     playSound(soundSys, 0 );		
 	
 	
-    auto winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_10_render_text", null, null);
+    winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_10_render_text", null, null);
 		
     glfwMakeContextCurrent(winMain); 
 
@@ -112,14 +113,6 @@ void main(string[] argv)
     // Start Game within Menu State
     breakout.state = GameState.GAME_ACTIVE;
 	
-    // how to create and apply textures to 3D geometry data...
-    int x = 0;
-    float r = 0.001;
-		
-    //Texture2D tex = resource_manager.ResMgr.getTexture("face");	
-	
- 
-	
     initTextRenderingSystem(textRenderSys);		
 	
     while (!glfwWindowShouldClose(winMain))    // Loop until the user closes the window
@@ -141,16 +134,11 @@ void main(string[] argv)
         breakout.update_04(deltaTime);
 
         // Render
-        //glClearColor(0.1f, 0.3f, 0.4f, 1.0f);  // originally
+
 		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
 		breakout.renderGameWithParticles();
-
-        //textRend.renderText("KYLE HEASER textRend.renderText", 50.0f, 50.0f, 1.0);
-		
-	    //renderText(textRenderSys.font, textRenderSys.VAO, textRenderSys.VBO, textRenderSys.progID, 
-        //           "Courier Bold Text", 25.0f, 75.0f, 2.5f, vec3(1.0, 1.0f, 1.0f));	
 		
         glfwSwapBuffers(winMain);
     }

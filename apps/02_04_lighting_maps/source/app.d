@@ -6,6 +6,7 @@ import common;
 import std.stdio;   // writeln
 import std.conv;    // to
 import gl3n.linalg; // vec3 mat4
+import core.stdc.stdlib; // exit
 
 import derelict.util.loader;
 import derelict.util.sharedlib;
@@ -88,7 +89,8 @@ extern(C) void onWindowResize(GLFWwindow* window, int width, int height) nothrow
 
 
 // Window dimensions
-const GLuint width = 800, height = 600;
+enum width = 800;
+enum height = 600;
 
 
 
@@ -105,8 +107,17 @@ GLfloat lastFrame = 0.0f;  	// Time of last frame
 
 void main(string[] argv)
 {
-    camera = new Camera(vec3(0.0f, 0.0f, 3.0f));
- 
+    mat4 model = mat4.identity; 
+    mat4 view  = mat4.identity;
+    mat4 projection = mat4.identity;
+
+    camera = new Camera(vec3(0.0f, 0.0f, 4.5f));
+
+    writeln("model = ", model);
+    writeln("view = ", view);
+    writeln("projection = ", projection);
+
+
     load_libraries();
 	
     auto winMain = glfwCreateWindow(800, 600, "02_04_lighting_maps", null, null);
@@ -145,7 +156,8 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat[] vertices;
     initializeCubePosNormsTexs(vertices);   //////////////////////// NEW
-    writeln("vertices = ", vertices);	
+    writeln("vertices = ", vertices);
+
 	
     GLuint VBO, containerVAO;
     glGenVertexArrays(1, &containerVAO);
@@ -204,9 +216,9 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
 
         glfwPollEvents();  // Check if any events have been activiated (key pressed, mouse
                            // moved etc.) and call corresponding response functions 
-        do_movement();
-
         handleEvent(winMain);
+
+        do_movement();
 
         // Clear the colorbuffer
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -216,6 +228,7 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
         glUseProgram(lightingShader);
         GLint lightPosLoc = glGetUniformLocation(lightingShader, "light.position");
         GLint viewPosLoc  = glGetUniformLocation(lightingShader, "viewPos");
+
         glUniform3f(lightPosLoc, lightPos.x, lightPos.y, lightPos.z);
         glUniform3f(viewPosLoc, camera.position.x, camera.position.y, camera.position.z);
 
@@ -228,11 +241,11 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
 
         // Create camera transformations
         //mat4 view;  // moved to module level
-        mat4 view = mat4.identity;
+        //mat4 view = mat4.identity;
         view = camera.GetViewMatrix();
 
 
-        mat4 projection = mat4.identity;
+        //mat4 projection = mat4.identity;
         projection = perspectiveFunc(camera.zoom, width/height, 0.1f, 100.0f);
 
 
@@ -253,7 +266,7 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
 
         // Draw the container (using container's vertex attributes)
         glBindVertexArray(containerVAO);
-            mat4 model = mat4.identity;
+            //mat4 model = mat4.identity;
             glUniformMatrix4fv(modelLoc, 1, GL_TRUE, model.value_ptr);
             glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
@@ -264,11 +277,12 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
         modelLoc = glGetUniformLocation(lampShader, "model");
         viewLoc  = glGetUniformLocation(lampShader, "view");
         projLoc  = glGetUniformLocation(lampShader, "projection");
+
         // Set matrices
         glUniformMatrix4fv(viewLoc, 1, GL_TRUE, view.value_ptr);
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, projection.value_ptr);
-        model = mat4.identity;
-        model = model.scale(0.2f, 0.2, 0.2); // Make it a smaller cube
+        //model = mat4.identity;
+        model = model.scale(0.2f, 0.2f, 0.2f); // Make it a smaller cube
         model = model.translate(lightPos);
         glUniformMatrix4fv(modelLoc, 1, GL_TRUE, model.value_ptr);
         // Draw the light object (using light's vertex attributes)

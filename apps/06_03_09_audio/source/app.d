@@ -42,6 +42,7 @@ extern(C) static void onInternalKeyEvent(GLFWwindow* window, int key, int scanco
     }
 }
 
+GLFWwindow* winMain;  // need to make global so post_processor can acces winMain;  Kludge.
 
 void main(string[] argv)
 {
@@ -63,7 +64,7 @@ void main(string[] argv)
 	
     playSound(soundSys, 0 );	
 	
-    auto winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_09_audio", null, null);
+    winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_09_audio", null, null);
 
 
     glfwMakeContextCurrent(winMain); 

@@ -144,15 +144,7 @@ public:
         // (2) must be &projection[0][0]  or  cast(const(float)*) projection.ptr
         glUniformMatrix4fv(glGetUniformLocation(this.ID, name), 1, ROW_MAJOR, &matrix[0][0]);       
     }
-	
-/+
-    GLint logLen;
-    glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &logLen);
 
-    GLchar[] vertLog = new GLchar[logLen+1];	
-    glGetShaderInfoLog(shaderID, logLen, null, vertLog.ptr);
-    writeln("Compile result for shader: ", shaderType, vertLog); 
-+/
 private:
     // Checks if compilation or linking failed and if so, print the error logs
     void checkCompileErrors(GLuint object, string type)

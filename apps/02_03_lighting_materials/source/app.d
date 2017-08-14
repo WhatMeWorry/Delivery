@@ -8,6 +8,7 @@ import std.random;
 import std.math;    // sin
 import std.conv;    // to
 import gl3n.linalg; // vec3 mat4
+import core.stdc.stdlib; // exit
 
 import derelict.util.loader;
 import derelict.util.sharedlib;
@@ -106,11 +107,11 @@ GLfloat lastFrame = 0.0f;  	// Time of last frame
 
 void main(string[] argv)
 {
-    camera = new Camera(vec3(0.0f, 0.0f, 3.0f));
+    camera = new Camera(vec3(0.0f, 0.0f, 4.5f));
  
     load_libraries();
 	
-    auto winMain = glfwCreateWindow(800, 600, "02_03_lighting_materials", null, null);
+    auto winMain = glfwCreateWindow(width, height, "02_03_lighting_materials", null, null);
 	
     glfwMakeContextCurrent(winMain); 
 	
@@ -122,9 +123,6 @@ void main(string[] argv)
     glfwSetWindowSizeCallback(winMain, &onWindowResize);
 glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);    
 	 
-    // Define the viewport dimensions
-    //glViewport(0, 0, , height);
-
     // Setup OpenGL options
     glEnable(GL_DEPTH_TEST);
 
@@ -151,6 +149,8 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     initializeCubeVariant3(vertices);
     writeln("vertices = ", vertices);	
 	
+    //exit(1);
+
     GLuint VBO, containerVAO;
     glGenVertexArrays(1, &containerVAO);
     glGenBuffers(1, &VBO);

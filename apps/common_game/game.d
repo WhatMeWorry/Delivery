@@ -91,7 +91,7 @@ public:
     // Game state
     GameState   state;	
     static      GLboolean[512] keys;
-    GLuint      width; 
+    GLuint      width;
     GLuint      height;
 
     GameLevel[] levels;
@@ -508,12 +508,23 @@ public:
 
         static if (__traits(compiles, effects) && effects)		
         {
-		// BAD BUG: this makes a new local scope variable called postProc.  Not the module scope 
+		
         //PostProcessor postProc = new PostProcessor(resource_manager.ResMgr.getShader("effects"),
         //                                           this.width, this.height); 
-        writeln("this.width = ", this.width, " this.height = ", this.height);
+        // BAD BUG: this makes a new local scope variable called postProc.  Not the module scope 
+        writeln("****************this.width = ", this.width, " this.height = ", this.height);
+
+        int pixelWidth, pixelHeight;
+        glfwGetFramebufferSize(winMain, &pixelWidth, &pixelHeight); 
+
         postProc = new PostProcessor(resource_manager.ResMgr.getShader("effects"),
-                                     this.width, this.height);  		
+                                     pixelWidth, pixelHeight);  
+        // Mac OS (Screen)
+        // this.width and this.height are in Screen Coordinate size.  Need pixel sizes
+        // on Mac machines with Retina.
+        // Windows and Linux seem to have the their screen coordinates scale to pixels.
+        //postProc = new PostProcessor(resource_manager.ResMgr.getShader("effects"),
+        //                             this.width, this.height);  		
         }		
 
         // Load levels

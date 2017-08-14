@@ -562,14 +562,14 @@ extern(C) void onFrameBufferResize(GLFWwindow* window, int width, int height) no
 		
 		int srcWidth, srcHeight;
         glfwGetWindowSize(window, &srcWidth, &srcHeight);
-        writeln("Inside FrameBufferResize but lets look at screen coordinates");
-		writeln("Screen Coordinates: srcWidth = ", srcWidth, "  srcHeight = ", srcHeight);
+        //writeln("Inside FrameBufferResize but lets look at screen coordinates");
+		//writeln("Screen Coordinates: srcWidth = ", srcWidth, "  srcHeight = ", srcHeight);
 
 		int pixelWidth, pixelHeight;
 		glfwGetFramebufferSize(window, &pixelWidth, &pixelHeight);
-        writeln("Pixels size: pixelWidth = ", pixelWidth, "  pixelHeight = ", pixelHeight);	
+        //writeln("Pixels size: pixelWidth = ", pixelWidth, "  pixelHeight = ", pixelHeight);	
 
-        writeln("width passed in = ", width, "  height passed in = ", height);				
+        //writeln("width passed in = ", width, "  height passed in = ", height);				
 		
         queue.eventIn.frameBufferSize.width = width;
         queue.eventIn.frameBufferSize.height = height;
@@ -612,9 +612,9 @@ void handleEvent(GLFWwindow* window)
 		{
             //writeln("frameBufferSize Event = ");
             //glfwSetWindowSize(window, eve.frameBufferSize.width, eve.frameBufferSize.height);   
-            writeln("eve.frameBufferSize.width ", eve.frameBufferSize.width);
-            writeln("eve.frameBufferSize.height ", eve.frameBufferSize.height);
-            writeln("Before glViewport");
+            //writeln("eve.frameBufferSize.width ", eve.frameBufferSize.width);
+            //writeln("eve.frameBufferSize.height ", eve.frameBufferSize.height);
+            //writeln("Before glViewport");
 
 			/+ 
             Do not pass the window size to glViewport or other pixel-based OpenGL calls. The 

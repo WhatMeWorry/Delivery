@@ -52,17 +52,12 @@ void main(string[] argv)
 
     showMonitorVideoMode();
 
-    //===============================================================
-
-                 //glfwSetKeyCallback(winMain, &onKeyEvent);
+    // you must set the callbacks after creating the window
           glfwSetCursorPosCallback(winMain, &onCursorPosition);
 	    glfwSetMouseButtonCallback(winMain, &onMouseButton);
     glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);	
         glfwSetCursorEnterCallback(winMain, &onCursorEnterLeave);         
-    
-
-    // you must set the callbacks after creating the window
-    glfwSetKeyCallback(winMain, &onInternalKeyEvent);	
+                glfwSetKeyCallback(winMain, &onInternalKeyEvent);	
 	
     // GLFW Options
     glfwSetInputMode(winMain, GLFW_CURSOR, GLFW_CURSOR_NORMAL);	
@@ -88,12 +83,6 @@ void main(string[] argv)
     // Start Game within Menu State
     breakout.state = GameState.GAME_ACTIVE;
 	
-    // how to create and apply textures to 3D geometry data...
-    int x = 0;
-    float r = 0.001;
-		
-    Texture2D tex = resource_manager.ResMgr.getTexture("face");	
-	
     while (!glfwWindowShouldClose(winMain))    // Loop until the user closes the window
     {     
         // Calculate delta time
@@ -104,8 +93,6 @@ void main(string[] argv)
 
         handleEvent(winMain);  
 
-        writeln("breakout.width = ", breakout.width);        
-
         deltaTime = 0.001f;
         // Manage user input
         breakout.processInput(deltaTime);
@@ -115,7 +102,7 @@ void main(string[] argv)
         breakout.update_04(deltaTime);
  		
         // Render
-        //glClearColor(0.1f, 0.3f, 0.4f, 1.0f);  // originally
+ 
 		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 

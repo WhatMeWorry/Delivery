@@ -75,20 +75,19 @@ Something really important here is a bit of compiler magic: once the code path i
 
 +/
 
+GLFWwindow* winMain;  // need to make global so post_processor can acces winMain;  Kludge.
+
 void main(string[] argv)
 {
     Game breakout = new Game(800, 600);  // originally (800, 600)  // (1600, 1200) for 4K monitors
 	
     load_libraries();
 	
-    auto winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_08_power_ups", null, null);
+    winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_08_power_ups", null, null);
 
     // The created window, framebuffer and context may differ from what you requested. Query the actual values
     // by using glfwGetWindowSize, and glfwGetFramebufferSize
-
-
-
-		
+	
     glfwMakeContextCurrent(winMain); 
 
         // you must set the callbacks after creating the window
@@ -101,8 +100,7 @@ void main(string[] argv)
 
     // you must set the callbacks after creating the window
     glfwSetKeyCallback(winMain, &onInternalKeyEvent);	
-	
-	
+		
     // GLFW Options
     glfwSetInputMode(winMain, GLFW_CURSOR, GLFW_CURSOR_NORMAL);	
 	
@@ -112,15 +110,6 @@ void main(string[] argv)
     glfwGetFramebufferSize(winMain, &pixelWidth, &pixelHeight);  
     glViewport(0, 0, pixelWidth, pixelHeight);
 
-
-    int w;
-    int h;
-    glfwGetFramebufferSize(winMain, &w, &h);
-
-    //glViewport(0, 0, w, h);
-
-    writeln("width = ", breakout.width, "  ", w);
-    writeln("heigh = ", breakout.height, "  ", h);
     // Set OpenGL options
     glEnable(GL_CULL_FACE);
     glEnable(GL_BLEND);

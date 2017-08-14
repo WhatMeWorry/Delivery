@@ -75,6 +75,7 @@ Something really important here is a bit of compiler magic: once the code path i
 
 +/
 
+GLFWwindow* winMain;  // need to make global so post_processor can acces winMain;  Kludge.
 
 
 void main(string[] argv)
@@ -83,60 +84,27 @@ void main(string[] argv)
 	
     load_libraries();
 	
-    auto winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_07_post_processing", null, null);
+    winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_07_post_processing", null, null);
 		
     glfwMakeContextCurrent(winMain); 
+
+    showMonitorVideoMode();   
 
     // you must set the callbacks after creating the window
           glfwSetCursorPosCallback(winMain, &onCursorPosition);
 	    glfwSetMouseButtonCallback(winMain, &onMouseButton);
     glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);	
         glfwSetCursorEnterCallback(winMain, &onCursorEnterLeave);            
+                glfwSetKeyCallback(winMain, &onInternalKeyEvent);
 
-     // you must set the callbacks after creating the window
-    glfwSetKeyCallback(winMain, &onInternalKeyEvent);	
     // GLFW Options
     glfwSetInputMode(winMain, GLFW_CURSOR, GLFW_CURSOR_NORMAL);	
 	
     // Define the viewport dimensions
-/+
     int pixelWidth, pixelHeight;
     glfwGetFramebufferSize(winMain, &pixelWidth, &pixelHeight);  
     glViewport(0, 0, pixelWidth, pixelHeight);
 
-
-  //===============================================================
-    writeln("breakout.width = ", breakout.width);
-    writeln("breakout.height = ", breakout.height);
-
-
-
-    int fbw;
-    int fbh;
-    glfwGetFramebufferSize(winMain, &fbw, &fbh);
-
-    writeln("Framebuffer size width = ", fbw);
-    writeln("Framebuffer size height = ", fbh);
-
-    int ww;
-    int wh;
-    glfwGetWindowSize(winMain, &ww, &wh);
-
-    writeln("Window size width = ", ww);
-    writeln("Window size height = ", wh);
-+/
-    showMonitorVideoMode();
-
-    //===============================================================
-
-
-
-/+
-    int w;
-    int h;
-    glfwGetFramebufferSize(winMain, &w, &h);
-    //glViewport(0, 0, w, h);
-+/
     // Set OpenGL options
     glEnable(GL_CULL_FACE);
     glEnable(GL_BLEND);
@@ -152,12 +120,6 @@ void main(string[] argv)
 
     // Start Game within Menu State
     breakout.state = GameState.GAME_ACTIVE;
-	
-    // how to create and apply textures to 3D geometry data...
-    int x = 0;
-    float r = 0.001;
-		
-    //Texture2D tex = resource_manager.ResMgr.getTexture("face");	
 	
     while (!glfwWindowShouldClose(winMain))    // Loop until the user closes the window
     {     
@@ -178,7 +140,7 @@ void main(string[] argv)
         breakout.update_04(deltaTime);
 
         // Render
-        //glClearColor(0.1f, 0.3f, 0.4f, 1.0f);  // originally
+ 
 		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 

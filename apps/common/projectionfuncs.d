@@ -3,6 +3,7 @@ module projectionfuncs;
 import gl3n.linalg;  // mat4
 import gl3n.math: tan;
 
+
 mat4 perspectiveFunc(float fovInRadians, float aspect, float zNear, float zFar)
 {
     float f = 1 / tan(fovInRadians / 2);
@@ -35,7 +36,6 @@ mat4 perspectiveFunc(float fovInRadians, float aspect, float zNear, float zFar)
     +/
     return cm;
 }
-
 
 
 mat4 orthographicFunc(float left, float right, float bottom, float top, float near, float far)

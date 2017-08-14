@@ -53,15 +53,32 @@ GLuint makeShader(uint shaderType, string source)
     //writeln("source = ",source);
     immutable char* Cptr = toStringz(source);
     GLuint shaderID = glCreateShader(shaderType);
+
     glShaderSource(shaderID, 1, &Cptr, null);
     glCompileShader(shaderID);
 
+    writeln(shaderType, " = ", shaderID);
+
+    // The compilation status will be stored as part of the shader object's state. 
+    // This value will be set to GL_TRUE if the shader was compiled without errors 
+    // and is ready for use, and GL_FALSE otherwise. It can be queried by calling 
+    // glGetShaderiv with arguments shader and GL_COMPILE_STATUS.
+
+    GLint compileStatus;
+    glGetShaderiv(shaderID, GL_COMPILE_STATUS, &compileStatus);
+    writeln("compile status = ", compileStatus);  
+
     GLint logLen;
     glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &logLen);
+    writeln("shaders.d logLen = ", logLen);
 
     GLchar[] vertLog = new GLchar[logLen+1];	
     glGetShaderInfoLog(shaderID, logLen, null, vertLog.ptr);
-    writeln("Compile result for shader: ", shaderType, vertLog); 
+    writeln("Compile result for shader: ", shaderType); 
+    if (logLen > 0)
+    {
+        writeln("vertLog = ", vertLog);
+    }
 	
 	//writeAndPause(" ");
 
