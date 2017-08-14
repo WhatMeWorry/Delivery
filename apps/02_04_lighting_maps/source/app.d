@@ -130,6 +130,7 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
           Shader(GL_VERTEX_SHADER, "source/LightingMapsVertexShader.glsl",   0),
         Shader(GL_FRAGMENT_SHADER, "source/LightingMapsFragmentShader.glsl", 0)
     ];
+    
     GLuint lightingShader = createProgramFromShaders(lightingShaders);
 
     Shader[] lampShaders =
@@ -137,6 +138,7 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
         Shader(GL_VERTEX_SHADER,   "source/LampVertexShader.glsl",   0),
         Shader(GL_FRAGMENT_SHADER, "source/LampFragmentShader.glsl", 0)
     ];
+
     GLuint lampShader = createProgramFromShaders(lampShaders);
 
     writeln("lightingShader = ", lightingShader);

@@ -83,9 +83,21 @@ void writeAndPause(string s)
     writeln(s);
     version(Windows)
     {  
-        writeln("Before executeShell");
-                                        // pause command prints out
-        executeShell("pause");          // "Press any key to continue..."
+        // pause command prints out
+        // "Press any key to continue..."
+
+        // auto ret = executeShell("pause");
+        // if (ret.status == 0)
+        //     writeln(ret.output);
+
+        // The functions capture what the child process prints to both its standard output 
+        // and standard error streams, and return this together with its exit code.
+        // The problem is we don't have the pause return output until after the user
+        // hits a key.
+
+        writeln("Press any key to continue...");       
+        executeShell("pause");  // don't bother with standard output the child returns
+
     }
     else // Mac OS or Linux
     {
