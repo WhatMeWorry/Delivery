@@ -1,5 +1,5 @@
 
-module app;  // 01_06_coordinate_systems_3d_rotating_cube
+module app;  // 01_06_coordinate_systems_3d_rotate
 
 import common;
 
@@ -17,7 +17,7 @@ import derelict.glfw3.glfw3;
 float angle;
 
 // Window dimensions
-const GLuint width = 800, height = 600;
+enum width = 800;  enum height = 600;
 
 void main(string[] argv)
 {
@@ -65,12 +65,17 @@ void main(string[] argv)
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.arraySizeInBytes, vertices.ptr, GL_STATIC_DRAW);
 
+    enum describeBuff = defineVertexLayout!(int)([3,2]);
+    mixin(describeBuff);
+    pragma(msg, describeBuff);
+    /+ 
     // Position attribute    Data         Stride                        offset
     //                       len
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * GLfloat.sizeof, cast(const(void)*) 0);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * GLfloat.sizeof, cast(const(void)*) (3 * GLfloat.sizeof));
     glEnableVertexAttribArray(2);
+    +/
 
     glBindVertexArray(0);   // Unbind VAO
 
@@ -79,7 +84,6 @@ void main(string[] argv)
     GLuint texture2;
 
     loadTexture(texture1, "../art/container.jpg");
-
     loadTexture(texture2, "../art/awesomeface.png");
 
     // Bind Textures using texture units

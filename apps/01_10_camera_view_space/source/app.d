@@ -20,7 +20,7 @@ float angle;
 float distance = 3.0;
 
 // Window dimensions
-const GLuint width = 800, height = 600;
+enum width = 1000;  enum height = 800;
 
 void main(string[] argv)
 {
@@ -57,9 +57,7 @@ void main(string[] argv)
     // Setup OpenGL options
     glEnable(GL_DEPTH_TEST);	
 
-//===================================================================================
- 
-     // Set up vertex data (and buffer(s)) and attribute pointers
+    // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat[] vertices;
 	initializeCube(vertices);
 
@@ -78,12 +76,17 @@ void main(string[] argv)
 	// vertices are defined in common.vertex_data.d
     glBufferData(GL_ARRAY_BUFFER, vertices.arraySizeInBytes, vertices.ptr, GL_STATIC_DRAW);
 
+    enum describeBuff = defineVertexLayout!(int)([3,2]);
+    mixin(describeBuff);
+    pragma(msg, describeBuff);
+    /+
     // Position attribute    Data         Stride                        offset
     //                       len
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * GLfloat.sizeof, cast(const(void)*) 0);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * GLfloat.sizeof, cast(const(void)*) (3 * GLfloat.sizeof));
     glEnableVertexAttribArray(2);
+    +/
 
     glBindVertexArray(0);   // Unbind VAO
 
@@ -92,7 +95,6 @@ void main(string[] argv)
     GLuint texture2;
 
     loadTexture(texture1, "../art/container.jpg");
-
     loadTexture(texture2, "../art/awesomeface.png");
 
     // Bind Textures using texture units

@@ -19,13 +19,9 @@ import derelict.glfw3.glfw3;
 
 extern(C) void processMouse(double xpos, double ypos) nothrow
 {
-    //if (firstMouse)
-    //{
-        lastX = xpos;
-        lastY = ypos;
-        //firstMouse = false;
-    //}
-
+    lastX = xpos;
+    lastY = ypos;
+ 
     GLfloat xoffset = xpos - lastX;
     GLfloat yoffset = lastY - ypos;  // Reversed since y-coordinates go from bottom to left
 
@@ -38,9 +34,7 @@ extern(C) void processMouse(double xpos, double ypos) nothrow
 
 void do_movement(Event event)
 {
-    // Camera controls
     GLfloat magnify = 10; 	
-    //if (keys[GLFW_KEY_W])
 	
     if (event.keyboard.key == Key.w)	
         camera.ProcessKeyboard(Camera_Movement.FORWARD, (deltaTime * magnify));
@@ -49,38 +43,8 @@ void do_movement(Event event)
     if (event.keyboard.key == Key.a)
         camera.ProcessKeyboard(Camera_Movement.LEFT, (deltaTime * magnify));
     if (event.keyboard.key == Key.d)
-        camera.ProcessKeyboard(Camera_Movement.RIGHT, (deltaTime * magnify));
-    
+        camera.ProcessKeyboard(Camera_Movement.RIGHT, (deltaTime * magnify));   
 }
-void moveCamera(Event event)
-{
- /+   
-    // Camera controls
-    GLfloat cameraSpeed = 0.01;
-
-    if (event.keyboard.key == Key.w)
-	{
-        cameraPos += cameraSpeed * cameraFront;
-		writeln("W key pressed cameraPos = ", cameraPos);
-    }
-    if (event.keyboard.key == Key.s)
-    {
-        cameraPos -= cameraSpeed * cameraFront;
-   		writeln("S key pressed cameraPos = ", cameraPos);
-    }     
-    if (event.keyboard.key == Key.a)
-    {
-        cameraPos -= cross(cameraFront, cameraUp).normalized * cameraSpeed;
-        writeln("A key pressed cameraPos = ", cameraPos);
-    }
-    if (event.keyboard.key == Key.d)
-    {
-        cameraPos += cross(cameraFront, cameraUp).normalized * cameraSpeed;
-        writeln("D key pressed cameraPos = ", cameraPos);
-    }
-+/	
-}
-
 
 
 extern(C) void onWindowResize(GLFWwindow* window, int width, int height) nothrow
@@ -99,9 +63,6 @@ extern(C) void cursor_enter_leave_callback(GLFWwindow* window, int entered) noth
     if (entered)
     {
         // The cursor entered the client area of the window
-        //globalCameraPos   = cameraPos;
-        //globalCameraFront = cameraFront;
-        //globalCameraUp    = cameraUp;		
     }
     else
     {
@@ -110,8 +71,7 @@ extern(C) void cursor_enter_leave_callback(GLFWwindow* window, int entered) noth
 }
  
 // Window dimensions
-const GLuint width = 800, height = 600;
-
+enum width = 800;  enum height = 600;
 
 Camera camera;  // C++ had: Camera  camera(glm::vec3(0.0f, 0.0f, 3.0f)); here
 GLfloat lastX =  width / 2.0;
@@ -129,9 +89,8 @@ bool firstMouse = true;
 void main(string[] argv)
 {
     // Camera
-    camera = new Camera(vec3(0.0f, 0.0f, 3.0f));            //////////////////////////  ORIGINALLY 3.0
+    camera = new Camera(vec3(0.0f, 0.0f, 3.0f));
 
-    //auto winMain = load_libraries();
 	load_libraries();
 	
 	auto winMain = glfwCreateWindow(800, 600, "02_01_lighting_colors", null, null);
@@ -164,23 +123,13 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     writeln("lightingShader = ", lightingShader);
     writeln("lampShader = ", lampShader);
 
-	// Define the viewport dimensions
-    //glViewport(0, 0, width, height);
-	
     // OpenGL options
     glEnable(GL_DEPTH_TEST);	
 	
-
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat[] vertices;
 	initializeCubeJustPositions(vertices);
-	
-    writeln("vertices = ", vertices);
 
-    // World space positions of our cubes
-    //vec3[] cubePositions;
-    //initializeCubePositions(cubePositions);
- 
     GLuint VBO, VAO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -189,11 +138,16 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     glBufferData(GL_ARRAY_BUFFER, vertices.arraySizeInBytes, vertices.ptr, GL_STATIC_DRAW);
 
     glBindVertexArray(VAO);
+
+    mixin( defineVertexLayout!(int)([3]) );
+    pragma( msg, defineVertexLayout!(int)([3]) );
+    /+
     // Position attribute    Data         Stride                        offset
     //                       len
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * GLfloat.sizeof, cast(const(void)*) 0);
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);   // Unbind VAO
+    +/
 
     // Then, we set the light's VAO (VBO stays the same. After all, the vertices are the same for 
     // the light object (also a 3D cube))
@@ -204,8 +158,13 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     // to fill it; the VBO's data already contains all we need.
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     // Set the vertex attributes (only position data for the lamp))
+
+    mixin( defineVertexLayout!(int)([3]) );
+    pragma( msg, defineVertexLayout!(int)([3]) );
+    /+
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * GLfloat.sizeof, cast(const(void)*) 0);
     glEnableVertexAttribArray(0);
+    +/
     glBindVertexArray(0);
 
     while (!glfwWindowShouldClose(winMain))    // Loop until the user closes the window
@@ -214,8 +173,6 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
         GLfloat currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-		
-        //writeln("deltaTime = ", deltaTime);
 
         glfwPollEvents();  // Check if any events have been activiated (key pressed, mouse
                            // moved etc.) and call corresponding response functions 
@@ -240,7 +197,6 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
             }							
         }						   			   
 
-
         // Clear the colorbuffer
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -257,13 +213,13 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
         view = camera.GetViewMatrix();
 
         mat4 projection = mat4.identity;
-        //GLfloat nonConstCameraZoom = camera.zoom;
+     
         projection = perspectiveFunc(camera.zoom, width/height, 0.1f, 100.0f);
         // Get the uniform locations
         GLint modelLoc = glGetUniformLocation(lightingShader, "model");
         GLint viewLoc  = glGetUniformLocation(lightingShader, "view");
         GLint projLoc  = glGetUniformLocation(lightingShader, "projection");
-		
+
         // Note: currently we set the projection matrix each frame, but since 
         // the projection matrix rarely changes it's often best practice to set 
         // it outside the main loop only once.

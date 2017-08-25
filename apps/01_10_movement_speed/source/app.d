@@ -1,5 +1,5 @@
 
-module app;  // 01_10_camera_view_space_movement_speed
+module app;  // 01_10_movement_speed
 
 import common;
 
@@ -108,7 +108,7 @@ void enableCursor(Event event)
 
  
 // Window dimensions
-const GLuint width = 800, height = 600;
+enum width = 800;  enum height = 600;
 
 // Camera
 vec3 cameraPos   = vec3(0.0f, 0.0f,  3.0f);
@@ -179,13 +179,17 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.arraySizeInBytes, vertices.ptr, GL_STATIC_DRAW);
 
-
+    enum describeBuff = defineVertexLayout!(int)([3,2]);
+    mixin(describeBuff);
+    pragma(msg, describeBuff);
+    /+
     // Position attribute    Data         Stride                        offset
     //                       length
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * GLfloat.sizeof, cast(const(void)*) 0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * GLfloat.sizeof, cast(const(void)*) (3 * GLfloat.sizeof));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * GLfloat.sizeof, cast(const(void)*) (3 * GLfloat.sizeof));
     glEnableVertexAttribArray(2);
+    +/
 
     glBindVertexArray(0);   // Unbind VAO
 
@@ -194,7 +198,6 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     GLuint texture2;
 
     loadTexture(texture1, "../art/container.jpg");
-
     loadTexture(texture2, "../art/awesomeface.png");
 
     // Bind Textures using texture units

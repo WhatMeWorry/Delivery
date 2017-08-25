@@ -1,5 +1,5 @@
 ﻿
-module app;  // 01_10_camera_view_space_walk_around
+module app;  // 01_10_walk_around
 
 import common;
 
@@ -52,7 +52,7 @@ vec3 cameraFront = vec3(0.0f, 0.0f, -1.0f);
 vec3 cameraUp    = vec3(0.0f, 1.0f,  0.0f);
 
 // Window dimensions
-const GLuint width = 800, height = 600;
+enum width = 800;  enum height = 600;
 
 void main(string[] argv)
 {
@@ -102,13 +102,18 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.arraySizeInBytes, vertices.ptr, GL_STATIC_DRAW);
 
+    enum describeBuff = defineVertexLayout!(int)([3,2]);
+    mixin(describeBuff);
+    pragma(msg, describeBuff);
+    
+    /+
     // Position attribute    Data         Stride                        offset
     //                       length
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * GLfloat.sizeof, cast(const(void)*) 0);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * GLfloat.sizeof, cast(const(void)*) (3 * GLfloat.sizeof));
     glEnableVertexAttribArray(2);
-
+    +/
     glBindVertexArray(0);   // Unbind VAO
 
     // Load and create a texture 
@@ -116,7 +121,6 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     GLuint texture2;
 
     loadTexture(texture1, "../art/container.jpg");
-
     loadTexture(texture2, "../art/awesomeface.png");
 
     // Bind Textures using texture units

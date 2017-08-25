@@ -189,10 +189,10 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
         blue  = 1 << 2,
 	}
 	
-    // Generate a uniformly-distributed integer in the range [0, 7]
-    auto i = uniform(0, 8);	
+    // Generate a uniformly-distributed integer in the range [1, 7]
+    auto i = uniform(1, 8);	
 	
-    double interval = 5.0;
+    double interval = 2.0;
     ManualTimer manualTimer;
 	manualTimer.startTimer(interval);
 	
@@ -229,7 +229,7 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
 
         if(manualTimer.expires)
         {
-            i = uniform(0, 8); 
+            i = uniform(1, 8);  // uniformly-distributed integer in the range [1, 7]
             writeln("i = ", i);	
             manualTimer.startTimer(interval);		
 		}		

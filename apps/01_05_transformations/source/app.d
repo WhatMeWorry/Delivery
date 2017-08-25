@@ -78,6 +78,11 @@ void main(string[] argv)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.bytes, indices.ptr, GL_STATIC_DRAW);
 
+    enum describeBuff = defineVertexLayout!(int)([3,3,2]);
+    mixin(describeBuff);
+    pragma(msg, describeBuff);   
+
+    /+
     // Position attribute    Data         Stride                        offset
     //                       len
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * GLfloat.sizeof, cast(const(void)*) 0);
@@ -88,6 +93,7 @@ void main(string[] argv)
     // TexCoord attribute
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * GLfloat.sizeof, cast(const(void)*) (6 * GLfloat.sizeof));
     glEnableVertexAttribArray(2);
+    +/
 
     glBindVertexArray(0); // Unbind VAO
 
@@ -96,7 +102,6 @@ void main(string[] argv)
     GLuint texture2;
 
     loadTexture(texture1, "../art/container.jpg");
-
     loadTexture(texture2, "../art/awesomeface.png");
 
     // Bind Textures using texture units
@@ -133,7 +138,7 @@ void main(string[] argv)
   
         // opposite order from C++ and OpenGL and GLM
         transform = transform.rotate(cast(GLfloat) glfwGetTime() * 1.0f, vec3(0.0f, 0.0f, -1.0f));  // negative sign
-        transform = transform.translate(vec3(0.5f, -0.5f, 0.0f));
+        transform = transform.translate(vec3(0.25f, -0.25f, 0.0f));
 
         double runningTimeInSeconds = glfwGetTime();
         int runTimeInSecs = cast(int) runningTimeInSeconds;

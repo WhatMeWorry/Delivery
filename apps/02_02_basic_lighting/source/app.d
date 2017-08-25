@@ -86,16 +86,15 @@ extern(C) void onWindowResize(GLFWwindow* window, int width, int height) nothrow
 
 
 // Window dimensions
-const GLuint width = 800, height = 600;
-
-
+enum width = 800;  enum height = 600;
 
 GLfloat lastX =  width / 2.0;
 GLfloat lastY =  height / 2.0;
 bool[1024] keys;
 
 // Light attributes
-vec3 lightPos = vec3(1.2f, 1.0f, 2.0f);
+//vec3 lightPos = vec3(1.2f, 1.0f, 2.0f);
+vec3 lightPos = vec3(0.16f, 0.75f, 1.0f);
 
 // Deltatime
 GLfloat deltaTime = 0.0f;	// Time between current frame and last frame
@@ -107,7 +106,7 @@ void main(string[] argv)
  
     load_libraries();
 	
-    auto winMain = glfwCreateWindow(800, 600, "02_02_basic_lighting", null, null);
+    auto winMain = glfwCreateWindow(width, height, "02_02_basic_lighting", null, null);
 	
     glfwMakeContextCurrent(winMain); 
 	
@@ -119,9 +118,6 @@ void main(string[] argv)
      glfwSetWindowSizeCallback(winMain, &onWindowResize);
 glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
 	 
-    // Define the viewport dimensions
-    //glViewport(0, 0, width, height);
-
     // Setup OpenGL options
     glEnable(GL_DEPTH_TEST);
 
@@ -156,6 +152,10 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     glBufferData(GL_ARRAY_BUFFER, vertices.arraySizeInBytes, vertices.ptr, GL_STATIC_DRAW);
 
     glBindVertexArray(containerVAO);
+
+    mixin( defineVertexLayout!(int)([3,3]) );
+    pragma( msg, defineVertexLayout!(int)([3,3]) );  
+    /+  
     // Position attribute    Data         Stride                        offset
     //                       len
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * GLfloat.sizeof, cast(const(void)*) 0);
@@ -163,6 +163,7 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     // Normal attribute
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * GLfloat.sizeof, cast(const(void)*) (3*GLfloat.sizeof) );
     glEnableVertexAttribArray(1);
+    +/
     glBindVertexArray(0);   // Unbind VAO
 
     // Then, we set the light's VAO (VBO stays the same. After all, the vertices are the same for 

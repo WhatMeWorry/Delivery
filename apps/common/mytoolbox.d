@@ -5,8 +5,59 @@ import std.stdio;             // writeln()
 import std.process;           // executeShell()
 import std.traits;            // isDynamicArray!()
 import std.math;
+import derelict.opengl3.gl3;     // GL_FALSE
+import std.algorithm.iteration;  // sum
+import std.ascii;                // newline
+import std.conv;                 // to
 
 
+
+/+
+This compile time function generates the glVertexAttr... commands like the following:
+
+glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * GLfloat.sizeof, cast(const(void)*) (0 * GLfloat.sizeof));
+glEnableVertexAttribArray(0);
+glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * GLfloat.sizeof, cast(const(void)*) (3 * GLfloat.sizeof));
+glEnableVertexAttribArray(1);
+glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * GLfloat.sizeof, cast(const(void)*) (6 * GLfloat.sizeof));
+glEnableVertexAttribArray(2);
++/
+
+string defineVertexLayout(T)(T[] arr, bool normalization = GL_FALSE)
+{
+    auto s = sum(arr);
+    auto offset = 0;
+    string    cmd1 = `glVertexAttribPointer(`;
+    string    cmd2 = `glEnableVertexAttribArray(`;
+    string   comma = `,`;
+    string closing = `);`;
+    string guts;
+    string accum;
+    string normalStr;
+
+    if (normalization)
+        normalStr = "GL_TRUE";
+    else 
+        normalStr = "GL_FALSE";
+
+    foreach(i, elem; arr)
+    {
+	    guts = cmd1 ~
+               to!string(i) ~ ", " ~ 
+               to!string(elem) ~ ", GL_FLOAT, " ~
+               normalStr ~ ", " ~
+               to!string(s) ~ " * GLfloat.sizeof, cast(const(void)*) (" ~
+               to!string(offset) ~ " * GLfloat.sizeof)" ~ closing ~ newline;
+
+        cmd2 = "glEnableVertexAttribArray(" ~ to!string(i) ~ closing ~ newline;
+
+        offset += elem;
+
+        accum ~= guts ~ cmd2;
+    }
+
+    return (accum);
+}
 
 
 

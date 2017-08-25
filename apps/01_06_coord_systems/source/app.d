@@ -16,7 +16,7 @@ import derelict.glfw3.glfw3;
 
 
 // Window dimensions
-const GLuint width = 800, height = 600;
+enum width = 800;  enum height = 600;
 
 void main(string[] argv)
 {
@@ -79,6 +79,10 @@ void main(string[] argv)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.bytes, indices.ptr, GL_STATIC_DRAW);
 
+    enum describeBuff = defineVertexLayout!(int)([3,3,2]);
+    mixin(describeBuff);
+    pragma(msg, describeBuff);   
+    /+
     // Position attribute    Data         Stride                        offset
     //                       len
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * GLfloat.sizeof, cast(const(void)*) 0);
@@ -89,6 +93,7 @@ void main(string[] argv)
     // TexCoord attribute
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * GLfloat.sizeof, cast(const(void)*) (6 * GLfloat.sizeof));
     glEnableVertexAttribArray(2);
+    +/
 
     glBindVertexArray(0); // Unbind VAO
 
@@ -97,7 +102,6 @@ void main(string[] argv)
     GLuint texture2;
 
     loadTexture(texture1, "../art/container.jpg");
-
     loadTexture(texture2, "../art/awesomeface.png");
 
     // Bind Textures using texture units

@@ -1,5 +1,5 @@
 
-module app;  // 02_04_lighting_maps
+module app;  // 02_04_01_light_maps_diffuse_maps
 
 import common;
 
@@ -87,7 +87,6 @@ extern(C) void onWindowResize(GLFWwindow* window, int width, int height) nothrow
     glViewport(0, 0, pixelWidth, pixelHeight);
 }
 
-
 // Window dimensions
 enum width = 800;
 enum height = 600;
@@ -96,30 +95,24 @@ GLfloat lastX =  width / 2.0;
 GLfloat lastY =  height / 2.0;
 bool[1024] keys;
 
-// Light attributes
-vec3 lightPos = vec3(1.2f, 1.0f, 2.0f);
-
 // Deltatime
 GLfloat deltaTime = 0.0f;	// Time between current frame and last frame
 GLfloat lastFrame = 0.0f;  	// Time of last frame
-
 
 mat4 model      = mat4.identity; 
 mat4 view       = mat4.identity;
 mat4 projection = mat4.identity;
 
+// Light attributes
+vec3 lightPos = vec3(1.2f, 1.0f, 2.0f);
 
 void main(string[] argv)
 {
     camera = new Camera(vec3(0.0f, 0.0f, 4.5f));
 
-    writeln("model = ", model);
-    writeln("view = ", view);
-    writeln("projection = ", projection);
-
     load_libraries();
 	
-    auto winMain = glfwCreateWindow(width, height, "02_04_lighting_maps", null, null);
+    auto winMain = glfwCreateWindow(width, height, "02_04_01_light_maps_diffuse_maps", null, null);
 	
     glfwMakeContextCurrent(winMain); 
 	
@@ -136,29 +129,22 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
 
     Shader[] lightingShaders =
     [
-          Shader(GL_VERTEX_SHADER, "source/LightingMapsVertexShader.glsl",   0),
-        Shader(GL_FRAGMENT_SHADER, "source/LightingMapsFragmentShader.glsl", 0)
+          Shader(GL_VERTEX_SHADER, "source/LightMapsVertShade.glsl",   0),
+        Shader(GL_FRAGMENT_SHADER, "source/LightMapsFragShade.glsl", 0)
     ];
     
     GLuint lightingShader = createProgramFromShaders(lightingShaders);
 
     Shader[] lampShaders =
     [
-        Shader(GL_VERTEX_SHADER,   "source/LampVertexShader.glsl",   0),
-        Shader(GL_FRAGMENT_SHADER, "source/LampFragmentShader.glsl", 0)
+        Shader(GL_VERTEX_SHADER,   "source/LampVertShade.glsl",   0),
+        Shader(GL_FRAGMENT_SHADER, "source/LampFragShade.glsl", 0)
     ];
 
-    GLuint lampShader = createProgramFromShaders(lampShaders);
-
-    writeln("lightingShader = ", lightingShader);
-    writeln("lampShader = ", lampShader);
-	
-    // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat[] vertices;
     initializeCubePosNormsTexs(vertices);
-    writeln("vertices = ", vertices);
 
-    //writeAndPause("rest");	
+    GLuint lampShader = createProgramFromShaders(lampShaders);
 
     GLuint VBO, cubeVAO;
     glGenVertexArrays(1, &cubeVAO);
@@ -176,13 +162,13 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * GLfloat.sizeof, cast(const(void)*) (6*GLfloat.sizeof) );
     glEnableVertexAttribArray(2);
-    //glBindVertexArray(0);   // Unbind VAO
 
     // Then, we set the light's VAO (VBO stays the same. After all, the vertices are the same for 
     // the light object (also a 3D cube))
     GLuint lightVAO;
     glGenVertexArrays(1, &lightVAO);
     glBindVertexArray(lightVAO);
+
     // We only need to bind to the VBO (to link it with glVertexAttribPointer), no need 
     // to fill it; the VBO's data already contains all we need.
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -190,23 +176,16 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     // Note that we skip over the normal vectors
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * GLfloat.sizeof, cast(const(void)*) 0);
     glEnableVertexAttribArray(0);
-    //glBindVertexArray(0);
-
-    // Load textures                  ////////////////////////////// NEW
+    
     GLuint diffuseMap;
-    //GLuint specularMap; 
-
     glGenTextures(1, &diffuseMap);
-    //glGenTextures(1, &specularMap);
 
-    loadTexture(diffuseMap,  "../art/container2.png");     // relative to executable
-    //loadTexture(specularMap, "../art/container2_specular.png");
+    loadTexture(diffuseMap, "../art/container2.png");     // relative to executable
 
     // Set texture units
     glUseProgram(lightingShader);
     glUniform1i(glGetUniformLocation(lightingShader, "material.diffuse"),  0);
-    //glUniform1i(glGetUniformLocation(lightingShader, "material.specular"), 1);
-	
+    // glUniform1i(glGetUniformLocation(lightingShader, "material.specular"), 1);	
 	
     while (!glfwWindowShouldClose(winMain))    // Loop until the user closes the window
     {
@@ -219,9 +198,9 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
                            // moved etc.) and call corresponding response functions 
         handleEvent(winMain);
 
-        do_movement();
-
-        // Clear the colorbuffer
+        do_movement();	
+	
+       // Clear the colorbuffer
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -237,63 +216,56 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
         glUniform3f(glGetUniformLocation(lightingShader, "light.ambient"),  0.2f, 0.2f, 0.2f);
         glUniform3f(glGetUniformLocation(lightingShader, "light.diffuse"),  0.5f, 0.5f, 0.5f);
         glUniform3f(glGetUniformLocation(lightingShader, "light.specular"), 1.0f, 1.0f, 1.0f);
+
         // Set material properties
+        glUniform3f(glGetUniformLocation(lightingShader, "material.specular"), 0.5f, 0.5f, 0.5f);   
         glUniform1f(glGetUniformLocation(lightingShader, "material.shininess"), 32.0f);
 
-        // Create camera transformations
-        //mat4 view;  // moved to module level
-        //mat4 view = mat4.identity;
-        view = camera.GetViewMatrix();
-
-
         //mat4 projection = mat4.identity;
-        projection = perspectiveFunc(camera.zoom, width/height, 0.1f, 100.0f);
+        mat4 projection = perspectiveFunc(camera.zoom, width/height, 0.1f, 100.0f);
 
+        // Create camera transformations
+        //mat4 view = mat4.identity;
+        mat4 view = camera.GetViewMatrix();
 
-        // Get their uniform location
-        GLint modelLoc = glGetUniformLocation(lampShader, "model");
-        GLint viewLoc  = glGetUniformLocation(lampShader, "view");
-        GLint projLoc  = glGetUniformLocation(lampShader, "projection");
-        // Pass the matrices to the shader
-        glUniformMatrix4fv(viewLoc,  1, GL_TRUE, view.value_ptr);
-        glUniformMatrix4fv(projLoc,  1, GL_FALSE, projection.value_ptr);
-
-        // Bind diffuse map
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, diffuseMap);
-        // Bind specular map
-        //glActiveTexture(GL_TEXTURE1);
-        //glBindTexture(GL_TEXTURE_2D, specularMap);
-
-        // Draw the container (using cube's vertex attributes)
-        glBindVertexArray(cubeVAO);
-            //mat4 model = mat4.identity;
-            glUniformMatrix4fv(modelLoc, 1, GL_TRUE, model.value_ptr);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        glBindVertexArray(0);
-
-        // Also draw the lamp object, again binding the appropriate shader
-        glUseProgram(lampShader);
-        // Get location objects for the matrices on the lamp shader (these could be different on a different shader)
-        modelLoc = glGetUniformLocation(lampShader, "model");
-        viewLoc  = glGetUniformLocation(lampShader, "view");
-        projLoc  = glGetUniformLocation(lampShader, "projection");
-
+        int viewLoc  = glGetUniformLocation(lightingShader, "view");
+        int projLoc  = glGetUniformLocation(lightingShader, "projection");
         // Set matrices
         glUniformMatrix4fv(viewLoc, 1, GL_TRUE, view.value_ptr);
-        glUniformMatrix4fv(projLoc, 1, GL_FALSE, projection.value_ptr);
-        //model = mat4.identity;
-        model = model.scale(0.2f, 0.2f, 0.2f); // Make it a smaller cube
-        model = model.translate(lightPos);
+        glUniformMatrix4fv(projLoc, 1, GL_FALSE, projection.value_ptr);    
+
+        model = mat4.identity;  
+        int modelLoc = glGetUniformLocation(lightingShader, "model");      
         glUniformMatrix4fv(modelLoc, 1, GL_TRUE, model.value_ptr);
-        // Draw the light object (using light's vertex attributes)
+
+        // bind diffuse map
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, diffuseMap);
+
+        // render the cube
+        glBindVertexArray(cubeVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        // also draw the lamp object
+        glUseProgram(lampShader);  
+
+        projLoc  = glGetUniformLocation(lampShader, "projection");  
+        glUniformMatrix4fv(projLoc, 1, GL_FALSE, projection.value_ptr);  
+
+        viewLoc  = glGetUniformLocation(lampShader, "view");
+        glUniformMatrix4fv(viewLoc, 1, GL_TRUE, view.value_ptr);
+		
+        model = mat4.identity;
+        model = model.scale(0.2f, 0.2, 0.2); // Here, these two lines (scale and translate) are in reverse order from the C++ code 	
+        model = model.translate(lightPos);   // It doesn't work correctly if not done this way
+
+        modelLoc = glGetUniformLocation(lampShader, "model");
+        glUniformMatrix4fv(modelLoc, 1, GL_TRUE, model.value_ptr);
+
         glBindVertexArray(lightVAO);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        glBindVertexArray(0);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
-        glfwSwapBuffers(winMain);   // Swap front and back buffers 
+        glfwSwapBuffers(winMain);
+        glfwPollEvents();
     }
-
-    glfwTerminate();   // Clear any resources allocated by GLFW.
-	return;
 }
