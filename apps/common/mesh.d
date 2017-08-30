@@ -2,12 +2,8 @@
 module mesh;
 
 import common;
-
-
 import gl3n.linalg; // vec3, vec2
-//import ShaderClass;
 import mytoolbox;  
-
 
 import std.stdio; //  writeln
 
@@ -44,9 +40,8 @@ public:
         this.textures = textures;
 
         // Now that we have all the required data, set the vertex buffers and its attribute pointers.
-        writeAndPause("Mesh Constructor - Call this.setupMesh");
+
         this.setupMesh();
-        writeAndPause("After - this.setupMesh();");
     }
 	
     // Render the mesh
@@ -66,18 +61,6 @@ public:
             //stringstream ss;
             string number;
             string name = this.textures[i].type;
-
-            //writeln("name = ", name);
-            //writeAndPause(" ");
-
-            //if(name == "texture_diffuse")
-            //    ss << diffuseNr++; // Transfer GLuint to stream
-            //else if(name == "texture_specular")
-            //    ss << specularNr++; // Transfer GLuint to stream
-            //number = ss.str(); 
-            // Now set the sampler to the correct texture unit
-
-            //TODO: glUniform1i(glGetUniformLocation(shader.Program, name + toString(number)), i);
 
             // And finally bind the texture
             glBindTexture(GL_TEXTURE_2D, this.textures[i].id);
@@ -130,39 +113,34 @@ public:  // kludge so to make setupMesh() accessable from outside class
 		writeln("01");
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this.EBO);
 		writeln("02");		
-        //glBufferData(GL_ELEMENT_ARRAY_BUFFER, this.indices.length * GLuint.sizeof, &this.indices[0], GL_STATIC_DRAW);
+ 
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, this.indices.length * GLuint.sizeof, this.indices.ptr, GL_STATIC_DRAW);		
 
-			  writeln("1111111111111111111111");
-		
-        /+
-        vec3 Position;
-        vec3 Normal;
-        vec2 TexCoords;
-        vec3 Tangent;
-        vec3 Bitangent;
-        +/
+        mixin( defineVertexLayout!(int)([3,3,2,3,3]) );
+        pragma( msg, defineVertexLayout!(int)([3,3,2,3,3]) );       
+
         // Set the vertex attribute pointers
         //                                              stride         starting offset
-        // Vertex Positions                                            cast(const(void)*) (3 * GLfloat.sizeof)
-        glEnableVertexAttribArray(0);	
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, Vertex.sizeof, cast(const(void)*) 0);  // Position 
+        // Vertex Positions
+        //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, Vertex.sizeof, cast(const(void)*) 0);  // Position 
+        //glEnableVertexAttribArray(0);
+
         // Vertex Normals
-        glEnableVertexAttribArray(1);	
-        //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, Vertex.sizeof, cast(const(void)*) Vertex.Normal.offset );
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, Vertex.sizeof, cast(const(void)*) (3 * GLfloat.sizeof) );
+        //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, Vertex.sizeof, cast(const(void)*) (3 * GLfloat.sizeof) );
+        //glEnableVertexAttribArray(1);
+
         // Vertex Texture Coords
-        glEnableVertexAttribArray(2);	
-        //glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), cast(const(void)*) offsetof(Vertex, TexCoords) );
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, Vertex.sizeof, cast(const(void)*) (6 * GLfloat.sizeof) );      
+        //glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, Vertex.sizeof, cast(const(void)*) (6 * GLfloat.sizeof) ); 
+        //glEnableVertexAttribArray(2);
+
         // Vertex Tangent
-        glEnableVertexAttribArray(3);
-        //glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), cast(const(void)*) offsetof(Vertex, Tangent));
-        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, Vertex.sizeof, cast(const(void)*) (8 * GLfloat.sizeof) );
+        //glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, Vertex.sizeof, cast(const(void)*) (8 * GLfloat.sizeof) );
+        //glEnableVertexAttribArray(3);
+
         // Vertex Bitangent
-        glEnableVertexAttribArray(4);
-        //glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), cast(const(void)*) offsetof(Vertex, Bitangent));
-        glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, Vertex.sizeof, cast(const(void)*) (11 * GLfloat.sizeof) );      
+        //glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, Vertex.sizeof, cast(const(void)*) (11 * GLfloat.sizeof) );    
+        //glEnableVertexAttribArray(4);
+   
         glBindVertexArray(0);
     }
 };

@@ -34,7 +34,6 @@ struct TextRenderingSystem
     static GLuint progID;
     static GLuint VAO;
     static GLuint VBO;	
-
 } 
 
 /+

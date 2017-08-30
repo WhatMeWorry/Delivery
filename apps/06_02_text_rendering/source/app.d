@@ -21,8 +21,7 @@ float distance = 3.0;
 
 bool firstMouse = true;
 
-// This just declares a _pointer_ to CameraClass that is set to null.  No Camera object is created.
-Camera camera;  
+
 
 
 extern(C) static void onInternalKeyEvent(GLFWwindow* window, int key, int scancode, int action, int modifier) nothrow
@@ -49,10 +48,10 @@ extern(C) void onWindowResize(GLFWwindow* window, int width, int height) nothrow
 }
 
  
-//FT_Face face;
+
 
 // Window dimensions
-const GLuint width = 800, height = 600;
+enum width = 800;  enum height = 600;
 
 GLfloat lastX =  width / 2.0;
 GLfloat lastY =  height / 2.0;
@@ -70,7 +69,11 @@ Glyph[GLchar] phoenixRising;
 Glyph[GLchar] eagleLake;
 GLuint VAO, VBO;
 
+// In D all classes are references
+// This just declares a _pointer_ to Camera class that is set to null.  No Camera object is created.
+Camera camera;  
 
+// In D, all structs are value types.  This will actually create an object called textRenderSys
 TextRenderingSystem textRenderSys;
 
 
@@ -154,7 +157,8 @@ void main(string[] argv)
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        renderText(textRenderSys.font, textRenderSys.VAO, textRenderSys.VBO, textRenderSys.progID, "This is sample Courier Bold text", 25.0f, 75.0f, 3.5f, vec3(0.0, 0.0f, 0.0f));
+        renderText(textRenderSys.font, textRenderSys.VAO, textRenderSys.VBO, textRenderSys.progID, 
+                   "This is sample Courier Bold text", 25.0f, 75.0f, 3.5f, vec3(0.0, 0.0f, 0.0f));
 
         // Play with scale value
         //renderText(courierBold, VAO, VBO, progID, "This changes scale to 0.5", 25.0f, 75.0f, 0.5f, vec3(0.5, 0.8f, 0.2f));

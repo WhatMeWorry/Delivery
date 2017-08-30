@@ -87,8 +87,7 @@ extern(C) void onWindowResize(GLFWwindow* window, int width, int height) nothrow
 
 
 // Window dimensions
-const GLuint width = 800, height = 600;
-
+enum width = 800;  enum height = 600;
 
 
 GLfloat lastX =  width / 2.0;
@@ -173,14 +172,17 @@ void main(string[] argv)
     glBufferData(GL_ARRAY_BUFFER, vertices.arraySizeInBytes, vertices.ptr, GL_STATIC_DRAW);
 
     glBindVertexArray(containerVAO);
+
+    mixin( defineVertexLayout!(int)([3,3,2]) );
+    pragma( msg, defineVertexLayout!(int)([3,3,2]) );    
     // Position attribute    Data         Stride                        offset
     //                       len
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * GLfloat.sizeof, cast(const(void)*) 0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * GLfloat.sizeof, cast(const(void)*) (3*GLfloat.sizeof) );
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * GLfloat.sizeof, cast(const(void)*) (6*GLfloat.sizeof) );
-    glEnableVertexAttribArray(2);
+    //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * GLfloat.sizeof, cast(const(void)*) 0);
+    //glEnableVertexAttribArray(0);
+    //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * GLfloat.sizeof, cast(const(void)*) (3*GLfloat.sizeof) );
+    //glEnableVertexAttribArray(1);
+    //glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * GLfloat.sizeof, cast(const(void)*) (6*GLfloat.sizeof) );
+    //glEnableVertexAttribArray(2);
     glBindVertexArray(0);   // Unbind VAO
 
     // Then, we set the light's VAO (VBO stays the same. After all, the vertices are the same for 

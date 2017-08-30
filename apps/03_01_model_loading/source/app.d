@@ -88,26 +88,8 @@ extern(C) void onWindowResize(GLFWwindow* window, int width, int height) nothrow
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
 // Window dimensions
-const GLuint width = 800, height = 600;
+enum width = 800;  enum height = 600;
 
 
 GLfloat lastX =  width / 2.0;
@@ -146,8 +128,6 @@ void main(string[] argv)
     // Setup OpenGL options
     glEnable(GL_DEPTH_TEST);
 	
- 
-
     Shader[] shaders =
     [
           Shader(GL_VERTEX_SHADER, "source/VertexShader.glsl",   0),
@@ -156,15 +136,8 @@ void main(string[] argv)
 	
     shader.ID = createProgramFromShaders(shaders);
 
-    //    Shader shader = new Shader("../VertexShader.glsl", "../FragmentShader.glsl");
-
     // Load models
     Model ourModel = new Model("../models/nanosuit.obj");
-
-	writeln("Before Main");
- 
-
-
 
     while (!glfwWindowShouldClose(winMain))    // Loop until the user closes the window
     {
@@ -176,17 +149,12 @@ void main(string[] argv)
         glfwPollEvents();  // Check if any events have been activiated (key pressed, mouse
                            // moved etc.) and call corresponding response functions 
         do_movement();
-		
-        writeln("After do_movement");
 
         // Clear the colorbuffer
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        //shader.Use();   // <-- Don't forget this one!
         glUseProgram(shader.ID);
-        //writeln("shader.Program = ", shader.Program);
-        //writeAndPause(" ");
 
         // Transformation matrices
         mat4 projection = mat4.identity;  // is this needed????
@@ -204,7 +172,6 @@ void main(string[] argv)
         model = model.scale(0.2f, 0.2f, 0.2f);	           // It's a bit too big for our scene, so scale it down
         glUniformMatrix4fv(glGetUniformLocation(shader.ID, "model"), 1, GL_TRUE, model.value_ptr);
         ourModel.draw(shader);       
-
 
         glfwSwapBuffers(winMain);   // Swap front and back buffers 
     }

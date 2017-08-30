@@ -26,7 +26,7 @@ public:
     // Constructor, expects a filepath to a 3D model.
     this(string path, bool gamma = false)
     {
-        writeAndPause("inside Model Constructor");
+        //writeAndPause("inside Model Constructor");
         this.gammaCorrection = false;
         this.loadModel(path);
     }
@@ -36,7 +36,7 @@ public:
     {
         for(GLuint i = 0; i < this.meshes.length; i++)
         {
-            writeln("i = ", i);
+            //writeln("i = ", i);
             this.meshes[i].draw(shader);
         }
     }
@@ -137,7 +137,7 @@ private:
 
             writeln("aMesh.VAO = ", aMesh.VAO, "  VBO = ", aMesh.VBO, "  EBO = ", aMesh.EBO);
 
-            writeAndPause("  ");
+            //writeAndPause("  ");
             meshes ~= aMesh;  
             //meshes ~= *mesh; // append operator        
         }
@@ -277,7 +277,7 @@ private:
 
         // Process materials
         writeln("mesh.mMaterialIndex = ", mesh.mMaterialIndex);
-        writeAndPause(" ");
+        //writeAndPause(" ");
         if(mesh.mMaterialIndex >= 0)
         {
             const aiMaterial* material = scene.mMaterials[mesh.mMaterialIndex];
