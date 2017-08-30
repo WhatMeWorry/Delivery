@@ -184,8 +184,7 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
 
     // Set texture units
     glUseProgram(lightingShader);
-    glUniform1i(glGetUniformLocation(lightingShader, "material.diffuse"),  0);
-    // glUniform1i(glGetUniformLocation(lightingShader, "material.specular"), 1);	
+    glUniform1i(glGetUniformLocation(lightingShader, "material.diffuse"),  0);	
 	
     while (!glfwWindowShouldClose(winMain))    // Loop until the user closes the window
     {
