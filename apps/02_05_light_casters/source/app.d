@@ -81,8 +81,9 @@ void do_movement()
 
 extern(C) void onWindowResize(GLFWwindow* window, int width, int height) nothrow
 {
-    glfwSetWindowSize(window, width, height);   
-    glViewport(0, 0, width, height);
+    int pixelWidth, pixelHeight;
+    glfwGetFramebufferSize(window, &pixelWidth, &pixelHeight);  
+    glViewport(0, 0, pixelWidth, pixelHeight);
 }
 
 

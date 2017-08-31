@@ -233,7 +233,7 @@ public:
         vec2 aabb_center = vec2(two.position.x + aabb_half_extents.x, 
                                 two.position.y + aabb_half_extents.y);
 								
-         writeln("aabb_half_extents = ", aabb_half_extents);
+        writeln("aabb_half_extents = ", aabb_half_extents);
         writeln("aabb_center = ", aabb_center);		 
 		 
         // Get difference vector between both centers
@@ -244,7 +244,6 @@ public:
         vec2 clamped = clamp(difference, -aabb_half_extents, aabb_half_extents);
 		
         writeln("clamped = ", clamped);
-		writeAndPause(" ");
 		
 		
         // float clamp(float value, float min, float max) 
@@ -286,7 +285,6 @@ public:
 
     void init()
     {
-		writeAndPause("Before e_manager.ResMgr.loadShader");	
         resource_manager.ResMgr.loadShader("source/VertexShader.glsl", 
                                            "source/FragmentShader.glsl", 
                                            null, "sprite");
@@ -512,7 +510,7 @@ public:
         //PostProcessor postProc = new PostProcessor(resource_manager.ResMgr.getShader("effects"),
         //                                           this.width, this.height); 
         // BAD BUG: this makes a new local scope variable called postProc.  Not the module scope 
-        writeln("****************this.width = ", this.width, " this.height = ", this.height);
+
 
         int pixelWidth, pixelHeight;
         glfwGetFramebufferSize(winMain, &pixelWidth, &pixelHeight); 
@@ -701,7 +699,7 @@ public:
     {
         if(this.state == GameState.GAME_ACTIVE)
         {
-            writeln("this.width = ", this.width, " this.height = ", this.height);
+            //writeln("this.width = ", this.width, " this.height = ", this.height);
             renderer.drawSprite(resource_manager.ResMgr.getTexture("background"), 
                                 vec2(0, 0), 
                                 vec2(this.width, this.height),

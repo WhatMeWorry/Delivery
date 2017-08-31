@@ -3,6 +3,7 @@ module app;  // 02_02_basic_lighting
 
 import common;
 
+
 import std.stdio;   // writeln
 import std.conv;    // to
 import gl3n.linalg; // vec3 mat4
@@ -80,8 +81,9 @@ void do_movement()
 
 extern(C) void onWindowResize(GLFWwindow* window, int width, int height) nothrow
 {
-    glfwSetWindowSize(window, width, height);   
-    glViewport(0, 0, width, height);
+    int pixelWidth, pixelHeight;
+    glfwGetFramebufferSize(window, &pixelWidth, &pixelHeight);  
+    glViewport(0, 0, pixelWidth, pixelHeight);
 }
 
 

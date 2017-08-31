@@ -43,8 +43,9 @@ extern(C) static void onInternalKeyEvent(GLFWwindow* window, int key, int scanco
 
 extern(C) void onWindowResize(GLFWwindow* window, int width, int height) nothrow
 {
-    glfwSetWindowSize(window, width, height);   
-    glViewport(0, 0, width, height);
+    int pixelWidth, pixelHeight;
+    glfwGetFramebufferSize(window, &pixelWidth, &pixelHeight);  
+    glViewport(0, 0, pixelWidth, pixelHeight);
 }
 
  
@@ -96,50 +97,7 @@ void main(string[] argv)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	/+
-    Shader[] shaders =
-    [
-        Shader(GL_VERTEX_SHADER,   "source/VertexShader.glsl",   0),
-        Shader(GL_FRAGMENT_SHADER, "source/FragmentShader.glsl", 0)
-    ];
-    GLuint progID = createProgramFromShaders(shaders);	
-
-    glUseProgram(progID);
-
-               //mat4 orthographicFunc(left, right, bottom, top, near, far)
-    mat4 projection = orthographicFunc(0.0, width, 0.0, height, -1.0, 1.0);
-
-    //   (1) must be GL_FALSE
-    //   (2) must be &projection[0][0]  or  cast(const(float)*) projection.ptr
-    //                                                                  (1)            (2)
-    glUniformMatrix4fv(glGetUniformLocation(progID, "projection"), 1, GL_FALSE, &projection[0][0]); //WORKS
-
-
-    FT_Library library; 
-    FT_Face courierBoldFont;   // Load font as face
-	//FT_Face phoenixRisingFont;
-    //FT_Face eagleLakeFont;     // Load font as face	
 	
-    initializeFreeTypeAndFace(library, courierBoldFont,   "../fonts/courbd.ttf");
-    //initializeFreeTypeAndFace(library, phoenixRisingFont, "../fonts/phoenixrising.ttf");
-    //initializeFreeTypeAndFace(library, eagleLakeFont,     "../fonts/EagleLake-Regular.ttf");
-
-    initializeCharacters(courierBoldFont,   courierBold);
-    //initializeCharacters(phoenixRisingFont, phoenixRising, 20);	
-    //initializeCharacters(eagleLakeFont,     eagleLake);
-
-
-    // Configure VAO/VBO for texture quads
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, GLfloat.sizeof * 6 * 4, null, GL_DYNAMIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * GLfloat.sizeof, cast(const(void)*) 0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-+/
 
     initTextRenderingSystem(textRenderSys);
 	writeln("textRenderSys.progID = ", textRenderSys.progID);

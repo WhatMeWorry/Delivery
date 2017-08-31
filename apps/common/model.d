@@ -61,7 +61,7 @@ private:
         if(!scene)
             writeAndPause("aiImportFile failed on file " ~ path);
         else
-            writeAndPause("Object file successfully imported from file " ~ path );
+            writeln("Object file successfully imported from file " ~ path );
 
         //writeln("loadModel:scene.mNumMeshes = ", scene.mNumMeshes);
         //aiMesh**      mMeshes;
@@ -73,7 +73,7 @@ private:
         
         if( (!scene) || (scene.mFlags == AI_SCENE_FLAGS_INCOMPLETE) || (!scene.mRootNode) )
         {
-            writeAndPause("Something is wrong with ");
+            writeAndPause("Something is wrong here ");
             return;
         }
         // Retrieve the directory path of the filepath

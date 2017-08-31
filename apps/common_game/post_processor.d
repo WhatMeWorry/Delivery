@@ -81,7 +81,6 @@ public:
     {
         postProcShader = shader;
         texas = new Texture2D;
-		writeln("texas just allocated");
         this.postProcWidth = width;
         this.postProcHeight = height; 		
         confuse = GL_FALSE;
@@ -109,7 +108,6 @@ public:
         // also initialize the FBO/texture to blit multisampled color-buffer to; used for shader operations (for postprocessing effects)
         glBindFramebuffer(GL_FRAMEBUFFER, this.FBO);
         this.texas.generate(width, height, null);
-		writeln("this.texture.ID = ", this.texas.ID);
 		
 		// attach texture to framebuffer as its color attachment		
         glFramebufferTexture2D(GL_FRAMEBUFFER,       // specifies the target buffer. Here the Frame buffer 

@@ -82,9 +82,7 @@ vertical character pixel sizes for each of the strikes that are present in the f
 +/
 void displayFaceInfo(FT_Face face)
 {
-    writeAndPause("before breakdown_FT_Face_2_Ways");
     breakdown_FT_Face_2_Ways();	
-    writeAndPause("after breakdown_FT_Face_2_Ways");
 
 	string s = std.conv.to!string(face.family_name);
     writeln("family name is ", s);
@@ -443,6 +441,6 @@ void initializeFreeTypeAndFace(ref FT_Library library, ref FT_Face face, const(c
     if (error == FT_Err_Unknown_File_Format)
         writeAndPause("Unknown file format");        
 
-    writeAndPause("FT_New_Face succeeded");
+    writeln("FT_New_Face succeeded");
 
 }

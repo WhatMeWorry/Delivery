@@ -3,7 +3,6 @@
 module app;  // 03_01_model_loading
 
 import common;
-//import common_game;
 
 import std.math;    // cos
 import std.stdio;   // writeln
@@ -26,7 +25,7 @@ Camera camera;
 
 bool firstMouse = true;
 
-extern(C) static void COMDAT_ERRORonKeyEvent(GLFWwindow* window, int key, int scancode, int action, int modifier) nothrow
+extern(C) static void onInternalKeyEvent(GLFWwindow* window, int key, int scancode, int action, int modifier) nothrow
 {
 
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
@@ -82,8 +81,9 @@ void do_movement()
 
 extern(C) void onWindowResize(GLFWwindow* window, int width, int height) nothrow
 {
-    glfwSetWindowSize(window, width, height);   
-    glViewport(0, 0, width, height);
+    int pixelWidth, pixelHeight;
+    glfwGetFramebufferSize(window, &pixelWidth, &pixelHeight);  
+    glViewport(0, 0, pixelWidth, pixelHeight);
 }
 
 
@@ -118,7 +118,7 @@ void main(string[] argv)
     // you must set the callbacks after creating the window
 	   
      glfwSetCursorPosCallback(winMain, &mouse_callback); 
-           glfwSetKeyCallback(winMain, &COMDAT_ERRORonKeyEvent);
+           glfwSetKeyCallback(winMain, &onInternalKeyEvent);
         glfwSetScrollCallback(winMain, &mouseScrollWheel_callback);
     glfwSetWindowSizeCallback(winMain, &onWindowResize);
 	 
