@@ -24,14 +24,14 @@ void moveCamera(Event event)
     GLfloat cameraSpeed = 0.01;
 
     if (event.keyboard.key == Key.w)
-	{
+    {
         cameraPos += cameraSpeed * cameraFront;
-		writeln("W key pressed cameraPos = ", cameraPos);
+        writeln("W key pressed cameraPos = ", cameraPos);
     }
     if (event.keyboard.key == Key.s)
     {
         cameraPos -= cameraSpeed * cameraFront;
-   		writeln("S key pressed cameraPos = ", cameraPos);
+        writeln("S key pressed cameraPos = ", cameraPos);
     }     
     if (event.keyboard.key == Key.a)
     {
@@ -56,11 +56,11 @@ enum width = 800;  enum height = 600;
 
 void main(string[] argv)
 {
-	load_libraries();
-	
-	auto winMain = glfwCreateWindow(width, height, "01_10_walk_around", null, null);
-	
-	glfwMakeContextCurrent(winMain); 
+    load_libraries();
+
+    auto winMain = glfwCreateWindow(width, height, "01_10_walk_around", null, null);
+
+    glfwMakeContextCurrent(winMain); 
  
     // you must set the callbacks after creating the window
             glfwSetKeyCallback(winMain, &onKeyEvent);
@@ -81,9 +81,9 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     GLuint programID = createProgramFromShaders(shaders);
 
     writeln("programID = ", programID);
-	
+
     // Setup OpenGL options
-    glEnable(GL_DEPTH_TEST);	
+    glEnable(GL_DEPTH_TEST);
 
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat[] vertices;
@@ -145,7 +145,7 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     writeOnce!(cameraUp)();
 
     mt1.startTimer(3.0);
-	
+
     while (!glfwWindowShouldClose(winMain))    // Loop until the user closes the window
     {
         if (mt1.expires)
@@ -155,7 +155,7 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
             writeln("cameraFront = ", cameraFront);
             writeln("cameraUp = ", cameraUp);
  
-            mt1.startTimer(3.0);			
+            mt1.startTimer(3.0);
         }
 
         glfwPollEvents();  // Check if any events have been activiated (key pressed, mouse
@@ -163,18 +163,18 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
 
         //handleEvent(winMain);  // handleEvent will empty the queue so getNexEvent will never have anything to process
 
-        Event even;						   
+        Event even;   
         if (getNextEvent(winMain, even))
         {
             if (even.type == EventType.keyboard)
             {
                 if (even.keyboard.key == Key.escape)
                     glfwSetWindowShouldClose(winMain, GLFW_TRUE);
-                else					
+                else
                     moveCamera(even);
             }
             if (even.type == EventType.frameBufferSize)
-		    {
+            {
                 int pixelWidth, pixelHeight;
                 glfwGetFramebufferSize(winMain, &pixelWidth, &pixelHeight);  
                 glViewport(0, 0, pixelWidth, pixelHeight);
@@ -218,7 +218,7 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
             mat4 model = mat4.identity;
           
             // the rotate and translate are in opposite order from the C++ code
-			
+
             GLfloat angle = 1.01f * i;  // was 20.0f in C++ code
             model = model.rotate(angle, vec3(1.0f, 0.3f, 0.5f));
 

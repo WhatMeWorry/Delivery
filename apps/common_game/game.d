@@ -89,14 +89,14 @@ class Game
 {
 public:
     // Game state
-    GameState   state;	
+    GameState   state;
     static      GLboolean[512] keys;
     GLuint      width;
     GLuint      height;
 
     GameLevel[] levels;
     GLuint      currentLevel;
-	
+
     static if (__traits(compiles,powUps) && powUps)
     {
         PowerUp[] powerUps;
@@ -108,25 +108,23 @@ public:
     GLuint  width;
     }
     +/
-	
+
     static if (__traits(compiles, screenText) && screenText)
     {
     GLuint  lives;
     }
-	
-    // Constructor/Destructor	
+
+    // Constructor/Destructor
     this(GLuint width, GLuint height)
     {
         state = GameState.GAME_ACTIVE;
         this.width = width; 
         this.height = height; 
-		
+
         static if (__traits(compiles, screenText) && screenText)
         {
-        lives = 3;			
+        lives = 3;
         }
-	
-		
     }
 
 
@@ -151,7 +149,7 @@ public:
         }       
     }
 
-	
+
 
     GLboolean checkRectCollision_02(GameObject one, GameObject two) // AABB - AABB collision
     {
@@ -176,23 +174,23 @@ public:
     Collision doesCircleCollideWithRect(BallObject circle, ref GameObject rect)  // AABB - Circle collision
     {
         // Get center point of the circle first 
-		
+
         vec2 circCenter = vec2(circle.position.x + circle.radius, circle.position.y + circle.radius);
-		
+
         float deltaX = circCenter.x - fmax(rect.position.x, fmin(circCenter.x, rect.position.x + rect.size.x));
-        float deltaY = circCenter.y - fmax(rect.position.y, fmin(circCenter.y, rect.position.y + rect.size.y));		
-	
+        float deltaY = circCenter.y - fmax(rect.position.y, fmin(circCenter.y, rect.position.y + rect.size.y));
+
         // writeln("center of circle = ", circCenter);
         // writeln("deltas squared = ",(deltaX * deltaX + deltaY * deltaY));
-        // writeln("circle.radius squared = ",(circle.radius * circle.radius));	
+        // writeln("circle.radius squared = ",(circle.radius * circle.radius));
 
         vec2 rectCenter = vec2( (rect.position.x + (rect.size.x / 2.0)), (rect.position.y + (rect.size.y / 2.0)) );
-		 
+ 
         // Get difference vector between both centers
-        vec2 difference = circCenter - rectCenter;		
+        vec2 difference = circCenter - rectCenter;
 
         Collision hitOrMiss;
-		
+
         if ((deltaX * deltaX + deltaY * deltaY) <  (circle.radius * circle.radius))
         {
             hitOrMiss[0] = GL_TRUE;
@@ -207,60 +205,60 @@ public:
         }
  
         return hitOrMiss;
-    }	
-	
-	
-	
-	
-	
+    }
+
+
+
+
+
     GLboolean checkCollisionCircleWithRectReturnBool(BallObject one, GameObject two) // AABB - Circle collision
     {
-	
+
         // glm::vec2 center(one.Position + one.Radius);  // original C++ code
         // It works via operator overloading, and adding a scalar simply means 
-		// adding it to all vector components.	
-		
+        // adding it to all vector components.
+
         // Get center point of the circle first 
-		
+
         vec2 center = vec2(one.position.x + one.radius, one.position.y + one.radius);
-		
-		writeln("center = ", center);
-		
-		
+
+        writeln("center = ", center);
+
+
         // Calculate AABB info (center, half-extents)
         vec2 aabb_half_extents = vec2( (two.size.x / 2), (two.size.y / 2) );
-		
+
         vec2 aabb_center = vec2(two.position.x + aabb_half_extents.x, 
                                 two.position.y + aabb_half_extents.y);
-								
+
         writeln("aabb_half_extents = ", aabb_half_extents);
-        writeln("aabb_center = ", aabb_center);		 
-		 
+        writeln("aabb_center = ", aabb_center);
+
         // Get difference vector between both centers
         vec2 difference = center - aabb_center;
-		
-		writeln("difference between both centers = ", difference);
-		
+
+        writeln("difference between both centers = ", difference);
+
         vec2 clamped = clamp(difference, -aabb_half_extents, aabb_half_extents);
-		
+
         writeln("clamped = ", clamped);
-		
-		
+
+
         // float clamp(float value, float min, float max) 
         // {
         //    return std::max(min, std::min(max, value));  C++ code
         // }
-		
+
         // auto clamp(T1, T2, T3)(T1 val, T2 lower, T3 upper);   D code
-        // This functions is equivalent to max(lower, min(upper, val)).		
-		
+        // This functions is equivalent to max(lower, min(upper, val)).
+
         // Add clamped value to AABB_center and we get the value of box closest to circle
         vec2 closest = aabb_center + clamped;   
         // Retrieve vector between center circle and closest point AABB and check if length <= radius
         difference = closest - center;
 
         //return glm::length(difference) < one.Radius;
-        // genType::value_type glm::length(genType const &x)	
+        // genType::value_type glm::length(genType const &x)
         // Returns the length of x, i.e., sqrt(x * x).
 
         /// Returns the magnitude of the vector.
@@ -270,16 +268,16 @@ public:
         // }
         // alias magnitude_squared length_squared; /// ditto
         // alias magnitude length; /// ditto
-	
+
 
         //return (difference.length < one.radius);
-		
+
         GLboolean hit = false;
-        if (difference.magnitude < one.radius)		
+        if (difference.magnitude < one.radius)
         {
             hit = true;
         }
-        return hit;		
+        return hit;
     }  
 
 
@@ -306,10 +304,10 @@ public:
 
         // The default texture unit for a texture is 0 which is the default active 
         // texture unit so we did not had to assign a location in the previous section.
-			
+
         sB.setInteger("image", 0);   // in Fragment Shader
                                      // glUniform1i(glGetUniformLocation(this.ID, name), value);
-                                     // uniform sampler2D image;	
+                                     // uniform sampler2D image;
         /+
         You probably wondered why the sampler2D variable is a uniform if we didn’t even assign it 
         some value with glUniform. Using glUniform1i we can actually assign a location value to 
@@ -348,14 +346,14 @@ public:
 
         sB = resource_manager.ResMgr.getShader("sprite");
 
-                    // SpriteRenderer constructor calls initRenderData();		
+                    // SpriteRenderer constructor calls initRenderData();
         renderer = new SpriteRenderer(resource_manager.ResMgr.getShader("sprite"));
     }
-	
+
 
 //=========================================================================================================
 
-	
+
     // Initialize game state (load all shaders/textures/levels)
     void initGame()
     {
@@ -366,57 +364,57 @@ public:
         // ..\common_game\game.d(371,21): Error: module particles is not an expression
         // particles conflicted with module particles.d   Had to pick another flag variable name
         static if (__traits(compiles, particulate) && particulate)   // inject code only if using post processor effects
-        {										   
+        {  
         resource_manager.ResMgr.loadShader("source/VertexShaderParticle.glsl", 
                                            "source/FragmentShaderParticle.glsl", 
                                            null, "particle");
         } 
        
-		
+
         static if (__traits(compiles, effects) && effects)   // inject code only if using post processor effects
         {
         resource_manager.ResMgr.loadShader("source/VertexShaderEffects.glsl", 
                                            "source/FragmentShaderEffects.glsl", 
-                                           null, "effects");											   
+                                           null, "effects");   
         }
-		
+
         static if (__traits(compiles, screenText) && screenText)
         {
             textRend = new TextRenderer(this.width, this.height);
-			writeln("textRend.textShader.ID = ", textRend.textShader.ID);
-			
+            writeln("textRend.textShader.ID = ", textRend.textShader.ID);
+
             textRend.load("../fonts/ocraext.ttf", 24);
-        } 		
-      	
+        }
+    
 
         mat4 projection = orthographicFunc(0.0, this.width, this.height, 0.0, -1.0f, 1.0f);
 
 
-        // ResourceManager::GetShader("sprite").Use().SetInteger("sprite", 0);  // changed sprite to image	
-		
+        // ResourceManager::GetShader("sprite").Use().SetInteger("sprite", 0);  // changed sprite to image
+
         ShaderBreakout sB = resource_manager.ResMgr.getShader("sprite");
         sB.use();
         sB.setInteger("image", 0);   // in Fragment Shader: FragmentShader.glsl
                                      // glUniform1i(glGetUniformLocation(this.ID, name), value);
-                                     // uniform sampler2D image;	
-		
-        // ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);		
+                                     // uniform sampler2D image;
+
+        // ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
 
         sB.setMatrix4("projection", projection, COL_MAJOR, true);  // in Vertex Shader
                                                                    // uniform mat4 projection;
 
         // ResourceManager::GetShader("particle").Use().SetInteger("sprite", 0);
 
-        static if (__traits(compiles, particulate) && particulate)	
-        {		
+        static if (__traits(compiles, particulate) && particulate)
+        {
         ShaderBreakout sB2 = resource_manager.ResMgr.getShader("particle");
         sB2.use();
         sB2.setInteger("sprite", 0);   // in Fragment Shader: FragmentShaderParticle.glsl
 
         sB2.setMatrix4("projection", projection, COL_MAJOR, true); 
         }
-				
-																   
+
+  
         // Load textures
         Texture2D tempTexture = new Texture2D();
         loadTextureKCH_Unique(tempTexture.ID, "../art/awesomeface.png");
@@ -442,38 +440,38 @@ public:
         loadTextureKCH_Unique(tempTexture.ID, "../art/paddle.png");
         tempTexture.friendlyName = "paddle";
         resource_manager.ResMgr.aaTextures["paddle"] = tempTexture;
-		
+
         tempTexture = new Texture2D();
         loadTextureKCH_Unique(tempTexture.ID, "../art/face.png");
         tempTexture.friendlyName = "face";
         resource_manager.ResMgr.aaTextures["face"] = tempTexture;
-		
+
         tempTexture = new Texture2D();
         loadTextureKCH_Unique(tempTexture.ID, "../art/small_face.png");
         tempTexture.friendlyName = "small_face";
-        resource_manager.ResMgr.aaTextures["small_face"] = tempTexture;	
+        resource_manager.ResMgr.aaTextures["small_face"] = tempTexture;
 
         tempTexture = new Texture2D();
         loadTextureKCH_Unique(tempTexture.ID, "../art/particle.png");
         tempTexture.friendlyName = "particle";
-        resource_manager.ResMgr.aaTextures["particle"] = tempTexture;			
+        resource_manager.ResMgr.aaTextures["particle"] = tempTexture;
 
         tempTexture = new Texture2D();
         loadTextureKCH_Unique(tempTexture.ID, "../art/powerup_speed.png");
         tempTexture.friendlyName = "tex_speed";
-        resource_manager.ResMgr.aaTextures["tex_speed"] = tempTexture;		
+        resource_manager.ResMgr.aaTextures["tex_speed"] = tempTexture;
 
         tempTexture = new Texture2D();
         loadTextureKCH_Unique(tempTexture.ID, "../art/powerup_sticky.png");
         tempTexture.friendlyName = "tex_sticky";
-        resource_manager.ResMgr.aaTextures["tex_sticky"] = tempTexture;		
+        resource_manager.ResMgr.aaTextures["tex_sticky"] = tempTexture;
 
         tempTexture = new Texture2D();
         loadTextureKCH_Unique(tempTexture.ID, "../art/powerup_increase.png");
         tempTexture.friendlyName = "tex_size";
-        resource_manager.ResMgr.aaTextures["tex_size"] = tempTexture;		
-		
-	    tempTexture = new Texture2D();
+        resource_manager.ResMgr.aaTextures["tex_size"] = tempTexture;
+
+        tempTexture = new Texture2D();
         loadTextureKCH_Unique(tempTexture.ID, "../art/powerup_confuse.png");
         tempTexture.friendlyName = "tex_confuse";
         resource_manager.ResMgr.aaTextures["tex_confuse"] = tempTexture;
@@ -481,32 +479,29 @@ public:
         tempTexture = new Texture2D();
         loadTextureKCH_Unique(tempTexture.ID, "../art/powerup_chaos.png");
         tempTexture.friendlyName = "tex_chaos";
-        resource_manager.ResMgr.aaTextures["tex_chaos"] = tempTexture;		
-		
-	    tempTexture = new Texture2D();
+        resource_manager.ResMgr.aaTextures["tex_chaos"] = tempTexture;
+
+        tempTexture = new Texture2D();
         loadTextureKCH_Unique(tempTexture.ID, "../art/powerup_passthrough.png");
         tempTexture.friendlyName = "tex_pass";
         resource_manager.ResMgr.aaTextures["tex_pass"] = tempTexture;
 
 
-
-
-		
         // Set render-specific controls
         // Renderer = new SpriteRenderer(ResourceManager::GetShader("sprite"));
 
         renderer = new SpriteRenderer(resource_manager.ResMgr.getShader("sprite"));
 
         static if (__traits(compiles, particulate) && particulate)
-        {		
+        {
         partGen = new ParticleGenerator(resource_manager.ResMgr.getShader("particle"), 
                                         resource_manager.ResMgr.getTexture("particle"), 
                                         500);
         }
 
-        static if (__traits(compiles, effects) && effects)		
+        static if (__traits(compiles, effects) && effects)
         {
-		
+
         //PostProcessor postProc = new PostProcessor(resource_manager.ResMgr.getShader("effects"),
         //                                           this.width, this.height); 
         // BAD BUG: this makes a new local scope variable called postProc.  Not the module scope 
@@ -522,8 +517,8 @@ public:
         // on Mac machines with Retina.
         // Windows and Linux seem to have the their screen coordinates scale to pixels.
         //postProc = new PostProcessor(resource_manager.ResMgr.getShader("effects"),
-        //                             this.width, this.height);  		
-        }		
+        //                             this.width, this.height);
+        }
 
         // Load levels
         GameLevel level1 = new GameLevel; 
@@ -541,11 +536,10 @@ public:
         this.levels ~= level2;
         this.levels ~= level3;
         this.levels ~= level4;
-		
+
         this.currentLevel = 0;  // start game off at first level
 
- 
-				   
+  
         // Configure game objects
         vec3 color = vec3(0.0, 0.5, 0.5);
         vec2 velocity = vec2(0.0, 0.0);
@@ -554,14 +548,14 @@ public:
                                 PaddleSize, 
                                 resource_manager.ResMgr.getTexture("paddle"),
                                 color, velocity);
-								
+
         vec2 ballPos = paddlePos + vec2(PaddleSize.x / 2 - BallRadius, -BallRadius * 2);
 
         ball = new BallObject(ballPos, BallRadius, BallVelocity,
-                              resource_manager.ResMgr.getTexture("small_face"));												
-    }	
-	
-		
+                              resource_manager.ResMgr.getTexture("small_face"));
+    }
+
+
     // GameLoop
     void processInput(GLfloat dt)
     {
@@ -577,10 +571,10 @@ public:
                     paddle.position.x -= velocity;
                     if (ball.stuck)
                     {
-                        ball.position.x -= velocity;					
+                        ball.position.x -= velocity;
                     }
 
-                }						
+                }
             }
             if (Game.keys[GLFW_KEY_D])
             {
@@ -589,47 +583,46 @@ public:
                     paddle.position.x += velocity;
                     if (ball.stuck)
                     {
-                        ball.position.x += velocity;					
-                    }					
-                }						
+                        ball.position.x += velocity;
+                    }
+                }
             }
             if (Game.keys[GLFW_KEY_SPACE])
             {
-                ball.stuck = false;			
-			}					
+                ball.stuck = false;
+            }
         }
     }
-	
 
-	
+
     void update(GLfloat dt)
     {   
 
-    }		
+    }
 
     void update_01(GLfloat dt)
     {   
         ball.move(dt, this.width);
-    }		
-	
+    }
+
 
     void update_02(GLfloat dt)
     {
         // Update objects
-		ball.move(dt, this.width);
-		
+        ball.move(dt, this.width);
+
         // Check for collisions
         this.doCollisions_02();
     }
-	
+
     void update_03(GLfloat dt)
     {
         // Update objects
-		ball.move(dt, this.width);
-		
+        ball.move(dt, this.width);
+
         // Check for collisions
         this.doCollisions_03();
-		
+
         // Check loss condition
         if (ball.position.y >= this.height) // Did ball reach bottom edge?
         {
@@ -641,50 +634,50 @@ public:
     void update_04(GLfloat dt)
     {
         // Update objects
-		ball.move(dt, this.width);
+        ball.move(dt, this.width);
 
         static if (__traits(compiles, particulate) && particulate)
-        {		
-        partGen.update(dt, ball, 1, vec2(ball.radius / 2));       // Update particles		
+        {
+        partGen.update(dt, ball, 1, vec2(ball.radius / 2));       // Update particles
         }
-		
+
         // Update PowerUps
         static if (__traits(compiles,powUps) && powUps)
-        {				
+        {
         this.updatePowerUps(dt);
-        }		
-		
+        }
+
         // Check for collisions
         this.doCollisions_03();
-		
+
         static if (__traits(compiles, effects) && effects)  // only include this code block if using game effects      
-        {		
+        {
         if (shakeTime > 0.0f)
         {
             shakeTime -= dt;
             if (shakeTime <= 0.0f)
                 postProc.shake = false;
         }   
-        }	
+        }
 
         // Check loss condition
         if (ball.position.y >= this.height) // Did ball reach bottom edge?
         {
             static if (__traits(compiles, screenText) && screenText)
-            {  		
+            {
             this.lives--;
-			// Did the player lose all his lives? : Game over
+            // Did the player lose all his lives? : Game over
             if (this.lives == 0)
-            {	
+            {
                 this.resetLevel();
                 this.state = GameState.GAME_MENU;
             }
             }
             this.resetPlayer();
-        }		
+        }
     }
-	
-	
+
+
     void render()
     {       
         renderer.drawSprite(resource_manager.ResMgr.getTexture("face"), 
@@ -693,8 +686,8 @@ public:
                                                    45.0f, 
                                                    vec3(0.0f, 1.0f, 0.0f));
     }
-	
-	
+
+
     void renderGame()
     {
         if(this.state == GameState.GAME_ACTIVE)
@@ -706,17 +699,17 @@ public:
                                 0.0f, 
                                 //vec3(0.3f, 0.3f, 0.75f));   // original values
                                 vec3(0.95f, 0.95f, 0.95f));                               
-								
+
             paddle.draw(renderer);
 
-            ulong len = this.levels[0].bricks.length;				
+            ulong len = this.levels[0].bricks.length;
             this.levels[this.currentLevel].drawLevel(renderer);
-			
-            ball.draw(renderer);			
+
+            ball.draw(renderer);
         }
     }
-	
-	
+
+
     void renderGameWithParticles()
     {
         if(this.state == GameState.GAME_ACTIVE)
@@ -725,49 +718,49 @@ public:
             {
             postProc.beginRender();
             }
-			
+
             renderer.drawSprite(resource_manager.ResMgr.getTexture("background"), 
                                 vec2(0, 0), 
                                 vec2(this.width, this.height),
                                 0.0f, 
                                 //vec3(0.3f, 0.3f, 0.75f));   // original values
                                 vec3(0.95f, 0.95f, 0.95f));                               
-								
+
             paddle.draw(renderer);    // draw paddle/player
 
-            ulong len = this.levels[0].bricks.length;				
+            ulong len = this.levels[0].bricks.length;
             this.levels[this.currentLevel].drawLevel(renderer);
 
-            static if (__traits(compiles, particulate) && particulate)	
-            {			
+            static if (__traits(compiles, particulate) && particulate)
+            {
             partGen.draw();
             }
-			
-            ball.draw(renderer);	
+
+            ball.draw(renderer);
 
             static if (__traits(compiles, effects) && effects)
-            {	
-            postProc.endRender();	
-            postProc.render(glfwGetTime());
-            }	
-
-            static if (__traits(compiles,powUps) && powUps)	
             {
-                foreach(pup; powerUps)	
+            postProc.endRender();
+            postProc.render(glfwGetTime());
+            }
+
+            static if (__traits(compiles,powUps) && powUps)
+            {
+                foreach(pup; powerUps)
                 {
                     if (!pup.destroyed)
-                        pup.draw(renderer);					
-                }				
+                        pup.draw(renderer);
+                }
             }
-            static if (__traits(compiles, screenText) && screenText)	
+            static if (__traits(compiles, screenText) && screenText)
             {
                 string str = "Lives: " ~ to!string(this.lives);
-                textRend.renderText(str, 10.0f, 550.0f, 1.0);	
+                textRend.renderText(str, 10.0f, 550.0f, 1.0);
             }
         }
     }
-	
-	
+
+
     void resetLevel()
     {
         writeln("this.currentLevel = ", this.currentLevel);
@@ -781,7 +774,7 @@ public:
             this.levels[3].loadLevel("../levels/level4.txt", this.width, cast(GLuint) (this.height * 0.5f));
     }
 
-	
+
     void resetPlayer()
     {
         // Reset paddle/ball stats
@@ -789,7 +782,7 @@ public:
         paddle.position = vec2(this.width / 2 - PaddleSize.x / 2, this.height - PaddleSize.y);
         ball.reset(paddle.position + vec2(PaddleSize.x / 2 - BallRadius, -(BallRadius * 2)), BallVelocity);
     }
-	
+
 
 
 /+
@@ -801,7 +794,7 @@ public:
     DeltaX = CircleX - PointX;
     DeltaY = CircleY - PointY;
     return (DeltaX * DeltaX + DeltaY * DeltaY) < (CircleRadius * CircleRadius);
-	
+
     Surprisingly or not, rectangle-circle collisions are not all too different - first you find the point 
     of rectangle that is the closest to the circle' center, and check that point is in the circle.
 
@@ -810,43 +803,43 @@ public:
 
     NearestX = Max(RectX, Min(CircleX, RectX + RectWidth));
     NearestY = Max(RectY, Min(CircleY, RectY + RectHeight));
-	
+
     So, combining the above two snippets yields you a 3-line function for circle-rectangle check:
 
     DeltaX = CircleX - Max(RectX, Min(CircleX, RectX + RectWidth));
     DeltaY = CircleY - Max(RectY, Min(CircleY, RectY + RectHeight));
-    return (DeltaX * DeltaX + DeltaY * DeltaY) < (CircleRadius * CircleRadius);	
+    return (DeltaX * DeltaX + DeltaY * DeltaY) < (CircleRadius * CircleRadius);
 +/
-	
+
     void doCollisions_03()
     {
         foreach(i, ref box; this.levels[this.currentLevel].bricks)
         {
-		    Collision collide;  // Collision is a tuple not a struct.
+            Collision collide;  // Collision is a tuple not a struct.
 
             if (!box.destroyed)   // skip boxes that have been previously destroyed
             {
-                collide = doesCircleCollideWithRect(ball, box);	
-				
+                collide = doesCircleCollideWithRect(ball, box);
+
                 if (collide[0]) // If collision is true
-                {		
+                {
                     if (!box.isSolid)   // is box is destructable 
                     {
                         box.destroyed = true;
-                        static if (__traits(compiles,powUps) && powUps)						
+                        static if (__traits(compiles,powUps) && powUps)
                             this.spawnPowerUps(box);
-                        static if (__traits(compiles, audio) && audio)						
-                            //playSound(FMOD_LOOP_OFF, soundSys.system, "../audio/bleep.mp3");	
-                            playSound(soundSys, 1 );							
+                        static if (__traits(compiles, audio) && audio)
+                            //playSound(FMOD_LOOP_OFF, soundSys.system, "../audio/bleep.mp3");
+                            playSound(soundSys, 1 );
                     }
                     else  // if block is solid, enable shake effect
                     {
                         shakeTime = 0.05f;
                         postProc.shake = true;
-                        static if (__traits(compiles, audio) && audio)						
-                            playSound(soundSys, 2 );													
+                        static if (__traits(compiles, audio) && audio)
+                            playSound(soundSys, 2 );
                     }
-							
+
                     // Collision resolution
                     Direction dir = collide[1];
                     vec2 diff_vector = collide[2];
@@ -865,7 +858,7 @@ public:
                     else // Vertical collision
                     {
                         //writeln("Vertical collision");
-                        //writeAndPause("within dir == Direction.UP || dir == Direction.DOWN");					
+                        //writeAndPause("within dir == Direction.UP || dir == Direction.DOWN");
                         ball.velocity.y = -ball.velocity.y; // Reverse vertical velocity
                         // Relocate
                         GLfloat penetration = ball.radius - abs(diff_vector.y);
@@ -878,8 +871,8 @@ public:
                 }
             }    
         }
-		
-        // Also check collisions on PowerUps and if so, activate them	
+
+        // Also check collisions on PowerUps and if so, activate them
         static if (__traits(compiles,powUps) && powUps)
         {
         foreach (ref pow; this.powerUps)
@@ -890,22 +883,22 @@ public:
                     pow.destroyed = GL_TRUE;
 
                 if (checkRectCollision_02(paddle, pow))
-                {	// Collided with player, now activate powerup
+                {   // Collided with player, now activate powerup
                     activatePowerUp(pow);
                     pow.destroyed = GL_TRUE;
                     pow.activated = GL_TRUE;
-                    static if (__traits(compiles, audio) && audio)						
-                        playSound(soundSys, 3 );																	
+                    static if (__traits(compiles, audio) && audio)
+                        playSound(soundSys, 3 );
                 }
             }
         }  
-        }				
-		
-         		
+        }
+
+        
         // And finally check collisions for player's paddle (unless stuck)
-		
+
         Collision result = doesCircleCollideWithRect(ball, paddle);
-		
+
         if (!ball.stuck && result[0])
         {
             //writeAndPause("Ball has struck paddle");
@@ -919,23 +912,23 @@ public:
             ball.velocity.x = BallVelocity.x * percentage * strength; 
 
             // Keep speed consistent over both axes (multiply by length of old velocity, 
-			// so total strength is not changed)			
-			
+            // so total strength is not changed)
+
             ball.velocity = (ball.velocity).normalized * (oldVelocity.length); 
-			
+
             // Fix sticky paddle
             ball.velocity.y = -1 * abs(ball.velocity.y);
-			
+
             // If Sticky powerup is activated, also stick ball to paddle once 
             // new velocity vectors were calculated
-            static if (__traits(compiles,powUps) && powUps)	
-            {			
+            static if (__traits(compiles,powUps) && powUps)
+            {
             ball.stuck = ball.sticky;
             }
             static if (__traits(compiles, audio) && audio)
-            {			
+            {
                 playSound(soundSys, 4 );
-            }				
+            }
         }
 
 
@@ -976,7 +969,7 @@ answered Dec 10 '09 at 7:30
 
 Cygon
 5,83732945
-2	 	
+2
 You have a bug in there, you search for closestY with Left and Right, not Top and Bottom, otherwise lovely solution. – manveru May 21 '10 at 21:24
 
 +/
@@ -1016,39 +1009,39 @@ function RectCircleColliding(circle, rect) {
     {
         // glm::vec2 center(one.Position + one.Radius);  // original C++ code
         // It works via operator overloading, and adding a scalar simply means 
-		// adding it to all vector components.	
-		
+        // adding it to all vector components.
+
         // Get center point of the circle first 
         vec2 center = vec2(one.position.x + one.radius, one.position.y + one.radius);
-		
+
         // Calculate AABB info (center, half-extents)
         vec2 aabb_half_extents = vec2( (two.size.x / 2), (two.size.y / 2) );
-		
+
         vec2 aabb_center = vec2(two.position.x + aabb_half_extents.x, two.position.y + aabb_half_extents.y);
-		
+
         // Get difference vector between both centers
         vec2 difference = center - aabb_center;
         ///////vec2 clamped = clamp(difference, -aabb_half_extents, aabb_half_extents);
-		
+
         // float clamp(float value, float min, float max) 
         // {
         //    return std::max(min, std::min(max, value));  C++ code
         // }
-		
+
         // auto clamp(T1, T2, T3)(T1 val, T2 lower, T3 upper);   D code
-        // This functions is equivalent to max(lower, min(upper, val)).		
-		
+        // This functions is equivalent to max(lower, min(upper, val)).
+
         // Add clamped value to AABB_center and we get the value of box closest to circle
         /////////vec2 closest = aabb_center + clamped;   
         // Retrieve vector between center circle and closest point AABB and check if length <= radius
         /////////difference = closest - center;
 
-		writeln("difference = ", difference);
-		writeln("difference.magnitude = ", difference.magnitude);
-        //writeAndPause(" ");		
+        writeln("difference = ", difference);
+        writeln("difference.magnitude = ", difference.magnitude);
+        //writeAndPause(" ");
 
         //return glm::length(difference) < one.Radius;
-        // genType::value_type glm::length(genType const &x)	
+        // genType::value_type glm::length(genType const &x)
         // Returns the length of x, i.e., sqrt(x * x).
 
         /// Returns the magnitude of the vector.
@@ -1058,7 +1051,7 @@ function RectCircleColliding(circle, rect) {
         // }
         // alias magnitude_squared length_squared; /// ditto
         // alias magnitude length; /// ditto
-		
+
         Collision hitOrMiss;
 
         if (difference.magnitude < one.radius)  // not <= since in that case a collision also occurs when object one exactly touches
@@ -1084,7 +1077,7 @@ function RectCircleColliding(circle, rect) {
                           vec2( 0.0f, 1.0f), // up
                           vec2( 1.0f, 0.0f), // right
                           vec2( 0.0f,-1.0f), // down
-                          vec2(-1.0f, 0.0f)	 // left
+                          vec2(-1.0f, 0.0f)  // left
                          ];
         GLfloat max = 0.0f;
         GLuint best_match = -1;
@@ -1101,44 +1094,44 @@ function RectCircleColliding(circle, rect) {
     }   
 
     static if (__traits(compiles,powUps) && powUps)
-    {		
-	
+    {
+
     GLboolean shouldSpawn(GLuint chances)
     {
         //GLuint random = rand() % chance;
         //return random == 0;
-		
+
         auto z = dice(chances, 1);  // 1 in X chances
-		if (z == 1)
+        if (z == 1)
             return true;
         return false;
-    }	
+    }
 
 
-	void spawnPowerUps(GameObject block)
+    void spawnPowerUps(GameObject block)
     {
         if (shouldSpawn(75)) // 1 in 75 chance
-		    powerUps ~= new PowerUp("speed", vec3(0.5f, 0.5f, 1.0f), 0.0f, block.position, 
-			                        resource_manager.ResMgr.aaTextures["tex_speed"]);
+            powerUps ~= new PowerUp("speed", vec3(0.5f, 0.5f, 1.0f), 0.0f, block.position, 
+                                     resource_manager.ResMgr.aaTextures["tex_speed"]);
         if (shouldSpawn(75))
             powerUps ~= new PowerUp("sticky", vec3(1.0f, 0.5f, 1.0f), 20.0f, block.position,
-                                    resource_manager.ResMgr.aaTextures["tex_sticky"]);			
+                                    resource_manager.ResMgr.aaTextures["tex_sticky"]);
         if (shouldSpawn(75))
             powerUps ~= new PowerUp("pass-through", vec3(0.5f, 1.0f, 0.5f), 10.0f, block.position,
                                     resource_manager.ResMgr.aaTextures["tex_pass"]);
         if (shouldSpawn(75))
             powerUps ~= new PowerUp("pad-size-increase", vec3(1.0f, 0.6f, 0.4), 0.0f, block.position,
-                                    resource_manager.ResMgr.aaTextures["tex_size"]);			
+                                    resource_manager.ResMgr.aaTextures["tex_size"]);
         if (shouldSpawn(75)) // Negative powerups should spawn more often
             powerUps ~= new PowerUp("confuse", vec3(1.0f, 0.3f, 0.3f), 15.0f, block.position,
-                                    resource_manager.ResMgr.aaTextures["tex_confuse"]);			
-        if (shouldSpawn(75))	
+                                    resource_manager.ResMgr.aaTextures["tex_confuse"]);
+        if (shouldSpawn(75))
             powerUps ~= new PowerUp("chaos", vec3(0.9f, 0.25f, 0.25f), 15.0f, block.position,
-                                    resource_manager.ResMgr.aaTextures["tex_chaos"]);			
+                                    resource_manager.ResMgr.aaTextures["tex_chaos"]);
     }
 
-	
-	void activatePowerUp(ref PowerUp pup)
+
+    void activatePowerUp(ref PowerUp pup)
     {
         // Initiate a powerup based type of powerup
         if (pup.type == "speed")
@@ -1201,7 +1194,7 @@ function RectCircleColliding(circle, rect) {
                     if (pup.type == "sticky")
                     {
                         if (!isOtherPowerUpActive(this.powerUps, "sticky"))
-                        {	// Only reset if no other PowerUp of type sticky is active
+                        {   // Only reset if no other PowerUp of type sticky is active
                             ball.sticky = GL_FALSE;
                             paddle.color = vec3(1.0f);
                         }
@@ -1209,7 +1202,7 @@ function RectCircleColliding(circle, rect) {
                     else if (pup.type == "pass-through")
                     {
                         if (!isOtherPowerUpActive(this.powerUps, "pass-through"))
-                        {	// Only reset if no other PowerUp of type pass-through is active
+                        {   // Only reset if no other PowerUp of type pass-through is active
                             ball.passThrough = GL_FALSE;
                             ball.color = vec3(1.0f);
                         }
@@ -1217,30 +1210,22 @@ function RectCircleColliding(circle, rect) {
                     else if (pup.type == "confuse")
                     {
                         if (!isOtherPowerUpActive(this.powerUps, "confuse"))
-                        {	// Only reset if no other PowerUp of type confuse is active
+                        {   // Only reset if no other PowerUp of type confuse is active
                             postProc.confuse = GL_FALSE;
                         }
                     }
                     else if (pup.type == "chaos")
                     {
                         if (!isOtherPowerUpActive(this.powerUps, "chaos"))
-                        {	// Only reset if no other PowerUp of type chaos is active
+                        {   // Only reset if no other PowerUp of type chaos is active
                             postProc.chaos = GL_FALSE;
                         }
                     }                
                 }
             }
         }
-		/+
-        this->PowerUps.erase(std::remove_if(this->PowerUps.begin(), 
-                             this->PowerUps.end(),
-                             [](const PowerUp &powerUp) 
-                             { return powerUp.Destroyed && !powerUp.Activated; }
-                             ), this->PowerUps.end());
-        +/
     } 
-    } 	
-	
+    } 
 }
 
 

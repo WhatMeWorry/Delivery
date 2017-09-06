@@ -15,7 +15,6 @@ import mytoolbox;
 // int[13] straightJacket;     // fixed size
 // int[]   accordion;          // size can grow or shrink
 
-	
 // A static singleton ResourceManager class that hosts several functions to load Textures
 // and Shaders. Each loaded texture and/or shader is also stored for future reference by
 // string handles. All functions and resources are static and no public constructor is defined.
@@ -37,8 +36,8 @@ public:
             Shader(GL_VERTEX_SHADER,   vertShader, 0),
          // Shader(GL_GEOMETRY_SHADER, geoShader,  0),
             Shader(GL_FRAGMENT_SHADER, fragShader, 0)
-        ];		
-		
+        ];
+
         GLuint programID = createProgramFromShaders(shaders);
        
         aaShaders[name].ID = programID;
@@ -54,10 +53,10 @@ public:
             writeln("Invalid SHADER named: ", name, " is NOT in associative array of shaders");
             writeAndPause("Resolve this issue before continuing...");
         }
-				
+
         return aaShaders[name];
     }
-	
+
 
     static Texture2D getTexture(string name)
     {
@@ -66,15 +65,13 @@ public:
             writeln("Invalid TEXTURE named: ", name, " is NOT in associative array of shaders");
             writeAndPause("Resolve this issue before continuing...");
         }
-					
-	
         return aaTextures[name];
     }
 
-	
+
     void Clear()
     {
-        // delete all shaders and textures	
+        // delete all shaders and textures
         foreach(shader; aaShaders)
             glDeleteProgram(shader.ID);
         foreach(texture; aaTextures)

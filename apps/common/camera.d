@@ -61,7 +61,7 @@ public:
     GLfloat movementSpeed = SPEED;
     GLfloat mouseSensitivity = SENSITIVITY;
     GLfloat zoom = ZOOM;
-	
+
     // Constructor with vectors  ..Added this to match C++ code invocation
     this(vec3 position)                 
     {
@@ -115,9 +115,9 @@ public:
     void ProcessKeyboard(Camera_Movement direction, GLfloat deltaTime)
     {
         GLfloat velocity = this.movementSpeed * deltaTime;
-		
+
         writeln("this.position = ", this.position);
-		
+
         if (direction == Camera_Movement.FORWARD)
             this.position += this.front * velocity;
         if (direction == Camera_Movement.BACKWARD)
@@ -148,11 +148,11 @@ public:
         }
 
         // Update Front, Right and Up Vectors using the updated Eular angles
-		try
-		{
+        try
+        {
             this.updateCameraVectors();
-		}
-		catch {}
+        }
+        catch {}
     }
 
 
@@ -160,7 +160,7 @@ public:
     void ProcessMouseScroll(GLfloat yoffset) nothrow
     {
         gOffsetY = yoffset;
-        yoffset = yoffset * .01; 	
+        yoffset = yoffset * .01; 
         if (this.zoom >= 1.0f && this.zoom <= 45.0f)
             this.zoom -= yoffset;
         if (this.zoom <= 1.0f)
@@ -173,18 +173,18 @@ private:
     // Calculates the front vector from the Camera's (updated) Eular Angles
     void updateCameraVectors()
     {
-        jGlobal++;	
+        jGlobal++;
         // Calculate the new Front vector
         vec3 front;
         front.x = cos(toRadians(this.yaw)) * cos(toRadians(this.pitch));
         front.y = sin(toRadians(this.pitch));
         front.z = sin(toRadians(this.yaw)) * cos(toRadians(this.pitch));
-		
+
         globalVec3 = this.front; 
-		
+
         this.front = this.front.normalized;
-		
-        globalVec3 = this.front;    		
+
+        globalVec3 = this.front; 
 
         // Also re-calculate the Right and Up vector
 

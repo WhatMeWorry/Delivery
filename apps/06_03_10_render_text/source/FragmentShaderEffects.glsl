@@ -23,7 +23,7 @@ void main()
     {
         for(int i = 0; i < 9; i++)
         {
-            sample[i] = vec3(texture(scene, TexCoords.st + offsets[i]));			
+            sample[i] = vec3(texture(scene, TexCoords.st + offsets[i]));
         }
  
     }
@@ -33,7 +33,7 @@ void main()
     {           
         for(int i = 0; i < 9; i++)
         {
-           color += vec4(sample[i] * edge_kernel[i], 0.0f);		
+           color += vec4(sample[i] * edge_kernel[i], 0.0f);
         }
         color.a = 1.0f;
     }
@@ -45,7 +45,7 @@ void main()
     {
         for(int i = 0; i < 9; i++)
         {
-            color += vec4(sample[i] * blur_kernel[i], 0.0f);		
+            color += vec4(sample[i] * blur_kernel[i], 0.0f);
         }
         color.a = 1.0f;
     }

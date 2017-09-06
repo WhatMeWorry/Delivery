@@ -6,8 +6,8 @@ license     "proprietary"
 
 
 dependency "derelict-util"  version="~>2.0.6"
-dependency "derelict-glfw3" version="~>3.1.0"	
-dependency "derelict-gl3"   version="~>1.0.19"	
+dependency "derelict-glfw3" version="~>3.1.0"
+dependency "derelict-gl3"   version="~>1.0.19"
 dependency "derelict-fi"    version="~>2.0.3"
 dependency "derelict-ft"    version="~>1.1.2"
 dependency "derelict-al"    version="~>1.0.1"

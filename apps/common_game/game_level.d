@@ -74,7 +74,7 @@ public:
         //writeln("levelWidth = ", levelWidth);
         //writeln("levelHeight = ", levelHeight);
         //writeAndPause("Guess everything worked");   
-        writeln("Level Loaded");		
+        writeln("Level Loaded");
 
         if (((levelWidth > 0) && (levelHeight > 0)) &&
             ((rows > 0) && (columns > 0)) )
@@ -134,7 +134,7 @@ private:
                 // elem
         +/
 
-        // Initialize level tiles based on tiles		
+        // Initialize level tiles based on tiles
         //for (GLuint y = 0; y < height; ++y)
         foreach(i, row; tiles[])
         {
@@ -156,7 +156,7 @@ private:
                     obj.isSolid = GL_TRUE;
                     this.bricks ~= obj;
                 }
-                else if (tiles[i][j] > 1)	// Non-solid; now determine its color based on level data
+                else if (tiles[i][j] > 1)  // Non-solid; now determine its color based on level data
                 {
                     vec3 color = vec3(1.0f); // original: white
                     if (tiles[i][j] == 2)

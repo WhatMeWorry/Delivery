@@ -29,47 +29,46 @@ struct AutoRestartTimer
 {
     double  duration = 0.0;
     double  startTime = 0.0;
-	double  endTime = 0.0;
-	void setDuration(double inSecs)
-	{
+    double  endTime = 0.0;
+    void setDuration(double inSecs)
+    {
         duration = inSecs;
     }
     void startTimer()
     {
         endTime = glfwGetTime() + duration;
     }
-	bool expires()
-	{
+    bool expires()
+    {
         double currentTime = glfwGetTime();
         if (glfwGetTime() > endTime)
-		{
+        {
             startTimer();  // restart timer
-		    return true;
-        }	
-		return false;
+            return true;
+        }
+        return false;
     }
-    	
 }
 
 
 struct ManualTimer    // Have to restart the timer manually; call startTimer explicitly
 {                     // after each timer expiry
     double  startTime = 0.0;
-	double  endTime = 0.0;
+    double  endTime = 0.0;
     void startTimer(double durationInSecs)
     {
         endTime = glfwGetTime() + durationInSecs;
     }
-	bool expires()
-	{
+    bool expires()
+    {
         //writeln("within expires");
         if (glfwGetTime() > endTime)
-		{
-		    return true;
-        }	
-		return false;
+        {
+            return true;
+        }
+        return false;
     }
-    	
+
 }
 
 

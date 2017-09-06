@@ -28,23 +28,22 @@ enum Camera_Movement
 
 void showMonitorVideoMode()
 {
-    GLFWmonitor* primeMonitor = glfwGetPrimaryMonitor();	
-	
+    GLFWmonitor* primeMonitor = glfwGetPrimaryMonitor();
+
     //GLFWvidmode videoMode = 
     const GLFWvidmode* mode = glfwGetVideoMode(primeMonitor);
     //The resolution of a video mode is specified in screen coordinates, not pixels.
-       	
+    
     writeln("width in Screen coordinates of monitor = ", mode.width);
-		
-	writeln("Height in Screen coordinates of monitor = ", mode.height);
-	
+
+    writeln("Height in Screen coordinates of monitor = ", mode.height);
     writeln("Refresh rate of monitor = ", mode.refreshRate, "Hz");
 
     int virtualPosX, virtualPosY;
     glfwGetMonitorPos(primeMonitor, &virtualPosX, &virtualPosY);
     writeln("X position of monitor on virtual desktop in screen coordinates = ", virtualPosX);
     writeln("Y position of monitor on virtual desktop in screen coordinates = ", virtualPosY);  
-	
+
 }
 
 

@@ -101,27 +101,27 @@ bool[1024] keys;
 vec3 lightPos = vec3(1.2f, 1.0f, 2.0f);
 
 // Deltatime
-GLfloat deltaTime = 0.0f;	// Time between current frame and last frame
-GLfloat lastFrame = 0.0f;  	// Time of last frame
+GLfloat deltaTime = 0.0f;  // Time between current frame and last frame
+GLfloat lastFrame = 0.0f;  // Time of last frame
 
 void main(string[] argv)
 {
     camera = new Camera(vec3(0.0f, 0.0f, 4.5f));
  
     load_libraries();
-	
+
     auto winMain = glfwCreateWindow(width, height, "02_03_lighting_materials", null, null);
-	
+
     glfwMakeContextCurrent(winMain); 
-	
+
     // you must set the callbacks after creating the window
-	   
+  
      glfwSetCursorPosCallback(winMain, &mouse_callback); 
            glfwSetKeyCallback(winMain, &onInternalKeyEvent);
         glfwSetScrollCallback(winMain, &mouseScrollWheel_callback);
     glfwSetWindowSizeCallback(winMain, &onWindowResize);
 glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);    
-	 
+
     // Setup OpenGL options
     glEnable(GL_DEPTH_TEST);
 
@@ -142,12 +142,12 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
 
     writeln("lightingShader = ", lightingShader);
     writeln("lampShader = ", lampShader);
-	
+
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat[] vertices;
     initializeCubeVariant3(vertices);
-    writeln("vertices = ", vertices);	
-	
+    writeln("vertices = ", vertices);
+
     //exit(1);
 
     GLuint VBO, containerVAO;
@@ -186,18 +186,18 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
 
     enum Colors
     {
-        red	  = 1 << 0,
+        red   = 1 << 0,
         green = 1 << 1,
         blue  = 1 << 2,
-	}
-	
+    }
+
     // Generate a uniformly-distributed integer in the range [1, 7]
-    auto i = uniform(1, 8);	
-	
+    auto i = uniform(1, 8);
+
     double interval = 2.0;
     ManualTimer manualTimer;
-	manualTimer.startTimer(interval);
-	
+    manualTimer.startTimer(interval);
+
     while (!glfwWindowShouldClose(winMain))    // Loop until the user closes the window
     {
         // Calculate deltatime of current frame
@@ -222,7 +222,7 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
 
         glUniform3f(lightPosLoc, lightPos.x, lightPos.y, lightPos.z);
         glUniform3f(viewPosLoc, camera.position.x, camera.position.y, camera.position.z);
-	
+
         // Set lights properties
         vec3 lightColor;
         //lightColor.x = sin(glfwGetTime() * 2.0f);
@@ -232,29 +232,29 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
         if(manualTimer.expires)
         {
             i = uniform(1, 8);  // uniformly-distributed integer in the range [1, 7]
-            writeln("i = ", i);	
-            manualTimer.startTimer(interval);		
-		}		
+            writeln("i = ", i);
+            manualTimer.startTimer(interval);
+        }
 
-        auto newValue = fmax(abs(sin(glfwGetTime())), 0.4);  // oscillating value between 0.4 and 1.0	
-		
+        auto newValue = fmax(abs(sin(glfwGetTime())), 0.4);  // oscillating value between 0.4 and 1.0
+
         if(i & Colors.red)
             lightColor.x = newValue;
         if(i & Colors.green)
-            lightColor.y = newValue;			
+            lightColor.y = newValue;
         if(i & Colors.blue)
             lightColor.z = newValue;
 
-			
-		//writeln("sin(glfwGetTime()) = ", sin(glfwGetTime()) );
-		
+
+        //writeln("sin(glfwGetTime()) = ", sin(glfwGetTime()) );
+
         //vec3 diffuseColor = lightColor * vec3(0.5f); // Decrease the influence
         //vec3 diffuseColor = vec3(0.0f, fmax(abs(sin(glfwGetTime())),0.4), 0.0);
-        vec3 diffuseColor = vec3(lightColor.x, lightColor.y, lightColor.z); 		
-        //vec3 ambientColor = diffuseColor * vec3(0.2f); // Low influence	
+        vec3 diffuseColor = vec3(lightColor.x, lightColor.y, lightColor.z); 
+        //vec3 ambientColor = diffuseColor * vec3(0.2f); // Low influence
         //vec3 ambientColor = vec3(0.0f, fmax(abs(sin(glfwGetTime())), 0.4), 0.0);
-        vec3 ambientColor = vec3(lightColor.x, lightColor.y, lightColor.z);		
-		
+        vec3 ambientColor = vec3(lightColor.x, lightColor.y, lightColor.z);
+
         glUniform3f(glGetUniformLocation(lightingShader, "light.ambient"), ambientColor.x, ambientColor.y, ambientColor.z);
         glUniform3f(glGetUniformLocation(lightingShader, "light.diffuse"), diffuseColor.x, diffuseColor.y, diffuseColor.z);
         glUniform3f(glGetUniformLocation(lightingShader, "light.specular"), 1.0f, 1.0f, 1.0f);
@@ -262,8 +262,8 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
         glUniform3f(glGetUniformLocation(lightingShader, "material.ambient"),   1.0f, 0.5f, 0.31f);
         glUniform3f(glGetUniformLocation(lightingShader, "material.diffuse"),   1.0f, 0.5f, 0.31f);
         glUniform3f(glGetUniformLocation(lightingShader, "material.specular"),  0.5f, 0.5f, 0.5f); // Specular doesn't have full effect on this object's material
-        glUniform1f(glGetUniformLocation(lightingShader, "material.shininess"), 32.0f);	
-	
+        glUniform1f(glGetUniformLocation(lightingShader, "material.shininess"), 32.0f);
+
         // Create camera transformations
         mat4 view = mat4.identity;
         view = camera.GetViewMatrix();
@@ -295,11 +295,11 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
         // Set matrices
         glUniformMatrix4fv(viewLoc, 1, GL_TRUE, view.value_ptr);
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, projection.value_ptr);
-		
+
         model = mat4.identity;
-        model = model.scale(0.2f, 0.2, 0.2); // Here, these two lines (scale and translate) are in reverse order from the C++ code 	
+        model = model.scale(0.2f, 0.2, 0.2); // Here, these two lines (scale and translate) are in reverse order from the C++ code
         model = model.translate(lightPos);   // It doesn't work correctly if not done this way
-		
+
         glUniformMatrix4fv(modelLoc, 1, GL_TRUE, model.value_ptr);
         // Draw the light object (using light's vertex attributes)
         glBindVertexArray(lightVAO);
@@ -310,7 +310,7 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     }
 
     glfwTerminate();   // Clear any resources allocated by GLFW.
-	return;
+    return;
 }
 
 

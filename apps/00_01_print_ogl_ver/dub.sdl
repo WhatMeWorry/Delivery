@@ -5,8 +5,8 @@ copyright "Copyright © 2017, Kyle"
 license "proprietary"
 
 dependency "derelict-util"  version="~>2.0.6"
-dependency "derelict-glfw3" version="~>3.1.0"	
-dependency "derelict-gl3"   version="~>1.0.19"	
+dependency "derelict-glfw3" version="~>3.1.0"
+dependency "derelict-gl3"   version="~>1.0.19"
 dependency "derelict-fi"    version="~>2.0.3"
 dependency "derelict-ft"    version="~>1.1.2"
 dependency "derelict-al"    version="~>1.0.1"
@@ -24,4 +24,4 @@ dependency "derelict-assimp3" version="~>1.3.0"
 sourceFiles "../common/derelict_libraries.d"
 sourceFiles "../common/mytoolbox.d"
 
-targetPath	"./bin"	  // The destination path of the output binary - this setting does not support the platform attribute
+targetPath "./bin"  // The destination path of the output binary - this setting does not support the platform attribute

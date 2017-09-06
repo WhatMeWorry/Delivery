@@ -42,7 +42,7 @@ string defineVertexLayout(T)(T[] arr, bool normalization = GL_FALSE)
 
     foreach(i, elem; arr)
     {
-	    guts = cmd1 ~
+        guts = cmd1 ~
                to!string(i) ~ ", " ~ 
                to!string(elem) ~ ", GL_FLOAT, " ~
                normalStr ~ ", " ~
@@ -64,8 +64,8 @@ string defineVertexLayout(T)(T[] arr, bool normalization = GL_FALSE)
 void printEnvVariable(string str)
 {
     import std.process : environment;
-	import std.algorithm.iteration;
-	
+    import std.algorithm.iteration;
+
     auto splitUpItems(string envVar)
     {
         version(linux)
@@ -76,15 +76,15 @@ void printEnvVariable(string str)
              auto items = std.algorithm.iteration.splitter(envVar, ':');  // MacOS uses colon
         return items;
     }
-	
+
     string eVar = environment[str];  // get the environment variable
     auto components = splitUpItems(eVar);
-	
-	writeln("\n", "The ", str,  " environment variable contains:");
+
+    writeln("\n", "The ", str,  " environment variable contains:");
     foreach(component; components)
-        writeln("   ",component); 	
-	
-	
+        writeln("   ",component);
+
+
 }
 
 
@@ -102,7 +102,7 @@ void myLog(alias symbol)()
 // declared as void[].  The .length of a void array is the length of the data in bytes, 
 // rather than the number of elements in its original type.
 //
-// The .sizeof	Returns the size of the dynamic array reference, which is 8 in 32-bit builds 
+// The .sizeof Returns the size of the dynamic array reference, which is 8 in 32-bit builds 
 // and 16 on 64-bit builds.
 //
 // This template function does not all fixed arrays because staticArray.sizeof returns the array 

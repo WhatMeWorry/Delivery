@@ -30,7 +30,7 @@ void main()
 {
     // Ambient
     vec3 ambient = light.ambient * material.ambient;
-  	
+
     // Diffuse 
     vec3  norm     = normalize(Normal);
     vec3  lightDir = normalize(light.position - FragPos);

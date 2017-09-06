@@ -43,7 +43,7 @@ public:
 
         this.setupMesh();
     }
-	
+
     // Render the mesh
     void draw(Shader shader) 
     {
@@ -93,7 +93,7 @@ public:  // kludge so to make setupMesh() accessable from outside class
     // Initializes all the buffer objects/arrays
     void setupMesh()
     {
-	  writeln("within setupMesh");
+        writeln("within setupMesh");
         // Create buffers/arrays
         glGenVertexArrays(1, &this.VAO);
         glGenBuffers(1, &this.VBO);
@@ -107,14 +107,14 @@ public:  // kludge so to make setupMesh() accessable from outside class
         // again translates to 3/2 floats which translates to a byte array.
         //glBufferData(GL_ARRAY_BUFFER, this->vertices.size() * sizeof(Vertex), &this->vertices[0], GL_STATIC_DRAW);
         //glBufferData(GL_ARRAY_BUFFER, this.vertices.length * Vertex.sizeof, &this.vertices[0], GL_STATIC_DRAW); 
-		
-		writeln("00");
+
+        writeln("00");
         glBufferData(GL_ARRAY_BUFFER, this.vertices.length * Vertex.sizeof, this.vertices.ptr, GL_STATIC_DRAW);
-		writeln("01");
+        writeln("01");
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this.EBO);
-		writeln("02");		
+        writeln("02");
  
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, this.indices.length * GLuint.sizeof, this.indices.ptr, GL_STATIC_DRAW);		
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, this.indices.length * GLuint.sizeof, this.indices.ptr, GL_STATIC_DRAW);
 
         mixin( defineVertexLayout!(int)([3,3,2,3,3]) );
         pragma( msg, defineVertexLayout!(int)([3,3,2,3,3]) );       
@@ -144,5 +144,3 @@ public:  // kludge so to make setupMesh() accessable from outside class
         glBindVertexArray(0);
     }
 };
-
-	

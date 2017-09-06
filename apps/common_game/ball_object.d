@@ -16,14 +16,14 @@ import std.stdio;             // writeln
 class BallObject : GameObject
 {
 public:
-    // Ball state	
+    // Ball state
     GLfloat   radius;
     GLboolean stuck;
-    static if (__traits(compiles,powUps) && powUps)	
+    static if (__traits(compiles,powUps) && powUps)
     {
     GLboolean sticky;
     GLboolean passThrough;
-    }	
+    }
     // Constructor(s)
     //this();
     this(vec2 pos, GLfloat radius, vec2 velocity, Texture2D sprite)
@@ -32,11 +32,11 @@ public:
         super(pos, vec2(radius*2, radius*2), sprite, vec3(1.0f), velocity);
         this.radius = radius;
         this.stuck = true; 
-        static if (__traits(compiles,powUps) && powUps)	
+        static if (__traits(compiles,powUps) && powUps)
         {
         this.sticky = false;
         this.passThrough = false;
-        }			
+        }
     }
 
     // Moves the ball, keeping it constrained within the window bounds (except 
@@ -49,7 +49,7 @@ public:
         { 
             // Move the ball
             this.position += this.velocity * dt;
-			
+
             // Check if outside window bounds; if so, reverse velocity and restore at correct position
             if (this.position.x <= 0.0f)
             {
@@ -81,6 +81,6 @@ public:
         {
         this.sticky = GL_FALSE;
         this.passThrough = GL_FALSE;      
-        }		
+        }
     }
 }

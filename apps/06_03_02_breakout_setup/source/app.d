@@ -30,11 +30,11 @@ SoundSystem soundSys;  // Structure containing audio functionality
 void main(string[] argv)
 {
     Game breakout = new Game(800, 600);
-	
+
     load_libraries();
-	
+
     auto winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_02_beakout_setup", null, null);
-	
+
     glfwMakeContextCurrent(winMain); 
 
     // Define the viewport dimensions
@@ -80,7 +80,7 @@ void main(string[] argv)
     }
 
     glfwTerminate();   // Clear any resources allocated by GLFW.
-	return;
+    return;
 }
 
 

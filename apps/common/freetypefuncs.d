@@ -33,7 +33,7 @@ struct TextRenderingSystem
  
     static GLuint progID;
     static GLuint VAO;
-    static GLuint VBO;	
+    static GLuint VBO;
 } 
 
 /+
@@ -55,26 +55,26 @@ directly by dereferencing a handle, like in face−>num_glyphs.
 The complete list of available fields in in the FT_FaceRec structure description. However, we describe here 
 a few of them in more details:
 
-num_glyphs	
+num_glyphs
 This variable gives the number of glyphs available in the font face. A glyph is simply a character image. 
 It doesn't necessarily correspond to a character code though.
 
-face_flags	
+face_flags
 A 32-bit integer containing bit flags used to describe some face properties. For example, the flag 
 FT_FACE_FLAG_SCALABLE is used to indicate that the face's font format is scalable and that glyph images 
 can be rendered for all character pixel sizes. For more information on face flags, please read the 
 FreeType 2 API Reference.
 
-units_per_EM	
+units_per_EM
 This field is only valid for scalable formats (it is set to 0 otherwise). It indicates the number of font 
 units covered by the EM.
 
-num_fixed_sizes	
+num_fixed_sizes
 This field gives the number of embedded bitmap strikes in the current face. A strike is simply a series 
 of glyph images for a given character pixel size. For example, a font face could include strikes for 
 pixel sizes 10, 12 and 14. Note that even scalable font formats can have embedded bitmap strikes!
 
-available_sizes	
+available_sizes
 A pointer to an array of FT_Bitmap_Size elements. Each FT_Bitmap_Size indicates the horizontal and 
 vertical character pixel sizes for each of the strikes that are present in the face.
 
@@ -82,9 +82,9 @@ vertical character pixel sizes for each of the strikes that are present in the f
 +/
 void displayFaceInfo(FT_Face face)
 {
-    breakdown_FT_Face_2_Ways();	
+    breakdown_FT_Face_2_Ways();
 
-	string s = std.conv.to!string(face.family_name);
+    string s = std.conv.to!string(face.family_name);
     writeln("family name is ", s);
     s = std.conv.to!string(face.style_name);
     writeln("style name is ", s);
@@ -96,16 +96,16 @@ void displayFaceInfo(FT_Face face)
     //writeln("face.face_flags = ", face.face_flags);
     //writeln("face.units_per_EM = ", face.units_per_EM);
     //writeln("face.num_fixed_sizes = ", face.num_fixed_sizes);
-	//writeln("face.available_sizes = ", face.available_sizes);
-	//writeln("");
-	//writeln("face.size.metrics.x pixels per EM = ", face.size.metrics.x_ppem);
-	//writeln("face.size.metrics.y pixels per EM = ", face.size.metrics.y_ppem);
-	//writeln("face.size.metrics.x scale ", face.size.metrics.x_scale);
-	//writeln("face.size.metrics.y scale ", face.size.metrics.y_scale);
-	//writeln("face.num_charmaps = ", face.num_charmaps);
+    //writeln("face.available_sizes = ", face.available_sizes);
+    //writeln("");
+    //writeln("face.size.metrics.x pixels per EM = ", face.size.metrics.x_ppem);
+    //writeln("face.size.metrics.y pixels per EM = ", face.size.metrics.y_ppem);
+    //writeln("face.size.metrics.x scale ", face.size.metrics.x_scale);
+    //writeln("face.size.metrics.y scale ", face.size.metrics.y_scale);
+    //writeln("face.num_charmaps = ", face.num_charmaps);
 
-	//writeln("Bitmap Width in pixels = ", face.glyph.bitmap.width);
-	//writeln("Bitmap Height in pixels = ", face.glyph.bitmap.rows);
+    //writeln("Bitmap Width in pixels = ", face.glyph.bitmap.width);
+    //writeln("Bitmap Height in pixels = ", face.glyph.bitmap.rows);
 }
 
 
@@ -115,15 +115,15 @@ void breakdown_FT_Face_2_Ways(/+FT_Face face+/)
     // FT_Face  face;  below fails because this is a C structure and not a D struc.
     
     struct S
-	{
-	    int i;
-		float f;
-	}
-	S face;
-	
+    {
+        int i;
+        float f;
+    }
+    S face;
+
     foreach (index, name; FieldNameTuple!/+FT_Face+/S)             // works only for fields
         writefln("%s: %s", name, face.tupleof[index]);
-		
+
     foreach (name; FieldNameTuple!/+FT_Face+/S)                   // works for methods, opDispatch and similar
         writefln("%s: %s", name, mixin("face." ~ name));    
 
@@ -150,7 +150,7 @@ void initializeFreeTypeLibrary(ref FT_Library lib)
 void initializeFreeTypeFace(ref FT_Face face, FT_Library library, const(char)* font)
 {
     // assume FreeType and library has been loaded and initialized
-	
+
     //int error = FT_New_Face(library, "../fonts/courbd.ttf", 0, &face);
     int error = FT_New_Face(library, font, 0, &face);
     writeln("error = ", error);
@@ -178,7 +178,7 @@ void initializeFreeTypeAndFace(ref FT_Face face)
 
     FT_Library_Version(library, &v0, &v1, &v2);
     writeln("FreeType version = ", v0, ".", v1, ".", v2);
-	
+
     int error = FT_New_Face(library, "../fonts/courbd.ttf", 0, &face);
     writeln("error = ", error);
 
@@ -210,7 +210,7 @@ void initializeCharacters(ref FT_Face face, ref Glyph[GLchar] glyphs, int size =
         // Load each character glyph 
         // use function FT_Load_Char instead of FT_Load_Glyph. It is equivalent
         // to calling FT_Get_Char_Index, then FT_Load_Glyph.
-		
+
         if (FT_Load_Char(face, c, FT_LOAD_RENDER))    // FT_Load_Char(face, 'Z', FT_LOAD_RENDER)
         {
             writeln("Failed to load Glyph", c);         
@@ -270,13 +270,13 @@ void initializeCharacters(ref FT_Face face, ref Glyph[GLchar] glyphs, int size =
 void renderText(ref Glyph[GLchar] characters, GLuint VAO, GLuint VBO, GLuint progID, 
                 string text, GLfloat x, GLfloat y, GLfloat scale, vec3 color)
 {
-    // Activate corresponding render state	
-	glUseProgram(progID);
+    // Activate corresponding render state
+    glUseProgram(progID);
     glUniform3f(glGetUniformLocation(progID, "textColor"), color.x, color.y, color.z);
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
 
-	// Iterate through all characters
+    // Iterate through all characters
     foreach(i, c; text)
     {
         Glyph ch = characters[c];
@@ -301,7 +301,7 @@ void renderText(ref Glyph[GLchar] characters, GLuint VAO, GLuint VBO, GLuint pro
 
         // Render glyph texture over quad
         glBindTexture(GL_TEXTURE_2D, ch.textureID);
-		
+
         // Update content of VBO memory
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
@@ -312,9 +312,9 @@ void renderText(ref Glyph[GLchar] characters, GLuint VAO, GLuint VBO, GLuint pro
         glDrawArrays(GL_TRIANGLES, 0, 6);
         // Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
         x += (ch.advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide 
-		                                // amount of 1/64th pixels by 64 to get amount of pixels))
+                                        // amount of 1/64th pixels by 64 to get amount of pixels))
 
-	}
+    }
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -327,7 +327,7 @@ void initTextRenderingSystem(ref TextRenderingSystem textRenderSys)
         Shader(GL_VERTEX_SHADER,   "source/VertexShaderText.glsl",   0),
         Shader(GL_FRAGMENT_SHADER, "source/FragmentShaderText.glsl", 0)
     ];
-    textRenderSys.progID = createProgramFromShaders(shaders);	
+    textRenderSys.progID = createProgramFromShaders(shaders);
 
     glUseProgram(textRenderSys.progID);
 
@@ -351,13 +351,8 @@ void initTextRenderingSystem(ref TextRenderingSystem textRenderSys)
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * GLfloat.sizeof, cast(const(void)*) 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);	
-	
+    glBindVertexArray(0);
 }
-
-
-	
-	
 
 
 

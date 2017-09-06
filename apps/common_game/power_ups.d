@@ -17,7 +17,7 @@ class PowerUp : GameObject
 public:
     // PowerUp State
     string     type;
-    GLfloat    duration;	
+    GLfloat    duration;
     GLboolean  activated;
     // Constructor
     this(string type, vec3 color, GLfloat duration, vec2 position, Texture2D texture)
@@ -25,20 +25,15 @@ public:
         super(position, powerUpSize, texture, color, powerUpVelocity);
         this.type = type;
         this.duration = duration;
-        this.activated = false;		
-    }
-	
-	void display()
-    {
-        writeln("type = ", type);	
-        writeln("position = ", position);
-        writeln("duration = ", duration);	
-        writeln("powerUpSize = ", powerUpSize);	
+        this.activated = false;
     }
 
-	
-	
-	
-	
-	
+    void display()
+    {
+        writeln("type = ", type);
+        writeln("position = ", position);
+        writeln("duration = ", duration);
+        writeln("powerUpSize = ", powerUpSize);
+    }
+
 } 

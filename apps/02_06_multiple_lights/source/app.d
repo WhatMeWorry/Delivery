@@ -98,26 +98,26 @@ bool[1024] keys;
 vec3 lightPos = vec3(1.2f, 1.0f, 2.0f);
 
 // Deltatime
-GLfloat deltaTime = 0.0f;	// Time between current frame and last frame
-GLfloat lastFrame = 0.0f;  	// Time of last frame
+GLfloat deltaTime = 0.0f;  // Time between current frame and last frame
+GLfloat lastFrame = 0.0f;  // Time of last frame
 
 void main(string[] argv)
 {
     camera = new Camera(vec3(0.0f, 0.0f, 3.0f));
  
     load_libraries();
-	
+
     auto winMain = glfwCreateWindow(800, 600, "02_06_multiple_lights", null, null);
-	
+
     glfwMakeContextCurrent(winMain); 
-	
+
     // you must set the callbacks after creating the window
-	   
+   
      glfwSetCursorPosCallback(winMain, &mouse_callback); 
            glfwSetKeyCallback(winMain, &onInternalKeyEvent);
         glfwSetScrollCallback(winMain, &mouseScrollWheel_callback);
     glfwSetWindowSizeCallback(winMain, &onWindowResize);
-	 
+ 
     // Define the viewport dimensions
     glViewport(0, 0, width, height);
 
@@ -141,12 +141,12 @@ void main(string[] argv)
 
     writeln("lightingShader = ", lightingShader);
     writeln("lampShader = ", lampShader);
-	
+
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat[] vertices;
     initializeCubePosNormsTexs(vertices);   //////////////////////// NEW
-    writeln("vertices = ", vertices);	
-	
+    writeln("vertices = ", vertices);
+
     // World space positions of our cubes
     vec3[] cubePositions = 
     [
@@ -169,7 +169,7 @@ void main(string[] argv)
         vec3( 2.3f, -3.3f, -4.0f),
         vec3(-4.0f,  2.0f, -12.0f),
         vec3( 0.0f,  0.0f, -3.0f)
-    ];	
+    ];
 
     GLuint VBO, containerVAO;
     glGenVertexArrays(1, &containerVAO);
@@ -214,7 +214,7 @@ void main(string[] argv)
     glGenTextures(1, &specularMap);
 
     loadTexture(diffuseMap,  "../art/container2.png");          // relative to executable) 
-    loadTexture(specularMap, "../art/container2_specular.png");	
+    loadTexture(specularMap, "../art/container2_specular.png");
 
     // Set texture units
     glUseProgram(lightingShader);
@@ -256,9 +256,9 @@ void main(string[] argv)
         glUniform3f(glGetUniformLocation(lightingShader, "dirLight.specular"), 0.5f, 0.5f, 0.5f);
         // Point light 1
         glUniform3f(glGetUniformLocation(lightingShader, "pointLights[0].position"), 
-		                                                  pointLightPositions[0].x, 
-														  pointLightPositions[0].y, 
-														  pointLightPositions[0].z);
+                                                          pointLightPositions[0].x, 
+                                                          pointLightPositions[0].y, 
+                                                          pointLightPositions[0].z);
         glUniform3f(glGetUniformLocation(lightingShader, "pointLights[0].ambient"), 0.05f, 0.05f, 0.05f);
         glUniform3f(glGetUniformLocation(lightingShader, "pointLights[0].diffuse"), 0.8f, 0.8f, 0.8f);
         glUniform3f(glGetUniformLocation(lightingShader, "pointLights[0].specular"), 1.0f, 1.0f, 1.0f);
@@ -267,7 +267,7 @@ void main(string[] argv)
         glUniform1f(glGetUniformLocation(lightingShader, "pointLights[0].quadratic"), 0.032);
         // Point light 2
         glUniform3f(glGetUniformLocation(lightingShader, "pointLights[1].position"), 
-		                                                  pointLightPositions[1].x, 
+                                                          pointLightPositions[1].x, 
                                                           pointLightPositions[1].y, 
                                                           pointLightPositions[1].z);
         glUniform3f(glGetUniformLocation(lightingShader, "pointLights[1].ambient"), 0.05f, 0.05f, 0.05f);
@@ -366,7 +366,7 @@ void main(string[] argv)
     }
 
     glfwTerminate();   // Clear any resources allocated by GLFW.
-	return;
+    return;
 }
 
 

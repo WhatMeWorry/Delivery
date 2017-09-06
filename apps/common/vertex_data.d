@@ -53,8 +53,8 @@ void initializeCubeJustPositions(ref GLfloat[] verts)
        -0.5f,  0.5f,  0.5f,
        -0.5f,  0.5f, -0.5f,
     ];
-	
-	verts = vertices;
+
+    verts = vertices;
 }
 
 
@@ -106,8 +106,8 @@ void initializeCube(ref GLfloat[] verts)
        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     ];
-	
-	verts = vertices;
+
+    verts = vertices;
 }
 
     // World space positions of our cubes
@@ -136,7 +136,7 @@ void initializeCubePositions(ref vec3[] cubePos)
 
 void initializeCubeVariant3(ref GLfloat[] verts)
 {
-    // Set up vertex data (and buffer(s)) and attribute pointers	
+    // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat[] vertices =
     [
         // Positions          // Texture Coords
@@ -182,11 +182,10 @@ void initializeCubeVariant3(ref GLfloat[] verts)
        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
     ];
-	
-    verts = vertices;	
+
+    verts = vertices;
 }
-	
-	
+
 
 
 void initializeCubePosNormsTexs(ref GLfloat[] verts)
@@ -236,8 +235,7 @@ void initializeCubePosNormsTexs(ref GLfloat[] verts)
         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
-    ];	
-    		
-    verts = vertices;	
+    ];
+    
+    verts = vertices;
 }
-	

@@ -99,27 +99,27 @@ bool[1024] keys;
 vec3 lightPos = vec3(1.2f, 1.0f, 2.0f);
 
 // Deltatime
-GLfloat deltaTime = 0.0f;	// Time between current frame and last frame
-GLfloat lastFrame = 0.0f;  	// Time of last frame
+GLfloat deltaTime = 0.0f;  // Time between current frame and last frame
+GLfloat lastFrame = 0.0f;  // Time of last frame
 
 void main(string[] argv)
 {
     camera = new Camera(vec3(0.0f, 0.0f, 3.0f));
  
     load_libraries();
-	
+
     auto winMain = glfwCreateWindow(800, 600, "02_05_light_casters", null, null);
-	
+
     glfwMakeContextCurrent(winMain); 
-	
+
     // you must set the callbacks after creating the window
-	   
+  
           glfwSetCursorPosCallback(winMain, &mouse_callback); 
                 glfwSetKeyCallback(winMain, &onInternalKeyEvent);
              glfwSetScrollCallback(winMain, &mouseScrollWheel_callback);
          glfwSetWindowSizeCallback(winMain, &onWindowResize);
     glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize); 
-	 
+ 
     // Define the viewport dimensions
     //glViewport(0, 0, width, height);
 
@@ -143,12 +143,12 @@ void main(string[] argv)
 
     writeln("lightingShader = ", lightingShader);
     writeln("lampShader = ", lampShader);
-	
+
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat[] vertices;
     initializeCubePosNormsTexs(vertices);   //////////////////////// NEW
-    writeln("vertices = ", vertices);	
-	
+    writeln("vertices = ", vertices);
+
     // World space positions of our cubes
     vec3[] cubePositions = 
     [
@@ -208,7 +208,7 @@ void main(string[] argv)
     glGenTextures(1, &specularMap);
 
     loadTexture(diffuseMap,  "../art/container2.png");          // relative to executable) 
-    loadTexture(specularMap, "../art/container2_specular.png");	
+    loadTexture(specularMap, "../art/container2_specular.png");
 
     // Set texture units
     glUseProgram(lightingShader);
@@ -238,7 +238,7 @@ void main(string[] argv)
         GLint lightSpotCutOffLoc      = glGetUniformLocation(lightingShader, "light.cutOff");             
         GLint lightSpotOuterCutOffLoc = glGetUniformLocation(lightingShader, "light.outerCutOff");        
         GLint viewPosLoc              = glGetUniformLocation(lightingShader, "viewPos"); 
-		
+
         glUniform3f(lightPosLoc, camera.position.x, camera.position.y, camera.position.z);       
         glUniform3f(lightSpotdirLoc, camera.front.x, camera.front.y, camera.front.z);       
         glUniform1f(lightSpotCutOffLoc, cos(toRadians(12.5f)));      
@@ -273,7 +273,7 @@ void main(string[] argv)
         GLint modelLoc = glGetUniformLocation(lampShader, "model");
         GLint viewLoc  = glGetUniformLocation(lampShader, "view");
         GLint projLoc  = glGetUniformLocation(lampShader, "projection");
-		
+
         // Pass the matrices to the shader
         glUniformMatrix4fv(viewLoc,  1, GL_TRUE, view.value_ptr);
         glUniformMatrix4fv(projLoc,  1, GL_FALSE, projection.value_ptr);
@@ -311,7 +311,7 @@ void main(string[] argv)
     }
 
     glfwTerminate();   // Clear any resources allocated by GLFW.
-	return;
+    return;
 }
 
 

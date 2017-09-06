@@ -21,7 +21,7 @@ public:
     {
         glDeleteVertexArrays(1, &this.quadVAO);
     } 
-	
+
     // Renders a defined quad textured with given sprite
     void drawSprite(Texture2D texture, 
                     vec2 position, 
@@ -102,14 +102,14 @@ private:
 
     ShaderBreakout shader; 
     GLuint         quadVAO;
-	
+
     // Initializes and configures the quad's buffer and vertex attributes
     void initRenderData()
     {
         // Configure VAO/VBO
         GLuint VBO;
         GLfloat[] vertices = 
-		[   // Position   // Texture coords
+        [   // Position   // Texture coords
             0.0f, 1.0f, 0.0f, 1.0f,
             1.0f, 0.0f, 1.0f, 0.0f,
             0.0f, 0.0f, 0.0f, 0.0f, 

@@ -34,9 +34,9 @@ extern(C) void processMouse(double xpos, double ypos) nothrow
 
 void do_movement(Event event)
 {
-    GLfloat magnify = 10; 	
-	
-    if (event.keyboard.key == Key.w)	
+    GLfloat magnify = 10;
+
+    if (event.keyboard.key == Key.w)
         camera.ProcessKeyboard(Camera_Movement.FORWARD, (deltaTime * magnify));
     if (event.keyboard.key == Key.s)
         camera.ProcessKeyboard(Camera_Movement.BACKWARD, (deltaTime * magnify));
@@ -78,8 +78,8 @@ GLfloat lastY =  height / 2.0;
 vec3 lightPos = vec3(1.2f, 1.0f, 2.0f);
 
 // Deltatime
-GLfloat deltaTime = 0.0f;	// Time between current frame and last frame
-GLfloat lastFrame = 0.0f;  	// Time of last frame
+GLfloat deltaTime = 0.0f;  // Time between current frame and last frame
+GLfloat lastFrame = 0.0f;  // Time of last frame
 
 bool firstMouse = true;
 
@@ -88,11 +88,11 @@ void main(string[] argv)
     // Camera
     camera = new Camera(vec3(0.0f, 0.0f, 3.0f));
 
-	load_libraries();
-	
-	auto winMain = glfwCreateWindow(800, 600, "02_01_lighting_colors", null, null);
-	
-	glfwMakeContextCurrent(winMain); 
+    load_libraries();
+
+    auto winMain = glfwCreateWindow(800, 600, "02_01_lighting_colors", null, null);
+
+    glfwMakeContextCurrent(winMain); 
  
     // you must set the callbacks after creating the window
  
@@ -121,11 +121,11 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     writeln("lampShader = ", lampShader);
 
     // OpenGL options
-    glEnable(GL_DEPTH_TEST);	
-	
+    glEnable(GL_DEPTH_TEST);
+
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat[] vertices;
-	initializeCubeJustPositions(vertices);
+    initializeCubeJustPositions(vertices);
 
     GLuint VBO, VAO;
     glGenVertexArrays(1, &VAO);
@@ -173,32 +173,32 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
 
         glfwPollEvents();  // Check if any events have been activiated (key pressed, mouse
                            // moved etc.) and call corresponding response functions 
-        Event event;						   
+        Event event;   
         if (getNextEvent(winMain, event))
         {
             if (event.type == EventType.keyboard)
             {
                 if (event.keyboard.key == Key.escape)
                     glfwSetWindowShouldClose(winMain, GLFW_TRUE);
-                else	
-                    do_movement(event);				
+                else
+                    do_movement(event);
                     //moveCamera(event);
             }
             if (event.type == EventType.cursorInOrOut)
-            {			
+            {
                 //enableCursor(event);
             }
             if (event.type == EventType.cursorPosition)
-            {			
+            {
                 processMouse(event.cursor.position.x, event.cursor.position.y);
-            }							
-        }						   			   
+            }
+        }  
 
         // Clear the colorbuffer
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	    // Use cooresponding shader when setting uniforms/drawing objects
+        // Use cooresponding shader when setting uniforms/drawing objects
         glUseProgram(lightingShader);
         GLint objectColorLoc = glGetUniformLocation(lightingShader, "objectColor");
         GLint lightColorLoc  = glGetUniformLocation(lightingShader, "lightColor"); 
@@ -220,7 +220,7 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
         // Note: currently we set the projection matrix each frame, but since 
         // the projection matrix rarely changes it's often best practice to set 
         // it outside the main loop only once.
-		
+
         // Pass the matrices to the shader
         glUniformMatrix4fv(viewLoc,  1, GL_TRUE, view.value_ptr);
         glUniformMatrix4fv(projLoc,  1, GL_FALSE, projection.value_ptr);
@@ -243,10 +243,10 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
         // Set matrices
         glUniformMatrix4fv(viewLoc, 1, GL_TRUE, view.value_ptr);
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, projection.value_ptr);
-		
+
         model = mat4.identity;
-        model = model.scale(0.2, 0.2, 0.2);   // Make it a smaller cube	
-        model = model.translate(lightPos);	  // Swap order of translate/scale???			
+        model = model.scale(0.2, 0.2, 0.2);   // Make it a smaller cube
+        model = model.translate(lightPos);    // Swap order of translate/scale???
  
         glUniformMatrix4fv(modelLoc, 1, GL_TRUE, model.value_ptr);
         // Draw the light object (using light's vertex attributes)
@@ -258,7 +258,7 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     }
 
     glfwTerminate();   // Clear any resources allocated by GLFW.
-	return;
+    return;
 }
 
 

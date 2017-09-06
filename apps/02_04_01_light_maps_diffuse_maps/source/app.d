@@ -93,8 +93,8 @@ GLfloat lastY =  height / 2.0;
 bool[1024] keys;
 
 // Deltatime
-GLfloat deltaTime = 0.0f;	// Time between current frame and last frame
-GLfloat lastFrame = 0.0f;  	// Time of last frame
+GLfloat deltaTime = 0.0f;  // Time between current frame and last frame
+GLfloat lastFrame = 0.0f;  // Time of last frame
 
 mat4 model      = mat4.identity; 
 mat4 view       = mat4.identity;
@@ -108,13 +108,13 @@ void main(string[] argv)
     camera = new Camera(vec3(0.0f, 0.0f, 4.5f));
 
     load_libraries();
-	
+
     auto winMain = glfwCreateWindow(width, height, "02_04_01_light_maps_diffuse_maps", null, null);
-	
+
     glfwMakeContextCurrent(winMain); 
-	
+
     // you must set the callbacks after creating the window
-	   
+   
       glfwSetCursorPosCallback(winMain, &mouse_callback); 
             glfwSetKeyCallback(winMain, &onInternalKeyEvent);
          glfwSetScrollCallback(winMain, &mouseScrollWheel_callback);
@@ -185,8 +185,8 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
 
     // Set texture units
     glUseProgram(lightingShader);
-    glUniform1i(glGetUniformLocation(lightingShader, "material.diffuse"),  0);	
-	
+    glUniform1i(glGetUniformLocation(lightingShader, "material.diffuse"),  0);
+
     while (!glfwWindowShouldClose(winMain))    // Loop until the user closes the window
     {
         // Calculate deltatime of current frame
@@ -198,8 +198,8 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
                            // moved etc.) and call corresponding response functions 
         handleEvent(winMain);
 
-        do_movement();	
-	
+        do_movement();
+
        // Clear the colorbuffer
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -254,9 +254,9 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
 
         viewLoc  = glGetUniformLocation(lampShader, "view");
         glUniformMatrix4fv(viewLoc, 1, GL_TRUE, view.value_ptr);
-		
+
         model = mat4.identity;
-        model = model.scale(0.2f, 0.2, 0.2); // Here, these two lines (scale and translate) are in reverse order from the C++ code 	
+        model = model.scale(0.2f, 0.2, 0.2); // Here, these two lines (scale and translate) are in reverse order from the C++ code
         model = model.translate(lightPos);   // It doesn't work correctly if not done this way
 
         modelLoc = glGetUniformLocation(lampShader, "model");

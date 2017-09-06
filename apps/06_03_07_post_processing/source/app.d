@@ -81,25 +81,25 @@ GLFWwindow* winMain;  // need to make global so post_processor can acces winMain
 void main(string[] argv)
 {
     Game breakout = new Game(800, 600);  // originally (800, 600)  // (1600, 1200) for 4K monitors
-	
+
     load_libraries();
-	
+
     winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_07_post_processing", null, null);
-		
+
     glfwMakeContextCurrent(winMain); 
 
     showMonitorVideoMode();   
 
     // you must set the callbacks after creating the window
           glfwSetCursorPosCallback(winMain, &onCursorPosition);
-	    glfwSetMouseButtonCallback(winMain, &onMouseButton);
-    glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);	
+        glfwSetMouseButtonCallback(winMain, &onMouseButton);
+    glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
         glfwSetCursorEnterCallback(winMain, &onCursorEnterLeave);            
                 glfwSetKeyCallback(winMain, &onInternalKeyEvent);
 
     // GLFW Options
-    glfwSetInputMode(winMain, GLFW_CURSOR, GLFW_CURSOR_NORMAL);	
-	
+    glfwSetInputMode(winMain, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
     // Define the viewport dimensions
     int pixelWidth, pixelHeight;
     glfwGetFramebufferSize(winMain, &pixelWidth, &pixelHeight);  
@@ -109,7 +109,6 @@ void main(string[] argv)
     glEnable(GL_CULL_FACE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
 
     // Initialize game
     breakout.initGame();
@@ -120,7 +119,7 @@ void main(string[] argv)
 
     // Start Game within Menu State
     breakout.state = GameState.GAME_ACTIVE;
-	
+
     while (!glfwWindowShouldClose(winMain))    // Loop until the user closes the window
     {     
         // Calculate delta time
@@ -136,16 +135,16 @@ void main(string[] argv)
         breakout.processInput(deltaTime);
 
         // Update Game state
-		
+
         breakout.update_04(deltaTime);
 
         // Render
  
-		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+        glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-		breakout.renderGameWithParticles();
-		
+        breakout.renderGameWithParticles();
+
         glfwSwapBuffers(winMain);
     }
     return;

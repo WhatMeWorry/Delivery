@@ -47,23 +47,23 @@ GLFWwindow* winMain;  // need to make global so post_processor can acces winMain
 void main(string[] argv)
 {
     Game breakout = new Game(800, 600);  // originally (800, 600)  // (1600, 1200) for 4K monitors
-	
+
     load_libraries();
-	
+
     initSoundSystem(soundSys);
 
     playSound(FMOD_LOOP_NORMAL, soundSys.system, "../audio/breakout.mp3");
-	
-    printDrivers();	
 
-    initSound(soundSys, FMOD_LOOP_NORMAL, "../audio/breakout.mp3");  // offset 0	
+    printDrivers();
+
+    initSound(soundSys, FMOD_LOOP_NORMAL, "../audio/breakout.mp3");  // offset 0
     initSound(soundSys, FMOD_LOOP_OFF,    "../audio/bleep.mp3");     // offset 1
-    initSound(soundSys, FMOD_LOOP_OFF,    "../audio/solid.wav");     // offset 2	
-    initSound(soundSys, FMOD_LOOP_OFF,    "../audio/powerup.wav");   // offset 3	
-    initSound(soundSys, FMOD_LOOP_OFF,    "../audio/bleep.wav");     // offset 4	
-	
-    playSound(soundSys, 0 );	
-	
+    initSound(soundSys, FMOD_LOOP_OFF,    "../audio/solid.wav");     // offset 2
+    initSound(soundSys, FMOD_LOOP_OFF,    "../audio/powerup.wav");   // offset 3
+    initSound(soundSys, FMOD_LOOP_OFF,    "../audio/bleep.wav");     // offset 4
+
+    playSound(soundSys, 0 );
+
     winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_09_audio", null, null);
 
 
@@ -72,16 +72,16 @@ void main(string[] argv)
 
     // you must set the callbacks after creating the window
           glfwSetCursorPosCallback(winMain, &onCursorPosition);
-	    glfwSetMouseButtonCallback(winMain, &onMouseButton);
-    glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);	
+        glfwSetMouseButtonCallback(winMain, &onMouseButton);
+    glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
         glfwSetCursorEnterCallback(winMain, &onCursorEnterLeave);
 
     // you must set the callbacks after creating the window
-    glfwSetKeyCallback(winMain, &onInternalKeyEvent);	
-	
+    glfwSetKeyCallback(winMain, &onInternalKeyEvent);
+
     // GLFW Options
-    glfwSetInputMode(winMain, GLFW_CURSOR, GLFW_CURSOR_NORMAL);	
-	
+    glfwSetInputMode(winMain, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
 
     int pixelWidth, pixelHeight;
     glfwGetFramebufferSize(winMain, &pixelWidth, &pixelHeight);  
@@ -91,7 +91,6 @@ void main(string[] argv)
     glEnable(GL_CULL_FACE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
 
     // Initialize game
     breakout.initGame();
@@ -102,13 +101,13 @@ void main(string[] argv)
 
     // Start Game within Menu State
     breakout.state = GameState.GAME_ACTIVE;
-	
+
     // how to create and apply textures to 3D geometry data...
     int x = 0;
     float r = 0.001;
-		
-    //Texture2D tex = resource_manager.ResMgr.getTexture("face");	
-	
+
+    //Texture2D tex = resource_manager.ResMgr.getTexture("face");
+
     while (!glfwWindowShouldClose(winMain))    // Loop until the user closes the window
     {     
         // Calculate delta time
@@ -124,16 +123,16 @@ void main(string[] argv)
         breakout.processInput(deltaTime);
 
         // Update Game state
-		
+
         breakout.update_04(deltaTime);
 
         // Render
         //glClearColor(0.1f, 0.3f, 0.4f, 1.0f);  // originally
-		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+        glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-		breakout.renderGameWithParticles();
-		
+        breakout.renderGameWithParticles();
+
         glfwSwapBuffers(winMain);
     }
     return;

@@ -100,8 +100,8 @@ bool[256] keys;
 vec3 lightPos = vec3(1.2f, 1.0f, 2.0f);
 
 // Deltatime
-GLfloat deltaTime = 0.0f;	// Time between current frame and last frame
-GLfloat lastFrame = 0.0f;  	// Time of last frame
+GLfloat deltaTime = 0.0f;  // Time between current frame and last frame
+GLfloat lastFrame = 0.0f;  // Time of last frame
 
 Shader shader;
 
@@ -110,30 +110,30 @@ void main(string[] argv)
     camera = new Camera(vec3(0.0f, 0.0f, 3.0f));
  
     load_libraries();
-	
+
     auto winMain = glfwCreateWindow(800, 600, "03_01_model_loading", null, null);
-	
+
     glfwMakeContextCurrent(winMain); 
-	
+
     // you must set the callbacks after creating the window
-	   
+   
      glfwSetCursorPosCallback(winMain, &mouse_callback); 
            glfwSetKeyCallback(winMain, &onInternalKeyEvent);
         glfwSetScrollCallback(winMain, &mouseScrollWheel_callback);
     glfwSetWindowSizeCallback(winMain, &onWindowResize);
-	 
+ 
     // Define the viewport dimensions
     glViewport(0, 0, width, height);
 
     // Setup OpenGL options
     glEnable(GL_DEPTH_TEST);
-	
+
     Shader[] shaders =
     [
           Shader(GL_VERTEX_SHADER, "source/VertexShader.glsl",   0),
         Shader(GL_FRAGMENT_SHADER, "source/FragmentShader.glsl", 0)
     ];
-	
+
     shader.ID = createProgramFromShaders(shaders);
 
     // Load models
@@ -169,7 +169,7 @@ void main(string[] argv)
         // Draw the loaded model
         mat4 model = mat4.identity;
         model = model.translate(vec3(0.0f, -1.75f, 0.0f)); // Translate it down a bit so it's at the center of the scene
-        model = model.scale(0.2f, 0.2f, 0.2f);	           // It's a bit too big for our scene, so scale it down
+        model = model.scale(0.2f, 0.2f, 0.2f);             // It's a bit too big for our scene, so scale it down
         glUniformMatrix4fv(glGetUniformLocation(shader.ID, "model"), 1, GL_TRUE, model.value_ptr);
         ourModel.draw(shader);       
 
@@ -177,5 +177,5 @@ void main(string[] argv)
     }
 
     glfwTerminate();   // Clear any resources allocated by GLFW.
-	return;
+    return;
 }

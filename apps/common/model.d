@@ -17,7 +17,7 @@ public:
     // Stores all the textures loaded so far, 
     // optimized to make sure textures aren't loaded more than once.
 
-    Texture[] textures_loaded;	
+    Texture[] textures_loaded;
     Mesh[]    meshes;
     string    directory;
     bool      gammaCorrection;
@@ -68,7 +68,7 @@ private:
         //writeln("loadModel:scene.mNumMaterials = ", scene.mNumMaterials);
         //writeln("cStr (path) = ", cStr);
         
-		string currentWorkingDir = getcwd();
+        string currentWorkingDir = getcwd();
         writeln("currentWorkingDir = ", currentWorkingDir); // N:\LearnOpenGLdeVries\03_01_Model_Loading\Release
         
         if( (!scene) || (scene.mFlags == AI_SCENE_FLAGS_INCOMPLETE) || (!scene.mRootNode) )
@@ -313,7 +313,7 @@ private:
             // Specular: texture_specularN
             // Normal: texture_normalN
 
-	        // Not in C++ code?  why did i put this here??
+            // Not in C++ code?  why did i put this here??
             //uint texCount = material.aiGetMaterialTextureCount(aiTextureType_SPECULAR);
             //writeln("texCount = ", texCount);
 
@@ -363,21 +363,21 @@ private:
                                          C_ENUM aiTextureMapping* mapping    /*= NULL*/,
     +/
     /+
-	enum aiTextureType
-	{
-		aiTextureType_NONE = 0x0,
-		aiTextureType_DIFFUSE = 0x1,
-		aiTextureType_SPECULAR = 0x2,
-		aiTextureType_AMBIENT = 0x3,
-		aiTextureType_EMISSIVE = 0x4,
-		aiTextureType_HEIGHT = 0x5,
-		aiTextureType_NORMALS = 0x6,
-		aiTextureType_SHININESS = 0x7,
-		aiTextureType_OPACITY = 0x8,
-		aiTextureType_DISPLACEMENT = 0x9,
-		aiTextureType_LIGHTMAP = 0xA,
-		aiTextureType_REFLECTION = 0xB,
-		aiTextureType_UNKNOWN = 0xC,
+    enum aiTextureType
+    {
+        aiTextureType_NONE = 0x0,
+        aiTextureType_DIFFUSE = 0x1,
+        aiTextureType_SPECULAR = 0x2,
+        aiTextureType_AMBIENT = 0x3,
+        aiTextureType_EMISSIVE = 0x4,
+        aiTextureType_HEIGHT = 0x5,
+        aiTextureType_NORMALS = 0x6,
+        aiTextureType_SHININESS = 0x7,
+        aiTextureType_OPACITY = 0x8,
+        aiTextureType_DISPLACEMENT = 0x9,
+        aiTextureType_LIGHTMAP = 0xA,
+        aiTextureType_REFLECTION = 0xB,
+        aiTextureType_UNKNOWN = 0xC,
     } +/
 
 
@@ -395,29 +395,29 @@ private:
         {
             // WRONG!! C++  mat.aiGetMaterialTexture(aiTextureType_SPECULAR, 1, &str);
 
-			/+
-			C_ENUM aiReturn aiGetMaterialTexture(const C_STRUCT aiMaterial* mat,
-												 C_ENUM aiTextureType type,
-												 unsigned int  index,
-												 C_STRUCT aiString* path,
-			@param[in] mat Pointer to the input material. May not be NULL
-			*  @param[in] type Specifies the texture stack to read from (e.g. diffuse,
-			*     specular, height map ...).
-			*  @param[in] index Index of the texture. The function fails if the
-			*     requested index is not available for this texture type.
-			*     #aiGetMaterialTextureCount() can be used to determine the number of
-			*     textures in a particular texture stack.
-			*  @param[out] path Receives the output path
-			*      This parameter must be non-null.
-			+/
+            /+
+            C_ENUM aiReturn aiGetMaterialTexture(const C_STRUCT aiMaterial* mat,
+                                                 C_ENUM aiTextureType type,
+                                                 unsigned int  index,
+                                                 C_STRUCT aiString* path,
+            @param[in] mat Pointer to the input material. May not be NULL
+            *  @param[in] type Specifies the texture stack to read from (e.g. diffuse,
+            *     specular, height map ...).
+            *  @param[in] index Index of the texture. The function fails if the
+            *     requested index is not available for this texture type.
+            *     #aiGetMaterialTextureCount() can be used to determine the number of
+            *     textures in a particular texture stack.
+            *  @param[out] path Receives the output path
+            *      This parameter must be non-null.
+            +/
 
-           aiString str;
-           aiReturn result = aiGetMaterialTexture(mat, type, i, &str); 
+            aiString str;
+            aiReturn result = aiGetMaterialTexture(mat, type, i, &str); 
 
-           size_t len1 = str.length;
-           string str1 = str.data[0..len1].idup;
+            size_t len1 = str.length;
+            string str1 = str.data[0..len1].idup;
  
-           //writeln("str1 = ", "\t", "\t", "\t", "\t", "\t", "\t", str1);
+            //writeln("str1 = ", "\t", "\t", "\t", "\t", "\t", "\t", str1);
 
             // Skip loading texture if previously loaded
             GLboolean skip = false;
@@ -507,7 +507,7 @@ GLint TextureFromFile(string file, string directory, bool gamma = false)
 
     //writeln("bitsPerPixel = ", bitsPerPixel);
 
-    GLint  	internalFormat;
+    GLint   internalFormat;
     GLint   dataFormat;
 
     FIBITMAP* bitmap;
@@ -563,7 +563,7 @@ GLint TextureFromFile(string file, string directory, bool gamma = false)
 
 
     //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-    glGenerateMipmap(GL_TEXTURE_2D);	
+    glGenerateMipmap(GL_TEXTURE_2D);
 
 
     glBindTexture(GL_TEXTURE_2D, 0);

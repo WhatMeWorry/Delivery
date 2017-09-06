@@ -31,33 +31,33 @@ public:
     // Holds a list of pre-compiled Characters
     // std::map<GLchar, Character> Characters; 
     Character[GLchar] characters;
-	
+
     // Shader used for text rendering
     // Shader TextShader;
-	ShaderBreakout textShader;
+    ShaderBreakout textShader;
 
     GLuint VAO, VBO;
-	
+
     // TextRenderer(GLuint width, GLuint height);
     this(GLuint width, GLuint height)
     {
         resource_manager.ResMgr.loadShader("source/VertexShaderText.glsl", 
                                            "source/FragmentShaderText.glsl", 
                                            null, "text");
-										   
+ 
         this.textShader = resource_manager.ResMgr.getShader("text");
 
         //textShader.use();
-		
+
         glUseProgram(this.textShader.ID);  // equivalent to textShader.use();
-		
+
         textShader.setInteger("text", 0);
-		
-        //mat4 projection = orthographicFunc(0.0, width, height, 0.0, -1.0f, 1.0f);	
-        mat4 projection = orthographicFunc(0.0, width, 0.0, height, -1.0f, 1.0f);			
+
+        //mat4 projection = orthographicFunc(0.0, width, height, 0.0, -1.0f, 1.0f);
+        mat4 projection = orthographicFunc(0.0, width, 0.0, height, -1.0f, 1.0f);
         //textShader.setMatrix4("projection", projection, COL_MAJOR, true); 
         textShader.setMatrix4("projection", projection, GL_FALSE, true);
-		
+
         // Configure VAO/VBO for texture quads
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
@@ -69,9 +69,8 @@ public:
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
 
-		
     }
-	
+
     
 
 void load(string fontName, /+ref Character[GLchar] characters,+/ int fontSize)
@@ -97,9 +96,9 @@ void load(string fontName, /+ref Character[GLchar] characters,+/ int fontSize)
         if (FT_Load_Char(face, c, FT_LOAD_RENDER))    // FT_Load_Char(face, 'Z', FT_LOAD_RENDER)
         {
             writeln("Failed to load Glyph", c); 
-            continue;			
+            continue;
         } 
-		
+
         //writeln("Glyph ", c, " ", to!char(c), " Bitmap height x width: ", face.glyph.bitmap.rows, "x", face.glyph.bitmap.width);
 
         // Generate texture
@@ -127,9 +126,9 @@ void load(string fontName, /+ref Character[GLchar] characters,+/ int fontSize)
 
         // Now store character for later use
         // initialize a structure via the constructor using variable set above.
-		
+
         int   i = to!int(c);
-		char ch = to!char(c);
+        char ch = to!char(c);
 
         Character character = {
             c,
@@ -150,32 +149,30 @@ void load(string fontName, /+ref Character[GLchar] characters,+/ int fontSize)
 }
 
 
-	
-
 // void renderText(ref Character[GLchar] characters, GLuint VAO, GLuint VBO, GLuint progID, 
 //                 string text, GLfloat x, GLfloat y, GLfloat scale, vec3 color)
 void renderText(string text, GLfloat x, GLfloat y, GLfloat scale, vec3 color = vec3(1.0f))
 {
-    // Activate corresponding render state	
-	
+    // Activate corresponding render state
+
     this.textShader.use();
     this.textShader.setVector3f("textColor", color);
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(this.VAO);
-	
-	// Iterate through all characters
+
+    // Iterate through all characters
     foreach(i, c; text)
     {
         Character ch = characters[c];
 
         //writeln("c = ", c, " ch.texture = ", ch.textureID);
-		
+
         GLfloat xpos = x + ch.bearing.x * scale;
         GLfloat ypos = y - (ch.size.y - ch.bearing.y) * scale;
 
         //        ypos = y + (characters['H'].bearing.y - ch.bearing.y) * scale;
 
-		
+
         GLfloat w = ch.size.x * scale;
         GLfloat h = ch.size.y * scale;
         // Update VBO for each character
@@ -193,7 +190,7 @@ void renderText(string text, GLfloat x, GLfloat y, GLfloat scale, vec3 color = v
 
         // Render glyph texture over quad
         glBindTexture(GL_TEXTURE_2D, ch.textureID);
-		
+
         // Update content of VBO memory
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
@@ -204,12 +201,12 @@ void renderText(string text, GLfloat x, GLfloat y, GLfloat scale, vec3 color = v
         glDrawArrays(GL_TRIANGLES, 0, 6);
         // Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
         x += (ch.advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide 
-		                                // amount of 1/64th pixels by 64 to get amount of pixels))
+                                        // amount of 1/64th pixels by 64 to get amount of pixels))
 
-	}
+    }
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
-}	
-	
+}
+
 
 };

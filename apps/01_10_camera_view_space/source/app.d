@@ -24,20 +24,20 @@ enum width = 1000;  enum height = 800;
 
 void main(string[] argv)
 {
-	load_libraries();
-	
-	auto winMain = glfwCreateWindow(width, height, "01_10_camera_view_space", null, null);
-	
-	glfwMakeContextCurrent(winMain); 
+    load_libraries();
+
+    auto winMain = glfwCreateWindow(width, height, "01_10_camera_view_space", null, null);
+
+    glfwMakeContextCurrent(winMain); 
  
     // you must set the callbacks after creating the window
  
                 glfwSetKeyCallback(winMain, &onKeyEvent);
           glfwSetCursorPosCallback(winMain, &onCursorPosition);
-	    glfwSetMouseButtonCallback(winMain, &onMouseButton);
-    glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);	
+        glfwSetMouseButtonCallback(winMain, &onMouseButton);
+    glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
         glfwSetCursorEnterCallback(winMain, &onCursorEnterLeave);
-	
+
     glfwSetWindowAspectRatio(winMain, 8, 6);  // to match 800, 600
 
     Shader[] shaders =
@@ -53,18 +53,18 @@ void main(string[] argv)
     GLuint programID = createProgramFromShaders(shaders);
 
     writeln("programID = ", programID);
-	
+
     // Setup OpenGL options
-    glEnable(GL_DEPTH_TEST);	
+    glEnable(GL_DEPTH_TEST);
 
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat[] vertices;
-	initializeCube(vertices);
+    initializeCube(vertices);
 
     // World space positions of our cubes
     vec3[] cubePositions;
     initializeCubePositions(cubePositions);
-	
+
     GLuint VBO, VAO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -72,8 +72,8 @@ void main(string[] argv)
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		
-	// vertices are defined in common.vertex_data.d
+
+    // vertices are defined in common.vertex_data.d
     glBufferData(GL_ARRAY_BUFFER, vertices.arraySizeInBytes, vertices.ptr, GL_STATIC_DRAW);
 
     enum describeBuff = defineVertexLayout!(int)([3,2]);
@@ -116,17 +116,13 @@ void main(string[] argv)
 
     angle = 0.0;
 
-	//AutoRestartTimer aRT;
-	//aRT.setDuration(3.0);
-	//aRT.startTimer;
-
     while (!glfwWindowShouldClose(winMain))    // Loop until the user closes the window
     {
         glfwPollEvents();  // Check if any events have been activiated (key pressed, mouse
                            // moved etc.) and call corresponding response functions
-	    //if(aRT.expires)			   
+  
         handleEvent(winMain);
-		
+
         // Render
         
         // Clear the colorbuffer
@@ -191,7 +187,7 @@ void main(string[] argv)
     }
 
     glfwTerminate();   // Clear any resources allocated by GLFW.
-	return;
+    return;
 }
 
 

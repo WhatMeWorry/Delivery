@@ -38,11 +38,11 @@ void processMouse(double xpos, double ypos)
     }
 
     GLfloat xoffset = xpos - lastX;
-    GLfloat yoffset = lastY - ypos; // Reversed since y-coordinates go from bottom to left
+    GLfloat yoffset = lastY - ypos;  // Reversed since y-coordinates go from bottom to left
     lastX = xpos;
     lastY = ypos;
 
-    GLfloat sensitivity = 0.05;	// Change this value to your liking
+    GLfloat sensitivity = 0.05;  // Change this value to your liking
     xoffset *= sensitivity;
     yoffset *= sensitivity;
 
@@ -69,14 +69,14 @@ void moveCamera(Event event)
     GLfloat cameraSpeed = 0.01;
 
     if (event.keyboard.key == Key.w)
-	{
+    {
         cameraPos += cameraSpeed * cameraFront;
-		writeln("W key pressed cameraPos = ", cameraPos);
+        writeln("W key pressed cameraPos = ", cameraPos);
     }
     if (event.keyboard.key == Key.s)
     {
         cameraPos -= cameraSpeed * cameraFront;
-   		writeln("S key pressed cameraPos = ", cameraPos);
+        writeln("S key pressed cameraPos = ", cameraPos);
     }     
     if (event.keyboard.key == Key.a)
     {
@@ -98,7 +98,7 @@ void enableCursor(Event event)
         // The cursor entered the client area of the window
         globalCameraPos   = cameraPos;
         globalCameraFront = cameraFront;
-        globalCameraUp    = cameraUp;		
+        globalCameraUp    = cameraUp;
     }
     else
     {
@@ -124,25 +124,25 @@ GLfloat lastX =  width / 2.0;
 GLfloat lastY =  height / 2.0;
 
 // Deltatime
-GLfloat deltaTime = 0.0f;	// Time between current frame and last frame
-GLfloat lastFrame = 0.0f;  	// Time of last frame
+GLfloat deltaTime = 0.0f;   // Time between current frame and last frame
+GLfloat lastFrame = 0.0f;   // Time of last frame
 
 
 void main(string[] argv)
 {
     //auto winMain = load_libraries();
-	load_libraries();
-	
-	auto winMain = glfwCreateWindow(800, 600, "01_10_movement_speed", null, null);
-	
-	glfwMakeContextCurrent(winMain); 
+    load_libraries();
+
+    auto winMain = glfwCreateWindow(800, 600, "01_10_movement_speed", null, null);
+
+    glfwMakeContextCurrent(winMain); 
  
     // you must set the callbacks after creating the window
             glfwSetKeyCallback(winMain, &onKeyEvent);
       glfwSetCursorPosCallback(winMain, &onCursorPosition);
 glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     glfwSetCursorEnterCallback(winMain, &onCursorEnterLeave); // triggered when cursor enters or leaves window
-	
+
     Shader[] shaders =
     [
              Shader(GL_VERTEX_SHADER, "source/vertexShader.glsl",      0),
@@ -156,15 +156,15 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     GLuint programID = createProgramFromShaders(shaders);
 
     writeln("programID = ", programID);
-	
+
     // Setup OpenGL options
-    glEnable(GL_DEPTH_TEST);	
+    glEnable(GL_DEPTH_TEST);
 
 //===================================================================================
 
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat[] vertices;
-	initializeCube(vertices);
+    initializeCube(vertices);
 
     // World space positions of our cubes
     vec3[] cubePositions;
@@ -218,7 +218,7 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     glUseProgram(programID);
 
     angle = 0.0;
-	
+
     writeOnce!(cameraPos)();
     writeOnce!(cameraFront)();
     writeOnce!(cameraUp)();
@@ -235,37 +235,36 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
 
         //handleEvent(winMain);  // handleEvent will empty the queue so getNexEvent will never have anything to process     
 
-        Event even;						   
-		if (getNextEvent(winMain, even))
+        Event even;   
+        if (getNextEvent(winMain, even))
         {
             if (even.type == EventType.keyboard)
             {
-		        if (even.keyboard.key == Key.escape)
+                if (even.keyboard.key == Key.escape)
                 {
                     glfwSetWindowShouldClose(winMain, GLFW_TRUE);
                 }                  
                 else
                 {
                     moveCamera(even);
-                }					
+                }
             }
             if (even.type == EventType.cursorInOrOut)
-            {			
+            {
                 enableCursor(even);
             }
             if (even.type == EventType.cursorPosition)
-            {			
+            {
                 processMouse(even.cursor.position.x, even.cursor.position.y);
             }
             if (even.type == EventType.frameBufferSize)
-		    {
+            {
                 int pixelWidth, pixelHeight;
                 glfwGetFramebufferSize(winMain, &pixelWidth, &pixelHeight);  
                 glViewport(0, 0, pixelWidth, pixelHeight);
             }
-        }	
-
-						   
+        }
+  
         // Render
         
         // Clear the colorbuffer
@@ -324,7 +323,7 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     }
 
     glfwTerminate();   // Clear any resources allocated by GLFW.
-	return;
+    return;
 }
 
 

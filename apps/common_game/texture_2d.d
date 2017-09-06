@@ -24,7 +24,6 @@ public:
     GLuint wrap_T;          // Wrapping mode on T axis
     GLuint filter_Min;      // Filtering mode if texture pixels < screen pixels
     GLuint filter_Max;      // Filtering mode if texture pixels > screen pixels
-	
 
     this()    // Constructor (sets default texture modes)
     {
@@ -45,7 +44,7 @@ public:
         this.width = width;
         this.height = height;
         // Create Texture
-		glGenTextures(1, &this.ID);                 // HAD TO ADD THIS MYSELF?
+        glGenTextures(1, &this.ID);                 // HAD TO ADD THIS MYSELF?
         glBindTexture(GL_TEXTURE_2D, this.ID);
         glTexImage2D(GL_TEXTURE_2D, 0, 
                      this.internal_Format, width, height, 0, 

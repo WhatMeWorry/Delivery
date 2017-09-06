@@ -19,10 +19,10 @@ public:
     // State
     GLuint ID; 
     string logicalName;
-	
+
     // Constructor
     this() { }
-	
+
     // Sets the current shader as active
     ShaderBreakout use()
     {
@@ -31,7 +31,7 @@ public:
         glUseProgram(this.ID);
         return this;
     }
-	
+
     // Compiles the shader from given source code
     void compile(const GLchar *vertexSource, const GLchar *fragmentSource, 
                  const GLchar *geometrySource = null)  // Note: geometry source code is optional 
@@ -139,7 +139,7 @@ public:
         //writeln("name = ", to!string(name));
         //writeln("value = ", matrix);
         //writeln("FOUR = glGetUniformLocation(this.ID, name) = ", glGetUniformLocation(this.ID, name), "\n\n\n" );
-		
+
         // glUniformMatrix4fv(glGetUniformLocation(this.ID, name), 1, GL_FALSE, &matrix[0][0]);   // WORKS
         // (2) must be &projection[0][0]  or  cast(const(float)*) projection.ptr
         glUniformMatrix4fv(glGetUniformLocation(this.ID, name), 1, ROW_MAJOR, &matrix[0][0]);       

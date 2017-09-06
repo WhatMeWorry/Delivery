@@ -62,8 +62,8 @@ bool[1024] keys;
 vec3 lightPos = vec3(1.2f, 1.0f, 2.0f);
 
 // Deltatime
-GLfloat deltaTime = 0.0f;	// Time between current frame and last frame
-GLfloat lastFrame = 0.0f;  	// Time of last frame
+GLfloat deltaTime = 0.0f;  // Time between current frame and last frame
+GLfloat lastFrame = 0.0f;  // Time of last frame
 
 Glyph[GLchar] courierBold;
 Glyph[GLchar] phoenixRising;
@@ -81,31 +81,31 @@ TextRenderingSystem textRenderSys;
 void main(string[] argv)
 {
     load_libraries();
-	
+
     auto winMain = glfwCreateWindow(800, 600, "06_02_text_rendering", null, null);
-	
+
     glfwMakeContextCurrent(winMain); 
-	
+
     // you must set the callbacks after creating the window
-	   
+  
            glfwSetKeyCallback(winMain, &onInternalKeyEvent);
     glfwSetWindowSizeCallback(winMain, &onWindowResize);
-	 
+ 
     // Define the viewport dimensions
     glViewport(0, 0, width, height);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	
+
 
     initTextRenderingSystem(textRenderSys);
-	writeln("textRenderSys.progID = ", textRenderSys.progID);
-	writeln("textRenderSys.VAO = ", textRenderSys.VAO);	
-	writeln("textRenderSys.VBO = ", textRenderSys.VBO);	
+    writeln("textRenderSys.progID = ", textRenderSys.progID);
+    writeln("textRenderSys.VAO = ", textRenderSys.VAO);
+    writeln("textRenderSys.VBO = ", textRenderSys.VBO);
 
     auto RED = vec3(1.0, 0.0, 0.0);
-	
+
     while (!glfwWindowShouldClose(winMain))    // Loop until the user closes the window
     {     
         glfwPollEvents();  // Check if any events have been activiated (key pressed, mouse
@@ -129,7 +129,7 @@ void main(string[] argv)
     }
 
     glfwTerminate();   // Clear any resources allocated by GLFW.
-	return;
+    return;
 }
 
 

@@ -62,7 +62,7 @@ public:
             //p.Life -= dt; // reduce life
   
             if (this.particles[i].life > 0.0f)
-            {	// particle is alive, thus update
+            {   // particle is alive, thus update
                 float decayFactor = 6.0;
                 this.particles[i].life -= dt * decayFactor;
 
@@ -180,10 +180,10 @@ private:
     void respawnParticle(ref Particle particle, GameObject object, vec2 offset = vec2(0.0f, 0.0f))
     {
         // GLfloat random = ((rand() % 100) - 50) / 10.0f;  
-	    // rand() returns a random number between 0 and a large number.
-        // % 100 gets the remainder after dividing by 100, which will be an integer from 0 to 99 inclusive.	
-		// - 50 will change the range from -50 to 50
-		// / 10.0 will change the range from -5 to 5
+        // rand() returns a random number between 0 and a large number.
+        // % 100 gets the remainder after dividing by 100, which will be an integer from 0 to 99 inclusive.
+        // - 50 will change the range from -50 to 50
+        // / 10.0 will change the range from -5 to 5
 
         //writeln("Inside respawnParticle");
 
@@ -196,9 +196,9 @@ private:
         GLfloat rColor = 0.5;  // originally 0.5
 
         // rand() returns a random number between 0 and a large number.
-        // % 100 gets the remainder after dividing by 100, which will be an integer from 0 to 99 inclusive.	 
-        // / 100.0 will change range from 0.0, .01, ... .99 		
-				
+        // % 100 gets the remainder after dividing by 100, which will be an integer from 0 to 99 inclusive.
+        // / 100.0 will change range from 0.0, .01, ... .99 
+
         particle.position.x = object.position.x + random + offset.x;
         particle.position.y = object.position.y + random + offset.y;
         particle.color = vec4(rColor, rColor, rColor, 1.0f);

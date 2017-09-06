@@ -43,29 +43,28 @@ extern(C) static void onInternalKeyEvent(GLFWwindow* window, int key, int scanco
 void main(string[] argv)
 {
     Game breakout = new Game(1600, 1200);  // originally (800, 600)
-	
+
     load_libraries();
-	
+
     auto winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_05_03_collide_resolution", null, null);
-		
+
     glfwMakeContextCurrent(winMain); 
 
               //glfwSetKeyCallback(winMain, &onKeyEvent);
           glfwSetCursorPosCallback(winMain, &onCursorPosition);
-	    glfwSetMouseButtonCallback(winMain, &onMouseButton);
-    glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);	
+        glfwSetMouseButtonCallback(winMain, &onMouseButton);
+    glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
         glfwSetCursorEnterCallback(winMain, &onCursorEnterLeave);            
 
     // you must set the callbacks after creating the window
-    glfwSetKeyCallback(winMain, &onInternalKeyEvent);	
-	
+    glfwSetKeyCallback(winMain, &onInternalKeyEvent);
+
     // GLFW Options
-    glfwSetInputMode(winMain, GLFW_CURSOR, GLFW_CURSOR_NORMAL);	
-	
+    glfwSetInputMode(winMain, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
     // Define the viewport dimensions
     //glViewport(0, 0, breakout.width, breakout.height);  // replaced with glfwGetFramebufferSize()
                                                           // for Mac OS.
-
     int w;
     int h;
     glfwGetFramebufferSize(winMain, &w, &h);
@@ -75,7 +74,7 @@ void main(string[] argv)
     glEnable(GL_CULL_FACE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
+
 
     // Initialize game
     breakout.initGame();
@@ -86,13 +85,13 @@ void main(string[] argv)
 
     // Start Game within Menu State
     breakout.state = GameState.GAME_ACTIVE;
-	
+
     // how to create and apply textures to 3D geometry data...
     int x = 0;
     float r = 0.001;
-		
-    Texture2D tex = resource_manager.ResMgr.getTexture("face");	
-	
+
+    Texture2D tex = resource_manager.ResMgr.getTexture("face");
+
     while (!glfwWindowShouldClose(winMain))    // Loop until the user closes the window
     {     
         // Calculate delta time
@@ -108,13 +107,13 @@ void main(string[] argv)
         breakout.processInput(deltaTime);
 
         // Update Game state
-		
+
         breakout.update_03(deltaTime);
- 		
+
         // Render
         //glClearColor(0.1f, 0.3f, 0.4f, 1.0f);  // originally
-		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-		
+        glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+
         glClear(GL_COLOR_BUFFER_BIT);
 
         //x =+ 5;  // surprised this compiled
@@ -123,11 +122,11 @@ void main(string[] argv)
 
         if (x > 400)
         {
-            x = 0;		
-        }		
+            x = 0;
+        }
 
-		breakout.renderGame();
-		
+        breakout.renderGame();
+
         glfwSwapBuffers(winMain);
     }
     return;

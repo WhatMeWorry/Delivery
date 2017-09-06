@@ -36,17 +36,17 @@ public:
     bool     isSolid;
     bool     destroyed;
     // Render state
-    Texture2D sprite;	
+    Texture2D sprite;
 
-	
+
     void traceGameObject()
     {
         writeln("position = ", this.position);
         writeln("size = ", this.size);
         writeln("velocity = ", this.velocity);
 
-    }		
-	
+    }
+
     void draw(SpriteRenderer renderer)
     {
         renderer.drawSprite(this.sprite, this.position, this.size, this.rotation, this.color);

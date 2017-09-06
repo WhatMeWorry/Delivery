@@ -41,9 +41,9 @@ ShouldThrow myMissingSymCallBackFI( string symbolName )
 ShouldThrow myMissingSymCallBackFT( string symbolName )
 {
     if (symbolName == "FT_Stream_OpenBzip2"                     ||  // Windows libfreetype-6.dll
-	    symbolName == "FT_Get_CID_Is_Internally_CID_Keyed"      ||
-	    symbolName == "FT_Get_CID_From_Glyph_Index"             ||
-	    symbolName == "FT_Get_CID_Registry_Ordering_Supplement"
+        symbolName == "FT_Get_CID_Is_Internally_CID_Keyed"      ||
+        symbolName == "FT_Get_CID_From_Glyph_Index"             ||
+        symbolName == "FT_Get_CID_Registry_Ordering_Supplement"
        )
     {
        return ShouldThrow.No;
@@ -58,8 +58,8 @@ ShouldThrow myMissingSymCallBackFT( string symbolName )
 ShouldThrow myMissingSymCallBackFmod( string symbolName )
 {
     if (symbolName == "FMOD_System_GetChannelsReal"        ||  // Windows fmod.dll
-	    symbolName == "FMOD_Channel_OverridePanDSP"        ||
-	    symbolName == "FMOD_ChannelGroup_OverridePanDSP"
+        symbolName == "FMOD_Channel_OverridePanDSP"        ||
+        symbolName == "FMOD_ChannelGroup_OverridePanDSP"
        )
     {
        return ShouldThrow.No;
@@ -74,8 +74,8 @@ ShouldThrow myMissingSymCallBackFmod( string symbolName )
 ShouldThrow myMissingSymCallBackASSIMP3( string symbolName )
 {
     if (symbolName == "aiReleaseExportFormatDescription"  ||  // Windows assimp.dll
-	    symbolName == "aiGetImportFormatCount"            ||
-	    symbolName == "aiGetImportFormatDescription"
+        symbolName == "aiGetImportFormatCount"            ||
+        symbolName == "aiGetImportFormatDescription"
        )
     {
        return ShouldThrow.No;
@@ -94,11 +94,11 @@ void load_libraries()
     
     DerelictGLFW3.load();   // must be loaded before OpenGL so a context can be created
 
-	writeln("GLFW3 library loaded");
+    writeln("GLFW3 library loaded");
 
     if (glfwInit() == 0)
         throw new Exception("glfwInit failed");
-	
+
     // Load Open Graphics Library
 
     DerelictGL3.load();     // Load OpenGL versions 1.0 and 1.1
@@ -117,25 +117,25 @@ void load_libraries()
     writeln("window = ", window);
 
     if (!window)
-        throw new Exception("Window Creation Failed.");	
+        throw new Exception("Window Creation Failed.");
 
     glfwMakeContextCurrent(window);
 
     DerelictGL3.reload();   // Load OpenGL versions 1.2+
 
-	glfwDestroyWindow(window);
+    glfwDestroyWindow(window);
 
     writeln("OpenGL library loaded");
 
-	  // Set the callback before calling load
+    // Set the callback before calling load
     DerelictFI.missingSymbolCallback = &myMissingSymCallBackFI;
     DerelictFI.load();      // Load the FreeImage library
 
-	writeln("FreeImage library loaded");
+    writeln("FreeImage library loaded");
 
-	// Set the callback before calling load
+    // Set the callback before calling load
     DerelictFT.missingSymbolCallback = &myMissingSymCallBackFT;
-    DerelictFT.load();	    // Load the FreeType library
+    DerelictFT.load();    // Load the FreeType library
 
     int v0,v1,v2;
     FT_Library library;
@@ -154,7 +154,7 @@ void load_libraries()
 
     // Load the Fmod library.
 
-	// Set the callback before calling load
+    // Set the callback before calling load
     DerelictFmod.missingSymbolCallback = &myMissingSymCallBackFmod;
     DerelictFmod.load();
 
@@ -174,5 +174,5 @@ void load_libraries()
 
     writeln("DerelictASSIMP3 library loaded");
 
-	//return window;
+    //return window;
 }

@@ -19,16 +19,16 @@ import derelict.glfw3.glfw3;
 
 void main(string[] argv)
 {
-	load_libraries();
-	
-	auto winMain = glfwCreateWindow(800, 600, "01_05_transformations", null, null);
-	
-	glfwMakeContextCurrent(winMain); 
-	
+    load_libraries();
+    
+    auto winMain = glfwCreateWindow(800, 600, "01_05_transformations", null, null);
+    
+    glfwMakeContextCurrent(winMain); 
+
     // you must set the callbacks after creating the window
 
                 glfwSetKeyCallback(winMain, &onKeyEvent);
-    glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);	
+    glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
  
     Shader[] shaders =
     [
@@ -58,13 +58,13 @@ void main(string[] argv)
         -0.5, -0.5, 0.0,   0.0, 0.0, 1.0,   0.0f, 0.0, // Bottom Left
         -0.5,  0.5, 0.0,   1.0, 1.0, 0.0,   0.0f, 1.0  // Top Left 
     ];
-	
+
     GLuint[] indices =   // Note that we start from 0
     [
         0, 1, 3, // First Triangle
         1, 2, 3  // Second Triangle
     ];
-	
+
     GLuint VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -118,14 +118,14 @@ void main(string[] argv)
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, texture2);
     glUniform1i(glGetUniformLocation(programID, "ourTexture2"), 1);
-	
+
     glUseProgram(programID);
 
     while (!glfwWindowShouldClose(winMain))    // Loop until the user closes the window
     {
         glfwPollEvents();  // Check if any events have been activiated (key pressed, mouse
                            // moved etc.) and call corresponding response functions  
-        handleEvent(winMain);							   
+        handleEvent(winMain);   
         // Render
         
         // Clear the colorbuffer
@@ -156,7 +156,7 @@ void main(string[] argv)
     }
 
     glfwTerminate();   // Clear any resources allocated by GLFW.
-	return;
+    return;
 }
 
 

@@ -19,11 +19,11 @@ void main(char[][] args)
         writeln(arg);
     }
 
-	printEnvVariable("PATH");
+    printEnvVariable("PATH");
 
-	version(Windows)
+    version(Windows)
     {
-	    printEnvVariable("LIB");
+        printEnvVariable("LIB");
     }
     version(linux)
     {
@@ -35,15 +35,15 @@ void main(char[][] args)
     }
 
 
-	//printEnvVariable("LIBPATH");
+    //printEnvVariable("LIBPATH");
 
     string currentWorkingDirectory = getcwd();  // this is where the exec was started from
                                                 // we need this because all the libraries, resources,
-										        // will be relative to this location
+                                                // will be relative to this location
 
     writeln("This executable was started at location: ", currentWorkingDirectory);
 
-	load_libraries();
+    load_libraries();
 
     auto window = glfwCreateWindow(width, height, "01_01_hello_window", null, null);
     glfwMakeContextCurrent(window);
@@ -52,7 +52,7 @@ void main(char[][] args)
     while (!glfwWindowShouldClose(window))    // Loop until the user closes the window
     {
         // Check if any events have been activiated (key pressed, mouse moved etc.)
-		// and call corresponding response functions
+        // and call corresponding response functions
         glfwPollEvents();
 
         // Render
@@ -65,5 +65,5 @@ void main(char[][] args)
 
     glfwTerminate();   // clear any resources allocated by GLFW.
 
-	return;
+    return;
 }

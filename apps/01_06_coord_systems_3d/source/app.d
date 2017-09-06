@@ -22,11 +22,11 @@ enum width = 800;  enum height = 600;
 
 void main(string[] argv)
 {
-	load_libraries();
-	
-	auto winMain = glfwCreateWindow(width, height, "01_06_coord_systems_3d", null, null);
-	
-	glfwMakeContextCurrent(winMain); 
+    load_libraries();
+
+    auto winMain = glfwCreateWindow(width, height, "01_06_coord_systems_3d", null, null);
+
+    glfwMakeContextCurrent(winMain); 
 
     // you must set the callbacks after creating the window
                 glfwSetKeyCallback(winMain, &onKeyEvent);
@@ -45,13 +45,13 @@ void main(string[] argv)
     GLuint programID = createProgramFromShaders(shaders);
 
     writeln("programID = ", programID);
-	
+
     // Setup OpenGL options
-    glEnable(GL_DEPTH_TEST);	
+    glEnable(GL_DEPTH_TEST);
  
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat[] vertices;
-	initializeCube(vertices);
+    initializeCube(vertices);
 
     // World space positions of our cubes
     vec3[] cubePositions;
@@ -109,7 +109,7 @@ void main(string[] argv)
     {
         glfwPollEvents();  // Check if any events have been activiated (key pressed, mouse
                            // moved etc.) and call corresponding response functions 
-        handleEvent(winMain);						   
+        handleEvent(winMain);   
         // Render
         
         // Clear the colorbuffer
@@ -137,7 +137,7 @@ void main(string[] argv)
         GLint modelLoc = glGetUniformLocation(programID, "model");
         GLint viewLoc  = glGetUniformLocation(programID, "view");
         GLint projLoc  = glGetUniformLocation(programID, "projection");
-		
+
         // Pass the matrices to the shader
         glUniformMatrix4fv(viewLoc,  1, GL_TRUE, view.value_ptr);
         // Note: currently we set the projection matrix each frame, but since 
@@ -168,7 +168,7 @@ void main(string[] argv)
     }
 
     glfwTerminate();   // Clear any resources allocated by GLFW.
-	return;
+    return;
 }
 
 

@@ -171,8 +171,8 @@ auto findExecutable(string exec)
         string command = "which ";    // Mac uses which
 
     auto at = executeShell(command ~ exec);
-	if (at.status != 0)
-	    writeln("Handle Error here");
+    if (at.status != 0)
+        writeln("Handle Error here");
     return at;
 }
 
@@ -201,7 +201,7 @@ void main(char[][] args)
     }
 
     string progName = args[0].idup;  // get the command that called this program
-	                                 // (should be dublin, dubwin, or dubmac)
+                                     // (should be dublin, dubwin, or dubmac)
     version(linux)
     {
 
@@ -217,43 +217,43 @@ void main(char[][] args)
     }
 
     /+ Assumptions:
-	    the duball (dublin, dubwin, dubmac) are located at and executed at the pre-defined
-		projects folder which will hold individual projects
-		<root>/projects   (where root is the root of the flash drive assigned by Linux or OSX)
-		or
-		X:\projects       (where X is the letter assigned by Windows to the flash drive)
+        the duball (dublin, dubwin, dubmac) are located at and executed at the pre-defined
+        projects folder which will hold individual projects
+        <root>/projects   (where root is the root of the flash drive assigned by Linux or OSX)
+        or
+        X:\projects       (where X is the letter assigned by Windows to the flash drive)
 
-		Windows Example:
+        Windows Example:
 
-		    after inserting a flash drive in windows, assume the flash drive is assigned letter E: (C: and D: were already taken by permanent drives of the system)
-		    open a command window
-		    cd to e:\projects
-	        dubwin init myfirstproj
+            after inserting a flash drive in windows, assume the flash drive is assigned letter E: (C: and D: were already taken by permanent drives of the system)
+            open a command window
+            cd to e:\projects
+            dubwin init myfirstproj
 
-		    to build, link, run,
+            to build, link, run,
             cd myfirstproj
             ..\dubwin.exe run
 
-		Linux Example:
+        Linux Example:
 
-		    after inserting a flash drive in linux, the flash drive is a path
-		    open a terminal window
-		    cd to <path>\projects
-	        dublin init mysecondproj
+            after inserting a flash drive in linux, the flash drive is a path
+            open a terminal window
+            cd to <path>\projects
+            dublin init mysecondproj
 
-		    to build, link, run,
+            to build, link, run,
             cd mysecondproj
             .\..\dublin run
 
 
-			Windows then searches for the DLLs in the following sequence:
+            Windows then searches for the DLLs in the following sequence:
                 o The directory where the executable module for the current process is located.
                 o The current directory.
                 o The Windows system directory. The GetSystemDirectory function retrieves the path of this directory.
                 o The Windows directory. The GetWindowsDirectory function retrieves the path of this directory.
                 o The directories listed in the PATH environment variable.
 
-	+/
+    +/
 
     string envPath = environment["PATH"];  // get the environment variable PATH.
 
@@ -263,8 +263,8 @@ void main(char[][] args)
 
     version(linux)
     {
-	    string relDmdPath = r"./../Linux/dmd-2.071.0/linux/bin64:./../../Linux/dmd-2.071.0/linux/bin64:";
-	    string relDubPath = r"./../Windows/dub:./../../Windows/dub:";
+        string relDmdPath = r"./../Linux/dmd-2.071.0/linux/bin64:./../../Linux/dmd-2.071.0/linux/bin64:";
+        string relDubPath = r"./../Windows/dub:./../../Windows/dub:";
         string    dllPath = r"./../../linux/dynamiclibraries:";
 
       //LD_LIBRARY_PATH=/usr/local/lib
@@ -272,26 +272,26 @@ void main(char[][] args)
       environment["LD_LIBRARY_PATH"] = r"./../../linux/dynamiclibraries:";
     } else version(Win64)
     {
-	    //pragma(lib, r".\..\Windows\Windows Kits\10\Lib\10.0.10150.0\ucrt\x64");  // not allowed as statement
-	    string relDmdPath = r".\..\Windows\D\dmd2\windows\bin;.\..\..\Windows\D\dmd2\windows\bin;";
-	    string relDubPath = r".\..\Windows\dub;.\..\..\Windows\dub;";
+        //pragma(lib, r".\..\Windows\Windows Kits\10\Lib\10.0.10150.0\ucrt\x64");  // not allowed as statement
+        string relDmdPath = r".\..\Windows\D\dmd2\windows\bin;.\..\..\Windows\D\dmd2\windows\bin;";
+        string relDubPath = r".\..\Windows\dub;.\..\..\Windows\dub;";
         string   dllPath  = r".\..\..\windows\dynamiclibraries;";    // needed for glfw3.dll
         dllPath = r".\..\..\Windows\VisualStudio\VC\redist\x64\Microsoft.VC140.CRT;" ~ dllPath;
 
-		/+ Microsoft quote "LIB, if defined. The LINK tools uses the LIB path when
-		   searching for an object or library (example, libucrt.lib) +/
+        /+ Microsoft quote "LIB, if defined. The LINK tools uses the LIB path when
+           searching for an object or library (example, libucrt.lib) +/
 
-	    environment["LIB"] = r".\..\..\Windows\Windows Kits\10\Lib\10.0.14393.0\ucrt\x64";
+        environment["LIB"] = r".\..\..\Windows\Windows Kits\10\Lib\10.0.14393.0\ucrt\x64";
 
-		// The value of DFLAGS environment variable  is treated as if it were
-		// appended to the command line to dmd.exe.
+        // The value of DFLAGS environment variable  is treated as if it were
+        // appended to the command line to dmd.exe.
 
-		environment["DFLAGS"] = `-I..\  -I..\common  -I..\common_game`;
+        environment["DFLAGS"] = `-I..\  -I..\common  -I..\common_game`;
 
-		// set LINKCMD64=C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\amd64\link.ex
-	} else version(OSX)
+        // set LINKCMD64=C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\amd64\link.ex
+    } else version(OSX)
     {
-		string relDmdPath = r"./../MacOS/D/osx/bin:./../../MacOS/D/osx/bin:";
+        string relDmdPath = r"./../MacOS/D/osx/bin:./../../MacOS/D/osx/bin:";
         string relDubPath = r"./../MacOS/dub:./../../MacOS/dub:" ~ r"./../../MacOS/dynamiclibraries:";
         // Dynamic (.dylib) libs can be placed at a nonstandard location in your file system, but only in
         // one of these environment variables: LD_LIBRARY_PATH, DYLD_FALLBACK_LIBRARY_PATH, or LD_LIBRARY_PATH
@@ -301,20 +301,20 @@ void main(char[][] args)
     }
 
 
-	if ((!canFind(envPath, relDmdPath)) | (!canFind(envPath, relDubPath)) | (!canFind(envPath, dllPath)))
-	{
-	    //writeln("CANT FIND PATHS ===========================");
+    if ((!canFind(envPath, relDmdPath)) | (!canFind(envPath, relDubPath)) | (!canFind(envPath, dllPath)))
+    {
+        //writeln("CANT FIND PATHS ===========================");
         version(Windows)
             envPath = relDmdPath ~ relDubPath ~ dllPath ~ envPath;
         else
             envPath = relDmdPath ~ relDubPath ~ dllPath ~ envPath;  // maybe call these soPath
 
-		//writeln("new path = ", envPath);
+        //writeln("new path = ", envPath);
 
-	    environment["PATH"] = envPath;  // Update with new DMD and DUB paths
+        environment["PATH"] = envPath;  // Update with new DMD and DUB paths
 
-		envPath = environment["PATH"];    // get the environment variable PATH.
-		//writeln("added new paths = ", envPath);
+        envPath = environment["PATH"];    // get the environment variable PATH.
+        //writeln("added new paths = ", envPath);
     }
 
 
@@ -326,7 +326,7 @@ void main(char[][] args)
 
     paths = splitUpPaths(envPath);
 
-	//writeln("\n","The PATH env variable now has paths:");
+    //writeln("\n","The PATH env variable now has paths:");
     foreach(path; paths)
     {
         //writeln("   ",path);
@@ -344,37 +344,37 @@ void main(char[][] args)
 
     args[0] = "dub".dup;  // overwrite dubwin, dubmac, or dublin with the generic dup command
 
-	writeln("calling spawnProcess with args = ", args);
+    writeln("calling spawnProcess with args = ", args);
 
-	/+
+    /+
     wait(spawnProcess("myapp", ["foo" : "bar"], Config.newEnv));
 
-	auto pid = spawnProcess("myapp", stdin, stdout, logFile,
+    auto pid = spawnProcess("myapp", stdin, stdout, logFile,
                              Config.retainStderr | Config.suppressConsole);
 
     @trusted Pid spawnProcess(in char[] program,
-	                          File stdin = std.stdio.stdin,
-							  File stdout = std.stdio.stdout,
-							  File stderr = std.stdio.stderr,
-							  const string[string] env = null,
-							  Config config = Config.none,
-							  in char[] workDir = null);
-	+/
+                              File stdin = std.stdio.stdin,
+                              File stdout = std.stdio.stdout,
+                              File stderr = std.stdio.stderr,
+                              const string[string] env = null,
+                              Config config = Config.none,
+                              in char[] workDir = null);
+    +/
 
 
     /+
     By default, the child process inherits the environment of the parent process, along
-	with any additional variables specified in the env parameter. If the same variable
-	exists in both the parent's environment and in env, the latter takes precedence.
-	+/
+    with any additional variables specified in the env parameter. If the same variable
+    exists in both the parent's environment and in env, the latter takes precedence.
+    +/
 
     auto pid = spawnProcess(args,
                             std.stdio.stdin,
                             std.stdio.stdout,
-							std.stdio.stderr,
-							null,
-							Config.none,  /+ Config.none +/
-							null
+                            std.stdio.stderr,
+                            null,
+                            Config.none,  /+ Config.none +/
+                            null
                             );
     scope(exit)
     {
@@ -382,9 +382,9 @@ void main(char[][] args)
         writeln("myapp exited with code ", exitCode);
     }
     //    if (wait(pid) != 0)
-    //	      writeln("spawnProcess failed.");
+    //        writeln("spawnProcess failed.");
 
-	/+
+    /+
     else version(OSX)
     {
         auto paths = std.algorithm.iteration.splitter(envPath, ':');  // colon is path separator in Linux
@@ -429,12 +429,12 @@ void main(char[][] args)
     Version identifiers do not conflict with other identifiers in the code, they
     are in a separate name space. Predefined version identifiers are global.
     Predefined Version Identifiers
-    Version Identifier	Description
-    Windows	            Microsoft Windows systems
-    Win32	            Microsoft 32-bit Windows systems
-    Win64	            Microsoft 64-bit Windows systems
-    linux	            All Linux systems
-    OSX	                Mac OS X
+    Version Identifier Description
+    Windows             Microsoft Windows systems
+    Win32               Microsoft 32-bit Windows systems
+    Win64               Microsoft 64-bit Windows systems
+    linux               All Linux systems
+    OSX                 Mac OS X
   +/
 
 }

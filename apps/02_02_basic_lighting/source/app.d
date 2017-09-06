@@ -99,27 +99,27 @@ bool[1024] keys;
 vec3 lightPos = vec3(0.16f, 0.75f, 1.0f);
 
 // Deltatime
-GLfloat deltaTime = 0.0f;	// Time between current frame and last frame
-GLfloat lastFrame = 0.0f;  	// Time of last frame
+GLfloat deltaTime = 0.0f;  // Time between current frame and last frame
+GLfloat lastFrame = 0.0f;  // Time of last frame
 
 void main(string[] argv)
 {
     camera = new Camera(vec3(0.0f, 0.0f, 3.0f));
  
     load_libraries();
-	
+
     auto winMain = glfwCreateWindow(width, height, "02_02_basic_lighting", null, null);
-	
+
     glfwMakeContextCurrent(winMain); 
-	
+
     // you must set the callbacks after creating the window
-	   
+   
       glfwSetCursorPosCallback(winMain, &mouse_callback); 
             glfwSetKeyCallback(winMain, &onInternalKeyEvent);
          glfwSetScrollCallback(winMain, &mouseScrollWheel_callback);
      glfwSetWindowSizeCallback(winMain, &onWindowResize);
 glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
-	 
+ 
     // Setup OpenGL options
     glEnable(GL_DEPTH_TEST);
 
@@ -140,12 +140,12 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
 
     writeln("lightingShader = ", lightingShader);
     writeln("lampShader = ", lampShader);
-	
+
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat[] vertices;
     initializeCubeVariant3(vertices);
-    writeln("vertices = ", vertices);	
-	
+    writeln("vertices = ", vertices);
+
     GLuint VBO, containerVAO;
     glGenVertexArrays(1, &containerVAO);
     glGenBuffers(1, &VBO);
@@ -258,7 +258,7 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     }
 
     glfwTerminate();   // Clear any resources allocated by GLFW.
-	return;
+    return;
 }
 
 

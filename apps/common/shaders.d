@@ -20,13 +20,13 @@ struct Shader
 
 
 string readFile(const char[] fileName)
-{	
+{
     //string currentWorkingDir = getcwd();
     //ulong size = getSize(fileName);
 
-    string contents = readText(fileName); 	
+    string contents = readText(fileName);
 
-	return contents;
+    return contents;
 }
 
 
@@ -41,8 +41,8 @@ bool compiledStatus(GLuint shaderID)
         char[] msgBuffer = new char[logLen];
         glGetShaderInfoLog(shaderID, logLen, null, &msgBuffer[0]);
         writeln(msgBuffer);
-		return false;
-	}
+        return false;
+    }
     return true;
 }
 
@@ -72,20 +72,20 @@ GLuint makeShader(uint shaderType, string source)
     glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &logLen);
     writeln("shaders.d logLen = ", logLen);
 
-    GLchar[] vertLog = new GLchar[logLen+1];	
+    GLchar[] vertLog = new GLchar[logLen+1];
     glGetShaderInfoLog(shaderID, logLen, null, vertLog.ptr);
     writeln("Compile result for shader: ", shaderType); 
     if (logLen > 0)
     {
         writeln("vertLog = ", vertLog);
     }
-	
-	//writeAndPause(" ");
 
-	if (compiledStatus(shaderID) == false) 
-		return -1;
+    //writeAndPause(" ");
 
-	return shaderID;
+    if (compiledStatus(shaderID) == false) 
+        return -1;
+
+    return shaderID;
 }
 
 

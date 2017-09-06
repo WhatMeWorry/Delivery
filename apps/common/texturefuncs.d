@@ -17,7 +17,7 @@ void loadTextureKCH_Unique(ref GLuint texture, string fileName)
     glBindTexture(GL_TEXTURE_2D, texture); // All future GL_TEXTURE_2D operations will effect our texture object
 
     // Set our texture parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);  // Set texture wrapping to GL_REPEAT
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     // Set texture filtering
@@ -57,8 +57,8 @@ void loadTextureKCH_Unique(ref GLuint texture, string fileName)
 
     writeln("bitsPerPixel = ", bitsPerPixel);
 
-    GLint  	internalFormat;
-    GLint   dataFormat;
+    GLint internalFormat;
+    GLint dataFormat;
 
     FIBITMAP* bitmap;
     if (bitsPerPixel == 32)
@@ -130,7 +130,7 @@ void loadTexture(ref GLuint texture, string fileName)
     glBindTexture(GL_TEXTURE_2D, texture); // All future GL_TEXTURE_2D operations will effect our texture object
 
     // Set our texture parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);  // Set texture wrapping to GL_REPEAT
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     // Set texture filtering
@@ -175,8 +175,8 @@ void loadTexture(ref GLuint texture, string fileName)
 
     writeln("bitsPerPixel = ", bitsPerPixel);
 
-    GLint  	internalFormat;
-    GLint   dataFormat;
+    GLint internalFormat;
+    GLint dataFormat;
 
     FIBITMAP* bitmap;
     if (bitsPerPixel == 32)
@@ -185,7 +185,7 @@ void loadTexture(ref GLuint texture, string fileName)
         dataFormat = GL_BGRA;
         writeln("Source image has ", bitsPerPixel, " bits per pixel. Skipping conversion.");
         //writeAndPause("SHOULD HAVE 24 BIT IMAGE");
-		writeln("SHOULD HAVE 24 BIT IMAGE");
+        writeln("SHOULD HAVE 24 BIT IMAGE");
         bitmap = bitmapImage;
     }
     else
@@ -255,7 +255,7 @@ void loadTextureFromBitmap(ref GLuint texture, ref FT_Face face)
     glBindTexture(GL_TEXTURE_2D, texture); // All future GL_TEXTURE_2D operations will effect our texture object
 
     // Set our texture parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);  // Set texture wrapping to GL_REPEAT
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     // Set texture filtering
@@ -265,8 +265,8 @@ void loadTextureFromBitmap(ref GLuint texture, ref FT_Face face)
     // Load, create texture and generate mipmaps
     int width, height;
 
-    GLint  	internalFormat;
-    GLint   dataFormat;
+    GLint internalFormat;
+    GLint dataFormat;
 
     writeln("TrueType Glyph Bitmat height is ", face.glyph.bitmap.rows);
     writeln("TrueType Glyph Bitmat width is ", face.glyph.bitmap.width);

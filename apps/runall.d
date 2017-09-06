@@ -32,9 +32,9 @@ void main(char[][] args)
                 //writeln("s = ", s); 
                 //if (cmp(s,j) == 0)
                 {
-				    //string execFile = i ~ `.exe`;
+                    //string execFile = i ~ `.exe`;
                     //writeln(execFile, " is the executable ");
-					
+
                     /+
                     auto pid = spawnProcess(`..\duball.exe run --verbose --arch=x86_64 --force`,
                                std.stdio.stdin,
@@ -43,7 +43,7 @@ void main(char[][] args)
                                null,
                                Config.none,
                                null);
-					+/
+                    +/
                     version(Windows)  
                     {
                         auto pid = spawnShell(`..\duball.exe run --arch=x86_64 --force`);    
@@ -59,13 +59,9 @@ void main(char[][] args)
                         auto exitCode = wait(pid);
                         writeln("myapp exited with code ", exitCode);
                     }        
-                }				
+                }
             //}
-            chdir("..");
- 		
-            
+            chdir("..");          
         }
-		
     }
-	
 }
