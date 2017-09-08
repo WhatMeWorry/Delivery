@@ -113,10 +113,11 @@ void main(string[] argv)
 
     // you must set the callbacks after creating the window
    
-     glfwSetCursorPosCallback(winMain, &mouse_callback); 
-           glfwSetKeyCallback(winMain, &onInternalKeyEvent);
-        glfwSetScrollCallback(winMain, &mouseScrollWheel_callback);
-    glfwSetWindowSizeCallback(winMain, &onWindowResize);
+          glfwSetCursorPosCallback(winMain, &mouse_callback); 
+                glfwSetKeyCallback(winMain, &onInternalKeyEvent);
+             glfwSetScrollCallback(winMain, &mouseScrollWheel_callback);
+         glfwSetWindowSizeCallback(winMain, &onWindowResize);
+    glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);    
  
     // Define the viewport dimensions
     glViewport(0, 0, width, height);
@@ -229,7 +230,8 @@ void main(string[] argv)
         lastFrame = currentFrame;
 
         glfwPollEvents();  // Check if any events have been activiated (key pressed, mouse
-                           // moved etc.) and call corresponding response functions 
+                           // moved etc.) and call corresponding response functions
+        handleEvent(winMain);                            
         do_movement();
 
         // Clear the colorbuffer
