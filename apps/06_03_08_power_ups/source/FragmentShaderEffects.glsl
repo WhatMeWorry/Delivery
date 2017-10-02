@@ -1,5 +1,5 @@
 
-#version 330 core
+#version 330 core  // This must stay at 330 for this project to work
 
 in  vec2  TexCoords;
 out vec4  color;

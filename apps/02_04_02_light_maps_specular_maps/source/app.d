@@ -128,8 +128,7 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     [
           Shader(GL_VERTEX_SHADER, "source/LightMapsVertShade.glsl",   0),
         Shader(GL_FRAGMENT_SHADER, "source/LightMapsFragShade.glsl", 0)
-    ];
-    
+    ];   
     GLuint lightingShader = createProgramFromShaders(lightingShaders);
 
     Shader[] lampShaders =
@@ -137,11 +136,10 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
         Shader(GL_VERTEX_SHADER,   "source/LampVertShade.glsl",   0),
         Shader(GL_FRAGMENT_SHADER, "source/LampFragShade.glsl", 0)
     ];
+    GLuint lampShader = createProgramFromShaders(lampShaders);
 
     GLfloat[] vertices;
     initializeCubePosNormsTexs(vertices);
-
-    GLuint lampShader = createProgramFromShaders(lampShaders);
 
     GLuint VBO, cubeVAO;
     glGenVertexArrays(1, &cubeVAO);

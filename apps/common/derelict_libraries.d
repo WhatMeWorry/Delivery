@@ -105,9 +105,19 @@ void load_libraries()
 
     // Set all the required options for GLFW
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);    // Lenovo Tiny PCs are at openGL 4.2    Lian Li PC-33B is OpenGL 4.4
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);    // iMac 27" are at opengl 4.1
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);    // iMac 27" are at opengl 4.1   Surface Book is at opengl 4.1
+
+    // Significant parts of OpenGL were marked as deprecated when the 3.2 spec was published in December 2009, 
+    // resulting in two different OpenGL profiles:
+
+    // The Core Profile, which contains only non-deprecated features.
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
+    // The Compatibility Profile, which contains all the features.
+      
+    // You should never use the forward compatibility bit. It had a use for GL 3.0, 
+    // but once 3.1 removed most of the stuff, it stopped having a use.
+    // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     
 
     // Create an OpenGL context with another library (in this case, GLFW 3)

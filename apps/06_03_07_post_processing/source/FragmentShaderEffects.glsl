@@ -1,5 +1,5 @@
 
-#version 330 core
+#version 410 core
 
 in  vec2  TexCoords;
 out vec4  color;
@@ -51,6 +51,7 @@ void main()
     }
     else
     {
-        color =  texture(scene, TexCoords);
+        //color =  texture(scene, TexCoords);  // Bug? see above texture...
+        color = vec4(texture(scene, TexCoords).rgb, 1.0);       
     }
 }
