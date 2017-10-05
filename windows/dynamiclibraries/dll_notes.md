@@ -1,7 +1,8 @@
 
 
-## This document describes the DLL (Dynamic Link Libraries) used by the Windows. It summarizes which
-dynamic libraries are used and when and where they originally came from  
+## This document describes the DLL (Dynamic Link Libraries) used by Windows. It summarizes which
+dynamic libraries are used and when and where they were originally downloaded from. Some DLLs may
+already exist on a system, but these DLLS are placed here for version consistency and convenience.  
 
 ### Overview
 This is an introduction to Git version control system. It teachs by doing: a step by step walkthru of all the commands listed in the required order. It is believed that theory is better understood after the user first knows the lay of the land. For Git to become really powerful/useful, it needs to paired with a remote repository.  
@@ -12,23 +13,23 @@ This is an introduction to Git version control system. It teachs by doing: a ste
         Downloaded from fmod web site: http://assimp.sourceforge.net/ assimp 3.1.1: released June 2014
 
         Then unzipped to create Users\user\Downloads\assimp-3.1.1-win-binaries\bin64\assimp.dll (3,716 KB)
-        and moved fmod.dll and fmodL.dll to folder beneath this document.
+        and moved assimp.dll to this folder.
 
 
     - fmod
         Needed to create an account.  Then Downloaded from fmod web site and created: C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\lib
 
-        Renamed fmod64.dll and fmodL64.dll and changed to fmod.dll and fmodL.dll respectively.
+        Renamed fmod64.dll and fmodL64.dll to fmod.dll and fmodL.dll respectively.
 
-        Then moved fmod.dll and fmodL.dll to folder beneath this document.
+        Then moved fmod.dll and fmodL.dll to this folder.
 
     - FreeImage
         Went to the official FreeImage website: http://freeimage.sourceforge.net and
 
         downloaded FreeImage 3.17.0 [WIN32/WIN64]
 
-        Get the FreeImage.dll (6,253 KB) from C:\Users\user\Downloads\FreeImage3170Win32Win64\FreeImage\Dist\x64
-        and move it to folder beneath this document.
+        Got the FreeImage.dll (6,253 KB) from C:\Users\user\Downloads\FreeImage3170Win32Win64\FreeImage\Dist\x64
+        and moved it to this folder.
 
     - GLFW3
         At the official  http://www.glfw.org/  There is a pre-built Windows pre-compiled binary for 64-bits. Then 
@@ -53,6 +54,6 @@ This is an introduction to Git version control system. It teachs by doing: a ste
         opengl32.dll seems to be installed by default in C:\Windows\System32  
         (System32 = 64 bits; SystemWoW64 = 32 bits)
 
-        For consistency, will make a copy of the opengl32.dll and put it in the folder beneath this document.
+        Since opengl32.dll is a already a part of Windows, it will not be present in this folder. 
         
         
