@@ -1,4 +1,6 @@
 
+================== Git(ting) an existing GitHub Repo ==============================
+
 
 Go to WhatMeWorry/Delivery or https://github.com/WhatMeWorry/Delivery
 
@@ -8,12 +10,20 @@ At desktop, open a git command line or Visual Studio Code.  (This document assum
 
 View > Integrated Terminal  (Ctrl+`)
 
-type in "git clone" and ritht click you mouse to paste the clipboard content
+$ pwd
+/c/Users/kheaser/SomeRepo
 
+Now cd to where you want the gitted repo to reside:
 
+kheaser@IT-ASST-SB MINGW64 /c/Users/kheaser/Delivery (master)
+$ cd ..
 
-================== Git(ting) an existing GitHub Repo ==============================
+kheaser@IT-ASST-SB MINGW64 /c/Users/kheaser
+$ pwd
+/c/Users/kheaser       // Repo will now be gitted here!
 
+type in "git clone" and right click you mouse to paste the clipboard content
+type return.
 
 $git clone https://github.com/WhatMeWorry/Delivery.git
 
