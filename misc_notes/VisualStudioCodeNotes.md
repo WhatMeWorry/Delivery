@@ -29,8 +29,9 @@ After this, you should be able to see the new changes in you github repo from yo
 
 
 To Pull the Remote Repository to you local repo on your desktop,
-click on the Repo name in the left pane and then click on the Synchronize changes icon in the bottom left
-of the window.  It is a two white circular arrows on a field of blue.
+click on the Fork icon, to make the three dots . . . icon appear at the top of the Explorer.
+Then click on the three dots . . . and select "Pull:
+
 
 
 
