@@ -61,11 +61,14 @@ Edit the dub.sdl (add the dependencies and sourceFiles).  Just copy a previous o
 +/
 
 /+
-Executables only look in certain directories for a DLL. Windows will search the following
-locations in order for your DLL:
-1) the current directory that the executable is running from
-2) the Windows system directory (<Windows>\System32)
-3) any paths specified in the PATH environmental variable
+Windows only looks in certain directories for a DLL. The following search
+order is used:
+1) The directory where the executable module for the current process is located.
+2) The current directory.
+3) The Windows system directory. The GetSystemDirectory function retrieves the path of this directory.
+4) The Windows directory. The GetWindowsDirectory function retrieves the path of this directory.
+5) The directories listed in the PATH environment variable.
+Note: The LIBPATH environment variable is not used.
 +/
 
 /+
@@ -85,14 +88,16 @@ Windows 8.0 64 bit - 64 bit operating system, x64 based processor
 
 /+
 
-NOTE:  MUST HAVE CONNECTIONS TO INTERNET
+NOTE: MUST HAVE CONNECTIONS TO INTERNET
 
 -m64   Compile a 64 bit executable. The generated object code is in MS-COFF and is meant to be  used with the Microsoft Visual Studio 10 or later compiler.
 
 Build duball on ========== Windows ==========
-..\Windows\D\dmd2\windows\bin\dmd.exe -m64 duball.d    // Always assume 64 bit (for simplicity)
-Build Project on Windows
-E:\projects\01_01_hello_window>..\duball.exe run --force --arch=x86_64 --verbose
+cd to where duball.d is.
+$ ldc2 -m64 duball.d
+
+cd to one of the apps 
+/01_01_hello_window$ .\..\duball run --arch=x86_64 --compiler=ldc2 --verbose --force
 
 Build duball on ========== Linux ==========
 ./../Linux/dmd-2.071.0/linux/bin64/dmd duball.d
@@ -103,7 +108,7 @@ Build duball on ========== OSX ==========
 cd to where duball.d is.
 $ ldc2 -m64 duball.d
 
-cd to one of the Opengl apps 
+cd to one of the apps 
 /01_01_hello_window$ ./../duball run --arch=x86_64 --compiler=ldc2 --verbose --force
 
 Observation: when moving the flash drive from Linux to Windows, lots of files are
@@ -127,18 +132,14 @@ SysWOW64 and Program Files (x86) are special folders that only exists on 64-bit 
 +/
 
 /+
-duball.d will be built for
-1) Windows (64 bit only) and renamed dubwin.exe
-2) MacOS and renamed dubmac
-3) Linux and renamed dublin
+duball.d must be built (compiled) separately for Windows, MacOS,
+and Linux
 
 It is not possible to use a common executable that could be run on both Windows and Linux
 because the PE (Windows) and ELF (Linux) binary executable formats are totally different.
 Also windows ends all it executables with the .exe extension.
 
 +/
-
-// GNU bash, version 3.2.57(1)-release (x86_64-apple-darwin15)
 
 
 import std.stdio;
@@ -219,46 +220,6 @@ void main(char[][] args)
     found = findExecutable("dub");
     writeln("\n", "dub", " was found at: ", found.output);      
 
-
-    /+ Assumptions:
-        the duball (dublin, dubwin, dubmac) are located at and executed at the pre-defined
-        projects folder which will hold individual projects
-        <root>/projects   (where root is the root of the flash drive assigned by Linux or OSX)
-        or
-        X:\projects       (where X is the letter assigned by Windows to the flash drive)
-
-        Windows Example:
-
-            after inserting a flash drive in windows, assume the flash drive is assigned letter E: (C: and D: were already taken by permanent drives of the system)
-            open a command window
-            cd to e:\projects
-            dubwin init myfirstproj
-
-            to build, link, run,
-            cd myfirstproj
-            ..\dubwin.exe run
-
-        Linux Example:
-
-            after inserting a flash drive in linux, the flash drive is a path
-            open a terminal window
-            cd to <path>\projects
-            dublin init mysecondproj
-
-            to build, link, run,
-            cd mysecondproj
-            .\..\dublin run
-
-
-            Windows then searches for the DLLs in the following sequence:
-                o The directory where the executable module for the current process is located.
-                o The current directory.
-                o The Windows system directory. The GetSystemDirectory function retrieves the path of this directory.
-                o The Windows directory. The GetWindowsDirectory function retrieves the path of this directory.
-                o The directories listed in the PATH environment variable.
-
-    +/
-
     string envPath = environment["PATH"];  // get the environment variable PATH.
 
     //writeln(" The environment variable $PATH on this machine is: ", envPath);
@@ -277,20 +238,22 @@ void main(char[][] args)
 
     } else version(Win64)
     {
-        string compilerPath = `.\..\Windows\D\dmd2\windows\bin;.\..\..\Windows\D\dmd2\windows\bin;`;
-        string      dubPath = `.\..\Windows\dub;.\..\..\Windows\dub;`;
+        // ldc2 and dub are automatically placed in C:\ldc2\bin whose path is 
+        // automatically added to $PATH
+
         string  dynamicPath = `.\..\..\windows\dynamiclibraries;`;    // needed for glfw3.dll
-        dynamicPath = `.\..\..\Windows\VisualStudio\VC\redist\x64\Microsoft.VC140.CRT;` ~ dynamicPath;
+        envPath = dynamicPath ~ envPath;  // Prepend dynamiclibraries path to $PATH
+        environment["PATH"] = envPath;  // Update with new       
 
         /+ Microsoft quote "LIB, if defined. The LINK tools uses the LIB path when
            searching for an object or library (example, libucrt.lib) +/
 
-        environment["LIB"] = r".\..\..\Windows\Windows Kits\10\Lib\10.0.14393.0\ucrt\x64";
+        // This error appeared on Windows 10, 
+        // object.Exception@std\process.d(3171): Environment variable not found: LIB
+        // when commented out the following line: 
+        environment["LIB"] = `.\path\to\nowhere`;
 
-        // The value of DFLAGS environment variable  is treated as if it were
-        // appended to the command line to dmd.exe.
-
-        environment["DFLAGS"] = `-I..\  -I..\common  -I..\common_game`;
+        //environment["DFLAGS"] = `-I..\  -I..\common  -I..\common_game`;    
 
     } else version(OSX)
     {
@@ -344,9 +307,6 @@ void main(char[][] args)
     {
         writeln("   ",path);
     }
-
-
-
 
 
     args[0] = "dub".dup;  // overwrite dubwin, dubmac, or dublin with the generic dup command
