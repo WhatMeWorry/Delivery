@@ -246,7 +246,18 @@ LD_LIBRARY_PATH is searched when the program starts, LIBRARY_PATH is searched at
 
 	
 
-		
+1) Install on Linux  (Antergos - Arch with an easy to use installer)
+
+On terminal   (will be using yaourt: a pacman frontend)
+yaourt -Syu --aur should show you upgradable aur packages.
+
+$ sudo yaourt -Syyu
+follow all the prompts to update everything.  (Visual Studio Code)
+
+
+
+
+
 		
 		
 		
