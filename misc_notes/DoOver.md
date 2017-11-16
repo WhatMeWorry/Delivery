@@ -1,6 +1,6 @@
 
 
-1)  New Windows 8.0 system.
+1)  New Windows 8.0 system.  Mac OS below:
 
 2)  Install LLVM D Compiler (LDC)
 
@@ -190,6 +190,60 @@ PS P:\>
 	
 
 	
+
+1) Install on Mac OS 10.7 or newer
+$brew install ldc
+Updating Homebrew...
+==> Downloading https://homebrew.bintray.com/bottles-portable/portable-ruby-2.3.3.leopard_64.bottle.1.tar.gz
+######################################################################## 100.0%
+==> Pouring portable-ruby-2.3.3.leopard_64.bottle.1.tar.gz
+==> Auto-updated Homebrew!
+Updated 1 tap (homebrew/core).
+Clems-iMac:~ clemfandango$ brew install ldc
+Error: ldc 1.2.0 is already installed
+To upgrade to 1.5.0, run `brew upgrade ldc`
+Clems-iMac:~ clemfandango$ brew upgrade ldc
+==> Upgrading 1 outdated package, with result:
+ldc 1.5.0
+==> Upgrading ldc 
+==> Installing dependencies for ldc: llvm
+==> Installing ldc dependency: llvm
+==> Downloading https://homebrew.bintray.com/bottles/llvm-5.0.0.sierra.bottle.tar.gz
+
+2) Verify that D compiler LLVM was installed by:
+
+$ which ldc2
+/usr/local/bin/ldc2
+Clems-iMac:bin clemfandango$ ls -al  /usr/local/bin | grep Nov
+drwxrwxr-x  37 clemfandango  admin  1258 Nov 14 11:07 .
+drwxr-xr-x  14 root          wheel   476 Nov 13 17:32 ..
+lrwxr-xr-x   1 clemfandango  admin    33 Nov 14 11:07 assimp -> ../Cellar/assimp/4.0.1/bin/assimp
+lrwxr-xr-x   1 clemfandango  admin    32 Nov 14 11:07 ccmake -> ../Cellar/cmake/3.9.6/bin/ccmake
+lrwxr-xr-x   1 clemfandango  admin    31 Nov 14 11:07 cmake -> ../Cellar/cmake/3.9.6/bin/cmake
+lrwxr-xr-x   1 clemfandango  admin    37 Nov 14 11:07 cmakexbuild -> ../Cellar/cmake/3.9.6/bin/cmakexbuild
+lrwxr-xr-x   1 clemfandango  admin    31 Nov 14 11:07 cpack -> ../Cellar/cmake/3.9.6/bin/cpack
+lrwxr-xr-x   1 clemfandango  admin    31 Nov 14 11:07 ctest -> ../Cellar/cmake/3.9.6/bin/ctest
+lrwxr-xr-x   1 clemfandango  admin    44 Nov 14 11:07 freetype-config -> ../Cellar/freetype/2.8.1/bin/freetype-config
+lrwxr-xr-x   1 clemfandango  admin    33 Nov 14 11:07 glewinfo -> ../Cellar/glew/2.1.0/bin/glewinfo
+lrwxr-xr-x   1 clemfandango  admin    41 Nov 13 14:16 ldc-build-runtime -> ../Cellar/ldc/1.5.0/bin/ldc-build-runtime
+lrwxr-xr-x   1 clemfandango  admin    36 Nov 13 14:16 ldc-profdata -> ../Cellar/ldc/1.5.0/bin/ldc-profdata
+lrwxr-xr-x   1 clemfandango  admin    39 Nov 13 14:16 ldc-prune-cache -> ../Cellar/ldc/1.5.0/bin/ldc-prune-cache
+lrwxr-xr-x   1 clemfandango  admin    28 Nov 13 14:16 ldc2 -> ../Cellar/ldc/1.5.0/bin/ldc2
+lrwxr-xr-x   1 clemfandango  admin    29 Nov 13 14:16 ldmd2 -> ../Cellar/ldc/1.5.0/bin/ldmd2
+lrwxr-xr-x   1 clemfandango  admin    41 Nov 14 11:07 libpng-config -> ../Cellar/libpng/1.6.34/bin/libpng-config
+lrwxr-xr-x   1 clemfandango  admin    43 Nov 14 11:07 libpng16-config -> ../Cellar/libpng/1.6.34/bin/libpng16-config
+lrwxr-xr-x   1 clemfandango  admin    40 Nov 14 11:07 png-fix-itxt -> ../Cellar/libpng/1.6.34/bin/png-fix-itxt
+lrwxr-xr-x   1 clemfandango  admin    34 Nov 14 11:07 pngfix -> ../Cellar/libpng/1.6.34/bin/pngfix
+lrwxr-xr-x   1 clemfandango  admin    35 Nov 14 11:07 visualinfo -> ../Cellar/glew/2.1.0/bin/visualinfo
+
+
+LD_LIBRARY_PATH is used by your program to search directories containing shared libraries after it has been successfully compiled and linked.
+
+LD_LIBRARY_PATH is searched when the program starts, LIBRARY_PATH is searched at link time.
+
+
+
+
 	
 
 		

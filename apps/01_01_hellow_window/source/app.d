@@ -27,11 +27,12 @@ void main(char[][] args)
     }
     version(linux)
     {
-        printEnvVariable("LD_LIBRARY_PATH");  // for Fmod library
+        printEnvVariable("LD_LIBRARY_PATH");  // for Fmod library       
     }
     version(OSX)
     {
         printEnvVariable("LD_LIBRARY_PATH");
+        printEnvVariable("DYLD_LIBRARY_PATH");        
     }
 
 
@@ -44,6 +45,8 @@ void main(char[][] args)
     writeln("This executable was started at location: ", currentWorkingDirectory);
 
     load_libraries();
+
+    writeln("After load_libraries in app.d");
 
     auto window = glfwCreateWindow(width, height, "01_01_hello_window", null, null);
     glfwMakeContextCurrent(window);

@@ -1,15 +1,9 @@
 
 /+
-..\duball.exe run --verbose --arch=x86_64 --force
+..\duball.exe run --compiler=ldc2 --arch=x86_64 --force
 +/
 
 module duball;
-
-// We are using Visual Studio 2015 which is presently the most current
-
-//version(Windows)
-    //pragma(lib, `.\..\Windows\Windows Kits\10\Lib\10.0.14393.0\ucrt\x64\libucrt`);
-    //pragma(lib, `C:\Program Files (x86)\Windows Kits\10\Lib\10.0.14393.0\ucrt\x64\libucrt.lib`);
 
 // Procedure for using this tool to create a new project
 /+
@@ -87,8 +81,6 @@ Architecture:          x86_64
 CPU op-mode(s):        32-bit, 64-bit
 Windows 8.0 64 bit - 64 bit operating system, x64 based processor
 
-
-
 +/
 
 /+
@@ -108,12 +100,11 @@ Build Project on Linux
 /projects/01_01_hello_window>./../duball build --verbose --arch=x86_64 --force
 
 Build duball on ========== OSX ==========
-SOME_MAC:projects someuser$ sudo ./../MacOS/D/osx/bin/dmd -m64 duball.d
-enter
-space, space, space...
-agree
-Build duball on OSX
-SOME_MAC:projects/01_01_hello_window someuser$ ./../duball build --verbose --arch=x86_64 --force
+cd to where duball.d is.
+$ ldc2 -m64 duball.d
+
+cd to one of the Opengl apps 
+/01_01_hello_window$ ./../duball run --arch=x86_64 --compiler=ldc2 --verbose --force
 
 Observation: when moving the flash drive from Linux to Windows, lots of files are
 marked as Read-only. Right click on the file(s) and go into properties an unclick Read-only
@@ -172,7 +163,9 @@ auto findExecutable(string exec)
 
     auto at = executeShell(command ~ exec);
     if (at.status != 0)
-        writeln("Handle Error here");
+    {    
+        throw new Exception(exec, " is not found on this system");
+    }
     return at;
 }
 
@@ -193,15 +186,15 @@ void main(char[][] args)
     // here we use the system provided enum and the variable os defined as
     // immutable OS os;  // The OS that the program was compiled for.
 
-    writeln("This program was compiled for a ", os, " system.");
-    writeln("And called with the following arguments");
+    writeln("This program was compiled for a ", os, " system");
+    writeln("and called with the following arguments");
     foreach (arg; args)
     {
         writeln(arg);
     }
 
     string progName = args[0].idup;  // get the command that called this program
-                                     // (should be dublin, dubwin, or dubmac)
+                                     // (should be duball.exe of duball )
     version(linux)
     {
 
@@ -209,12 +202,23 @@ void main(char[][] args)
     else version(Windows)
     {
         if ((os != OS.win64) | (progName != r"..\duball.exe"))
-           writeln("FAILURE: os = ", os, "  progName = ", progName);
+            writeln("FAILURE: os = ", os, "  progName = ", progName);
     }
     else version(OSX)
     {
 
     }
+
+    // Check that ldc2 (LLVM D Compiler) is installed on this system 
+
+    auto found = findExecutable("ldc2");
+    writeln("\n", "ldc2", " was found at: ", found.output);  
+
+    // Check that dub is installed on this system
+
+    found = findExecutable("dub");
+    writeln("\n", "dub", " was found at: ", found.output);      
+
 
     /+ Assumptions:
         the duball (dublin, dubwin, dubmac) are located at and executed at the pre-defined
@@ -263,20 +267,20 @@ void main(char[][] args)
 
     version(linux)
     {
-        string relDmdPath = r"./../Linux/dmd-2.071.0/linux/bin64:./../../Linux/dmd-2.071.0/linux/bin64:";
-        string relDubPath = r"./../Windows/dub:./../../Windows/dub:";
-        string    dllPath = r"./../../linux/dynamiclibraries:";
+        string compilerPath = `./../Linux/dmd-2.071.0/linux/bin64:./../../Linux/dmd-2.071.0/linux/bin64:`;
+        string      dubPath = `./../Windows/dub:./../../Windows/dub:`;
+        string  dynamicPath = `./../../linux/dynamiclibraries:`;
 
-      //LD_LIBRARY_PATH=/usr/local/lib
-      //export LD_LIBRARY_PATH
-      environment["LD_LIBRARY_PATH"] = r"./../../linux/dynamiclibraries:";
+        //LD_LIBRARY_PATH=/usr/local/lib
+        //export LD_LIBRARY_PATH
+        environment["LD_LIBRARY_PATH"] = `./../../linux/dynamiclibraries:/ignore/this/one:`;
+
     } else version(Win64)
     {
-        //pragma(lib, r".\..\Windows\Windows Kits\10\Lib\10.0.10150.0\ucrt\x64");  // not allowed as statement
-        string relDmdPath = r".\..\Windows\D\dmd2\windows\bin;.\..\..\Windows\D\dmd2\windows\bin;";
-        string relDubPath = r".\..\Windows\dub;.\..\..\Windows\dub;";
-        string   dllPath  = r".\..\..\windows\dynamiclibraries;";    // needed for glfw3.dll
-        dllPath = r".\..\..\Windows\VisualStudio\VC\redist\x64\Microsoft.VC140.CRT;" ~ dllPath;
+        string compilerPath = `.\..\Windows\D\dmd2\windows\bin;.\..\..\Windows\D\dmd2\windows\bin;`;
+        string      dubPath = `.\..\Windows\dub;.\..\..\Windows\dub;`;
+        string  dynamicPath = `.\..\..\windows\dynamiclibraries;`;    // needed for glfw3.dll
+        dynamicPath = `.\..\..\Windows\VisualStudio\VC\redist\x64\Microsoft.VC140.CRT;` ~ dynamicPath;
 
         /+ Microsoft quote "LIB, if defined. The LINK tools uses the LIB path when
            searching for an object or library (example, libucrt.lib) +/
@@ -288,26 +292,35 @@ void main(char[][] args)
 
         environment["DFLAGS"] = `-I..\  -I..\common  -I..\common_game`;
 
-        // set LINKCMD64=C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\amd64\link.ex
     } else version(OSX)
     {
-        string relDmdPath = r"./../MacOS/D/osx/bin:./../../MacOS/D/osx/bin:";
-        string relDubPath = r"./../MacOS/dub:./../../MacOS/dub:" ~ r"./../../MacOS/dynamiclibraries:";
-        // Dynamic (.dylib) libs can be placed at a nonstandard location in your file system, but only in
-        // one of these environment variables: LD_LIBRARY_PATH, DYLD_FALLBACK_LIBRARY_PATH, or LD_LIBRARY_PATH
-        string  dllPath  = r"./../../macos/dynamiclibraries:"; 
+        // ldc2 and dub are automatically placed in default user binary directories at install time
+        // so paths don't need to be modified to run these two 
 
-         environment["LD_LIBRARY_PATH"] = r"./../../macos/dynamiclibraries:";       
+        // Dynamic (.dylib) libs can be placed at a nonstandard location in your file system, but only in
+        // one of these environment variables: LD_LIBRARY_PATH, DYLD_FALLBACK_LIBRARY_PATH, or DYLD_LIBRARY_PATH
+
+        // Note: either LD_LIBRARY_PATH or DYLD_LIBRARY_PATH works with the below path. 
+
+        // This error appeared on Mac OS High Sierra 
+        // object.Exception@std/process.d(3067): Environment variable not found: LD_LIBRARY_PATH 
+        // when commented out the following line: 
+        environment["LD_LIBRARY_PATH"] = `./../../macos/dynamiclibraries`; 
+
+        // This error appeared on Mac OS High Sierra       
+        // object.Exception@std/process.d(3067): Environment variable not found: DYLD_LIBRARY_PATH 
+        // when commented out the following line: 
+        environment["DYLD_LIBRARY_PATH"] = `./../../macos/dynamiclibraries`;      
     }
 
-
-    if ((!canFind(envPath, relDmdPath)) | (!canFind(envPath, relDubPath)) | (!canFind(envPath, dllPath)))
+/+
+    if ((!canFind(envPath, compilerPath)) | (!canFind(envPath, dubPath)) | (!canFind(envPath, dynamicPath)))
     {
         //writeln("CANT FIND PATHS ===========================");
         version(Windows)
-            envPath = relDmdPath ~ relDubPath ~ dllPath ~ envPath;
+            envPath = compilerPath ~ dubPath ~ dynamicPath ~ envPath;
         else
-            envPath = relDmdPath ~ relDubPath ~ dllPath ~ envPath;  // maybe call these soPath
+            envPath = compilerPath ~ dubPath ~ dynamicPath ~ envPath;  // maybe call these soPath
 
         //writeln("new path = ", envPath);
 
@@ -316,51 +329,29 @@ void main(char[][] args)
         envPath = environment["PATH"];    // get the environment variable PATH.
         //writeln("added new paths = ", envPath);
     }
++/
 
 
-
-    //string newPathVar = relDmdPath ~ relDubPath ~ envPath;
+    //string newPathVar = compilerPath ~ dubPath ~ envPath;
 
     //environment["PATH"] = newPathVar;  // Update the PATH environment
 
 
     paths = splitUpPaths(envPath);
 
-    //writeln("\n","The PATH env variable now has paths:");
+    writeln("\n","The PATH env variable now has paths:");
     foreach(path; paths)
     {
-        //writeln("   ",path);
+        writeln("   ",path);
     }
-     
 
-    // auto res = execute(["dub", "help"]);
-    // writeln("after dub", res.output);
 
-    auto found = findExecutable("dmd");
-    writeln("\n", "dmd", " was found at: ", found.output);
 
-    found = findExecutable("dub");
-    writeln("\n", "dub", " was found at: ", found.output);
+
 
     args[0] = "dub".dup;  // overwrite dubwin, dubmac, or dublin with the generic dup command
 
     writeln("calling spawnProcess with args = ", args);
-
-    /+
-    wait(spawnProcess("myapp", ["foo" : "bar"], Config.newEnv));
-
-    auto pid = spawnProcess("myapp", stdin, stdout, logFile,
-                             Config.retainStderr | Config.suppressConsole);
-
-    @trusted Pid spawnProcess(in char[] program,
-                              File stdin = std.stdio.stdin,
-                              File stdout = std.stdio.stdout,
-                              File stderr = std.stdio.stderr,
-                              const string[string] env = null,
-                              Config config = Config.none,
-                              in char[] workDir = null);
-    +/
-
 
     /+
     By default, the child process inherits the environment of the parent process, along
@@ -373,46 +364,20 @@ void main(char[][] args)
                             std.stdio.stdout,
                             std.stdio.stderr,
                             null,
-                            Config.none,  /+ Config.none +/
-                            null
-                            );
+                            Config.none,
+                            null);
     scope(exit)
     {
         auto exitCode = wait(pid);
-        writeln("myapp exited with code ", exitCode);
+        writeln(progName, " exited with code ", exitCode);
     }
-    //    if (wait(pid) != 0)
-    //        writeln("spawnProcess failed.");
-
-    /+
-    else version(OSX)
-    {
-        auto paths = std.algorithm.iteration.splitter(envPath, ':');  // colon is path separator in Linux
-        foreach(path; paths)
-            writeln("   ",path);
-        auto p = executeShell("pwd");  // Windows uses where; Linux uses whereis
-        // p.output string has a "return" character at the end. How to get rid of it?
-        string presentWorkingDirectory = removechars(p.output, "\n");
-        writeln("presentWorkingDirectory =", presentWorkingDirectory, "nospace");
-        writeln(" The newPathVar is: ", newPathVar);
-        environment["PATH"] = newPathVar;  // UPDATE THE PATH VARIABLE
-        envPath = environment["PATH"];  // get the just altered environment variable PATH.
-        writeln("The altered environment PATH variable on this Linux machine: ", envPath);
-
-        auto res = execute(["dub", "list"]);
-        writeln("after dub", res.output);
-
-        auto b = executeShell("echo $PATH");
-        writeln("from ECHO result ", b.output);
-
-        auto c = executeShell("which dmd");  // Windows uses where; Linux uses whereis
-        writeln("which dmd ", c.output);
-    }
-    +/
 
 
  /+
     defined in std.system
+
+    Information about the target operating system, environment, and CPU.
+
     enum OS
     {
         win32 = 1, /// Microsoft 32 bit Windows systems
@@ -425,16 +390,20 @@ void main(char[][] args)
         android,   /// Android
         otherPosix /// Other Posix Systems
     }
+
+
     Defined in Language
+
     Version identifiers do not conflict with other identifiers in the code, they
     are in a separate name space. Predefined version identifiers are global.
     Predefined Version Identifiers
-    Version Identifier Description
-    Windows             Microsoft Windows systems
-    Win32               Microsoft 32-bit Windows systems
-    Win64               Microsoft 64-bit Windows systems
-    linux               All Linux systems
-    OSX                 Mac OS X
+    Version Identifier    Description
+    ------------------    ---------------------
+    Windows               Microsoft Windows systems
+    Win32                 Microsoft 32-bit Windows systems
+    Win64                 Microsoft 64-bit Windows systems
+    linux                 All Linux systems
+    OSX                   Mac OS X
   +/
 
 }
