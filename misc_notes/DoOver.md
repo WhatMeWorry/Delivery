@@ -244,6 +244,29 @@ LD_LIBRARY_PATH is searched when the program starts, LIBRARY_PATH is searched at
 
 
 
+
+
+
+
+
+BSD ----+---- Sun OS
+        +---- BSD 4.3 (Open Source) --+---- Open BSD
+                                      +---- Free VBSD 
+        +-------- Next Step ------ Mac OS X                                    
+        +---- AIX
+        +---- HP/UX
+
+Linux --+---- Slackware (various package managers)
+        +---- Debian (.deb packages) ---- Ubuntu ----+---- Linux Mint
+                                                     +---- Xubuntu
+                                                     +---- Kubuntu
+        +---- Red Hat (.rpm packages) ------+----- CentOS
+                                            +----- Mandrake
+                                            +----- Fedora
+                        Arch (pacman) -------- Antergos (Arch with installer)
+
+
+
 	
 
 1) Install on Linux  (Antergos - Arch with an easy to use installer)
@@ -255,6 +278,17 @@ $ sudo yaourt -Syyu
 follow all the prompts to update everything.  (Visual Studio Code)
 
 
+
+
+There are two Linux C/C++ library types which can be created:
+
+Static libraries (.a): Library of object code which is linked with, and becomes part of the application.
+Dynamically linked shared object libraries (.so): There is only one form of this library but it can be used in two ways.
+Dynamically linked at run time. The libraries must be available during compile/link phase. The shared objects are not included into the executable component but are tied to the execution.
+Dynamically loaded/unloaded and linked during execution (i.e. browser plug-in) using the dynamic linking loader system functions.
+Library naming conventions:
+
+Libraries are typically named with the prefix "lib". This is true for all the C standard libraries. When linking, the command line reference to the library will not contain the library prefix or suffix.
 
 
 
