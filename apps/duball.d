@@ -100,9 +100,11 @@ cd to one of the apps
 /01_01_hello_window$ .\..\duball run --arch=x86_64 --compiler=ldc2 --verbose --force
 
 Build duball on ========== Linux ==========
-./../Linux/dmd-2.071.0/linux/bin64/dmd duball.d
-Build Project on Linux
-/projects/01_01_hello_window>./../duball build --verbose --arch=x86_64 --force
+cd to where duball.d is.
+$ ldc2 -m64 duball.d
+
+cd to one of the apps 
+/01_01_hello_window$ ./../duball run --arch=x86_64 --compiler=ldc2 --verbose --force
 
 Build duball on ========== OSX ==========
 cd to where duball.d is.
@@ -228,13 +230,13 @@ void main(char[][] args)
 
     version(linux)
     {
-        string compilerPath = `./../Linux/dmd-2.071.0/linux/bin64:./../../Linux/dmd-2.071.0/linux/bin64:`;
-        string      dubPath = `./../Windows/dub:./../../Windows/dub:`;
-        string  dynamicPath = `./../../linux/dynamiclibraries:`;
+        // ldc2 and dub are automatically placed in default user binary directories at install time
+        // so paths don't need to be modified to run these two
 
-        //LD_LIBRARY_PATH=/usr/local/lib
-        //export LD_LIBRARY_PATH
-        environment["LD_LIBRARY_PATH"] = `./../../linux/dynamiclibraries:/ignore/this/one:`;
+        // This error appeared on Antergos Linux
+        // object.Exception@std/process.d(3171): Environment variable not found: LD_LIBRARY_PATH
+        // when commented out the following line:
+        environment["LD_LIBRARY_PATH"] = `./../../linux/dynamiclibraries:/ignore/this/one:`;        
 
     } else version(Win64)
     {
