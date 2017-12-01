@@ -225,6 +225,9 @@ void initSoundSystem(ref SoundSystem sys)
     result = FMOD_System_GetVersion(sys.system, &sys.fmodVersion);
     checkForErrors(result, "FMOD_System_GetVersion", true);
 
+    writeln("FMOD_VERSION = ", FMOD_VERSION);
+    writeln("sys.fmodVersion = ", sys.fmodVersion);
+
     if (sys.fmodVersion < FMOD_VERSION)
     {
         writeln("FMOD lib version ", sys.fmodVersion, " does not match header version ", FMOD_VERSION);
