@@ -247,25 +247,31 @@ LD_LIBRARY_PATH is searched when the program starts, LIBRARY_PATH is searched at
 
 
 
+```
+Bell Labs 
+Unix ---+---- BSD Family --+---- OpenBSD
+                           +---- FreeBSD
+                           +---- NetBSD
+                           +---- SUN OS (Stanford Uni Network)       
+                           +---- Next Step ------ Mac OS X  
+        +---- SRV 5 -------+---- IRIX (SGI)
+                           +---- AIX (IBM)
+                           +---- Sun Solaris
+                           +---- HP/UX
 
+              GNU ----- Linux --+---- Slackware ---+---- SUSE ---- Open Suse
+                                                   +---- Mini Slack ---- Zenwalk
+                                                   +---- Frugalware
+                                +---- Debian (.deb packages) ---- Ubuntu ----+---- Linux Mint
+                                                                             +---- Xubuntu
+                                                                             +---- Kubuntu
+                                +---- Red Hat (.rpm packages) ------+----- CentOS
+                                                                    +----- Mandrake
+                                                                    +----- Fedora
 
-BSD ----+---- Sun OS
-        +---- BSD 4.3 (Open Source) --+---- Open BSD
-                                      +---- Free VBSD 
-        +-------- Next Step ------ Mac OS X                                    
-        +---- AIX
-        +---- HP/UX
+                                Ubuntu LTS ---- Arch (pacman) ---Antergos (Arch with installer)
 
-Linux --+---- Slackware (various package managers)
-        +---- Debian (.deb packages) ---- Ubuntu ----+---- Linux Mint
-                                                     +---- Xubuntu
-                                                     +---- Kubuntu
-        +---- Red Hat (.rpm packages) ------+----- CentOS
-                                            +----- Mandrake
-                                            +----- Fedora
-                        Arch (pacman) -------- Antergos (Arch with installer)
-
-
+```
 
 	
 
