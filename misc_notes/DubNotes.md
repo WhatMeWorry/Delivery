@@ -50,6 +50,18 @@ Packages present in the system and known to dub:
 ```
 ***
 
+```
+C:\>dub fetch derelict-sdl2
+Fetching derelict-sdl2 2.1.4...
+Please note that you need to use `dub run <pkgname>` or add it to dependencies of your package to actually use/run it. dub does not do actual installation of packages outside of its own ecosystem.
+
+C:\>dub list
+Packages present in the system and known to dub:
+  derelict-sdl2 2.1.4: C:\Users\kheaser\AppData\Roaming\dub\packages\derelict-sdl2-2.1.4\derelict-sdl2\
+```
+
+***
+
 have very simple dub.sdl with just:
 
 dependency "derelict-util"  version="~>2.0.6"
