@@ -1,7 +1,17 @@
 
-By default, it looks like Dub on Windows downloads local copies of packages to
+### Dub Notes
 
+#### Where does Dub store local copies of packages 
+
+By default, Dub on Microsoft Windows downloads local copies of packages to
 C:\Users\<username>\AppData\Roaming\dub\packages\<package1>
+                                                \<package2>
+                                                  .....
+                                                \<packageN>
+                                                
+                                                
+
+
 C:\Users\....."........."........."....\packages\<package2>
 
 
