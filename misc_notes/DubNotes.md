@@ -1,7 +1,9 @@
 
-### Dub Notes
+## Dub Notes
 
-###### Where does Dub store local copies of packages 
+***
+
+#### Where does Dub store local copies of packages 
 
 By default, Dub on Microsoft Windows downloads local copies of packages to
 C:\Users\<username>\AppData\Roaming\dub\packages\
@@ -17,8 +19,8 @@ C:\Users\kheaser\AppData\Roaming\dub\packages>dir
 11/07/2017  11:49 AM    <DIR>          derelict-util-2.1.0
 11/07/2017  12:50 PM    <DIR>          gl3n-1.3.1
 ```
-On 
 
+***
 
 By default, it looks like Dub on Windows trys to find packages locally at either of these two paths.
 
@@ -35,14 +37,19 @@ C:\Users\kheaser\AppData\Roaming\dub\packages>dir /a
 ```
 
 
------------------------------------------------------------------
+***
+
 To completely clean off Dub entirely,  the following on Windows:
 
 ```
 cd C:\Users\kheaser\AppData\Roaming
-rd dub /s /q
+rd /s /q dub
+
+dub list
+Packages present in the system and known to dub:
+
 ```
-----------------------------------------------------------------
+***
 
 have very simple dub.sdl with just:
 
