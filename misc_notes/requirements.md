@@ -9,3 +9,4 @@ Requirements are
 Strongly recommended
 - working knowledge of [Github](https://github.com/) 
 - the cross-platform code editor [Visual Studio Code](https://code.visualstudio.com/)    
+- familiarity with markup languages like [CommonMark](http://commonmark.org/) or [GitHub Flavored Markdown Spec](https://github.github.com/gfm/#link-reference-definitions)
