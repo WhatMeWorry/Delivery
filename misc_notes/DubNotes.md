@@ -1,14 +1,12 @@
 
-### Dub Notes
+# Dub Notes
 
-#### Where does Dub store local copies of packages 
+## Where does Dub store local copies of packages 
 
 By default, Dub on Microsoft Windows downloads local copies of packages to
-C:\Users\<username>\AppData\Roaming\dub\packages\<package1>
-C:\.............................................\<package2>
-C:\.............................................\<pacakgeN>
+C:\Users\<username>\AppData\Roaming\dub\packages\<package1>...<pacakgeN>
 
-```Batchfile
+```cmd
 C:\Users\kheaser\AppData\Roaming\dub\packages>dir
 
  Directory of C:\Users\kheaser\AppData\Roaming\dub\packages
