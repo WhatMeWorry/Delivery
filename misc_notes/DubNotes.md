@@ -5,16 +5,20 @@
 
 By default, Dub on Microsoft Windows downloads local copies of packages to
 C:\Users\<username>\AppData\Roaming\dub\packages\<package1>
-                                                \<package2>
-                                                  .....
-                                                \<packageN>
-                                                
-                                                
+C:\.............................................\<package2>
+C:\.............................................\<pacakgeN>
 
+```Batchfile
+C:\Users\kheaser\AppData\Roaming\dub\packages>dir
 
-C:\Users\....."........."........."....\packages\<package2>
+ Directory of C:\Users\kheaser\AppData\Roaming\dub\packages
 
-
+11/07/2017  11:44 AM    <DIR>          derelict-glfw3-3.1.3
+01/02/2018  03:12 PM    <DIR>          derelict-sdl2-2.1.4
+11/08/2017  12:41 PM    <DIR>          derelict-util-2.0.6
+11/07/2017  11:49 AM    <DIR>          derelict-util-2.1.0
+11/07/2017  12:50 PM    <DIR>          gl3n-1.3.1
+```
 
 By default, it looks like Dub on Windows trys to find packages locally at either of these two paths.
 
