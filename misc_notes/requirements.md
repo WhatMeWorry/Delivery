@@ -2,7 +2,7 @@
 
 Requirements are 
 - a Windows, MacOS or Linux computer
-- D Language
+- The LLVM D Compiler [LDC](https://github.com/ldc-developers/ldc#installation "Title").
 - DUB package manager
     
 Assumed famaliaity with
