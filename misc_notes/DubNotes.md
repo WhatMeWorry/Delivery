@@ -1,7 +1,6 @@
 
 ## Dub Notes
 
-***
 
 #### Where does Dub store local copies of packages 
 
@@ -39,7 +38,7 @@ C:\Users\kheaser\AppData\Roaming\dub\packages>dir /a
 
 ***
 
-To completely clean off Dub entirely,  the following on Windows:
+To completely clean off Dub entirely, do the following on Windows:
 
 ```
 cd C:\Users\kheaser\AppData\Roaming
