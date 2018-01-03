@@ -41,7 +41,7 @@ C:\>dub list
 Packages present in the system and known to dub:
   derelict-sdl2 2.1.4: C:\Users\kheaser\AppData\Roaming\dub\packages\derelict-sdl2-2.1.4\derelict-sdl2\
 ```
-The package has been downloded to the new default directory called **\dub\packages\**
+The package has been downloded to the new default directory called __...\dub\packages\derelict-sdl2-2.1.4\derelict-sdl2\__
 
 ***
 
