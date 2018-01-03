@@ -34,7 +34,8 @@ After deciding on the package you want, use the dub fetch command to download it
 ```
 C:\>dub fetch derelict-sdl2
 Fetching derelict-sdl2 2.1.4...
-Please note that you need to use `dub run <pkgname>` or add it to dependencies of your package to actually use/run it. dub does not do actual installation of packages outside of its own ecosystem.
+Please note that you need to use `dub run <pkgname>` or add it to dependencies of your package 
+to actually use/run it. dub does not do actual installation of packages outside of its own ecosystem.
 
 C:\>dub list
 Packages present in the system and known to dub:
@@ -52,7 +53,9 @@ C:\>cd dublocal
 
 C:\dublocal>dub fetch derelict-sdl2 --cache=local
 Fetching derelict-sdl2 2.1.4...
-Please note that you need to use `dub run <pkgname>` or add it to dependencies of your package to actually use/run it. dub does not do actual installation of packages outside of its own ecosystem.
+Please note that you need to use `dub run <pkgname>` or add it to dependencies of your package 
+to actually use/run it. dub does not do actual installation of packages outside of its own ecosystem.
+
 ```
 `dub list` won't show the new package, yet. Need to add it to the registry with:
 
@@ -113,7 +116,8 @@ Packages present in the system and known to dub:
 ```
 C:\>dub fetch derelict-sdl2
 Fetching derelict-sdl2 2.1.4...
-Please note that you need to use `dub run <pkgname>` or add it to dependencies of your package to actually use/run it. dub does not do actual installation of packages outside of its own ecosystem.
+Please note that you need to use `dub run <pkgname>` or add it to dependencies of your package 
+to actually use/run it. dub does not do actual installation of packages outside of its own ecosystem.
 
 C:\>dub list
 Packages present in the system and known to dub:
