@@ -4,7 +4,7 @@
 
 #### Where does Dub store local copies of packages 
 
-By default, Dub on Microsoft Windows downloads local copies of packages to
+By default, Dub on Microsoft Windows downloads copies of packages to
 C:\Users\<username>\AppData\Roaming\dub\packages\
 
 ```
@@ -17,6 +17,66 @@ C:\Users\kheaser\AppData\Roaming\dub\packages>dir
 11/08/2017  12:41 PM    <DIR>          derelict-util-2.0.6
 11/07/2017  11:49 AM    <DIR>          derelict-util-2.1.0
 11/07/2017  12:50 PM    <DIR>          gl3n-1.3.1
+```
+
+***
+
+A brand new system with no dub packages
+```
+C:\>dub list
+Packages present in the system and known to dub:
+```
+
+***
+
+After deciding on the package you want, use the dub fetch command to download it.
+
+```
+C:\>dub fetch derelict-sdl2
+Fetching derelict-sdl2 2.1.4...
+Please note that you need to use `dub run <pkgname>` or add it to dependencies of your package to actually use/run it. dub does not do actual installation of packages outside of its own ecosystem.
+
+C:\>dub list
+Packages present in the system and known to dub:
+  derelict-sdl2 2.1.4: C:\Users\kheaser\AppData\Roaming\dub\packages\derelict-sdl2-2.1.4\derelict-sdl2\
+```
+The package has been downloded to the new default directory called **\dub\packages\**
+
+***
+
+If you want to use your own path, 
+```
+C:\>mkdir dublocal
+
+C:\>cd dublocal
+
+C:\dublocal>dub fetch derelict-sdl2 --cache=local
+Fetching derelict-sdl2 2.1.4...
+Please note that you need to use `dub run <pkgname>` or add it to dependencies of your package to actually use/run it. dub does not do actual installation of packages outside of its own ecosystem.
+```
+`dub list` won't show the new package, yet. Need to add it to the registry with:
+
+```
+C:\dublocal>dir
+
+01/03/2018  01:00 PM    <DIR>          .
+01/03/2018  01:00 PM    <DIR>          ..
+01/03/2018  01:00 PM    <DIR>          derelict-sdl2-2.1.4
+01/03/2018  01:00 PM                 0 dub
+```
+Need to explicitly add it to the registry with:
+
+```
+C:\dublocal>dub add-local .\derelict-sdl2-2.1.4\derelict-sdl2
+Registered package: derelict-sdl2 (version: 2.1.4)
+```
+And now we can see local package too.
+```
+C:\dublocal>cd ..
+C:\>dub list
+Packages present in the system and known to dub:
+  derelict-sdl2 2.1.4: C:\dublocal\derelict-sdl2-2.1.4\derelict-sdl2\
+  derelict-sdl2 2.1.4: C:\Users\kheaser\AppData\Roaming\dub\packages\derelict-sdl2-2.1.4\derelict-sdl2\              
 ```
 
 ***
