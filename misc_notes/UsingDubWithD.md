@@ -150,4 +150,25 @@ source\app.d(9,5): Error: undefined identifier DerelictSDL2
 ```
  We now have the source code in derelict\sdl2\mixer.d, but we have a new error with undefined identifier DerelictSDL2. Compile now works but we don't have the run-time execuatable. We are falling off the cliff.  Goto the [SDL downloads](https://www.libsdl.org/download-2.0.php) and select on SDL2-2.0.7-win32-x64.zip or whatever is the current SDL2 release for 64 bits.
  
+ ### Special Notes
+ ***
  
+ 
+ ```
+ C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\Common7\Tools>vsdevcmd.bat
+**********************************************************************
+** Visual Studio 2017 Developer Command Prompt v15.0
+** Copyright (c) 2017 Microsoft Corporation
+**********************************************************************
+ ```
+ 
+ Not all `lib` files are static libraries. Some are import libraries, and chances are, that's what you linked with.
+
+If your `lib` file is much smaller than its corresponding dll file, that's a sure sign that it's an import library.
+
+	
+You can also run dumpbin /exports on the .lib file and if you end up with a list of all the functions in the library, it's an import lib.
+
+lib /list is also useful. If you only see .obj references, then it is only static. If it only has .dll then it is an import only library. Note: that it is possible for a .lib file to be both.
+
+Letting your program use a DLL requires an import library. It is a file with the .lib extension, just like a static .lib. But it is very small, it only contains a list of the functions that are exported by the DLL. The linker needs this so it can embed the name of the DLL in the import table. You can see this for yourself by running Dumpbin.exe /imports on your .exe
