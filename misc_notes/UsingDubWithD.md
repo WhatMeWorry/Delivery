@@ -162,13 +162,61 @@ source\app.d(9,5): Error: undefined identifier DerelictSDL2
 **********************************************************************
  ```
  
- Not all `lib` files are static libraries. Some are import libraries, and chances are, that's what you linked with.
+I have an .H and a .LIB file of a library. I wrote a program and refrenced the LIB via the project properties. It compiles fine, but when it runs, it asks for the DLL to be installed. If the DLL is in the same dir as the EXE it works ... but, if I have the LIB, doesn't it already mean the functions are staticly linked to my program?
+
+
+Not all `lib` files are static libraries. Some are import libraries, and chances are, that's what you linked with.
 
 If your `lib` file is much smaller than its corresponding dll file, that's a sure sign that it's an import library.
 
 	
 You can also run dumpbin /exports on the .lib file and if you end up with a list of all the functions in the library, it's an import lib.
 
+```
+C:\myprojects\HelloThenSound>dumpbin /exports DerelictSDL2.lib >> file.txt
+```
+
+file.txt only showed the following
+
+```
+Microsoft (R) COFF/PE Dumper Version 14.12.25831.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+Dump of file DerelictSDL2.lib
+File Type: LIBRARY
+  Summary
+        1C30 .bss
+        3B88 .data
+       157B0 .debug$S
+            ...
+          10 .tls$
+         3F4 .xdata
+```
+
 lib /list is also useful. If you only see .obj references, then it is only static. If it only has .dll then it is an import only library. Note: that it is possible for a .lib file to be both.
+
+```
+C:\myprojects\HelloThenSound>lib /list DerelictSDL2.lib >> liblist.txt
+```
+liblist.txt shows
+
+```
+Microsoft (R) Library Manager Version 14.12.25831.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+.dub\obj\derelict.sdl2.ttf.obj
+.dub\obj\derelict.sdl2.sdl.obj
+.dub\obj\derelict.sdl2.net.obj
+.dub\obj\derelict.sdl2.mixer.obj
+.dub\obj\derelict.sdl2.internal.sdl_types.obj
+.dub\obj\derelict.sdl2.internal.sdl_dynload.obj
+.dub\obj\derelict.sdl2.internal.sdl_dynamic.obj
+.dub\obj\derelict.sdl2.internal.gpu_types.obj
+.dub\obj\derelict.sdl2.internal.gpu_dynload.obj
+.dub\obj\derelict.sdl2.internal.gpu_dynamic.obj
+.dub\obj\derelict.sdl2.image.obj
+.dub\obj\derelict.sdl2.gpu.obj
+.dub\obj\derelict.sdl2.config.obj
+```
 
 Letting your program use a DLL requires an import library. It is a file with the .lib extension, just like a static .lib. But it is very small, it only contains a list of the functions that are exported by the DLL. The linker needs this so it can embed the name of the DLL in the import table. You can see this for yourself by running Dumpbin.exe /imports on your .exe
