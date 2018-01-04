@@ -63,6 +63,40 @@ C:\myprojects>dir HelloThenSound\source
 01/04/2018  11:09 AM                95 app.d
 ```
 
-app.d is an D file consisting of D Language code. It is incredible trivial. But as every thousand mile journey begins with one step, app.d is our first step.  you can open it up with your favorite editor. 
+app.d is an D file consisting of D Language code. It is incredible trivial. But as every thousand mile journey begins with one step, app.d is our first step.  Open it up with your favorite editor and you should see:
 
+```D
+import std.stdio;
 
+void main()
+{
+    writeln("Edit source/app.d to start your project.");
+}
+```
+
+Using your text editor, change the output to 
+```D
+import std.stdio;
+
+void main()
+{
+    writeln("Here we go", "\n");  // new line after Here we go  
+    writeln("Hellow World - But where's the Sound?");
+}
+```
+
+After saving off your changes, we will now use `dub run` command to compile, link, and run the program
+```
+C:\myprojects\HelloThenSound>dub run
+Performing "debug" build using ldc2 for x86_64.
+hellothensound ~master: building configuration "application"...
+Running .\hellothensound.exe
+Here we go
+
+Hellow World - But where's the Sound?
+```
+
+You've now ran you first D program. But where is the sound.  Well, we didn't put any D code to make audio. And even if you looked through the entire D language or Phobos library, you would not find anything.  D, like COBOL, Fortran, C, C++, Java, Go, Rust, etc. doesn't have built-in support for sound.  Here is were 3rd party libraries come in, or in our case DUB packages.
+
+You can go to [DUB](https://code.dlang.org/) website, and choose Select Category `Development Library` and `Audio Libraries` to show all the audio relevant packages. But instead, we are going to use the audio portion of a popular game package called [SDL](https://www.libsdl.org/). However, the D specific DUB package is called [derelict-sdl2](https://code.dlang.org/packages/derelict-sdl2) which has 
+ which is often used for games. 
