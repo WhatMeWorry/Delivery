@@ -41,7 +41,7 @@ C:\>dub list
 Packages present in the system and known to dub:
   derelict-sdl2 2.1.4: C:\Users\kheaser\AppData\Roaming\dub\packages\derelict-sdl2-2.1.4\derelict-sdl2\
 ```
-The package has been downloded to the user directory **_C:\\Users\\<user>\\AppData\\Roaming_\\dub\\packages\\derelict-sdl2-2.1.4\\derelict-sdl2\\**
+The package has been downloded to the user directory **_C:\\Users\\user\\AppData\\Roaming_\\dub\\packages\\derelict-sdl2-2.1.4\\derelict-sdl2\\**
 
 ```
 C:\>dub fetch derelict-sdl2 --cache=system
