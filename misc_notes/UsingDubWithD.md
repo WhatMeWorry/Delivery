@@ -96,7 +96,58 @@ Here we go
 Hellow World - But where's the Sound?
 ```
 
-You've now ran you first D program. But where is the sound.  Well, we didn't put any D code to make audio. And even if you looked through the entire D language or Phobos library, you would not find anything.  D, like COBOL, Fortran, C, C++, Java, Go, Rust, etc. doesn't have built-in support for sound.  Here is were 3rd party libraries come in, or in our case DUB packages.
+You've now ran you first D program. But where is the sound.  Well, we didn't put any D code to make audio. And even if you looked through the entire D language or Phobos library, you would not find anything.  D, like COBOL, Fortran, C, C++, Java, Go, Rust, etc. doesn't have built-in support for sound.  Here is were 3rd party libraries come to the rescue, or in our case DUB packages.
 
-You can go to [DUB](https://code.dlang.org/) website, and choose Select Category `Development Library` and `Audio Libraries` to show all the audio relevant packages. But instead, we are going to use the audio portion of a popular game package called [SDL](https://www.libsdl.org/). However, the D specific DUB package is called [derelict-sdl2](https://code.dlang.org/packages/derelict-sdl2) which has 
- which is often used for games. 
+You can go to [DUB](https://code.dlang.org/) website, and choose Select Category `Development Library` and `Audio Libraries` to show all the audio relevant packages. But instead, we are going to use the audio portion of a popular game package called [SDL](https://www.libsdl.org/). However, the D specific DUB package is called [derelict-sdl2](https://code.dlang.org/packages/derelict-sdl2) which has a component to [SDL2_mixer](https://www.libsdl.org/projects/SDL_mixer/docs/index.html)
+
+Let's begin.  To our app.d
+
+```D
+import std.stdio;
+import derelict.sdl2.mixer;  // import audio functionality
+
+void main()
+{
+    writeln("Here we go", "\n");  //  new line after Here we go    
+    writeln("Hellow World - But where's the Sound?");
+		                         
+    DerelictSDL2.load();         // Load the SDL 2 library.
+
+    DerelictSDL2Mixer.load();   // Load the SDL2_mixer library.	
+}
+```
+And re-run our program.
+```
+C:\myprojects\HelloThenSound>dub run
+Performing "debug" build using ldc2 for x86_64.
+hellothensound ~master: building configuration "application"...
+source\app.d(2,8): Error: module mixer is in file 'derelict\sdl2\mixer.d' which cannot be read
+ldc2 failed with exit code 1.
+```
+
+The error is because the program cannot fine the D code (which interfaces with the C code SDL2_mixer)
+Easy fix. We can add a dependency to our dub.sdl file.  Open the dub.sdl file which is located in the folder above the source code and add the following line.
+
+```
+name "hellothensound"
+description "A minimal D application."
+authors "kheaser"
+copyright "Copyright © 2018, kheaser"
+license "proprietary"
+
+dependency "derelict-sdl2" version="~>3.1.0-alpha.3"
+```
+
+Now try and run again.
+
+```Batchfile
+C:\myprojects\HelloThenSound>dub run
+Performing "debug" build using ldc2 for x86_64.
+derelict-util 3.0.0-beta.2: target for configuration "library" is up to date.
+derelict-sdl2 3.1.0-alpha.3: target for configuration "derelict-sdl2-dynamic" is up to date.
+hellothensound ~master: building configuration "application"...
+source\app.d(9,5): Error: undefined identifier DerelictSDL2
+```
+ We now have the source code in derelict\sdl2\mixer.d, but we have a new error with undefined identifier DerelictSDL2. Compile now works but we don't have the run-time execuatable. We are falling off the cliff.  Goto the [SDL downloads](https://www.libsdl.org/download-2.0.php) and select on SDL2-2.0.7-win32-x64.zip or whatever is the current SDL2 release for 64 bits.
+ 
+ 
