@@ -2,23 +2,6 @@
 ## Dub Notes
 
 
-#### Where does Dub store local copies of packages 
-
-By default, Dub on Microsoft Windows downloads copies of packages to
-C:\Users\<username>\AppData\Roaming\dub\packages\
-
-```
-C:\Users\kheaser\AppData\Roaming\dub\packages>dir
-
- Directory of C:\Users\kheaser\AppData\Roaming\dub\packages
-
-11/07/2017  11:44 AM    <DIR>          derelict-glfw3-3.1.3
-01/02/2018  03:12 PM    <DIR>          derelict-sdl2-2.1.4
-11/08/2017  12:41 PM    <DIR>          derelict-util-2.0.6
-11/07/2017  11:49 AM    <DIR>          derelict-util-2.1.0
-11/07/2017  12:50 PM    <DIR>          gl3n-1.3.1
-```
-
 ***
 
 A brand new system with no dub packages
@@ -41,7 +24,7 @@ C:\>dub list
 Packages present in the system and known to dub:
   derelict-sdl2 2.1.4: C:\Users\kheaser\AppData\Roaming\dub\packages\derelict-sdl2-2.1.4\derelict-sdl2\
 ```
-The package has been downloded to the user directory **_C:\\Users\\user\\AppData\\Roaming_\\dub\\packages\\derelict-sdl2-2.1.4\\derelict-sdl2\\**
+The package has been downloded to the user directory **C:\\Users\\user\\AppData\\Roaming\\dub\\packages\\derelict-sdl2-2.1.4\\derelict-sdl2\\**
 
 ```
 C:\>dub fetch derelict-sdl2 --cache=system
@@ -55,14 +38,10 @@ Packages present in the system and known to dub:
   derelict-sdl2 2.1.4: C:\ProgramData\dub\packages\derelict-sdl2-2.1.4\derelict-sdl2\
 ```
 
-The package has been downloded to the system directory **_C:\\ProgramData_\\dub\\packages\\derelict-sdl2-2.1.4\\derelict-sdl2\**
+This system package has been downloded to the system directory **C:\\ProgramData\\dub\\packages\\derelict-sdl2-2.1.4\\derelict-sdl2\**
 
 
-***
-
-
-
-If you want to use your own path, 
+It is a bit more invloved if want specify your own registry path, 
 ```
 C:\>mkdir dublocal
 
@@ -74,17 +53,22 @@ Please note that you need to use `dub run <pkgname>` or add it to dependencies o
 to actually use/run it. dub does not do actual installation of packages outside of its own ecosystem.
 
 ```
-`dub list` won't show the new package, yet. Need to add it to the registry with:
+The `dir` command will show that a derelict-sdl2 directory has been created.
+But `dub list` won't show the new package, yet. Need to add it to the registry with:
 
 ```
 C:\dublocal>dir
 
-01/03/2018  01:00 PM    <DIR>          .
-01/03/2018  01:00 PM    <DIR>          ..
 01/03/2018  01:00 PM    <DIR>          derelict-sdl2-2.1.4
 01/03/2018  01:00 PM                 0 dub
+
+C:\dublocal>dub list
+Packages present in the system and known to dub:
+  derelict-sdl2 2.1.4: C:\Users\kheaser\AppData\Roaming\dub\packages\derelict-sdl2-2.1.4\derelict-sdl2\
+  derelict-sdl2 2.1.4: C:\ProgramData\dub\packages\derelict-sdl2-2.1.4\derelict-sdl2\
 ```
-Need to explicitly add it to the registry with:
+
+We need to explicitly add it to the registry with the `add-local` option
 
 ```
 C:\dublocal>dub add-local .\derelict-sdl2-2.1.4\derelict-sdl2
@@ -96,7 +80,8 @@ C:\dublocal>cd ..
 C:\>dub list
 Packages present in the system and known to dub:
   derelict-sdl2 2.1.4: C:\dublocal\derelict-sdl2-2.1.4\derelict-sdl2\
-  derelict-sdl2 2.1.4: C:\Users\kheaser\AppData\Roaming\dub\packages\derelict-sdl2-2.1.4\derelict-sdl2\              
+  derelict-sdl2 2.1.4: C:\Users\kheaser\AppData\Roaming\dub\packages\derelict-sdl2-2.1.4\derelict-sdl2\
+  derelict-sdl2 2.1.4: C:\ProgramData\dub\packages\derelict-sdl2-2.1.4\derelict-sdl2\  
 ```
 
 ***
