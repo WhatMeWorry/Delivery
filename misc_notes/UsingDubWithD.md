@@ -236,7 +236,7 @@ Letting your program use a DLL requires an import library. It is a file with the
 
 
 ### Random Error Note
-===
+***
 
 Tried a subset of Visual Studio (not sure all the boxes I need to check)
 ```
