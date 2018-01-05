@@ -235,10 +235,10 @@ Letting your program use a DLL requires an import library. It is a file with the
 
 
 
-### Random Error Note
+### Compile Error (dub build)
 ***
 
-Tried a subset of Visual Studio (not sure all the boxes I need to check)
+Tried a subset of Visual Studio (not sure all the boxes I needed to check)
 ```
 hellothensound ~master: building configuration "application"...
 LINK : fatal error LNK1181: cannot open input file 'kernel32.lib'
@@ -275,8 +275,30 @@ Windows first searches for "known DLLs", such as Kernel32.dll and User32.dll. Wi
 
 NoteThe LIBPATH environment variable is not used.
 
+### Run-time Error (dub run)
 ***
 
+```
+Running .\hellothensound.exe
+Here we go
 
+Hellow World - But where's the Sound?
+
+derelict.util.exception.SharedLibLoadException@..\..\Users\kheaser\AppData\Roaming\dub\packages\derelict-util-3.0.0-beta.2\derelict-util\source\derelict\util\sharedlib.d(158): Failed to load one or more shared libraries:
+        SDL2_mixer.dll - The specified module could not be found.
+----------------
+0x00007FF741C14294 in derelict.util.exception.SharedLibLoadException.throwNew at C:\Users\kheaser\AppData\Roaming\dub\packages\derelict-util-3.0.0-beta.2\derelict-util\source\derelict\util\exception.d(66)
+0x00007FF741C14E28 in derelict.util.sharedlib.SharedLib.load at C:\Users\kheaser\AppData\Roaming\dub\packages\derelict-util-3.0.0-beta.2\derelict-util\source\derelict\util\sharedlib.d(160)
+0x00007FF741C082DB in derelict.util.loader.SharedLibLoader.load at C:\Users\kheaser\AppData\Roaming\dub\packages\derelict-util-3.0.0-beta.2\derelict-util\source\derelict\util\loader.d(253)
+0x00007FF741C08199 in derelict.util.loader.SharedLibLoader.load at C:\Users\kheaser\AppData\Roaming\dub\packages\derelict-util-3.0.0-beta.2\derelict-util\source\derelict\util\loader.d(197)
+0x00007FF741C080AB in derelict.util.loader.SharedLibLoader.load at C:\Users\kheaser\AppData\Roaming\dub\packages\derelict-util-3.0.0-beta.2\derelict-util\source\derelict\util\loader.d(134)
+0x00007FF741C01051 in D main at C:\myprojects\HelloThenSound\source\app.d(12)
+0x00007FF741C385B5 in d_run_main
+0x00007FF741C01BF5 in __entrypoint.main at C:\myprojects\HelloThenSound\__entrypoint.d(8)
+0x00007FF741C5F368 in __scrt_common_main_seh at f:\dd\vctools\crt\vcstartup\src\startup\exe_common.inl(283)
+0x00007FFECE8D2774 in BaseThreadInitThunk
+0x00007FFECEB50D51 in RtlUserThreadStart
+Program exited with code 1
+```
 
 
