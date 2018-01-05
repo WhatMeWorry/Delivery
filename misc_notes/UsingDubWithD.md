@@ -153,6 +153,9 @@ source\app.d(9,5): Error: undefined identifier DerelictSDL2
  ### Special Notes
  ***
  
+After downloading the **Build Tools for Visual Studio 2017**  (Since we are using Visual Studio Code we don't need the full kitchen sink Visuald studio 2017).
+ 
+We can  
  
  ```
  C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\Common7\Tools>vsdevcmd.bat
@@ -220,3 +223,38 @@ Copyright (C) Microsoft Corporation.  All rights reserved.
 ```
 
 Letting your program use a DLL requires an import library. It is a file with the .lib extension, just like a static .lib. But it is very small, it only contains a list of the functions that are exported by the DLL. The linker needs this so it can embed the name of the DLL in the import table. You can see this for yourself by running Dumpbin.exe /imports on your .exe
+
+
+
+
+
+
+
+
+
+
+
+
+### Random Error Note
+===
+
+Tried a subset of Visual Studio (not sure all the boxes I need to check)
+```
+hellothensound ~master: building configuration "application"...
+LINK : fatal error LNK1181: cannot open input file 'kernel32.lib'
+Error: C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.12.25827\bin\HostX64\x64\link.exe failed with status: 1181
+ldc2 failed with exit code 1181.
+```
+I installed the you do not have any windows SDK installed
+
+
+Yay. it now works.
+```
+C:\myprojects\HelloThenSound>dub build
+Performing "debug" build using ldc2 for x86_64.
+derelict-util 3.0.0-beta.2: target for configuration "library" is up to date.
+derelict-sdl2 3.1.0-alpha.3: target for configuration "derelict-sdl2-dynamic" is up to date.
+hellothensound ~master: building configuration "application"...
+To force a rebuild of up-to-date targets, run again with --force.
+```
+
