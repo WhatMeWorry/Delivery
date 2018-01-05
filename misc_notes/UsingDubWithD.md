@@ -247,6 +247,7 @@ ldc2 failed with exit code 1181.
 ```
 I installed the you do not have any windows SDK installed
 
+![Fig 1-0](https://user-images.githubusercontent.com/21070121/34625991-81511904-f220-11e7-8d21-193150088743.png)
 
 Yay. it now works.
 ```
