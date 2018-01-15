@@ -829,15 +829,19 @@ public:
                         static if (__traits(compiles,powUps) && powUps)
                             this.spawnPowerUps(box);
                         static if (__traits(compiles, audio) && audio)
-                            //playSound(FMOD_LOOP_OFF, soundSys.system, "../audio/bleep.mp3");
-                            playSound(soundSys, 1 );
+                        {
+                            playSound("SOLID");
+                        }
                     }
                     else  // if block is solid, enable shake effect
                     {
                         shakeTime = 0.05f;
                         postProc.shake = true;
                         static if (__traits(compiles, audio) && audio)
-                            playSound(soundSys, 2 );
+                        {
+                            playSound("BLEEP_WAV");
+                        }
+ 
                     }
 
                     // Collision resolution
@@ -888,7 +892,9 @@ public:
                     pow.destroyed = GL_TRUE;
                     pow.activated = GL_TRUE;
                     static if (__traits(compiles, audio) && audio)
-                        playSound(soundSys, 3 );
+                    {
+                        playSound("POWERUP");
+                    }
                 }
             }
         }  
@@ -923,11 +929,11 @@ public:
             // new velocity vectors were calculated
             static if (__traits(compiles,powUps) && powUps)
             {
-            ball.stuck = ball.sticky;
+                ball.stuck = ball.sticky;
             }
             static if (__traits(compiles, audio) && audio)
             {
-                playSound(soundSys, 4 );
+                //playSound(soundSys, 4 );
             }
         }
 

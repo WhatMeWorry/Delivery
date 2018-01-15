@@ -3,6 +3,7 @@ module app;
 
 import common;
 import common_game;
+import sound;
 
 import std.math;    // cos
 import std.stdio;   // writeln
@@ -16,7 +17,11 @@ import derelict.openal.al;
 import derelict.freeimage.freeimage;
 import derelict.opengl3.gl3;
 import derelict.glfw3.glfw3;
-import derelict.fmod.fmod;
+import derelict.sdl2.sdl;
+import derelict.sdl2.mixer;  // import audio functionality
+
+
+//import derelict.fmod.fmod;
 //import derelict.fmod.common;
 
 bool[1024] keys;
@@ -27,7 +32,6 @@ enum bool powUps      = true;
 enum bool audio       = true;
 enum bool screenText  = false;
 
-SoundSystem soundSys;  // Structure containing audio functionality
 
 extern(C) static void onInternalKeyEvent(GLFWwindow* window, int key, int scancode, int action, int modifier) nothrow
 {
@@ -46,23 +50,31 @@ GLFWwindow* winMain;  // need to make global so post_processor can acces winMain
 
 void main(string[] argv)
 {
-    Game breakout = new Game(800, 600);  // originally (800, 600)  // (1600, 1200) for 4K monitors
+    writeln("inside main");
 
+    Game breakout = new Game(800, 600);  // originally (800, 600)  // (1600, 1200) for 4K monitors
+ 
     load_libraries();
 
-    initSoundSystem(soundSys);
+    initAndOpenSoundAndLoadTracks();
 
-    playSound(FMOD_LOOP_NORMAL, soundSys.system, "../audio/breakout.mp3");
+    if (isMusicNotPlaying())
+    {
+        //PlayMusic(music, FOREVER);
+        playSound("BREAKOUT");
+	}
+    
+    //playSound(FMOD_LOOP_NORMAL, soundSys.system, "../audio/breakout.mp3");
 
-    printDrivers();
+    //printDrivers();
 
-    initSound(soundSys, FMOD_LOOP_NORMAL, "../audio/breakout.mp3");  // offset 0
-    initSound(soundSys, FMOD_LOOP_OFF,    "../audio/bleep.mp3");     // offset 1
-    initSound(soundSys, FMOD_LOOP_OFF,    "../audio/solid.wav");     // offset 2
-    initSound(soundSys, FMOD_LOOP_OFF,    "../audio/powerup.wav");   // offset 3
-    initSound(soundSys, FMOD_LOOP_OFF,    "../audio/bleep.wav");     // offset 4
+    //initSound(soundSys, FMOD_LOOP_NORMAL, "../audio/breakout.mp3");  // offset 0
+    //initSound(soundSys, FMOD_LOOP_OFF,    "../audio/bleep.mp3");     // offset 1
+    //initSound(soundSys, FMOD_LOOP_OFF,    "../audio/solid.wav");     // offset 2
+    //initSound(soundSys, FMOD_LOOP_OFF,    "../audio/powerup.wav");   // offset 3
+    //initSound(soundSys, FMOD_LOOP_OFF,    "../audio/bleep.wav");     // offset 4
 
-    playSound(soundSys, 0 );
+    //playSound(soundSys, 0 );
 
     winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_09_audio", null, null);
 

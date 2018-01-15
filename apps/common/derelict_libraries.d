@@ -8,8 +8,10 @@ public import derelict.freetype.ft;
 public import derelict.openal.al;
 public import derelict.util.exception;   // needed for the return type enum ShouldThrow.
 public import derelict.util.sharedlib;
-public import derelict.fmod.fmod;
+//public import derelict.fmod.fmod;
 public import derelict.assimp3.assimp;
+public import derelict.sdl2.sdl;
+public import derelict.sdl2.mixer;  // 
 
 
 import std.stdio;
@@ -167,15 +169,18 @@ void load_libraries()
     // Load the Fmod library.
 
     // Set the callback before calling load
-    DerelictFmod.missingSymbolCallback = &myMissingSymCallBackFmod;
-    DerelictFmod.load();
+    //DerelictFmod.missingSymbolCallback = &myMissingSymCallBackFmod;
+    //DerelictFmod.load();
 
     // Load the Fmod studio library.
     //DerelictFmodStudio.load();
 
     // Now Fmod functions can be called.
 
-    writeln("FMOD library loaded");
+    //writeln("FMOD library loaded");
+
+    DerelictSDL2.load();
+    DerelictSDL2Mixer.load();
 
     DerelictASSIMP3.missingSymbolCallback = &myMissingSymCallBackASSIMP3;
 
