@@ -1,5 +1,22 @@
 
 
+```D
+require 'redcarpet'
+markdown = Redcarpet.new("Hello World!")
+puts markdown.to_html
+```
+
+```Batchfile
+cd \to\path
+dir
+```
+
+
+- George Washington
+- John Adams
+- Thomas Jefferson
+
+
 1)  New Windows 8.0 system.  Mac OS below:
 
 2)  Install LLVM D Compiler (LDC)
@@ -20,11 +37,13 @@
 			
 3)  Goto https://www.visualstudio.com/downloads/?q=build+tool#build-tools-for-visual-studio-2017
 
-        vs_buildtools_1599795229  (setup application)
+    vs_buildtools_1599795229  (setup application)
 
-        Under Other Tools and Frameworks
-            Build Tools for Visual Studio 2017   These Build Tools allow you to build native and manage
-                                                 MSBuild-based applications without requiring the Visual Studio IDE	
+    Under Other Tools and Frameworks
+    Build Tools for Visual Studio 2017   These Build Tools allow you to
+                                         build native and manage
+                                         MSBuild-based applications without 
+                                         requiring the Visual Studio IDE
 
     Left all the default selected options as is.    
 	
@@ -43,7 +62,8 @@
 6)  Create a minimal DUB D project
 
     dub init myproject
-	
+
+```Batchfile
     C:\>dub init myproject
     Package recipe format (sdl/json) [json]: sdl
     Name [myproject]:
@@ -60,6 +80,7 @@
     C:\Users\Administrator\myproject>dub build
     Performing "debug" build using ldc2 for x86_64.
     myproject ~master: building configuration "application"...
+```
 
     // And runs
 
