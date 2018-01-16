@@ -162,20 +162,6 @@ void load_libraries()
     FT_Library_Version(library, &v0, &v1, &v2);
     writeln("FreeType library loaded version = ", v0, ".", v1, ".", v2);
 
-    DerelictAL.load();      // Load the OpenAL library
-
-    writeln("OpenAL library loaded");
-
-    // Load the Fmod library.
-
-    // Set the callback before calling load
-    //DerelictFmod.missingSymbolCallback = &myMissingSymCallBackFmod;
-    //DerelictFmod.load();
-
-    // Load the Fmod studio library.
-    //DerelictFmodStudio.load();
-
-    // Now Fmod functions can be called.
 
     //writeln("FMOD library loaded");
 

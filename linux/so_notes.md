@@ -1,10 +1,22 @@
 
 This document explains how, when and where all the shared objects (dynamic) Linux libraries are
-used with the Delivery repository
+used with the Delivery repository.  Specifically, we will assume Ubuntu 17.10, one of the most popular
+Linux distributions.
 
 
     - OpenGL3.0+
     - GLFW3
+    - SDL2_mixer
+
+
+```
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Ubuntu
+Description:	Ubuntu 17.10
+Release:	17.10
+Codename:	artful 
+```   
 
 ========================== GLFW ============================
 
@@ -25,7 +37,7 @@ sudo make install
 Install the project...
 -- Install configuration: ""
 -- Up-to-date: /usr/local/include/GLFW
--- Up-to-date: /usr/local/include/GLFW/glfw3.h
+-- Up-to-date: /usr/local/include/Ubuntu 17.10GLFW/glfw3.h
 -- Up-to-date: /usr/local/include/GLFW/glfw3native.h
 -- Up-to-date: /usr/local/lib/cmake/glfw3/glfw3Config.cmake
 -- Up-to-date: /usr/local/lib/cmake/glfw3/glfw3ConfigVersion.cmake
@@ -74,22 +86,24 @@ Total Installed Size:  13.39 MiB
  
 
 
-======================= FMOD ==================================
+======================= SDL2 and SDL2_mixer ==================================
 
-FMOD Studio Programmer’s API and Low Level Programmer API
+```
+$ sudo apt-get install libsdl2-dev
+Reading package lists...
 
-log in as WhatMeWorry, SunnySky1
+sudo apt-get install libsdl2-mixer-dev
+Reading package lists... Done
+```
 
-downloaded fmodstudioapilinuy.tar.gz
-extracted to
-fmodstudoapi
-and grabed the x86_64 lib files in /home/generic/Downloads/fmodstudioapi10905linux/api/lowlevel/lib/x86_64/libfmod.so
-/home/generic/Downloads/fmodstudioapi10905linux/api/lowlevel/lib/x86_64/libfmod.so.9
-/home/generic/Downloads/fmodstudioapi10905linux/api/lowlevel/lib/x86_64/libfmod.so.9.5
-/home/generic/Downloads/fmodstudioapi10905linux/api/lowlevel/lib/x86_64/libfmodL.so
-/home/generic/Downloads/fmodstudioapi10905linux/api/lowlevel/lib/x86_64/libfmodL.so.9
-/home/generic/Downloads/fmodstudioapi10905linux/api/lowlevel/lib/x86_64/libfmodL.so.9.5
-and moved to linux/dynamiclibraries
+Ubuntu installed SDL2 and extension to 
+/usr/lib/x86_64-linux-gnu/  
+
+Moved all the libSDL2_mixer-2.0.so.0 and libSDL2.so to Delivery/linux/dynamiclibraries
+
+
+
+
 
 
     - Assimp
@@ -100,3 +114,9 @@ and moved to linux/dynamiclibraries
             /usr/local/Cellar/assimp/3.3.1: 55 files, 7.9MB        
             and move the following dynamic libraries to the folder below this document.
             libassimp.3.dylib  libassimp.dylib
+
+
+
+
+
+

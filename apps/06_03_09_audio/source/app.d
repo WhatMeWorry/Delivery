@@ -60,21 +60,9 @@ void main(string[] argv)
 
     if (isMusicNotPlaying())
     {
-        //PlayMusic(music, FOREVER);
         playSound("BREAKOUT");
 	}
-    
-    //playSound(FMOD_LOOP_NORMAL, soundSys.system, "../audio/breakout.mp3");
 
-    //printDrivers();
-
-    //initSound(soundSys, FMOD_LOOP_NORMAL, "../audio/breakout.mp3");  // offset 0
-    //initSound(soundSys, FMOD_LOOP_OFF,    "../audio/bleep.mp3");     // offset 1
-    //initSound(soundSys, FMOD_LOOP_OFF,    "../audio/solid.wav");     // offset 2
-    //initSound(soundSys, FMOD_LOOP_OFF,    "../audio/powerup.wav");   // offset 3
-    //initSound(soundSys, FMOD_LOOP_OFF,    "../audio/bleep.wav");     // offset 4
-
-    //playSound(soundSys, 0 );
 
     winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_09_audio", null, null);
 
