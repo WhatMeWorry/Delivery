@@ -11,3 +11,4 @@ Strongly recommended
 - the cross-platform code editor [Visual Studio Code](https://code.visualstudio.com/)  
     with the extension: D Programming Lanuage (code-d)
 - familiarity with markup languages like [CommonMark](http://commonmark.org/) or [GitHub Flavored Markdown Spec](https://github.github.com/gfm/#link-reference-definitions)
+- Google's [Chrome](https://www.google.com/chrome/browser/desktop/index.html) browser with extension, __GitHub Flavored Markdown__ installed and enabled.
