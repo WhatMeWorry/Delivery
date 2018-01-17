@@ -56,7 +56,7 @@ void setTitles()     // having trouble with .mp3 and mixer_SDL2
 {
     tracks["BREAKOUT"]  = Track("../audio/breakout.wav", Sound.MUSIC, FOREVER, null );
     tracks["SOLID"]     = Track("../audio/solid.wav",    Sound.SFX,   ONCE,    null );	
-	tracks["POWERUP"]   = Track("../audio/powerup.wav",  Sound.SFX,   ONCE,    null );
+    tracks["POWERUP"]   = Track("../audio/powerup.wav",  Sound.SFX,   ONCE,    null );
     tracks["BLEEP_WAV"] = Track("../audio/bleep.wav",    Sound.SFX,   ONCE,    null );	
 }
 
@@ -72,18 +72,19 @@ It supports any number of simultaneously playing channels of 16 bit stereo audio
 Since playing both types of audio are supported, there is a structure fo each type.
 
 The Mix_Chunk structure represents a sample, or in other words a sound effect.
-The Mix_Music structure represents a piece of music, something that can be played for an extended period of time, usually repeated.
-When you want to play sound effects, you would use a Mix_Chunk and it's associated functions. When you want to play music, you would use a Mix_Music and it's associated functions.
+The Mix_Music structure represents a piece of music, something that can be played for an extended period of time, 
+usually repeated. When you want to play sound effects, you would use a Mix_Chunk and it's associated functions. 
+When you want to play music, you would use a Mix_Music and it's associated functions.
 
 It's important to remember that you can play multiple samples at once, but you can only play one music at a time.
-+/
 
-/+
 Mix_Chunk is used for playing sound samples, while Mix_Music is meant to play mussoundic.
 
-One key difference between the two is that multiple Mix_Chunk can be played at once on different sound channels, whereas only one Mix_Music may be played at the time.
+One key difference between the two is that multiple Mix_Chunk can be played at once on different sound channels, 
+whereas only one Mix_Music may be played at the time.
 
-For example, if you're programming a game, you'd want to use Mix_Music for the background music and Mix_Chunk for sound effects (lasers, powerups, etc.)
+For example, if you're programming a game, you'd want to use Mix_Music for the background music and Mix_Chunk for 
+sound effects (lasers, powerups, etc.)
 +/
 
 
@@ -92,20 +93,20 @@ void initAndOpenSoundAndLoadTracks()
     // Initialize all SDL subsystems
     if (SDL_Init(SDL_INIT_AUDIO) < 0 )
     {
-	    writeln(to!string(SDL_GetError()), " SDL_Init failed at line ", __LINE__);
+        writeln(to!string(SDL_GetError()), " SDL_Init failed at line ", __LINE__);
         return;
     }
 
     int    audioRate     = 22050;
-	ushort audioFormat   = AUDIO_S16SYS;
-	int    audioChannels = 2;
-	int    audioBuffers  = 4096;	
+    ushort audioFormat   = AUDIO_S16SYS;
+    int    audioChannels = 2;
+    int    audioBuffers  = 4096;	
 
 	
     // Initialize SDL_mixer
     if (Mix_OpenAudio(audioRate, MIX_DEFAULT_FORMAT, audioChannels, audioBuffers) == SDL_ERROR)
     {
-		writeln(to!string(SDL_GetError()), " failed at Mix_OpenAudio line ", __LINE__);
+        writeln(to!string(SDL_GetError()), " failed at Mix_OpenAudio line ", __LINE__);
         return;
     }
 	
@@ -117,21 +118,20 @@ void initAndOpenSoundAndLoadTracks()
 
     writeln("Compiled with SDL_mixer version: ", "\n", "major.minor.patch = ", 
             to!string(compileVersion.major), ".",
-			to!string(compileVersion.minor), ".",
-			to!string(compileVersion.patch));			
+            to!string(compileVersion.minor), ".",
+            to!string(compileVersion.patch));			
  
  
 
     writeln("Running with SDL_mixer version: ", "\n", "major.minor.patch = ", 
             to!string(linkVersion.major), ".",
-			to!string(linkVersion.minor), ".",
-			to!string(linkVersion.patch));			
+            to!string(linkVersion.minor), ".",
+            to!string(linkVersion.patch));			
 
     int devices = SDL_GetNumAudioDevices(PLAYBACK_DEVICES);
 
     for (int i = 0; i < devices; i++) 
     {
-        
         writeln("Audio device ", i, " : ", to!string(SDL_GetAudioDeviceName(i, PLAYBACK_DEVICES)));
     }
 
@@ -182,7 +182,8 @@ Mix_Music* LoadMusic(string musicFile)
     Mix_Music* temp = Mix_LoadMUS(cast (const(char)*) musicFile);
     if (temp == null)
     {
-        writeln(to!string(SDL_GetError()), " Failed in file ", __FILE__, " at Mix_LoadMUS line ", __LINE__);
+        writeln(to!string(SDL_GetError()), " Failed in file ", 
+                __FILE__, " at Mix_LoadMUS line ", __LINE__);
         exit(-1);
     }
     return temp;
@@ -195,7 +196,8 @@ Mix_Chunk* LoadSoundEffect(string soundEffectFile)
     Mix_Chunk* temp = Mix_LoadWAV(cast (const(char)*) soundEffectFile);
     if (temp == null)
     {
-        writeln(to!string(SDL_GetError()), " Failed in file ", __FILE__, " at Mix_LoadWAV line ", __LINE__);
+        writeln(to!string(SDL_GetError()), " Failed in file ", 
+                __FILE__, " at Mix_LoadWAV line ", __LINE__);
         writeln("Attempting to load file: ", soundEffectFile);
         exit(-1);
     }
@@ -216,7 +218,7 @@ void PlaySoundEffect(int channel, Mix_Chunk* chunk, int loops)
 {
     if (Mix_PlayChannel(channel, chunk, loops) == MIX_ERROR)
     {
-		writeln(to!string(SDL_GetError()), " failed at Mix_PlayChannel line " , __LINE__);
+        writeln(to!string(SDL_GetError()), " failed at Mix_PlayChannel line " , __LINE__);
         return;
     }	
 }
@@ -234,7 +236,7 @@ void loadSound(ref Track track)
         writeln("loadSFX with = ", track.file);        
         track.ptr = cast(Mix_Chunk*) LoadSoundEffect(track.file);            	
     }
-	else
+    else
     {
     }
 }
@@ -248,14 +250,13 @@ void playSound(string str)
     {
         PlayMusic(cast(Mix_Music*) track.ptr, FOREVER);            
     }
-    if (track.purpose == Sound.SFX)
+    else if (track.purpose == Sound.SFX)
     {
         PlaySoundEffect(FIRST_FREE_UNRESERVED_CHANNEL, cast(Mix_Chunk*) track.ptr, ONCE);           	
     }
-	else
+    else
     {
+        	   
     }
-
-
 }
 
