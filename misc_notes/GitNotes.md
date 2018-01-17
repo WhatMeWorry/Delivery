@@ -54,7 +54,7 @@ https://github.com/WhatMeWorry/Delivery.git
 
 ***
 Once in Visual Studio Code, performed a pull from the GUI and nothing happened.
-Had to go to TERMINAL.  Turned out this was hidden:
+Had to go to TERMINAL and type:
 ```
 ~Delivery$ git pull
 Already up-to-date
