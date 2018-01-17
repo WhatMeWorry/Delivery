@@ -44,6 +44,12 @@ Now from Windows Explorer, Navigate to C:\Users\kheaser\Delivery\apps
 and Shift + Rght Click and   Open Powershell/Command window here.
 
 
+***
+Finding out the name of the original repository you cloned from in Git
+```
+$ git config --get remote.origin.url
+https://github.com/WhatMeWorry/Delivery.git
+```
 
 ========================= git init versus clone =============================
 
