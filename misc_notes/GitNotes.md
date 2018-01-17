@@ -51,6 +51,15 @@ $ git config --get remote.origin.url
 https://github.com/WhatMeWorry/Delivery.git
 ```
 
+
+***
+Once in Visual Studio Code, performed a pull from the GUI and nothing happened.
+Had to go to TERMINAL.  Turned out this was hidden:
+```
+~Delivery$ git pull
+Already up-to-date
+```
+
 ========================= git init versus clone =============================
 
 I'm doing a git clone on a project following the instructions. But, do I need to do an init in the directory beforehand?
