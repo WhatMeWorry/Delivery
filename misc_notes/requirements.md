@@ -12,3 +12,6 @@ Strongly recommended
     with the extension: D Programming Lanuage (code-d)
 - familiarity with markup languages like [CommonMark](http://commonmark.org/) or [GitHub Flavored Markdown Spec](https://github.github.com/gfm/#link-reference-definitions)
 - Google's [Chrome](https://www.google.com/chrome/browser/desktop/index.html) browser with extension, __GitHub Flavored Markdown__ installed and enabled.
+
+Possibly useful
+- Some sound samples were too quiet on my Linux system. Used the cross-platform, free, audio editing software called [Audicity](http://www.audacityteam.org/).  Used Effect > Amplify... to boost their volumes. 
