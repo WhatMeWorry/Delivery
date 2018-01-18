@@ -33,6 +33,8 @@ enum ONCE = 0;  // 1 = LOOP_TWICE  2 = LOOP_THRICE...
 enum MIX_ERROR = -1;
 enum SDL_ERROR = -1;
 
+enum WHAT_IS_CURRENT_VOLUME = -1;
+
 enum channels { MONO = 1, STEREO  = 2};
 
 enum PLAYBACK_DEVICES = 0;
@@ -148,7 +150,21 @@ void initAndOpenSoundAndLoadTracks()
     {
         playSound(s);
         Thread.sleep(dur!("seconds")(2));
-    }      
+    } 
+
+    int numChannelsAllocated = Mix_AllocateChannels(-1); // num channels currently allocated.
+
+    writeln("numChannelsAllocated = ", numChannelsAllocated); 
+
+    int currentVolume = Mix_VolumeMusic(WHAT_IS_CURRENT_VOLUME);  // from 0 to 128
+
+    writeln("currentVolume = ", currentVolume);
+
+    Mix_VolumeMusic(100);
+
+    currentVolume = Mix_VolumeMusic(WHAT_IS_CURRENT_VOLUME);  // from 0 to 128
+
+    writeln("currentVolume = ", currentVolume);      
 }
 
 
@@ -248,6 +264,7 @@ void playSound(string str)
     writeln("inside playSound track.ptr = ", track.ptr);	
     if (track.purpose == Sound.MUSIC)
     {
+        // Music is not played on a normal mixer channel; hence no channel parameter      
         PlayMusic(cast(Mix_Music*) track.ptr, FOREVER);            
     }
     else if (track.purpose == Sound.SFX)
