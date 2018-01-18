@@ -14,4 +14,4 @@ Strongly recommended
 - Google's [Chrome](https://www.google.com/chrome/browser/desktop/index.html) browser with extension, __GitHub Flavored Markdown__ installed and enabled.
 
 Possibly useful
-- Some sound samples were too quiet on my Linux system. Used the cross-platform, free, audio editing software called [Audicity](http://www.audacityteam.org/).  Used Effect > Amplify... to boost their volumes. 
+- Some sound samples were too quiet on my Linux system. Used the cross-platform, free, audio editing software called [Audicity](http://www.audacityteam.org/).  Used Effect > Amplify... to boost their volumes. Later, used Audicity to convert .aiff and .wav files to .ogg files. This cut the size of the files in half.

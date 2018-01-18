@@ -56,10 +56,10 @@ Track[string] tracks;
                      // https://audio.online-convert.com/convert-to-wav
 void setTitles()     // having trouble with .mp3 and mixer_SDL2
 {
-    tracks["BREAKOUT"]  = Track("../audio/breakout.wav", Sound.MUSIC, FOREVER, null );
-    tracks["SOLID"]     = Track("../audio/solid.wav",    Sound.SFX,   ONCE,    null );	
-    tracks["POWERUP"]   = Track("../audio/powerup.wav",  Sound.SFX,   ONCE,    null );
-    tracks["BLEEP_WAV"] = Track("../audio/bleep.wav",    Sound.SFX,   ONCE,    null );	
+    tracks["BREAKOUT"]  = Track("../audio/breakout.ogg", Sound.MUSIC, FOREVER, null );
+    tracks["SOLID"]     = Track("../audio/solid.ogg",    Sound.SFX,   ONCE,    null );	
+    tracks["POWERUP"]   = Track("../audio/powerup.ogg",  Sound.SFX,   ONCE,    null );
+    tracks["BLEEP_WAV"] = Track("../audio/bleep.ogg",    Sound.SFX,   ONCE,    null );	
 }
 
 

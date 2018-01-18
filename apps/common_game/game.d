@@ -933,7 +933,7 @@ public:
             }
             static if (__traits(compiles, audio) && audio)
             {
-                //playSound(soundSys, 4 );
+                playSound("BLEEP_WAV");
             }
         }
 
