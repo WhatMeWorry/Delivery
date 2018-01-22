@@ -28,3 +28,6 @@ docs/
 
 # Code coverage
 *.lst
+
+# Don't store MacOS .DS_Store files
+*.DS_Store
