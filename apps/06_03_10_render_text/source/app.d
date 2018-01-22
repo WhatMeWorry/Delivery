@@ -11,12 +11,11 @@ import gl3n.linalg; // vec3 mat4
 import derelict.util.loader;
 import derelict.util.sharedlib;
 import derelict.freetype.ft;
-import derelict.openal.al;
 import derelict.freeimage.freeimage;
 import derelict.opengl3.gl3;
 import derelict.glfw3.glfw3;
-import derelict.fmod.fmod;
-//import derelict.fmod.common;
+import derelict.sdl2.sdl;
+import derelict.sdl2.mixer;  // import audio functionality
 
 bool[1024] keys;
 
@@ -42,9 +41,6 @@ extern(C) static void onInternalKeyEvent(GLFWwindow* window, int key, int scanco
 
 
 
-
-SoundSystem soundSys;  // Structure containing audio functionality
-
 TextRenderer textRend;
 
 TextRenderingSystem textRenderSys;  // works
@@ -57,19 +53,12 @@ void main(string[] argv)
 
     load_libraries();
 
-    initSoundSystem(soundSys);
+    initAndOpenSoundAndLoadTracks();
 
-    playSound(FMOD_LOOP_NORMAL, soundSys.system, "../audio/breakout.mp3");
-
-    printDrivers();
-
-    initSound(soundSys, FMOD_LOOP_NORMAL, "../audio/breakout.mp3");  // offset 0
-    initSound(soundSys, FMOD_LOOP_OFF,    "../audio/bleep.mp3");     // offset 1
-    initSound(soundSys, FMOD_LOOP_OFF,    "../audio/solid.wav");     // offset 2
-    initSound(soundSys, FMOD_LOOP_OFF,    "../audio/powerup.wav");   // offset 3
-    initSound(soundSys, FMOD_LOOP_OFF,    "../audio/bleep.wav");     // offset 4
-
-    playSound(soundSys, 0 );
+    if (isMusicNotPlaying())
+    {
+        playSound("BREAKOUT");
+	}
 
     winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_10_render_text", null, null);
 

@@ -5,10 +5,8 @@ public import derelict.glfw3;
 public import derelict.opengl3.gl3;
 public import derelict.freeimage.freeimage;
 public import derelict.freetype.ft;
-public import derelict.openal.al;
 public import derelict.util.exception;   // needed for the return type enum ShouldThrow.
 public import derelict.util.sharedlib;
-//public import derelict.fmod.fmod;
 public import derelict.assimp3.assimp;
 public import derelict.sdl2.sdl;
 public import derelict.sdl2.mixer;  // 
@@ -56,21 +54,6 @@ ShouldThrow myMissingSymCallBackFT( string symbolName )
     }
 }
 
-
-ShouldThrow myMissingSymCallBackFmod( string symbolName )
-{
-    if (symbolName == "FMOD_System_GetChannelsReal"        ||  // Windows fmod.dll
-        symbolName == "FMOD_Channel_OverridePanDSP"        ||
-        symbolName == "FMOD_ChannelGroup_OverridePanDSP"
-       )
-    {
-       return ShouldThrow.No;
-    }
-    else
-    {
-        return ShouldThrow.Yes;
-    }
-}
 
 
 ShouldThrow myMissingSymCallBackASSIMP3( string symbolName )

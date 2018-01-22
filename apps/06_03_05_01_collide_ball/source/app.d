@@ -11,7 +11,6 @@ import gl3n.linalg; // vec3 mat4
 import derelict.util.loader;
 import derelict.util.sharedlib;
 import derelict.freetype.ft;
-import derelict.openal.al;
 import derelict.freeimage.freeimage;
 import derelict.opengl3.gl3;
 import derelict.glfw3.glfw3;
@@ -22,9 +21,6 @@ enum bool powUps      = false;
 enum bool audio       = false;
 enum bool screenText  = false;
 
-SoundSystem soundSys;  // Structure containing audio functionality
-
-//bool[1024] keys;
 
 extern(C) static void onInternalKeyEvent(GLFWwindow* window, int key, int scancode, int action, int modifier) nothrow
 {

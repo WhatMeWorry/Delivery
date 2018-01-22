@@ -104,8 +104,6 @@ dir
     dependency "derelict-gl3"     version= "==1.0.23"
     dependency "derelict-fi"      version= "==2.0.3"
     dependency "derelict-ft"      version= "==1.1.3"
-    dependency "derelict-al"      version= "==1.0.3"
-    dependency "derelict-fmod"    version= "==4.1.0"
     dependency "derelict-assimp3" version= "==1.3.0"
 
 	
@@ -117,7 +115,6 @@ dir
     derelict-al 1.0.3: target for configuration "library" is up to date.
     derelict-assimp3 1.3.0: target for configuration "library" is up to date.
     derelict-fi 2.0.3: target for configuration "library" is up to date.
-    derelict-fmod 4.1.0: target for configuration "library" is up to date.
     derelict-ft 1.1.3: target for configuration "library" is up to date.
     derelict-gl3 1.0.23: target for configuration "library" is up to date.
     derelict-glfw3 3.1.3: target for configuration "derelict-glfw3-dynamic" is up to date.

@@ -28,10 +28,12 @@ enum PLAYING = 1;
 enum NOT_PLAYING = 0;
 
 enum FOREVER = -1;
-enum ONCE = 0;  // 1 = LOOP_TWICE  2 = LOOP_THRICE...
+enum ONCE = 0;  // 1 = loop twice  2 = loop thrice...
 
 enum MIX_ERROR = -1;
 enum SDL_ERROR = -1;
+
+enum OK = 0;
 
 enum WHAT_IS_CURRENT_VOLUME = -1;
 
@@ -52,14 +54,17 @@ struct Track
 
 Track[string] tracks;
 
+// WAV (BWF) and AIFF are both cross platform. I highly suggest you use WAV though.
+// SDL supports WAV files by default but you will need SMPEG library along with some 
+// more complex lines of code to make mp3's work.
 
                      // https://audio.online-convert.com/convert-to-wav
 void setTitles()     // having trouble with .mp3 and mixer_SDL2
 {
-    tracks["BREAKOUT"]  = Track("../audio/breakout.ogg", Sound.MUSIC, FOREVER, null );
-    tracks["SOLID"]     = Track("../audio/solid.ogg",    Sound.SFX,   ONCE,    null );	
-    tracks["POWERUP"]   = Track("../audio/powerup.ogg",  Sound.SFX,   ONCE,    null );
-    tracks["BLEEP_WAV"] = Track("../audio/bleep.ogg",    Sound.SFX,   ONCE,    null );	
+    tracks["BREAKOUT"] = Track("../audio/breakout.wav", Sound.MUSIC, FOREVER, null );
+    tracks["SOLID"]    = Track("../audio/solid.wav",    Sound.SFX,   ONCE,    null );	
+    tracks["POWERUP"]  = Track("../audio/powerup.wav",  Sound.SFX,   ONCE,    null );
+    tracks["BLEEP"]    = Track("../audio/bleep.wav",    Sound.SFX,   ONCE,    null );	
 }
 
 
@@ -99,6 +104,17 @@ void initAndOpenSoundAndLoadTracks()
         return;
     }
 
+
+    int flags = MIX_INIT_MP3;
+    int result = Mix_Init(flags);
+    if (result != OK) 
+    {
+        writeln("Could not initialize mixer. result = ", result);
+        writeln("Mix_Init: ", Mix_GetError());
+        exit(1);
+    }
+    writeln("Mix_Init: is successful with flags = ", flags);   
+
     int    audioRate     = 22050;
     ushort audioFormat   = AUDIO_S16SYS;
     int    audioChannels = 2;
@@ -111,8 +127,7 @@ void initAndOpenSoundAndLoadTracks()
         writeln(to!string(SDL_GetError()), " failed at Mix_OpenAudio line ", __LINE__);
         return;
     }
-	
-	
+
     SDL_version compileVersion;
     SDL_MIXER_VERSION(&compileVersion);
 	
@@ -209,7 +224,10 @@ Mix_Music* LoadMusic(string musicFile)
 Mix_Chunk* LoadSoundEffect(string soundEffectFile)
 {
     // This can load WAVE, AIFF, RIFF, OGG, and VOC files.
+    writeln("Before Mix_LoadWAV ", soundEffectFile);    
     Mix_Chunk* temp = Mix_LoadWAV(cast (const(char)*) soundEffectFile);
+    writeln("After Mix_LoadWAV");
+    writeln("temp = ", temp);
     if (temp == null)
     {
         writeln(to!string(SDL_GetError()), " Failed in file ", 

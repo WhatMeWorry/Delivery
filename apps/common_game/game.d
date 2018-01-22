@@ -839,7 +839,7 @@ public:
                         postProc.shake = true;
                         static if (__traits(compiles, audio) && audio)
                         {
-                            playSound("BLEEP_WAV");
+                            playSound("BLEEP");
                         }
  
                     }
@@ -933,7 +933,7 @@ public:
             }
             static if (__traits(compiles, audio) && audio)
             {
-                playSound("BLEEP_WAV");
+                playSound("BLEEP");
             }
         }
 

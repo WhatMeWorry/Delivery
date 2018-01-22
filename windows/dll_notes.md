@@ -10,18 +10,13 @@ This is an introduction to Git version control system. It teachs by doing: a ste
 
 ### Dynamic Libraries
     - Assimp (Assest )
-        Downloaded from fmod web site: http://assimp.sourceforge.net/ assimp 3.1.1: released June 2014
+        Downloaded from web site: http://assimp.sourceforge.net/ assimp 3.1.1: released June 2014
 
         Then unzipped to create Users\user\Downloads\assimp-3.1.1-win-binaries\bin64\assimp.dll (3,716 KB)
         and moved assimp.dll to this folder.
 
 
-    - fmod
-        Needed to create an account.  Then Downloaded from fmod web site and created: C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\lib
-
-        Renamed fmod64.dll and fmodL64.dll to fmod.dll and fmodL.dll respectively.
-
-        Then moved fmod.dll and fmodL.dll to this folder.
+    - sdl2  sdl2_mixer
 
     - FreeImage
         Went to the official FreeImage website: http://freeimage.sourceforge.net and
@@ -42,13 +37,6 @@ This is an introduction to Git version control system. It teachs by doing: a ste
         The libfreetype-6.dll (1,187 KB) in this folder was obtained from:
         C:\Users\user\AppData\Roaming\dub\packages\dlangui-0.9.8\dlangui\libs\windows\x86_64  ????
 
-    - OpenAL
-        Went to the official openal website: https://www.openal.org/downloads/ and downloaded their openAL 1.1 windows 
-        installer which placed a 
-        64 bit openAL32.dll in C:\Windows\System32 and a 
-        32 bit openAL32.dll in C:\Windows\SysWOW64 
-
-        It is counterintuitive but System32 holds the 64 bit DLLs.
     
     - OpenGL
         opengl32.dll seems to be installed by default in C:\Windows\System32  
