@@ -165,7 +165,7 @@ ldc2 -march=x86-64
     -I..\common 
     -I..\common_game 
     -of.dub\build\application-$DFLAGS-windows-x86_64-ldc_2074-FE51C38B209A0583D12856C210FFE155\00_01_print_ogl_ver.exe 
-    -w -oq -od=.dub/obj -d-version=Have_00_01_print_ogl_ver -d-version=Have_derelict_al -d-version=Have_derelict_util -d-version=Have_derelict_assimp3 -d-version=Have_derelict_fi -d-version=Have_derelict_fmod -d-    version=Have_derelict_ft -d-version=Have_derelict_gl3 -d-version=Have_derelict_glfw3 
+    -w -oq -od=.dub/obj -d-version=Have_00_01_print_ogl_ver -d-version=Have_derelict_al -d-version=Have_derelict_util -d-version=Have_derelict_assimp3 -d-version=Have_derelict_fi  -d-  version=Have_derelict_ft -d-version=Have_derelict_gl3 -d-version=Have_derelict_glfw3 
         -Isource 
         -I..\..\..\..\..\AppData\Roaming\dub\packages\derelict-al-1.0.3\derelict-al\source 
         -I..\..\..\..\..\AppData\Roaming\dub\packages\derelict-util-2.0.6\derelict-util\source 
@@ -178,7 +178,6 @@ ldc2 -march=x86-64
         ..\common\mytoolbox.d source\app.d 
         ..\..\..\..\..\AppData\Roaming\dub\packages\derelict-al-1.0.3\derelict-al\.dub\build\library-$DFLAGS-windows-x86_64-ldc_2074-B3C723F91C4AF259F342B150EF8443BF\DerelictAL.lib 
         ..\..\..\..\..\AppData\Roaming\dub\packages\derelict-assimp3-1.3.0\derelict-assimp3\.dub\build\library-$DFLAGS-windows-x86_64-ldc_2074-B7525DDFF60E7B732C9FFF8001B1A781\DerelictASSIMP3.lib 
-        ..\..\..\..\..\AppData\Roaming\dub\packages\derelict-fi-2.0.3\derelict-fi\.dub\build\library-$DFLAGS-windows-x86_64-ldc_2074-0FAE34F34A81D6023BDC8DA51FD10097\DerelictFmod.lib 
         ..\..\..\..\..\AppData\Roaming\dub\packages\derelict-ft-1.1.3\derelict-ft\.dub\build\library-$DFLAGS-windows-x86_64-ldc_2074-B8D2ADDD0FCAA568478A1EF96630AE62\DerelictFT.lib 
         ..\..\..\..\..\AppData\Roaming\dub\packages\derelict-gl3-1.0.23\derelict-gl3\.dub\build\library-$DFLAGS-windows-x86_64-ldc_2074-A98357941B6042F84FFE15BA0F9C8457\DerelictGL3.lib 
         ..\..\..\..\..\AppData\Roaming\dub\packages\derelict-glfw3-3.1.3\derelict-glfw3\.dub\build\derelict-glfw3-dynamic-$DFLAGS-windows-x86_64-ldc_2074-CAF77735C9072B00A4BACA43B90429A3\DerelictGLFW3.lib 

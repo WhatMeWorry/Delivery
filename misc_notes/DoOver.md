@@ -255,9 +255,10 @@ lrwxr-xr-x   1 clemfandango  admin    34 Nov 14 11:07 pngfix -> ../Cellar/libpng
 lrwxr-xr-x   1 clemfandango  admin    35 Nov 14 11:07 visualinfo -> ../Cellar/glew/2.1.0/bin/visualinfo
 
 
-LD_LIBRARY_PATH is used by your program to search directories containing shared libraries after it has been successfully compiled and linked.
 
-LD_LIBRARY_PATH is searched when the program starts, LIBRARY_PATH is searched at link time.
+LD_LIBRARY_PATH is used by your program when it executes: to search directories containing shared libraries. 
+
+LIBRARY_PATH is useded at compile and link phase.
 
 
 

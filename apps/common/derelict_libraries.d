@@ -145,9 +145,6 @@ void load_libraries()
     FT_Library_Version(library, &v0, &v1, &v2);
     writeln("FreeType library loaded version = ", v0, ".", v1, ".", v2);
 
-
-    //writeln("FMOD library loaded");
-
     DerelictSDL2.load();
     DerelictSDL2Mixer.load();
 

@@ -27,11 +27,13 @@ void main(char[][] args)
     }
     version(linux)
     {
-        printEnvVariable("LD_LIBRARY_PATH");  // for Fmod library       
+        printEnvVariable("LIBRARY_PATH");     // compile and link time 
+        printEnvVariable("LD_LIBRARY_PATH");  // run time      
     }
     version(OSX)
     {
-        printEnvVariable("LD_LIBRARY_PATH");
+        printEnvVariable("LIBRARY_PATH");     // compile and link time 
+        printEnvVariable("LD_LIBRARY_PATH");  // run time        
         printEnvVariable("DYLD_LIBRARY_PATH");        
     }
 
