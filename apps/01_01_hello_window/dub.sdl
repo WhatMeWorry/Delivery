@@ -1,4 +1,4 @@
-name "01_01_hellow_window"
+name "01_01_hello_window"
 description "A minimal D application."
 authors "Kyle"
 copyright "Copyright © 2017, Kyle"
