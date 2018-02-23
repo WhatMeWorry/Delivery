@@ -1,0 +1,14 @@
+.dub
+docs.json
+__dummy.html
+docs/
+04_01_depth_testing.so
+04_01_depth_testing.dylib
+04_01_depth_testing.dll
+04_01_depth_testing.a
+04_01_depth_testing.lib
+04_01_depth_testing-test-*
+*.exe
+*.o
+*.obj
+*.lst

@@ -239,3 +239,24 @@ void initializeCubePosNormsTexs(ref GLfloat[] verts)
     
     verts = vertices;
 }
+
+
+void initializePlane(ref GLfloat[] verts)
+{   
+    // Set up vertex data (and buffer(s)) and attribute pointers
+    GLfloat[] vertices =
+    [
+        // positions    // texture Coords (note we set these higher than 1 (together 
+        // with GL_REPEAT as texture wrapping mode). this will cause the floor texture to repeat)
+         5.0, -0.5,  5.0,  2.0, 0.0,
+        -5.0, -0.5,  5.0,  0.0, 0.0,
+        -5.0, -0.5, -5.0,  0.0, 2.0,
+
+         5.0, -0.5,  5.0,  2.0, 0.0,
+        -5.0, -0.5, -5.0,  0.0, 2.0,
+         5.0, -0.5, -5.0,  2.0, 2.0			
+    ];
+    
+    verts = vertices;
+}
+
