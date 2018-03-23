@@ -1,6 +1,6 @@
 
 
-| Class  | unit of object encapsulation |
+| __Class__  | __Reference Semantics__   unit of object encapsulation   |
 | ------ | ------ |
 | cookie cutter for creating objects. Like jig, template, or blueprint. |
 | specific instances of classes are called objects |
@@ -11,7 +11,7 @@
 | 3) methods/operations per-object by default, per-class with use of __static__ modifier |
 |    |
 | accessed with . (dot)  So object.someDataOrMethod for both per-object and per-class state and methods |
-| static class state/methods can also be accessed even if no objects exist through the class.someDataOrMethod syntax | 
+| static class state/methods can also be manipulated even if no objects exist through the class.someDataOrMethod syntax | 
 | Objects are accessed via references. |
 | references are linked to class objects. this reference is also called _bindings_  |
 | Objects may only be accessed through the use of references |
@@ -20,9 +20,34 @@
 | A reference may exist without an object but it should be set to null.  |
 | References that are not null and not bound to any object is an error called dangling pointer |
 | Objects once created will reside in the same place in memory forever until Garbage Collected |
-| using __object = new SomeClass__ creates a default initialized object. All fields use .init property |
-| Customized constructors may be defined with a method named __this__ with no return type  |
-| 
-| this() {}  // default constructor  
+| when using __object = new SomeClass__ , the compiler creates a default constructor which initializes the object. All fields use .init property |
+| Customized constructors may be defined with a method named __this__ with no return type but as soon as a user specifies a constructor, the compiler default one is deactivated. In this case user must specify explicitly the default constructor  __this() {}__    |
+| Copying references around just adds more references pointing to the same object;
+the object itself is never actually duplicated. |
+
+***
+***
+***
+***
+***
+---
+---
+---
+---
 
 
+
+
+
+
+
+| __Struct__  | __Value Semantics *__  encapsulates data values |
+| ------ | ------ |
+| The D Programming Language says you can't define a default constructor this()?  |
+| You can define a post-blit constructor this(this)  |
+| No inheritence like classes and all its accompanying support syntax |
+|
+
+
+
+__*__ In theory. Sometimes it is necessary for structures to be passed as reference for performance reasons. But this should be done as a last resort. 
