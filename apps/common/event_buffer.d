@@ -16,7 +16,28 @@ EventBuffer moreEvents(128);  // create an event buffer holding 128 events
 
 +/ 
 
+/+
+Private means that only members of the enclosing class can access the member, or members and 
+functions in the same module as the enclosing class. Private members cannot be overridden.
 
+Package extends private so that package members can be accessed from code in other modules 
+that are in the same package. This applies to the innermost package only, if a module is in 
+nested packages.
+
+Protected means that only members of the enclosing class or any classes derived from that class, 
+or members and functions in the same module as the enclosing class, can access the member. If 
+accessing a protected instance member through a derived class member function, that member can 
+only be accessed for the object instance which can be implicitly cast to the same type as ‘this’. 
+Protected module members are illegal.
+
+Public means that any code within the executable can access the member.
+
+Export means that any code outside the executable can access the member. Export is analogous to 
+exporting definitions from a DLL.
+
+Global static storage class currently is a no-op storage class in D, global symbols with one are 
+compiled but ignored.
++/
 
 
 
@@ -48,7 +69,7 @@ enum Category
     WindowSize,
     FrameBufferSize,
     WindowFocus,
-    CursorInOrOut,
+    CursorInOrOutWindow,
     CursorPosition,
     MouseScroll,
     MouseButton,
@@ -193,14 +214,14 @@ enum Key
 }
 
 
-// modifier is one or more of GLFW_MOD_SHIFT, GLFW_MOD_CONTROL, GLFW_MOD_ALT, GLFW_MOD_SUPER
+// Modifier is one or more of GLFW_MOD_SHIFT, GLFW_MOD_CONTROL, GLFW_MOD_ALT, GLFW_MOD_SUPER
 
-struct Modifier
+enum Modifier
 {
-    int shift;
-    int control;
-    int alternate;
-    int superKey;  // Window's window key or Apple's command (clover leaf) key
+    Shift     = GLFW_MOD_SHIFT,
+    Control   = GLFW_MOD_CONTROL,
+    Alternate = GLFW_MOD_ALT,
+    SuperKey  = GLFW_MOD_SUPER  // Window's window key or Apple's command (clover leaf) key
 }
 
 
@@ -213,17 +234,25 @@ enum Action
     Repeat   = GLFW_REPEAT
 }
 
-enum CursorState
+enum Situation
 {
     In,
     Out
 }
 
+struct Modifiers
+{
+    bool  shift;
+    bool  control;
+    bool  alternate;
+    bool  superKey;  // Window's window key or Apple's command (clover leaf) key
+}
+
 struct Keyboard
 {
-    Key       key;
-    Action    action;
-    Modifier  modifier;
+    Key        key;
+    Action     action;
+    Modifiers  modifier;
 }
 
 struct FrameBufferSize
@@ -259,6 +288,11 @@ enum Direction
     Leaving
 }
 
+enum : bool
+{
+    Open = true,
+    Closed = false    
+}
 /+
 queue notes
 queue will be manifested through an infinite array
@@ -268,16 +302,16 @@ queue will be manifested through an infinite array
      L   E
    |_0_|_1_|_2_|_3_|_4_|_5_|_6_|_7_|_8_|_9_|...
    
-   queue.add(a)  
+   queue.add(a)         // key 'a' is pressed
      L   a   E
    |_0_|_1_|_2_|_3_|_4_|_5_|_6_|_7_|_8_|_9_|...  
    
-   queue.add(b)
+   queue.add(b)         // key 'b' is pressed
      L   a   b   E
    |_0_|_1_|_2_|_3_|_4_|_5_|_6_|_7_|_8_|_9_|...   
 
    
-   obj = queue.remove()
+   obj = queue.remove()  // event is processed
          L   b   E
    |_0_|_1_|_2_|_3_|_4_|_5_|_6_|_7_|_8_|_9_|...   
    
@@ -331,45 +365,53 @@ class TryException : Exception
 
 
 
-struct EventBuffer
+shared public struct EventBuffer
 {
-    Event[] queue;    // static array modeling a circular queue
+    //public:
+
+    static Event[] queue;    // static array modeling a circular queue
 
     __gshared uint leave = 0;  // the index in queue of next event to exit queue for processing
     __gshared uint enter = 1;  // the index in queue of next event to enter waiting queue to wait for 
 
     // queue is empty when leave index is right behind (index is one less) the enter index.
 
-    Event outEvent;  // current event being processed (handling the event)
+    static Event outEvent;  // current event being processed (handling the event)
                      // saves off the event taken out of the queue so 
                      // that the event is definitely saved off within the synchronized period
                      // Since event processing can vary so much in tine, we put the event into
                      // eventOut so that the queue can be freed up to process incoming events.
-    Event inEvent;   // current event being sent to the queue  (storing the event)
+    static Event inEvent;   // current event being sent to the queue  (storing the event)
                      // Not so critical as eventOut, since processing is so simple: just put on queue.
                      // implement for symmetry  
 
+    static bool inGate = Open;   // used for manual debugging
+    static bool outGate = Open;  // used for manual debugging
+
+    static uint previousLeave;
+    static uint previousEnter;
 
     this(uint size)
     {
+        writeln("creating queue in EventBuffer constructor");
         queue = new Event[size]; 
     }
 
     // Modulus operator is "%" which is the remainder of dividing 'first' by 'second' first % second
     // Could replace in advance function, but potential for overflow?  Decided to keep as is.
 
-    void advance(ref uint x)
+    private static void advance(ref uint x)
     {
-        if (x == queue.length-1)  // are we wrapping around clockwise?
-            x = 0;
-        else
+        if (x < queue.length-1)  // are we wrapping around ?
             x++;
+        else
+            x = 0;
     }
 
  
-    bool isDirectlyBehind(long first, long second)
+    private static bool isDirectlyBehind(long first, long second)
     {
-        if( (first+1 == second) ||     // Is enter right behind leave?
+        if ( (first+1 == second) ||     // Is enter right behind leave?
             ( (first == queue.length-1) && (second == 0)) ) 
         {
             return true;
@@ -378,31 +420,51 @@ struct EventBuffer
     }  
     
    
-    bool enterOrLeave(Direction move)
+    public /+private+/ static bool enterOrLeaveQueue(Direction move)  // made public for testing
     {
+        writeln("move = ", move);
         synchronized   // lock everything down when an event enters or exists.
         {
-            if(move == Direction.Leaving)
+            writeln("leave = ", leave, " enter = ", enter);   
+  
+            if (move == Direction.Leaving)
             {
-                if(isDirectlyBehind(leave, enter))   
+                if (outGate == Closed)
+                    return false;
+                if (isDirectlyBehind(leave, enter))   
                 {
-                    //writeln("Queue is empty leave = ", leave, " enter = ", enter);
+                    if ((leave != previousLeave) || (enter != previousEnter))  // suppress redundant messages
+                    {
+                        writeln("****** QUEUE IS EMPTY. indices: leave = ", leave, " enter = ", enter);
+                        previousLeave = leave;  
+                        previousEnter = enter;                        
+                    }
+                    else
+                    {
+                        //previousLeave = leave;  
+                        //previousEnter = enter;
+                    }
                     return false;
                 }
 
-                advance(leave);  // There is an event go to it
-                outEvent = queue[leave];
+                advance(leave);  // If advance successful, there is an event waiting on queue
+                EventBuffer.outEvent = EventBuffer.queue[leave];
+                writeln("Event removed from queue position = ", leave);
                 return true;
             }
-            if(move == Direction.Entering)
+            if (move == Direction.Entering)
             { 
-                if(isDirectlyBehind(enter, leave))
+                writeln(".....");
+                if (inGate == Closed)
+                    return false;                
+                if (isDirectlyBehind(enter, leave))
                 {             
-                    //writeln("Queue is full enter = ", enter, " leave = ", leave);
+                    writeln("****** QUEUE IS FULL. indices: leave = ", leave, " enter = ", enter);
                     return false;
                 }
 
-                queue[enter] = inEvent;
+                EventBuffer.queue[enter] = EventBuffer.inEvent;
+                writeln("Event added to queue position = ", enter);
                 advance(enter);    // advance to new open slot
                 return true;
             }
@@ -411,6 +473,8 @@ struct EventBuffer
         assert(0);  // should never get here
     }
 
+
+}
 
 //===================================== ON Events ========================================
 
@@ -433,43 +497,76 @@ Framebuffer sizes are, in contrast to the window coordinates, given in pixels in
 Note, that on some systems window coordinates and pixel coordinates can be the same but this is not necessarily true.
 +/
 
+
 extern(C) void onKeyEvent(GLFWwindow* window, int key, int scancode, int action, int modifier) nothrow
 {
     try  // try is needed because of the nothrow
     {
-        inEvent.category = Category.Keyboard;
-        inEvent.keyboard.key = cast(Key) key;
-        inEvent.keyboard.action = cast(Action) action; 
+        if (action == Action.Released)  // ignore key ups
+            return;
+
+        if (action == Action.Repeat)  // ignore key repeats
+        {
+            writeln("Key Repeat");
+            return;
+        }            
+
+        if (key == Key.Home)  // toggle entry into queue with Home Key
+        {
+            EventBuffer.inGate = !(EventBuffer.inGate);
+            return;                
+        }
+        if (key == Key.End)  // toggle exit out of queue with End Key
+        {
+            EventBuffer.outGate = !(EventBuffer.outGate);
+            return;                
+        }
 
         //writeln("modifier = ", modifier);
-        if (modifier & GLFW_MOD_SHIFT)
-        {
-            //writeln("Shift key pressed");
-            inEvent.keyboard.modifier.shift = true;
-        }
-        if (modifier & GLFW_MOD_CONTROL)
-        {
-            //writeln("Control key pressed");
-            inEvent.keyboard.modifier.control = true;
-        }
-        if (modifier & GLFW_MOD_ALT)
-        {
-            //writeln("Alternate key pressed");
-            inEvent.keyboard.modifier.alternate = true;
-        }
-        if (modifier & GLFW_MOD_SUPER)
-        {
-            //writeln("Super key pressed");
-            inEvent.keyboard.modifier.superKey = true;
-        }
+        //writeln("action = ", action);
+        //writeln("scancode = ", scancode);
+        //writeln("key = ", key);  
 
-        if (enterOrLeave(Direction.Entering))
+        EventBuffer.inEvent.category = Category.Keyboard;
+        EventBuffer.inEvent.keyboard.key = cast(Key) key;
+        EventBuffer.inEvent.keyboard.action = cast(Action) action; 
+
+        if (modifier & Modifier.Shift)
         {
-            writeln("key = ", inEvent.keyboard.key, " entered at = ", enter-1);
+            writeln("Shift key pressed");
+            EventBuffer.inEvent.keyboard.modifier.shift = true;
+        }
+        if (modifier & Modifier.Control)
+        {
+            writeln("Control key pressed");
+            EventBuffer.inEvent.keyboard.modifier.control = true;
+        }
+        if (modifier & Modifier.Alternate)
+        {
+            writeln("Alternate key pressed");
+            EventBuffer.inEvent.keyboard.modifier.alternate = true;
+        }
+        if (modifier & Modifier.SuperKey)
+        {
+            writeln("Super key pressed");
+            EventBuffer.inEvent.keyboard.modifier.superKey = true;
+        }
+        /+ The following screen output proves that glfw can handle multiple key presses simultaneously
+        modifier = 7
+        Shift key pressed
+        Control key pressed
+        Alternate key pressed
+        key = LeftAlt entered at = 177        
+        +/
+        if (EventBuffer.enterOrLeaveQueue(Direction.Entering))
+        {
+            writeln("EventBuffer.enter is now at = ", EventBuffer.enter);
+            //writeln("key = ", EventBuffer.inEvent.keyboard.key, 
+            //        " entered at = ", (EventBuffer.enter == 0) ? EventBuffer.queue.length-1 : EventBuffer.enter-1 );
         }
         else
         {
-            writeln("queue is full");
+            // Queue Full or Queue Empty messages handled by enterOrLeaveQueue()
         }
     }
     catch(Exception e)
@@ -479,24 +576,24 @@ extern(C) void onKeyEvent(GLFWwindow* window, int key, int scancode, int action,
 }
 
 
-
-extern(C) void onCursorEnterLeave(GLFWwindow* window, int entered) nothrow
+extern(C) void onCursorEnterOrLeaveWindow(GLFWwindow* window, int entered) nothrow
 {
     try  // try is needed because of the nothrow
     {
-        inEvent.category = Category.CursorInOrOut;
-        if(entered)
-            inEvent.cursor.state = CursorState.In;    
+        writeln("Cursor has entered or left the window: entered = ", entered);
+        EventBuffer.inEvent.category = Category.CursorInOrOutWindow;
+        if (entered)
+            EventBuffer.inEvent.cursor.state = Situation.In;    
         else
-            inEvent.cursor.state = CursorState.Out;
+            EventBuffer.inEvent.cursor.state = Situation.Out;
 
-        if (enterOrLeave(Direction.Entering))
+        if (EventBuffer.enterOrLeaveQueue(Direction.Entering))
         {
-            //writeln("cursorState = ", inEvent.cursorState, " entered at = ", enter-1);
+            //writeln("cursor state = ", EventBuffer.inEvent.cursor.state, " entered queue at = ", EventBuffer.enter-1);
         }
         else
         {
-            //writeln("queue is full");
+            // Queue Full or Queue Empty messages handled by enterOrLeaveQueue()
         }
     }
     catch(Exception e)
@@ -510,10 +607,10 @@ extern(C) void onMouseButton(GLFWwindow* window, int button, int action, int mod
 {
     try  // try is needed because of the nothrow
     {
-        inEvent.category = Category.MouseButton;
+        EventBuffer.inEvent.category = Category.MouseButton;
  
-        auto success = enterOrLeave(Direction.Entering);
-        if(success)
+        auto success = EventBuffer.enterOrLeaveQueue(Direction.Entering);
+        if (success)
         {
             //writeln("cursorState = ", inEvent.cursorState, " entered at = ", enter-1);
         }
@@ -535,19 +632,21 @@ extern(C) void onMouseButton(GLFWwindow* window, int button, int action, int mod
 //        +----------------------+ 
 //                           (400,400)
 
- extern(C) void onCursorPosition(GLFWwindow* window, double x, double y) nothrow
+extern(C) void onCursorPosition(GLFWwindow* window, double x, double y) nothrow
 {
     try  // try is needed because of the nothrow
     {
-        inEvent.category = Category.CursorPosition;
+        EventBuffer.inEvent.category = Category.CursorPosition;
 
-        inEvent.cursor.position.x = x;
-        inEvent.cursor.position.y = y;
+        EventBuffer.inEvent.cursor.position.x = x;
+        EventBuffer.inEvent.cursor.position.y = y;
 
-        auto success = enterOrLeave(Direction.Entering);
-        if(success)
+        if (EventBuffer.enterOrLeaveQueue(Direction.Entering))  // Try to enter the event into queue
         {
-            //writeln("cursorState = ", queue.inEvent.cursorState, " entered at = ", queue.enter-1);
+            //writeln("cursor position x y = ", x, " ", y, " entered queue at = ", EventBuffer.enter-1);            
+        }
+        {
+            // Queue Full or Queue Empty messages handled by enterOrLeaveQueue()
         }
     }
     catch(Exception e)
@@ -566,7 +665,7 @@ extern(C) void onFrameBufferResize(GLFWwindow* window, int width, int height) no
 {
     try  // try is needed because of the nothrow
     {
-        inEvent.category = Category.FrameBufferSize;
+        EventBuffer.inEvent.category = Category.FrameBufferSize;
         //writeln("Inside onFrameBufferResize ");
         //writeln("frame width = ", width, "  frame height = ", height);
 
@@ -581,49 +680,48 @@ extern(C) void onFrameBufferResize(GLFWwindow* window, int width, int height) no
 
         //writeln("width passed in = ", width, "  height passed in = ", height);
 
-        inEvent.frameBufferSize.width = width;
-        inEvent.frameBufferSize.height = height;
+        EventBuffer.inEvent.frameBufferSize.width = width;
+        EventBuffer.inEvent.frameBufferSize.height = height;
         //writeln("Before Q Add  leave = ", leave, "  enter = ", enter);
-        if (enterOrLeave(Direction.Entering))
+        if (EventBuffer.enterOrLeaveQueue(Direction.Entering))
         {
             //writeln("After Q Add  leave = ", leave, "  enter = ", enter);
         }
         else
         {
-            //writeln("============= QUEUE NOT ADDED TO ===============");
+            // Queue Full or Queue Empty messages handled by enterOrLeaveQueue()
         }
     }
     catch(Exception e)
     {
     }
 }
- 
+
  
 void handleEvent(GLFWwindow* window)
 {
-    Event eve;
-    //writeln("Before Q SUB  leave = ", leave, "  enter = ", enter);
-    if (enterOrLeave(Direction.Leaving))
-    {
-        //writeln("After Q SUB  leave = ", leave, "  enter = ", enter);       
-        eve = outEvent;
+    Event event;
+ 
+    if (EventBuffer.enterOrLeaveQueue(Direction.Leaving))  // remove an event from queue if one is available
+    {                                                      // if successful, the event will be inEvent variable      
+        event = EventBuffer.outEvent;
     
-        if (eve.category == Category.Keyboard)
+        if (event.category == Category.Keyboard)
         {
-            //writeln("eve.key = ", eve.keyboard.key, " left at = ", leave-1);
-            if (eve.keyboard.key == Key.Escape)
+            //writeln("event.key = ", event.keyboard.key, " left at = ", leave-1);
+            if (event.keyboard.key == Key.Escape)
                 glfwSetWindowShouldClose(window, GLFW_TRUE);
         }
-        if (eve.category == Category.CursorInOrOut)
+        if (event.category == Category.CursorInOrOutWindow)
         {
-            //writeln("eve.cursorState = ", eve.cursorState);
+            //writeln("event.cursorState = ", event.cursorState);
         }
-        if (eve.category == Category.FrameBufferSize)
+        if (event.category == Category.FrameBufferSize)
         {
             //writeln("frameBufferSize Event = ");
-            //glfwSetWindowSize(window, eve.frameBufferSize.width, eve.frameBufferSize.height);   
-            //writeln("eve.frameBufferSize.width ", eve.frameBufferSize.width);
-            //writeln("eve.frameBufferSize.height ", eve.frameBufferSize.height);
+            //glfwSetWindowSize(window, event.frameBufferSize.width, event.frameBufferSize.height);   
+            //writeln("event.frameBufferSize.width ", event.frameBufferSize.width);
+            //writeln("event.frameBufferSize.height ", event.frameBufferSize.height);
             //writeln("Before glViewport");
 
             /+ 
@@ -631,12 +729,12 @@ void handleEvent(GLFWwindow* window)
             window size is in screen coordinates, not pixels. Use the framebuffer size, which 
             is in pixels, for pixel-based calls.
             +/
-            glViewport(0, 0, eve.frameBufferSize.width, eve.frameBufferSize.height);
+            glViewport(0, 0, event.frameBufferSize.width, event.frameBufferSize.height);
 
             static if (__traits(compiles, effects) && effects)
             {
-                postProc.postProcWidth =  eve.frameBufferSize.width;
-                postProc.postProcHeight =  eve.frameBufferSize.height; 
+                postProc.postProcWidth =  event.frameBufferSize.width;
+                postProc.postProcHeight =  event.frameBufferSize.height; 
                 postProc = new PostProcessor(resource_manager.ResMgr.getShader("effects"),
                                              postProc.postProcWidth, postProc.postProcHeight);  
             }
@@ -647,17 +745,19 @@ void handleEvent(GLFWwindow* window)
     }
     else
     {
-        //writeln("Event Queue is Empty");
+        // Queue Full or Queue Empty messages handled by enterOrLeaveQueue()
     }
 
 }
 
 
+
+/+
 bool getNextEvent(GLFWwindow* window, out Event event)
 {
-    if (enterOrLeave(Direction.Leaving))
+    if (EventBuffer.enterOrLeaveQueue(Direction.Leaving))
     {     
-        event = outEvent;
+        event = EventBuffer.outEvent;
         return true; 
     }
     else
@@ -666,7 +766,7 @@ bool getNextEvent(GLFWwindow* window, out Event event)
     }
 
 }
++/
 
 
-}
 
