@@ -135,3 +135,16 @@ int[5]
 int[7]
 
 Note: a call of { int[3] threeSize; diss(threeSize); } caused an error because it matches both func 1 and func 2.
+
+--------------------------------------------------------------------------------------------
+
+
+Also, if you need to append elements to an array inside of a function, then you need to mark function arguments as `ref`:
+
+	void bar(ref int[] arr)
+
+Code wouldn't compile if you try to pass static array as `ref` argument.
+
+	Error: function f436.bar (ref int[] arr) is not callable using argument types (int[3])
+
+static arrays cannot be passed as slice references because although there is an automatic slicing of static arrays, such slices are rvalues and rvalues cannot be bound to 'ref' parameters:
