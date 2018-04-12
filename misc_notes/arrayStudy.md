@@ -190,9 +190,19 @@ static arrays cannot be passed as slice references because although there is an 
 
 The copy constructor is a constructor which creates an object by initializing it with an object of the same class, which has been created previously. The copy constructor is used to −
 
-Initialize one object from another of the same type.
-Copy an object to pass it as an argument to a function.
-Copy an object to return it from a function.
+1 - Initialize one object from another of the same type.
+2 - Copy an object to pass it as an argument to a function.
+3 - Copy an object to return it from a function.
+
+
+When is copy constructor called?
+In C++, a Copy Constructor may be called in following cases: 
+1. When an object of the class is returned by value.
+2. When an object of the class is passed (to a function) by value as an argument.
+3. When an object is constructed based on another object of the same class.
+4. When compiler generates a temporary object.
+
+
 If a copy constructor is not defined in a class, the compiler itself defines one. If the class has pointer variables and has some dynamic memory allocations, then it is a must to have a copy constructor. The most common form of copy constructor is shown here −
 
 classname (const classname &obj) 
