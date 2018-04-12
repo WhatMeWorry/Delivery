@@ -1,4 +1,39 @@
 
+import std.stdio;
+
+void main()
+{
+    double[5] staticArray = 3.01;
+    staticArray.writeln;
+    
+    int[] dynamicArray = [ 1, 2 ,3, 5];
+    dynamicArray.writeln;   
+}
+
+Prints:
+[3.01, 3.01, 3.01, 3.01, 3.01]
+[1, 2, 3, 5]
+
+--------------------------------------------------------------------------------------------
+mport std.stdio;
+
+struct Foo(size_t n)
+{
+    double[n] bar = 3;
+}
+void main()
+{
+    import std.stdio;
+    Foo!5 foo;
+    writeln(foo.bar);  // prints "[0, 0, 0, 0, 0]"
+}
+
+Prints:
+[3, 3, 3, 3, 3]
+
+
+--------------------------------------------------------------------------------------------
+
 Q: Suppose we have a function like this:
 
 void diss(int[] array) ...
