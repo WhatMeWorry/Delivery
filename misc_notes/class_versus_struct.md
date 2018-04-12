@@ -51,3 +51,36 @@ the object itself is never actually duplicated. |
 
 
 __*__ In theory. Sometimes it is necessary for structures to be passed as reference for performance reasons. But this should be done as a last resort. 
+
+
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------
+
+Andrei 
+The behavior of this(this). His work:
+
+https://github.com/dlang/dmd/pull/8055
+https://github.com/dlang/dlang.org/pull/2281
+https://github.com/dlang/dlang.org/pull/2299
+
+... reveals a puzzling array of behaviors. Sometimes the typechecking is wrong, too.
+
+I think it's very important for us to have a simple, correct, and canonical way of defining structs in the D language that work with the language features: qualifiers, pure, safe, and nogc.
+
+Once we have that, we can encapsulate desirable abstractions (such as @nogc safe collections that work in pure code), regardless of how difficult their implementations might be. It seems that currently this(this) does not allow us to do that.
+
+I think the way to move forward is to deprecate this(this) entirely 
+...
+We're not removing it as much as evolving it: we define an alternate copying mechanism, and once that is in tip-top shape, we deprecate this(this).
+
+
+
+--------------------------------------------------------------------------------------------------------
+
+
+
