@@ -1,4 +1,4 @@
-
+```
 import std.stdio;
 
 void main()
@@ -9,13 +9,15 @@ void main()
     int[] dynamicArray = [ 1, 2 ,3, 5];
     dynamicArray.writeln;   
 }
-
+```
 Prints:
 [3.01, 3.01, 3.01, 3.01, 3.01]
 [1, 2, 3, 5]
 
 --------------------------------------------------------------------------------------------
-mport std.stdio;
+
+```
+import std.stdio;
 
 struct Foo(size_t n)
 {
@@ -27,7 +29,7 @@ void main()
     Foo!5 foo;
     writeln(foo.bar);  // prints "[0, 0, 0, 0, 0]"
 }
-
+```
 Prints:
 [3, 3, 3, 3, 3]
 
@@ -48,7 +50,7 @@ Static arrays are allocated on the stack
 Static arrays point to memory on the stack, inside an aggregate type on the heap, or inside the static data area. In the stack case, you can use this strategy:
 
 
-
+```
 import std.algorithm, std.conv, std.stdio, core.thread;
     
 bool isLocatedOnStack(T)(T[] arr) 
@@ -82,7 +84,7 @@ void main()
     writeln(isLocatedOnStack(dynamicArray)); 
     
 }
-
+```
 --------------------------------------------------------------------------------------------
 
 Note that static arrays are value types. So, if the parameter is int[3], then the argument will be copied. However, you can still take it by reference (with the ref keyword):
