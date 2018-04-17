@@ -447,4 +447,40 @@ The f.tupleof gives the list of struct members in a form that is suitable for au
 
 --------------------------------------------------------------------------------------------
 
+```
+import std.stdio;
+
+void main()
+{
+    int[] dyn = new int[9];
+    auto dyn1 = new int[9];
+    int[] dyn2 = new int[](9);  // newer syntax
+    auto dyn3 = new int[](9);  
+    
+    int[7] sta;
+    // auto sta1 = int[7];  // doesn't compile
+                            // One of my D books mentions this syntax.    
+    int[]*[1000] large;
+    
+    foreach(i, elem; large)
+    {
+        writeln("i = ", i);
+        int[] temp = new int[](999);
+        large[i] = &temp;      
+    }
+    // temp is a dynamic array (Reference Variable). So by it's very nature it uses indirection so I try
+    // large[i] = temp;    
+    // onlineapp.d(20): Error: cannot implicitly convert expression temp of type int[] to int[]*   
+    
+    // Ok, then I remember that dynamic arrays have that meta data stuff with a size and a pointer.  So I jump at
+    // large[i] = temp.ptr;
+    // onlineapp.d(20): Error: cannot implicitly convert expression cast(int*)temp of type int* to int[]*  
+    
+    // Finally I use large[i] = &temp;  which works, but it seems rather C/C++ like so I have a bad taste in my mouth.
+    // And I feel like I really don't know what the hell I'm doing.
+}
+```
+
+--------------------------------------------------------------------------------------------
+
 
