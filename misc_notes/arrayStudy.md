@@ -483,4 +483,67 @@ void main()
 
 --------------------------------------------------------------------------------------------
 
+```
+import std.stdio;
+
+void main()
+{
+    // auto sta1 = int[7];  // doesn't compile
+                            // One of my D books mentions this syntax.    
+    int[]*[2] large;
+    int[] temp;
+    static int total = 0;
+    
+    foreach(i, elem; large)
+    {
+        writeln("i = ", i);
+        //int[] temp = new int[](7);
+        temp = new int[](4);
+        for(int j = 0; j < temp.length; j++)
+        {
+            writeln("j = ", j);
+            writeln("total = ", total);
+            temp[j] = total;
+            total++;
+        }
+        large[i] = &temp;      
+    }
+    
+    foreach(i, elemi; large)
+    {
+        //for(int j = 0; j < large[i].length; j++)     // int i = 0; i < 10; i++
+        //{
+            writeln(large[i].length);
+            //writeln("[", i, "][", j, "]", *large[i]      );
+            writeln("[", i, "][]", *large[i]      );
+        //}
+    }          
+ 
+}
+
+```
+
+Prints incorrectly:
+i = 0
+j = 0
+total = 0
+j = 1
+total = 1
+j = 2
+total = 2
+j = 3
+total = 3
+i = 1
+j = 0
+total = 4
+j = 1
+total = 5
+j = 2
+total = 6
+j = 3
+total = 7
+4
+[0][][4, 5, 6, 7]
+4
+[1][][4, 5, 6, 7]
 
