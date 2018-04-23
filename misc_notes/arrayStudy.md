@@ -484,66 +484,61 @@ void main()
 --------------------------------------------------------------------------------------------
 
 ```
+Surely a stupid mistake on my part, but why is the first array repeated?
+
+
 import std.stdio;
 
 void main()
 {
-    // auto sta1 = int[7];  // doesn't compile
-                            // One of my D books mentions this syntax.    
-    int[]*[2] large;
-    int[] temp;
-    static int total = 0;
-    
-    foreach(i, elem; large)
-    {
-        writeln("i = ", i);
-        //int[] temp = new int[](7);
-        temp = new int[](4);
-        for(int j = 0; j < temp.length; j++)
-        {
-            writeln("j = ", j);
-            writeln("total = ", total);
-            temp[j] = total;
-            total++;
-        }
-        large[i] = &temp;      
-    }
-    
-    foreach(i, elemi; large)
-    {
-        //for(int j = 0; j < large[i].length; j++)     // int i = 0; i < 10; i++
-        //{
-            writeln(large[i].length);
-            //writeln("[", i, "][", j, "]", *large[i]      );
-            writeln("[", i, "][]", *large[i]      );
-        //}
-    }          
- 
-}
+    int[]*[2] a;  // a static arrray holding pointers to dynamic arrays
 
+    static int unique = 0;
+
+    foreach(i, elem; a)
+    {
+        int[] temp = new int[](5);
+        foreach(ref element; temp)
+        {
+            element = unique;
+            unique++;
+        }
+        writeln("temp = ", temp);
+        a[i] = &temp;
+    }
+
+    foreach(i, elem; a)
+    {
+            writeln(a[i].length);
+            writeln("[", i, "][]", *a[i]);
+    }
+}
 ```
 
-Prints incorrectly:
-i = 0
-j = 0
-total = 0
-j = 1
-total = 1
-j = 2
-total = 2
-j = 3
-total = 3
-i = 1
-j = 0
-total = 4
-j = 1
-total = 5
-j = 2
-total = 6
-j = 3
-total = 7
-4
-[0][][4, 5, 6, 7]
-4
-[1][][4, 5, 6, 7]
+temp = [0, 1, 2, 3, 4]
+temp = [5, 6, 7, 8, 9]
+5
+[0][][5, 6, 7, 8, 9]
+5
+[1][][5, 6, 7, 8, 9]
+
+why is the first array repeated?
+
+You're taking the address of a local variable and persisting it beyond the variable's scope. This is not safe in general; compilers regularly reuse spaces on the stack. DMD specifically tends to do this reliably with foreach loop bodies.
+
+
+In addition to what Neia said, you shouldn't use pointers to dynamic arrays. Such things are really hard to allocate on the heap, since new int[] just makes an array, not a pointer to an array. You're way more likely to accidentally store pointers to stack variables (as demonstrated).
+
+The only way 2 ways I know of to do it are to a) allocate a multi-dimensional array, and take it's pointer (e.g. (new int[][1]).ptr) or b) create a dummy struct with an array in it, and new that:
+
+Struct Dummy { int[] array; }
+
+auto p = new Dummy;
+auto ptr = &p.array;
+
+Just use int[][2] a, you will be better off.
+
+--------------------------------------------------------------------------------------------
+
+
 
