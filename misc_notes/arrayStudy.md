@@ -540,5 +540,39 @@ Just use int[][2] a, you will be better off.
 
 --------------------------------------------------------------------------------------------
 
+```
+import std.stdio;
+
+void main()
+{
+    int[][3] a;  // a static arrray holding pointers to dynamic arrays
+
+    static int unique = 0;
+
+    foreach(i, elem; a)
+    {
+        int[] temp = new int[](5);
+        foreach(ref element; temp)
+        {
+            element = unique;
+            unique++;
+        }
+        a[i] = temp;
+    }
+
+    foreach(i, elem; a)
+    {
+            writeln("[", i, "][]", a[i]);
+    }
+}
+```
+Prints
+[0][][0, 1, 2, 3, 4]
+[1][][5, 6, 7, 8, 9]
+[2][][10, 11, 12, 13, 14]
+
+--------------------------------------------------------------------------------------------
+
+
 
 
