@@ -573,6 +573,52 @@ Prints
 
 --------------------------------------------------------------------------------------------
 
+```
+import std.stdio;
+import std.random;
 
+size_t dynamicMax = 100_000;    // 1_000_000 causes a memory allocation error
+const size_t staticMax = 10_000;  // 100_000 does no compile
 
+void main()
+{
+    int[][staticMax] a;  // a static arrray holding pointers to dynamic arrays
+
+    static int unique = 0;
+
+    foreach(i, elem; a)
+    {
+        int[] temp = new int[](dynamicMax);
+        foreach(ref element; temp)
+        {
+            element = unique;
+            unique++;
+        }
+        a[i] = temp;
+    }
+
+    auto rnd = Random(42);  // seed a random generator with a constant
+    
+    // Generate a uniformly-distributed integer in the range [0, dynamicMax-1]
+    // If no random generator is passed, the global `rndGen` would be used
+    
+    foreach(i, elem; a)
+    {
+	        auto j = uniform(0, dynamicMax, rnd);	    
+            writeln("[", i, "][", j, "] = ", a[i][j] );
+    }
+}
+```
+
+Prints
+[9993][28901] = 999328901
+[9994][76304] = 999476304
+[9995][88941] = 999588941
+[9996][75768] = 999675768
+[9997][32152] = 999732152
+[9998][93308] = 999893308
+[9999][82790] = 999982790
+myapp exited with code 0
+
+--------------------------------------------------------------------------------------------
 
