@@ -9,10 +9,12 @@ void main()
     int[] dynamicArray = [ 1, 2 ,3, 5];
     dynamicArray.writeln;   
 }
-```
+
 Prints:
 [3.01, 3.01, 3.01, 3.01, 3.01]
 [1, 2, 3, 5]
+```
+
 
 --------------------------------------------------------------------------------------------
 
@@ -29,9 +31,11 @@ void main()
     Foo!5 foo;
     writeln(foo.bar);  // prints "[0, 0, 0, 0, 0]"
 }
-```
+
 Prints:
 [3, 3, 3, 3, 3]
+```
+
 
 
 --------------------------------------------------------------------------------------------
@@ -112,13 +116,14 @@ void main()
         
     int[] dynamicArray = [55, 66, 77];
    
-     writeln(GC.addrOf(dynamicArray.ptr));  
+    writeln(GC.addrOf(dynamicArray.ptr));  
 }
-```
-Prints:
 
+Prints:
 null
 7FC1A171E000
+```
+
 
 
 Note: The append operator uses this kind of logic to determine if it is safe to append.
@@ -468,16 +473,16 @@ void main()
         int[] temp = new int[](999);
         large[i] = &temp;      
     }
-    // temp is a dynamic array (Reference Variable). So by it's very nature it uses indirection so I try
+    // temp is a dynamic array (Reference Variable). By it's very nature uses indirection so I try
     // large[i] = temp;    
     // onlineapp.d(20): Error: cannot implicitly convert expression temp of type int[] to int[]*   
     
-    // Ok, then I remember that dynamic arrays have that meta data stuff with a size and a pointer.  So I jump at
+    // Ok, I know that dynamic arrays have that meta data stuff with a size and a pointer. So I try
     // large[i] = temp.ptr;
-    // onlineapp.d(20): Error: cannot implicitly convert expression cast(int*)temp of type int* to int[]*  
+    // onlineapp.d(20): Error: implicitly convert expression cast(int*)temp of type int* to int[]*  
     
-    // Finally I use large[i] = &temp;  which works, but it seems rather C/C++ like so I have a bad taste in my mouth.
-    // And I feel like I really don't know what the hell I'm doing.
+    // Finally I use large[i] = &temp;  which works, but it seems rather C/C++ like so I have a bad 
+    // taste in my mouth.  And I feel like I really don't know what the hell I'm doing.
 }
 ```
 
@@ -513,7 +518,6 @@ void main()
             writeln("[", i, "][]", *a[i]);
     }
 }
-```
 
 temp = [0, 1, 2, 3, 4]
 temp = [5, 6, 7, 8, 9]
@@ -521,6 +525,8 @@ temp = [5, 6, 7, 8, 9]
 [0][][5, 6, 7, 8, 9]
 5
 [1][][5, 6, 7, 8, 9]
+
+```
 
 why is the first array repeated?
 
