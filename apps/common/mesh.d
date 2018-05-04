@@ -117,7 +117,7 @@ public:  // kludge so to make setupMesh() accessable from outside class
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, this.indices.length * GLuint.sizeof, this.indices.ptr, GL_STATIC_DRAW);
 
         mixin( defineVertexLayout!(int)([3,3,2,3,3]) );
-        pragma( msg, defineVertexLayout!(int)([3,3,2,3,3]) );       
+        //pragma( msg, defineVertexLayout!(int)([3,3,2,3,3]) );       
 
         // Set the vertex attribute pointers
         //                                              stride         starting offset

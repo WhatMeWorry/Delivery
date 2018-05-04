@@ -7,7 +7,7 @@ import gl3n.linalg; // vec3
 import std.stdio;   // writeln
 import std.math;    // sin cos
 
-import derelict.util.loader;
+import derelict.util.loader; 
 import derelict.util.sharedlib;
 import derelict.freetype.ft;
 import derelict.freeimage.freeimage;
@@ -42,10 +42,12 @@ enum Movement
     RIGHT
 };
 
-void ProcessKeyboard2018_02_15(Movement direction, float deltaTime)
+pragma(msg, "LINE 45");
+
+void ProcessKeyboard2018_02_15(Movement direction, float deltaTime) nothrow
 {
     float velocity = movementSpeed * deltaTime;
-    writeln("velocity = ", velocity);
+    //writeln("velocity = ", velocity);
     if (direction == Movement.FORWARD)
         Position += Front * velocity;
     if (direction == Movement.BACKWARD)
@@ -56,8 +58,8 @@ void ProcessKeyboard2018_02_15(Movement direction, float deltaTime)
         Position += Right * velocity;
 }
 
-
-void onKeyEvent(GLFWwindow *window)
+extern(C) static void onInternalKeyEvent(GLFWwindow* window, int key, int scancode, int action, int modifier) nothrow
+//void onKeyEvent(GLFWwindow *window)
 {
     //writeAndPausewriteAndPause("Inside processInput2018_02_15");
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -65,12 +67,12 @@ void onKeyEvent(GLFWwindow *window)
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
-        writeln("key W was priced");
+        //writeln("key W was priced");
         ProcessKeyboard2018_02_15(Movement.FORWARD, deltaTime);   
     } 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
     {
-        writeln("key S was priced");
+        //writeln("key S was priced");
         ProcessKeyboard2018_02_15(Movement.BACKWARD, deltaTime);
     } 
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
@@ -80,22 +82,24 @@ void onKeyEvent(GLFWwindow *window)
 }
 
 
-
+pragma(msg, "LINE 85");
 
 void main(string[] argv)
 {
+    pragma(msg, "After main");
     // Camera
     camera = new Camera(vec3(0.0, 0.0, 3.0));
-
+   pragma(msg, "LINE 91");
     load_libraries();
-	
-    auto winMain = glfwCreateWindow(800, 600, "02_01_lighting_colors", null, null);
-
+   pragma(msg, "LINE 93");	
+    auto winMain = glfwCreateWindow(800, 600, "04_01_depth_testing", null, null);
+   pragma(msg, "LINE 95");
     glfwMakeContextCurrent(winMain); 
  
     // you must set the callbacks after creating the window
+    pragma(msg, "LINE 99");
  
-                glfwSetKeyCallback(winMain, &onKeyEvent);
+                glfwSetKeyCallback(winMain, &onInternalKeyEvent);
           glfwSetCursorPosCallback(winMain, &onCursorPosition);
     //     glfwSetWindowSizeCallback(winMain, &onWindowResize);
     glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
@@ -125,6 +129,8 @@ void main(string[] argv)
     GLuint programID = createProgramFromShaders(shaders);
 
     writeln("programID = ", programID);
+
+    pragma(msg, "compiling...");
 
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat[] cubeVertices;
@@ -192,8 +198,8 @@ void main(string[] argv)
     while(!glfwWindowShouldClose(winMain))
     {
         // per-frame time logic
-        writeln("currentFrame = ", currentFrame);
-        writeAndPause("  ");
+        //writeln("currentFrame = ", currentFrame);
+        //writeAndPause("  ");
         currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;

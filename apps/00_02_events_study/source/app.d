@@ -6,7 +6,6 @@ import core.thread;
 import derelict_libraries;
 // or
 import derelict.glfw3.glfw3;
-
 import event_buffer;
 
 
@@ -18,7 +17,7 @@ void createEvents(shared EventBuffer eventBuffer)
     // as possible while the eventHandler will be called
     // every pass through the main loop of the main()
 
-    for (int i = 0; i < 10; i++)
+    for (int i; i < 10; i++)
     {
         eventBuffer.inEvent.category = Category.Keyboard;
         eventBuffer.inEvent.keyboard.key = Key.a;
@@ -63,6 +62,8 @@ void main()
 
     
     spawn(&createEvents, eventBuffer);
+
+    writeAndPause("After spawn");
 
     while (!glfwWindowShouldClose(window))    // Loop until the user closes the window
     {
