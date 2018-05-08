@@ -22,12 +22,16 @@ import derelict.freeimage.freeimage;
 import derelict.opengl3.gl3;
 import derelict.glfw3.glfw3;
      
+bool squares = false;
+bool hexes = true;
 
 void main(string[] argv)
 {
     load_libraries();
 
-    auto winMain = glfwCreateWindow(800, 600, "01_03_hexagon", null, null);
+    // window must be square
+
+    auto winMain = glfwCreateWindow(800, 800, "01_03_hexagon", null, null);
 
     glfwMakeContextCurrent(winMain); 
 
@@ -63,13 +67,16 @@ void main(string[] argv)
          //0.0,  0.5, 0.0  // top   		
     ];
 
-    GLfloat deltaNDC = 2.0;
+    GLfloat deltaNDC = 2.0;  // Nomalized Device Coordinates  -1.0 to 1.0 is all three axis
 
-    GLuint rows = 5;
-    GLuint cols = 5;
+    //GLuint rows = 6;
+    //GLuint cols = 4;
 
-    GLfloat deltaRise = deltaNDC / rows;
-    GLfloat deltaRun  = deltaNDC / cols;
+    //GLfloat deltaRise = deltaNDC / rows;
+    //GLfloat deltaRun  = deltaNDC / cols;
+
+    GLfloat deltaRise = .50;
+    GLfloat deltaRun  = .50;  
 
     writeln("deltaRise = ", deltaRise);
     writeln("deltaRun = ", deltaRun);
@@ -82,6 +89,8 @@ void main(string[] argv)
     GLfloat startX = -1.0;
     GLfloat startY = -1.0;
     
+    if (squares)
+    { 
     while(x < 1.0)
     {
         while(y < 1.0)
@@ -91,10 +100,43 @@ void main(string[] argv)
             board ~= [x + deltaRun, y, 0.0];  // lower right corner
             board ~= [x + deltaRun, y + deltaRise, 0.0];  // upper right corner
             board ~= [x, y + deltaRise, 0.0];  // upper left corner
+
             y += deltaRise;            
         }
         y = startY;
         x += deltaRun;
+    }
+    }
+
+    if (hexes)
+    { 
+    GLfloat halfRun = deltaRun * 0.5;
+    GLfloat quarRun = deltaRun * 0.25;
+    deltaRise *= 0.866;  // hex is only .866 as tall as a unit 1.0 equilateral hex is wide
+    GLfloat halfRise = deltaRise / 2.0;
+
+    int evenOdd = 1; 
+
+    while(x < 1.0)
+    {
+        //if ( !(evenOdd % 2) )
+        //    y += halfRise;     // x is even
+
+        while(y < 1.0)
+        {
+            // initialize each hexagon 
+            board ~= [x + quarRun, y, 0.0];
+            board ~= [x + quarRun + halfRun, y, 0.0];
+            board ~= [x + deltaRun, y + halfRise, 0.0];
+            board ~= [x + quarRun + halfRun, y + deltaRise, 0.0]; 
+            board ~= [x + quarRun, y + deltaRise, 0.0];
+            board ~= [x, y + halfRise, 0.0];                       
+
+            y += deltaRise;            
+        }
+        y = startY;
+        x += deltaRun + halfRun;
+    }  
     }
 
     writeln("board = ", board);
@@ -147,13 +189,27 @@ void main(string[] argv)
 
         glBindVertexArray(VAO);  // seeing as we only have a single VAO there's no need to bind it every time, 
 		                         // but we'll do so to keep things a bit more organized
+        if (squares)
+        { 
         int i = 0;
         while (i < vertices.length )
         {
             glDrawArrays(GL_LINE_LOOP, i, 4);
             i += 4;
         }
-     
+        }
+
+        if (hexes)
+        { 
+        int i = 0;
+        while (i < vertices.length )
+        {
+            glDrawArrays(GL_LINE_LOOP, i, 6);
+            i += 6;
+        }
+        }
+
+
         // glBindVertexArray(0); // no need to unbind it every time 
  
         glfwSwapBuffers(winMain);
