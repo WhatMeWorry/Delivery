@@ -25,6 +25,32 @@ import derelict.glfw3.glfw3;
 bool squares = false;
 bool hexes = true;
 
+GLfloat[] board;
+
+// start at the bottom left corner of the NDC
+GLfloat x = -1.0;
+GLfloat y = -1.0;
+GLfloat startX = -1.0;   // NDC Normalized Device Coordinates start at -1.0 and ends at 1.0 for all axes
+GLfloat startY = -1.0;
+ 
+immutable GLfloat deltaRun  = .50;
+immutable GLfloat deltaRise = deltaRun * 0.866;  // hex is only .866 as tall as a unit 1.0 equilateral hex is wide
+
+GLfloat halfRun  = deltaRun  * 0.5;
+GLfloat quarRun  = deltaRun  * 0.25;
+GLfloat halfRise = deltaRise / 2.0;
+
+void drawHexagon()
+{
+    // initialize each hexagon 
+    board ~= [x + quarRun, y, 0.0];
+    board ~= [x + quarRun + halfRun, y, 0.0];
+    board ~= [x + deltaRun, y + halfRise, 0.0];
+    board ~= [x + quarRun + halfRun, y + deltaRise, 0.0]; 
+    board ~= [x + quarRun, y + deltaRise, 0.0];
+    board ~= [x, y + halfRise, 0.0];                       
+}
+
 void main(string[] argv)
 {
     load_libraries();
@@ -57,37 +83,9 @@ void main(string[] argv)
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat[] vertices = 
     [
-        //  Positions         Colors      Texture Coords
-        -0.5, -0.5, 0.0, // left  
-         0.5, -0.5, 0.0, // right 
-         1.0,  0.0, 0.0,
-         0.5,  0.5, 0.0,
-        -0.5,  0.5, 0.0,
-        -1.0,  0.0, 0.0 //,
-         //0.0,  0.5, 0.0  // top   		
+        //  Positions         Colors      Texture Coords 		
     ];
 
-    GLfloat deltaNDC = 2.0;  // Nomalized Device Coordinates  -1.0 to 1.0 is all three axis
-
-    //GLuint rows = 6;
-    //GLuint cols = 4;
-
-    //GLfloat deltaRise = deltaNDC / rows;
-    //GLfloat deltaRun  = deltaNDC / cols;
-
-    GLfloat deltaRise = .50;
-    GLfloat deltaRun  = .50;  
-
-    writeln("deltaRise = ", deltaRise);
-    writeln("deltaRun = ", deltaRun);
-
-    GLfloat[] board;
-
-    // start at the bottom left corner of the NDC
-    GLfloat x = -1.0;
-    GLfloat y = -1.0;
-    GLfloat startX = -1.0;
-    GLfloat startY = -1.0;
     
     if (squares)
     { 
@@ -95,7 +93,7 @@ void main(string[] argv)
     {
         while(y < 1.0)
         {
-            // initialize each square. 
+            // initialize each square 
             board ~= [x, y, 0.0];             // lower left corner
             board ~= [x + deltaRun, y, 0.0];  // lower right corner
             board ~= [x + deltaRun, y + deltaRise, 0.0];  // upper right corner
@@ -108,34 +106,29 @@ void main(string[] argv)
     }
     }
 
+
     if (hexes)
     { 
-    GLfloat halfRun = deltaRun * 0.5;
-    GLfloat quarRun = deltaRun * 0.25;
-    deltaRise *= 0.866;  // hex is only .866 as tall as a unit 1.0 equilateral hex is wide
-    GLfloat halfRise = deltaRise / 2.0;
 
-    int evenOdd = 1; 
 
-    while(x < 1.0)
+    bool stagger = false; 
+
+    while(y < 1.0)
     {
-        //if ( !(evenOdd % 2) )
-        //    y += halfRise;     // x is even
-
-        while(y < 1.0)
+        while(x < 1.0)
         {
-            // initialize each hexagon 
-            board ~= [x + quarRun, y, 0.0];
-            board ~= [x + quarRun + halfRun, y, 0.0];
-            board ~= [x + deltaRun, y + halfRise, 0.0];
-            board ~= [x + quarRun + halfRun, y + deltaRise, 0.0]; 
-            board ~= [x + quarRun, y + deltaRise, 0.0];
-            board ~= [x, y + halfRise, 0.0];                       
+            drawHexagon();
+            stagger = !stagger;
 
-            y += deltaRise;            
+            if (stagger)
+                y += halfRise;
+            else 
+                y -= halfRise;   
+
+            x += quarRun + halfRun;  
         }
-        y = startY;
-        x += deltaRun + halfRun;
+        x = startX;       
+        y += deltaRise;
     }  
     }
 
@@ -220,3 +213,5 @@ void main(string[] argv)
     glfwTerminate();   // Clear any resources allocated by GLFW.
     return;
 }
+
+
