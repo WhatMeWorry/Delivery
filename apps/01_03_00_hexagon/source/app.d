@@ -1,20 +1,13 @@
 
-module app;  // 01_03_hexagon
-
-//import common;
-import shaders;
+module app;  // 01_03_00_hexagon
+import shaders; 
 import texturefuncs;
 import mytoolbox;
 import derelict_libraries;
 import event_handler;
-
 import common_game;
-
 import std.stdio;  // writeln
 import std.conv;   // toChars
-
-
-
 import derelict.util.loader;
 import derelict.util.sharedlib;
 import derelict.freetype.ft;
@@ -57,7 +50,7 @@ void main(string[] argv)
 
     // window must be square
 
-    auto winMain = glfwCreateWindow(800, 800, "01_03_hexagon", null, null);
+    auto winMain = glfwCreateWindow(800, 800, "01_03_00_hexagon", null, null);
 
     glfwMakeContextCurrent(winMain); 
 
