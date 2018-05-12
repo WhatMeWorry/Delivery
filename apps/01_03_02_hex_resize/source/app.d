@@ -1,5 +1,5 @@
 
-module app;  // 01_03_01_hex_study
+module app;  // 01_03_02_hex_resize
 import shaders; 
 import texturefuncs;
 import mytoolbox;
@@ -27,9 +27,13 @@ struct Delta
 {
     GLfloat rise;
     GLfloat run;
-    //GLfloat ratio;  // rise/run 
 }
 
+Delta delta;
+
+GLfloat halfRun;
+GLfloat quarRun;
+GLfloat halfRise;
 
 void drawHexagon(Delta delta, GLfloat halfRise, GLfloat quarRun, GLfloat halfRun)
 {
@@ -42,24 +46,48 @@ void drawHexagon(Delta delta, GLfloat halfRise, GLfloat quarRun, GLfloat halfRun
     board ~= [x, y + halfRise, 0.0];                       
 }
 
+void drawHexBoard()
+{
+    bool stagger = false; 
+
+    while(y < 1.0)
+    {
+        while(x < 1.0)
+        {
+            drawHexagon(delta, halfRise, quarRun, halfRun);
+            stagger = !stagger;
+
+            if (stagger)
+                y += halfRise;
+            else 
+                y -= halfRise;   
+
+            x += quarRun + halfRun;  
+        }
+        x = startX;       
+        y += delta.rise;
+    }  
+}
+
+// Window dimensions
+int width = 1200;  int height = 800;
 
 void main(string[] argv)
 {
-    Delta delta;
+ 
 
     delta.run  = .50;
     delta.rise = delta.run * 0.866;  // hex is only .866 as tall as a unit 1.0 equilateral hex is wide
-    //delta.ratio = delta.rise/delta.run;
 
-    GLfloat halfRun  = delta.run  * 0.5;
-    GLfloat quarRun  = delta.run  * 0.25;
-   // GLfloat halfRise = delta.rise / 2.0;
+    halfRun  = delta.run  * 0.5;
+    quarRun  = delta.run  * 0.25;
+    halfRise = delta.rise / 2.0;
 
     load_libraries();
 
     // window must be square
 
-    auto winMain = glfwCreateWindow(800, 800, "01_03_01_hex_study", null, null);
+    auto winMain = glfwCreateWindow(width, height, "01_03_02_hex_resize", null, null);
 
     glfwMakeContextCurrent(winMain); 
 
@@ -88,7 +116,7 @@ void main(string[] argv)
         //  Positions         Colors      Texture Coords 		
     ];
 
-
+/+
     bool stagger = false; 
 
     while(y < 1.0)
@@ -108,7 +136,9 @@ void main(string[] argv)
         x = startX;       
         y += delta.rise;
     }  
++/
 
+    drawHexBoard();
 
     writeln("board = ", board);
     writeln("board.length = ", board.length);
@@ -151,8 +181,18 @@ void main(string[] argv)
     {
         glfwPollEvents();  // Check if any events have been activiated (key pressed, mouse
                            // moved etc.) and call corresponding response functions  
-        handleEvent(winMain);   
-        // Render
+        handleEvent(winMain); 
+
+        int newWidth, newHeight;
+        glfwGetWindowSize(winMain, &newWidth, &newHeight);  
+
+        if ((width != newWidth) || (height != newHeight))  
+        {
+            writeln("Window changed size"); 
+            drawHexBoard(); 
+            width = newWidth;
+            height = newHeight;
+        }  
         
         // Clear the colorbuffer
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
