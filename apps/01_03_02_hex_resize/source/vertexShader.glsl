@@ -2,7 +2,17 @@
 
 layout (location = 0) in vec3 aPos;
 
+uniform float reciprocalWindowScale;
+
 void main()
 {
-    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+    float rWS = reciprocalWindowScale;
+    mat3 window_scale = mat3(
+        vec3( rWS, 0.0, 0.0),  // reciprocal of the aspect ratio
+        vec3( 0.0, 1.0, 0.0),
+        vec3( 0.0, 0.0, 1.0)
+    );
+
+    //gl_Position = vec4(window_scale * aPos.xyz, 1.0); 
+    gl_Position = vec4(window_scale * aPos.xyz, 1.0);    
 }

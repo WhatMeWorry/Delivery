@@ -14,14 +14,15 @@ import derelict.freetype.ft;
 import derelict.freeimage.freeimage;
 import derelict.opengl3.gl3;
 import derelict.glfw3.glfw3;
+import gl3n.linalg; // mat3
 
 GLfloat[] board;
 
 // start at the bottom left corner of the NDC
-GLfloat x = -1.0;
-GLfloat y = -1.0;
-GLfloat startX = -1.0;   // NDC Normalized Device Coordinates start at -1.0 and ends at 1.0 for all axes
-GLfloat startY = -1.0;   // the board will be drawn starting from the lower left corner of screen
+GLfloat x = -3.0;
+GLfloat y = -3.0;
+GLfloat startX = -3.0;   // NDC Normalized Device Coordinates start at -1.0 and ends at 1.0 for all axes
+GLfloat startY = -3.0;   // the board will be drawn starting from the lower left corner of screen
  
 struct Delta
 {
@@ -35,7 +36,87 @@ GLfloat halfRun;
 GLfloat quarRun;
 GLfloat halfRise;
 
-void drawHexagon(Delta delta, GLfloat halfRise, GLfloat quarRun, GLfloat halfRun)
+/+
+How does one convert pixel length (i.e an image with 512 pixel width and height) to accurate 
+OpenGL coordinates?
+
+All I can do now is try to guess the size manually between -1 and 1.
+
+=============================================================================================
+
+The question is quite vague, but as I see it the problem is that the window coordinates are 
+ranging, as you say, between -1 to 1; and since the screen is a rectangle, quads will be 
+drawn as a rectangle rather than a square.  It is not recommended to draw in "pixel coordinates" 
+since all monitors don't have the same resolution nor the same aspect ratio. However, if your 
+are certain that this is what you want to do, then this is how you'd do it:
+
+=============================================================================================
+
+If you are using shaders with OpenGL 3+:
+
+    Just divide the x coordinate by half of the width of the window and subtract 1.
+    Do the same for the the y coordinate but divide by half the height instead of half the width.
+
+If you are using the old immediate mode OpenGL (which by the way is not recommended and outdated 
+since long ago) then you should look into glOrtho
+Note that all the above is just for orthographic projection (2D).
+
+If you want to draw in 3D you should not draw in "pixel coordinates" by any means. Instead, 
+multiply either the width or height by the relevant aspect ratio (i.e width/height or height/width)
+or integrate the aspect ratio into your perspective projection if creating your own shader.
+
+Generally, OpenGL does not draw by pixels. You draw into OpenGL's own coordinate system and 
+OpenGL will then convert it to pixels. This is what makes it so powerful for 3D rendering. 
+This approach is much more convenient because of the differing monitor resolutions and aspect 
+ratios.
+
+=============================================================================================
+
+If you want to address pixels precisely, the previously posted answer is not sufficient. It 
+calculates the lower left corner of pixels. But to place a vertex exactly on a pixel, you need 
+to use the coordinates of the pixel center.
+
+In your example with a width of 512 pixels, without any transformations applied, these pixels 
+span the NDC coordinate range of [-1.0, 1.0]. This means that the width of each pixel is 2.0 / 512 
+in NDC space.
+
+For example, for the very first pixel, if you look at it as a small square, its coordinate range 
+is from -1.0 to -1.0 + 2.0 / 512. It's center is therefore at -1.0 + 1.0 / 512 in NDC space.
+
+Generalizing this for a general window width w and height h, the coordinates of pixel with 
+index i in horizontal direction and index k in vertical direction (bottom to top) are:
+
+x = -1.0 + i * (2.0 / w) + (1.0 / w) = (2.0 * i + 1.0) / w - 1.0
+y = -1.0 + k * (2.0 / h) + (1.0 / h) = (2.0 * k + 1.0) / h - 1.0
+
+if width 
++/
+
+// The problem with using Normalized Device Coordinates (NDC) is that when a window is not
+// square, the x, y values are not propotional. So on rectangular windows (1,1) (-1,-1) will not
+// form a square (in other words, not have equal pixels on their sides)
+// Pixel coordinates are however proportional. So (0,0) - (640, 640) will form a square
+
+//===========================================================================================
+
+/+
+ Jamie King   https://www.youtube.com/watch?v=A8uSL7JBsBs&index=125&list=PLRwVmtr-pp04XomGtm-abzb-2M1xszjFx&t=0s
+
+aspectRatio = width / height
+
+
+http://duriansoftware.com/joe/An-intro-to-modern-OpenGL.-Chapter-3:-3D-transformation-and-projection.html
+
+mat3 window_scale = mat3(
+        vec3(3.0/4.0, 0.0, 0.0),
+        vec3(    0.0, 1.0, 0.0),
+        vec3(    0.0, 0.0, 1.0)
+    );
+
+
++/
+
+void drawHexagon(GLfloat x, GLfloat y, Delta delta, GLfloat halfRise, GLfloat quarRun, GLfloat halfRun)
 {
     // initialize each hexagon 
     board ~= [x + quarRun, y, 0.0];
@@ -50,17 +131,18 @@ void drawHexBoard()
 {
     bool stagger = false; 
 
-    while(y < 1.0)
+    while(y < 3.0)   // outside NDC of 1.0
     {
-        while(x < 1.0)
+        GLfloat tempY = y;
+        while(x < 3.0)  // outside NDC of 1.0
         {
-            drawHexagon(delta, halfRise, quarRun, halfRun);
+            drawHexagon(x, tempY, delta, halfRise, quarRun, halfRun);
             stagger = !stagger;
 
             if (stagger)
-                y += halfRise;
+                tempY += halfRise;
             else 
-                y -= halfRise;   
+                tempY -= halfRise;   
 
             x += quarRun + halfRun;  
         }
@@ -69,20 +151,53 @@ void drawHexBoard()
     }  
 }
 
-// Window dimensions
-int width = 1200;  int height = 800;
-
-void main(string[] argv)
+void setHexParameters()
 {
- 
-
-    delta.run  = .50;
+    delta.run = howWide;
     delta.rise = delta.run * 0.866;  // hex is only .866 as tall as a unit 1.0 equilateral hex is wide
 
     halfRun  = delta.run  * 0.5;
     quarRun  = delta.run  * 0.25;
     halfRise = delta.rise / 2.0;
 
+    writeln("halfRun = ", halfRun);
+    writeln("quarRun = ", quarRun);
+    writeln("halfRise = ", halfRise);  
+
+    writeln("delta.run = ", delta.run);
+    writeln("delta.rise  = ", delta.rise);    
+
+}
+
+const GLfloat howWide = .50;  // .50 is an arbitrary constant, a fraction of 
+                              // the range [-1.0, 1.0] or distance 2.0   So .5 should give you 4 hex wide.
+
+void main(string[] argv)
+{
+    // Window dimensions
+    //int width = 1200;  int height = 600;  // works
+    int width = 1800;  int height = 900;  // works
+
+    GLfloat aspectRatio = cast(float) width / cast(float) height;
+
+    GLfloat reciprocalWindowScale = 1.0 / aspectRatio;
+
+    setHexParameters();
+    /+
+    delta.run  =  howWide; 
+    delta.rise = delta.run * 0.866;  // hex is only .866 as tall as a unit 1.0 equilateral hex is wide
+
+    halfRun  = delta.run  * 0.5;
+    quarRun  = delta.run  * 0.25;
+    halfRise = delta.rise / 2.0;
+
+    writeln("halfRun = ", halfRun);
+    writeln("quarRun = ", quarRun);
+    writeln("halfRise = ", halfRise);  
+
+    writeln("delta.run = ", delta.run);
+    writeln("delta.rise  = ", delta.rise);    
++/
     load_libraries();
 
     // window must be square
@@ -116,32 +231,7 @@ void main(string[] argv)
         //  Positions         Colors      Texture Coords 		
     ];
 
-/+
-    bool stagger = false; 
-
-    while(y < 1.0)
-    {
-        while(x < 1.0)
-        {
-            drawHexagon(delta, halfRise, quarRun, halfRun);
-            stagger = !stagger;
-
-            if (stagger)
-                y += halfRise;
-            else 
-                y -= halfRise;   
-
-            x += quarRun + halfRun;  
-        }
-        x = startX;       
-        y += delta.rise;
-    }  
-+/
-
     drawHexBoard();
-
-    writeln("board = ", board);
-    writeln("board.length = ", board.length);
 
     vertices = board;
 
@@ -163,6 +253,10 @@ void main(string[] argv)
     // Position attribute
     //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * GLfloat.sizeof, cast(const(void)*) 0);
     //glEnableVertexAttribArray(0);
+
+    GLint reciprocalWindowScaleLoc = glGetUniformLocation(programID, "reciprocalWindowScale");
+
+    glUniform1f(reciprocalWindowScaleLoc, reciprocalWindowScale);  
 
     // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex 
 	// attribute's bound vertex buffer object so afterwards we can safely unbind
@@ -189,9 +283,16 @@ void main(string[] argv)
         if ((width != newWidth) || (height != newHeight))  
         {
             writeln("Window changed size"); 
-            drawHexBoard(); 
+
+            aspectRatio = cast(float) newWidth / cast(float) newHeight;
+            writeln("aspectRatio = ", aspectRatio);
             width = newWidth;
             height = newHeight;
+
+            reciprocalWindowScale = 1.0 / aspectRatio;
+            writeln("reciprocalWindowScale = ", reciprocalWindowScale);
+ 
+            glUniform1f(reciprocalWindowScaleLoc, reciprocalWindowScale); 
         }  
         
         // Clear the colorbuffer
@@ -202,7 +303,7 @@ void main(string[] argv)
 		                         // but we'll do so to keep things a bit more organized
 
         int i = 0;
-        while (i < vertices.length )
+        while (i < vertices.length)
         {
             glDrawArrays(GL_LINE_LOOP, i, 6);
             i += 6;

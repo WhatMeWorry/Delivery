@@ -42,18 +42,18 @@ void drawHexagon(Delta delta, GLfloat halfRise, GLfloat quarRun, GLfloat halfRun
     board ~= [x, y + halfRise, 0.0];                       
 }
 
-
+const GLfloat howWide = .50;  // .50 is an arbitrary constant, a fraction of the range [-1.0, 1.0] or distance 2.0
+                              // which because of the hex board stagger makes a row of 5 (not 4) hexes.
 void main(string[] argv)
 {
     Delta delta;
 
-    delta.run  = .50;
-    delta.rise = delta.run * 0.866;  // hex is only .866 as tall as a unit 1.0 equilateral hex is wide
-    //delta.ratio = delta.rise/delta.run;
+    delta.run  = howWide;
+    delta.rise = delta.run * 0.866;  // a hex is only .866 as tall as a unit 1.0 hex is wide
 
     GLfloat halfRun  = delta.run  * 0.5;
     GLfloat quarRun  = delta.run  * 0.25;
-   // GLfloat halfRise = delta.rise / 2.0;
+    GLfloat halfRise = delta.rise / 2.0;
 
     load_libraries();
 
