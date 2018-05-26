@@ -1,0 +1,297 @@
+
+
+
+https://alfonse.bitbucket.io/oldtut/Basics/Tut01%20Following%20the%20Data.html
+
+OpenGL is in a way very much like connect-the-dots drawing. You specify dots (vertices) in space and then openGL draws the lines between them.  It is not quite as open ended as that, First OpenGL can only draw triangles. And the vertices must be specified in a counter clock-wise order. 
+
+KCH:  "Vertex attributes are catagories of usage.  One of the most fundamental purpose of vertices is to represet position in space. After all, openGL cannot even draw a stick figures if you don't know the start and stop (vertices) of each line.  
+
+Inputs to and outputs from a shader stage come from somewhere and go to somewhere. Thus, the input position in the vertex shader must be filled in with data somewhere. So where does that data come from? Inputs to a vertex shader are called vertex attributes.
+
+You might recognize something similar to the term “vertex attribute.” For example, “glEnableVertexAttribArray” or “glVertexAttribPointer.”
+
+This is how data flows down the pipeline in OpenGL. When rendering starts, vertex data in a buffer object is read based on setup work done by glVertexAttribPointer. This function describes where the data for an attribute comes from. The connection between a particular call to glVertexAttribPointer and the string name of an input value to a vertex shader is somewhat complicated.
+
+Each input to a vertex shader has an index location called an attribute index. The input in this shader was defined with this statement:
+
+layout(location = 0) in vec4 position;
+
+The layout location part assigns the attribute index of 0 to position. Attribute indices must be greater than or equal to zero, and there is a hardware-based limit on the number of attribute indices that can be in use at any one time[2].
+
+In code, when referring to attributes, they are always referred to by attribute index. The functions glEnableVertexAttribArray, glDisableVertexAttribArray, and glVertexAttribPointer all take as their first parameter an attribute index. We assigned the attribute index of the position attribute to 0 in the vertex shader, so the call to glEnableVertexAttribArray(0) enables the attribute index for the position attribute.
+
+https://www.opengl.org/sdk/docs/tutorials/ClockworkCoders/attributes.php
+
+
+Dont USE*****************
+Compatibility Profile Vertex Shader Built-In Inputs
+The following predeclared input names can be used from within a vertex shader to access the current
+values of OpenGL state when using the compatibility profile.
+in vec4 gl_Color;
+in vec4 gl_SecondaryColor;
+in vec3 gl_Normal;
+in vec4 gl_Vertex;
+in vec4 gl_MultiTexCoord0;
+in vec4 gl_MultiTexCoord1;
+in vec4 gl_MultiTexCoord2;
+in vec4 gl_MultiTexCoord3;
+in vec4 gl_MultiTexCoord4;
+in vec4 gl_MultiTexCoord5;
+in vec4 gl_MultiTexCoord6;
+in vec4 gl_MultiTexCoord7;
+in float gl_FogCoord;
+
+**********************
+
+The state contained in a VAO consists of:
+
+1. For each attribute:
+- whether it is enabled (glEnableVertexAttribArray/glDisableVertexAttribArray)
+- the size, type, stride, normalised flag, integer flag, long flag, and offset ("pointer") (glVertexAttribPointer)
+- the buffer object containing the data (i.e. the buffer which was bound to GL_ARRAY_BUFFER at the time of the glVertexAttribPointer call).
+- the attribute divisor (glVertexAttribDivisor)
+
+2. The buffer currently bound to GL_ELEMENT_ARRAY_BUFFER.
+
+[There is actually more state related to vertex buffer bindings, but that isn't relevant here and has been omitted for simplicity.]
+
+Note that the current GL_ARRAY_BUFFER binding isn't stored in a VAO. You don't need to bind a VAO before binding a buffer to that target or modifying the buffer's data. You do need to bind a VAO before calling any of the functions listed in 1 or 2 above which modify the VAO state, and before calling drawing functions (glDrawElements etc). You do need to bind the correct buffer to GL_ARRAY_BUFFER before calling glVertexAttribPointer, as that function stores the current binding in the VAO along with its parameters.
+
+void glBindBuffer(GLenum target, GLuint buffer);  // where target can be one of the following:
+
+     Target                       Purpose
+----------------------       -------------------------
+GL_ARRAY_BUFFER	             Vertex attributes                    GL_ARRAY_BUFFER_BINDING 
+GL_ATOMIC_COUNTER_BUFFER     Atomic counter storage               GL_ATOMIC_COUNTER_BUFFER_BINDING
+GL_COPY_READ_BUFFER          Buffer copy source                   GL_COPY_READ_BUFFER_BINDING
+GL_COPY_WRITE_BUFFER         Buffer copy destination              GL_COPY_WRITE_BUFFER_BINDING
+GL_DISPATCH_INDIRECT_BUFFER  Indirect compute dispatch commands   GL_DISPATCH_INDIRECT_BUFFER_BINDING
+GL_DRAW_INDIRECT_BUFFER	     Indirect command arguments           GL_DRAW_INDIRECT_BUFFER_BINDING
+GL_ELEMENT_ARRAY_BUFFER	     Vertex array indices                 GL_ELEMENT_ARRAY_BUFFER_BINDING
+GL_PIXEL_PACK_BUFFER         Pixel read target                    GL_PIXEL_PACK_BUFFER_BINDING
+GL_PIXEL_UNPACK_BUFFER       Texture data source                  GL_PIXEL_UNPACK_BUFFER_BINDING
+GL_QUERY_BUFFER	             Query result buffer
+GL_SHADER_STORAGE_BUFFER     Read-write storage for shaders       GL_SHADER_STORAGE_BUFFER_BINDING
+GL_TEXTURE_BUFFER            Texture data buffer
+GL_TRANSFORM_FEEDBACK_BUFFER Transform feedback buffer            GL_TRANSFORM_FEEDBACK_BUFFER_BINDING
+GL_UNIFORM_BUFFER            Uniform block storage                GL_UNIFORM_BUFFER_BINDING
+
+
+GL_ARRAY_BUFFER is a binding location, not a type. Buffer objects do not have types. They are simply unformatted memory.
+
+You can bind a buffer object to GL_TRANSFORM_FEEDBACK_BUFFER to do some transform feedback, then bind that buffer to GL_ARRAY_BUFFER to do some attribute transfers and rendering, then to GL_UNIFORM_BUFFER to use it as a uniform buffer, and then to GL_PIXEL_UNPACK_BUFFER to upload data to a texture. All with the same buffer object. No glBufferData, no respecifying. Nothing.
+
+Targets have specific semantics associated with them. GL_ARRAY_BUFFER is used for associating a buffer object with vertex attributes when doing glDraw* calls. GL_UNIFORM_BUFFER is used for associating a buffer object with uniform data. And so on.
+
+The only reason GL_COPY_READ_BUFFER and GL_COPY_WRITE_BUFFER exist is to allow you to bind to read/write locations that don't have any specific semantics associated with them. That way, if you have something important bound to GL_ARRAY_BUFFER or whatever, you don't have to unbind it just to do a copy.
+
+Targets only matter as far as their semantic utility is concerned*. All buffer objects are equal, endowed by their creator with certain inalienable rights. You may wish to read the wiki page on Buffer Objects, for more details.
+
+
+
+
+
+
+From Jeffry Chastine Tutorial 9 YouTube
+
+Matrix - a mathematical construct (4x4) than can translate, rotate, and scale vertices.
+
+Local,       Model*        World         View**         View          Projection***
+Object, ==== Matrix ===> Coordinates === Matrix ===> Coordinates ===>    Matrix ======> 2D Screen
+Model        translate    (aka "World                 (aka "Camera    (perspective or   image
+Coordinates  scale          Space")                      Space")       orthographic}
+
+(coordinates that
+the model was
+constructed in)
+
+* typically there is a Model matrix for each model because their is alot of variety in objects.
+** usually there is only one View Matrix because there is usually only one view.
+*** Interestingly, the result of multiplying by the Projection Matrix always gives
+us Normalized Device Coordinates.
+
+Note: Usually in beginner OpenGL tutorials, they haven't talked about the Projection Matrix yet
+so simplistic shaders are used. This requires the programs to manually ensure that the vertex 
+position buffers are already in NDC (Normalized Device Coordinates) or else nothing is rendered.
+
+in vec4 vPosition
+gl_Position = vPosition; // vPosition must be in NDC!
+
+
+rd "directoryname" /s /q
+
+
+C:\a\local\path> pushd \\network_host\a\network\path
+
+
+
+https://www.youtube.com/watch?v=yT46zoyy6v4
+
+In real world projects, you typically don't create from scratch. Instaed you download SDK's that come DLLs
+Heasers and .lib files.  Realize that a DLL is just a compiled set of functions. The main benefit of DLLS is
+that they are reusable.  For example, you may have a couple of games and a couple of applications that use the same graphics
+library that could be packaged into a DLL.  To get an idea of how many DLLs you have on your system, look in c:\windows\system32
+You'll probably find a couple hundred of them.  DLLs usually come with Header files and .lib files. So, what is a header file?
+They are text files that ends in a .h extension. All these entries are a description of all the functions you can call.
+
+Derelict uses prebuilt .dll run-time libraries from C/C++. But to call them from D programs they need to be built with 
+derelict .d files.
+
+
+.dll and .lib are extensions that are used on Windows.  On most other *nix like systems (Linux, BSD, etc) .so and .a are used.  
+(For the pedantic, OS X uses .dylib for shared libraries, and .so for shared modules, but that is a detail of Mach-O).
+
+
+HEADER FILES
+   - A description of available functions
+   - No implementation (resides in DLL)
+   - Use #include   
+       " " search locally
+       < > search elsewhere
+
+    gl3.d  (like .h)
+    bindGLFunc(cast(void**)&glBufferData, "glBufferData");      
+    bindGLFunc(cast(void**)&glVertexAttribPointer, "glVertexAttribPointer");
+
+LIB FILES 
+    - Relates the header to the DLL
+    - Tells where in the DLL the functions are!
+
+static means compile time
+dynamic means run time.
+
+static memory are variables shared among many classes.  History behind it goes much further, static variables are variables that have memory created by compiler at compile time and embedded directly into the executable.
+
+dynamic memory (new or malloc) memory is created at run time.
+
+
+For a dynamic library, the .lib file contains a list of the exported functions and data elements from the library, and information about which DLL they came from. When the linker builds the final executable then if any of the functions or data elements from the library are used then the linker adds a reference to the DLL (causing it to be automatically loaded by Windows), and adds entries to the executable's import table so that a call to the function is redirected into that DLL.
+
+
+C:\dub\packages\derelict-glfw3-3.1.3\derelict-glfw3\source\derelict\glfw3\glfw3.d
+           "                     "                        "              \statfunc.d
+           "                     "                        "              \types.d
+C:\dub\packages\derelict-glfw3-3.1.3\derelict-glfw3\lib\DerelictGLFW3.lib
+
+So whenever our application uses the graphic library OpenGL, we can use functions as defined by
+the Header (.d) files.  The compiler will take in our program and whenever it sees a call to the openGL
+library, it will then look at the header file to see that we are calling it correctly. If so, then 
+it will look at the Derelict.lib file and replace that call with an actual address into the glfw3.dll
+library.
+ 
+
+https://www.youtube.com/watch?v=W_2S0-dJ308
+
+
+How to deal with "CMD does not support UNC paths as current directories"
+
+You need to use the "pushd" command instead of "cd" to change the current directory to a UNC path (e.g.: >pushd \\servername\sharename). 
+
+"the pushd command creates a temporary drive letter that points to the network resource, and then changes the current drive and folder to the new drive letter. Temporary drive letters are allocated starting from Z and then backward through the alphabet, using the first unused drive letter found."
+
+Use "popd" when you're finished (e.g.: >popd) to cleanup the temporary mapped drive.
+
+For more info see How To Use the PUSHD Command to Access a UNC Path at a Command Prompt in Windows 2000 (http://support.microsoft.com/kb/317379)
+
+
+C:\Windows\System32>pushd \\eapl.staff\Users\Files\kheaser\Downloads\LDC-master-4533-x64
+
+Z:\Files\kheaser\Downloads\LDC-master-4533-x64>
+
+rd "directoryname" /s /q
+
+
+I want to use ls in windows command prompt and make it run the dir command.
+echo dir %1 > %systemroot%\system32\ls.bat
+Make sure you run cmd.exe as admin first if you are on vista and up
+
+
+Hey - do you check as I suggested to see if the path already begins with \\ ? Because it's not totally uncommon to specify a path to a remote resource rather than a drive on Windows and currently I guess this might work, and it won't after the fix.
+
+
+=======================================================================================================
+
+https://www.opengl.org/
+https://www.khronos.org/opengl/wiki/Getting_Started
+https://www.khronos.org/opengl/wiki/Getting_Started#Tutorials_and_How_To_Guides
+
+https://www.quora.com/What-are-the-binding-points-in-OpenGL
+
+http://openglbook.com/chapter-0-preface-what-is-opengl.html
+
+
+
+If you set the Forward Compatible flag, the context that is returned will not contain any of the features that were deprecated in the version that you requested, thus making it compatible with future versions that may have removed these features.
+
+An OpenGL context allows us to pass commands to the underlying hardware, so without one your OpenGL program is quite useless. 
+
+A call to glutCreateWindow will create our context and will return a handle to our newly created window.
+
+The vertex shader is the programmable stage in the rendering pipeline that handles the processing of individual vertices. A vertex shader receives a single vertex composed of a series of Vertex Attributes. This input vertex is processed arbitrarily to produce an output vertex. There must be a 1:1 mapping from input vertices to output vertices.
+
+A geometry shader (GS) is a Shader program that governs the processing of primitives. A GS can create new primitives, unlike vertex shaders, which are limited to a 1:1 input to output ratio. A GS can also perform layered rendering, where different primitives can be rendered to different attached layered images.
+
+http://ogldev.atspace.co.uk/
+
+http://ogldev.atspace.co.uk/www/tutorial32/tutorial32.html
+
+
+OpenGL Objects are structures composed of states and data and are responsible for transmitting data from the CPU to the GPU. OpenGL objects must first be created and bound before they can be used. 
+
+There are several types of OpenGL Objects. For example, a Vertex Buffer Object can store vertices of a character. Whereas a Texture, another kind of OpenGL Object, can store image data.
+
+OpenGL objects can be classified as: Regular Objects or Container Objects:
+
+Regular Objects
+These type of objects contain data. A list of regular objects are:
+Buffer Objects
+Renderbuffer Objects
+Texture Objects
+Query Objects
+Sampler Objects
+
+Container Objects
+As the name implies, these type of objects do not contain any data. Instead they are containers for regular OpenGL objects. A list of container objects are:
+Framebuffer Objects
+Vertex Array Objects
+Transform Feedback Objects
+Program Pipeline Objects
+
+Now, before an OpenGL object can be used, it must be created and bound to the OpenGL context.
+
+When you bind an OpenGL object to the OpenGL Context, you must specified what kind of data the object will transport to the GPU. The type of data that the OpenGL Object transports defines its behavior.
+
+A Binding Point specifies the behavior of the OpenGL object. Binding Points, also known as Targets, allows OpenGL objects to be used for different purposes. 
+
+The most common binding points are:
+GL_ARRAY_BUFFER
+GL_TEXTURE_BUFFER
+GL_ELEMENT_ARRAY_BUFFER
+
+For example, when a buffer object's binding point is GL_ARRAY_BUFFER, it behaves as a Vertex Buffer Object. This type of objects are mainly used to store vertex data of characters. 
+
+If interested, here is a complete list of Binding points:
+GL_ARRAY_BUFFER
+GL_COPY_READ_BUFFER
+GL_COPY_WRITE_BUFFER
+GL_ELEMENT_ARRAY_BUFFER
+GL_PIXEL_PACK_BUFFER
+GL_PIXEL_UNPACK_BUFFER
+GL_TEXTURE_BUFFER
+GL_TRANSFORM_FEEDBACK_BUFFER
+GL_UNIFORM_BUFFER
+
+This should do, what you want.
+It simply draws a circle with 6 Points.
+
+Code :
+glBegin(GL_POLYGON);
+for(int i = 0; i < 6; ++i) {
+    glVertex2d(sin(i/6.0*2*M_PI),
+               cos(i/6.0*2*M_PI));
+}
+glEnd();
+
+
+
