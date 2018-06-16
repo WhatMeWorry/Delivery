@@ -167,13 +167,29 @@ void setHexParameters()
 
     writeln("delta.run = ", delta.run);
     writeln("delta.rise  = ", delta.rise);    
+}
 
+
+void do_movement(Event event)
+{
+    GLfloat magnify = 5.025;
+    writeln("Inside do_movement");    
+    if (event.keyboard.key == Key.w)
+        camera.ProcessKeyboard(Camera_Movement.FORWARD, (deltaTime * magnify));
+    if (event.keyboard.key == Key.s)
+        camera.ProcessKeyboard(Camera_Movement.BACKWARD, (deltaTime * magnify));
+    if (event.keyboard.key == Key.a)
+        camera.ProcessKeyboard(Camera_Movement.LEFT, (deltaTime * magnify));
+    if (event.keyboard.key == Key.d)
+        camera.ProcessKeyboard(Camera_Movement.RIGHT, (deltaTime * magnify));   
 }
 
 const GLfloat howWide = .50;  // .50 is an arbitrary constant, a fraction of 
                               // the range [-1.0, 1.0] or distance 2.0   So .5 should give you 4 hex wide.
 
 Camera camera;
+// Deltatime
+GLfloat deltaTime = 1.0f;  // Time between current frame and last frame
 
 void main(string[] argv)
 {
@@ -184,8 +200,13 @@ void main(string[] argv)
     //int width = 1200;  int height = 600;  // works
     int width = 833;  int height = 431;  // works
 
+
+
     //mat4 projection = orthographicFunc(0.0, width, 0.0, height, -1.0f, 1.0f);
-    mat4 projection = mat4.identity;     
+    mat4 projection = mat4.identity;  
+
+    mat4 view = camera.GetViewMatrix();  // not sure if I like the view being dependent on the camera class?
+                                         // maybe refactor this?
 
     GLfloat aspectRatio = cast(float) width / cast(float) height;
 
@@ -200,6 +221,15 @@ void main(string[] argv)
     auto winMain = glfwCreateWindow(width, height, "01_03_02_hex_resize", null, null);
 
     glfwMakeContextCurrent(winMain); 
+   // you must set the callbacks after creating the window
+ 
+            glfwSetKeyCallback(winMain, &onKeyEvent);
+      glfwSetCursorPosCallback(winMain, &onCursorPosition);
+     //glfwSetWindowSizeCallback(winMain, &onWindowResize);
+glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
+    glfwSetCursorEnterCallback(winMain, &onCursorEnterLeave);  // triggered when cursor enters or leaves the window
+
+
 
     // glgetInteger.. queries must be done AFTER opengl context is created!!!
 
@@ -265,8 +295,11 @@ void main(string[] argv)
 
     GLint projLoc = glGetUniformLocation(programID, "projection");
     glUniformMatrix4fv(projLoc,  1, GL_FALSE, projection.value_ptr);
+    //writeln("projection = ", projection);
 
-    writeln("projection = ", projection);
+    GLint viewLoc = glGetUniformLocation(programID, "view");
+    glUniformMatrix4fv(viewLoc,  1, GL_TRUE, view.value_ptr);
+    //writeln("view = ", view);    
 
     // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex 
 	// attribute's bound vertex buffer object so afterwards we can safely unbind
@@ -285,7 +318,27 @@ void main(string[] argv)
     {
         glfwPollEvents();  // Check if any events have been activiated (key pressed, mouse
                            // moved etc.) and call corresponding response functions  
-        handleEvent(winMain); 
+        //handleEvent(winMain); 
+        Event event;   
+        if (getNextEvent(winMain, event))
+        {
+            if (event.type == EventType.keyboard)
+            {
+                if (event.keyboard.key == Key.escape)
+                    glfwSetWindowShouldClose(winMain, GLFW_TRUE);
+                else
+                    do_movement(event);
+                    //moveCamera(event);
+            }
+            if (event.type == EventType.cursorInOrOut)
+            {
+                //enableCursor(event);
+            }
+            if (event.type == EventType.cursorPosition)
+            {
+                //processMouse(event.cursor.position.x, event.cursor.position.y);
+            }
+        }  
 
         int newWidth, newHeight;
         glfwGetWindowSize(winMain, &newWidth, &newHeight);  
@@ -306,7 +359,13 @@ void main(string[] argv)
  
             glUniform1f(reciprocalWindowScaleLoc, reciprocalWindowScale); 
         }  
-        
+
+        //GLint viewLoc = glGetUniformLocation(programID, "view");
+        view = camera.GetViewMatrix(); 
+        //view = mat4.identity;       
+        glUniformMatrix4fv(viewLoc,  1, GL_TRUE, view.value_ptr);
+        //writeln("view = ", view);    
+
         // Clear the colorbuffer
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);

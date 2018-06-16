@@ -4,6 +4,7 @@ layout (location = 0) in vec3 aPos;
 
 uniform float reciprocalWindowScale;
 
+uniform mat4 view;
 uniform mat4 projection;  // values for orthographic 
 
 void main()
@@ -16,7 +17,8 @@ void main()
         vec3( 0.0, 0.0, 1.0)
     );
 
-    gl_Position = vec4(window_scale * aPos.xyz, 1.0); 
+    gl_Position = vec4(window_scale * aPos.xyz, 1.0) * view;  // THIS WORKED!!
+    //gl_Position = view * vec4(window_scale * aPos.xyz, 1.0) * view;   // THIS MAKES VERY SMALL!! 
     //gl_Position = projection * vec4(window_scale * aPos.xyz, 1.0);   
     //gl_Position = projection * vec4(aPos.xyz, 1.0);      
 }
