@@ -72,10 +72,14 @@ matrix is that all data has Normalized Device Coordinates or between -1.0 and 1.
         0    0    0      1          .
 
 
+Notes:
+
 Matrix is a mathematical construct that can Translate (move), Rotate, and Scale.
 Usually 4x4 array.  
 
-
+Model * View * Projection is actually completely wrong for OpenGL. OpenGL uses column-major matrices, 
+which means the canonical (formal math notation) is actually Projection * View * Model. Direct3D uses 
+row-major, which is where Model * View * Projection would actually be correct. 
 
 
 
