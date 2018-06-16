@@ -5,6 +5,7 @@ import texturefuncs;
 import mytoolbox;
 import derelict_libraries;
 import event_handler;
+import common; // freetypefuncs.d - orthographicFunc()
 import common_game;
 import std.stdio;  // writeln
 import std.conv;   // toChars
@@ -19,10 +20,10 @@ import gl3n.linalg; // mat3
 GLfloat[] board;
 
 // start at the bottom left corner of the NDC
-GLfloat x = -3.0;
-GLfloat y = -3.0;
-GLfloat startX = -3.0;   // NDC Normalized Device Coordinates start at -1.0 and ends at 1.0 for all axes
-GLfloat startY = -3.0;   // the board will be drawn starting from the lower left corner of screen
+GLfloat x = -1.0;
+GLfloat y = -1.0;
+GLfloat startX = -1.0;   // NDC Normalized Device Coordinates start at -1.0 and ends at 1.0 for all axes
+GLfloat startY = -1.0;   // the board will be drawn starting from the lower left corner of screen
  
 struct Delta
 {
@@ -119,22 +120,22 @@ mat3 window_scale = mat3(
 void drawHexagon(GLfloat x, GLfloat y, Delta delta, GLfloat halfRise, GLfloat quarRun, GLfloat halfRun)
 {
     // initialize each hexagon 
-    board ~= [x + quarRun, y, 0.0];
-    board ~= [x + quarRun + halfRun, y, 0.0];
-    board ~= [x + delta.run, y + halfRise, 0.0];
+    board ~= [x + quarRun,           y,              0.0];
+    board ~= [x + quarRun + halfRun, y,              0.0];
+    board ~= [x + delta.run,         y + halfRise,   0.0];
     board ~= [x + quarRun + halfRun, y + delta.rise, 0.0]; 
-    board ~= [x + quarRun, y + delta.rise, 0.0];
-    board ~= [x, y + halfRise, 0.0];                       
+    board ~= [x + quarRun,           y + delta.rise, 0.0];
+    board ~= [x,                     y + halfRise,   0.0];                       
 }
 
 void drawHexBoard()
 {
     bool stagger = false; 
 
-    while(y < 3.0)   // outside NDC of 1.0
+    while(y < 1.0)   // outside NDC of 1.0
     {
         GLfloat tempY = y;
-        while(x < 3.0)  // outside NDC of 1.0
+        while(x < 1.0)  // outside NDC of 1.0
         {
             drawHexagon(x, tempY, delta, halfRise, quarRun, halfRun);
             stagger = !stagger;
@@ -172,32 +173,26 @@ void setHexParameters()
 const GLfloat howWide = .50;  // .50 is an arbitrary constant, a fraction of 
                               // the range [-1.0, 1.0] or distance 2.0   So .5 should give you 4 hex wide.
 
+Camera camera;
+
 void main(string[] argv)
 {
+    camera = new Camera(vec3(0.0f, 0.0f, 3.0f));
+    writeln("after new Camera");
+    
     // Window dimensions
     //int width = 1200;  int height = 600;  // works
-    int width = 1800;  int height = 900;  // works
+    int width = 833;  int height = 431;  // works
+
+    //mat4 projection = orthographicFunc(0.0, width, 0.0, height, -1.0f, 1.0f);
+    mat4 projection = mat4.identity;     
 
     GLfloat aspectRatio = cast(float) width / cast(float) height;
 
     GLfloat reciprocalWindowScale = 1.0 / aspectRatio;
 
     setHexParameters();
-    /+
-    delta.run  =  howWide; 
-    delta.rise = delta.run * 0.866;  // hex is only .866 as tall as a unit 1.0 equilateral hex is wide
 
-    halfRun  = delta.run  * 0.5;
-    quarRun  = delta.run  * 0.25;
-    halfRise = delta.rise / 2.0;
-
-    writeln("halfRun = ", halfRun);
-    writeln("quarRun = ", quarRun);
-    writeln("halfRise = ", halfRise);  
-
-    writeln("delta.run = ", delta.run);
-    writeln("delta.rise  = ", delta.rise);    
-+/
     load_libraries();
 
     // window must be square
@@ -205,6 +200,16 @@ void main(string[] argv)
     auto winMain = glfwCreateWindow(width, height, "01_03_02_hex_resize", null, null);
 
     glfwMakeContextCurrent(winMain); 
+
+    // glgetInteger.. queries must be done AFTER opengl context is created!!!
+
+    GLint[2] maxViewportDims;
+    glGetIntegerv(GL_MAX_VIEWPORT_DIMS, maxViewportDims.ptr);
+    writeln("maxViewportDims = ", maxViewportDims);
+
+    GLint maxRenderBufferSize;
+    glGetIntegerv(GL_MAX_RENDERBUFFER_SIZE_EXT, &maxRenderBufferSize); 
+    writeln("maxRenderBufferSize = ", maxRenderBufferSize);
 
     // you must set the callbacks after creating the window
 
@@ -258,6 +263,11 @@ void main(string[] argv)
 
     glUniform1f(reciprocalWindowScaleLoc, reciprocalWindowScale);  
 
+    GLint projLoc = glGetUniformLocation(programID, "projection");
+    glUniformMatrix4fv(projLoc,  1, GL_FALSE, projection.value_ptr);
+
+    writeln("projection = ", projection);
+
     // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex 
 	// attribute's bound vertex buffer object so afterwards we can safely unbind
     glBindBuffer(GL_ARRAY_BUFFER, 0); 
@@ -283,6 +293,8 @@ void main(string[] argv)
         if ((width != newWidth) || (height != newHeight))  
         {
             writeln("Window changed size"); 
+            writeln("newWidth = ", newWidth);
+            writeln("newHeight = ", newHeight);            
 
             aspectRatio = cast(float) newWidth / cast(float) newHeight;
             writeln("aspectRatio = ", aspectRatio);
