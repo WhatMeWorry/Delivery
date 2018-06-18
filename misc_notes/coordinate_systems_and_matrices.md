@@ -3,7 +3,7 @@
 Transforming coordinates to NDC and then to screen coordinates is usually accomplished in a step-by-step fashion where we transform an object's vertices to several coordinate systems before finally transforming them to screen coordinates. The advantage of transforming them to several intermediate coordinate systems is that some operations/calculations are easier in certain coordinate systems as will soon become apparent. There are a total of 5 different coordinate systems that are of importance to us:
 
 Coordinate Systems and Matrices  (matrices allow transitions between coordinate systems)
------------------------
+
 
 Local Coordinate System (1)   (aka Object Space)  
       ||
@@ -57,7 +57,7 @@ reside in. Typically the world system is much larger than the model space.
 glm::mat4 CameraMatrix = glm::lookAt(
     cameraPosition, // the position of your camera, in world space
     cameraTarget,   // where you want to look at, in world space
-    upVector        // probably glm::vec3(0,1,0), but (0,-1,0) would make you looking upside-down, which can be great too
+    upVector        // probably glm::vec3(0,1,0), but (0,-1,0) would make you looking upside-down
 );
 ```
 
