@@ -17,7 +17,7 @@ World Coordinate System (2)   (aka World Space)
    View matrix    transform World space into Camera space
       ||          usually only need one of these
       ||
-Camera Coordinate System (3)   (aka Camera Space, View Space, Eye Space)
+View Coordinate System (3)   (aka Camera Space, Eye Space)
       ||
       ||   
    Projection Matrix (3m)
