@@ -4,7 +4,7 @@ Transforming coordinates to NDC and then to screen coordinates is usually accomp
 
 Coordinate Systems and Matrices  (matrices allow transitions between coordinate systems)
 
-
+```
 Local Coordinate System (1)   (aka Object Space)  
       ||
       ||
@@ -30,7 +30,7 @@ Clip Coordinates System (4)  (aka Clip Space Clip) (coordinates fall between the
       ||
       ||
 Screen Coordinates
-
+```
 
 Those are all a different state at which our vertices will be transformed in before finally ending up as fragments.
 
