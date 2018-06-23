@@ -131,7 +131,15 @@ void initializeCubePositions(ref vec3[] cubePos)
     cubePos = cubePositions;
 }
 
+void initializeCubePosition(ref vec3[] cubePos)
+{
+    vec3[] cubePositions = 
+    [
+       vec3( 0.0f,  0.0f,  0.0f)
+    ];
 
+    cubePos = cubePositions;
+}
 
 
 void initializeCubeVariant3(ref GLfloat[] verts)

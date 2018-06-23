@@ -16,8 +16,10 @@ void main()
         vec3( 0.0, 1.0, 0.0),
         vec3( 0.0, 0.0, 1.0)
     );
+    //gl_Position = projection * view * model * vec4(position, 1.0f);  // from 01_10_orthographic
 
-    gl_Position = vec4(window_scale * aPos.xyz, 1.0) * view;  // THIS WORKED!!
+    // gl_Position = vec4(window_scale * aPos.xyz, 1.0) * view;  // THIS WORKED!!  AMBER
+    gl_Position = projection * view * vec4(window_scale * aPos.xyz, 1.0);
     //gl_Position = view * vec4(window_scale * aPos.xyz, 1.0) * view;   // THIS MAKES VERY SMALL!! 
     //gl_Position = projection * vec4(window_scale * aPos.xyz, 1.0);   
     //gl_Position = projection * vec4(aPos.xyz, 1.0);      

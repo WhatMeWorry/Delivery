@@ -117,13 +117,25 @@ public:
         return mat4.look_at(this.position, this.position + this.front, this.up);
     }
 
+    mat4 GetViewMatrixFixedAhead()
+    {
+        auto fixedAhead = this.position;
+        fixedAhead.z = -1;
+        //writeln("this.position = ", this.position);
+        //writeln("fixed ahead = ", fixedAhead);
+        //writeln("this.up = ", this.up);              
+
+
+        return mat4.look_at(this.position, fixedAhead, this.up);
+    }
     // Processes input received from any keyboard-like input system. Accepts input parameter 
     // in the form of camera defined ENUM (to abstract it from windowing systems)
     void ProcessKeyboard(Camera_Movement direction, GLfloat deltaTime)
     {
         GLfloat velocity = this.movementSpeed * deltaTime;
 
-        writeln("this.position = ", this.position);
+        //writeln("this.position = ", this.position);
+        //writeln("this.front = ", this.front);    
 
         if (direction == Camera_Movement.FORWARD)
             this.position += this.front * velocity;
@@ -133,6 +145,13 @@ public:
             this.position -= this.right * velocity;
         if (direction == Camera_Movement.RIGHT)
             this.position += this.right * velocity;
+
+        //this.front.x = this.position.x;
+        //this.front.y = this.position.y;
+        writeln("this.position = ", this.position); 
+        writeln("this.position + this.front = ", this.position + this.front); 
+       
+          
     }
 
     // Processes input received from a mouse input system. Expects the offset value in both the x and y direction.

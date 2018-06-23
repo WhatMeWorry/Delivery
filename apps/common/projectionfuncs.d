@@ -29,10 +29,10 @@ mat4 perspectiveFunc(float fovInRadians, float aspect, float zNear, float zFar)
     // from  dub package gfm:   math/gfm/math/matrix.d
     // Returns: perspective projection.
     /+
-    mat4 prepare(f / aspect, 0,    0,                    0,
-    0, f,                  0,                    0,
-    0, 0, (zFar + zNear) * d, 2 * d * zFar * zNear,
-    0, 0,                 -1,                    0);
+    mat4 prepare( f/aspect, 0,  0,                    0,
+                  0,        f,  0,                    0,
+                  0,        0,  (zFar + zNear) * d,   2 * d * zFar * zNear,
+                  0,        0,  -1,                   0);
     +/
     return cm;
 }
@@ -50,10 +50,10 @@ mat4 orthographicFunc(float left, float right, float bottom, float top, float ne
 
     // from  dub package gfm:   math/gfm/math/matrix.d
     /+
-    return Matrix(2 / dx,   0,      0,    tx,
-    0,      2 / dy,   0,    ty,
-    0,        0,   -2 / dz, tz,
-    0,        0,      0,     1);
+    return Matrix( 2/dx,  0,      0,      tx,
+                   0,     2/dy,   0,      ty,
+                   0,     0,      -2/dz,  tz,
+                   0,     0,      0,      1);
     +/
 
     mat4 cm;  // column major
