@@ -61,9 +61,11 @@ glm::mat4 CameraMatrix = glm::lookAt(
 );
 ```
 
-(3) Camera coordinates is the coordinate space where everything is relative to the
-camera's position. You can think in terms of a stationary camera. The camera never moves, but
+(3) View coordinates is the coordinate space where everything is relative to the
+camera's (or eye's) position. You can think in terms of a stationary camera. The camera never moves, but
 the world (and models) move around the camera.
+
+The camera in OpenGL cannot move and is defined to be located at (0,0,0) facing the negative Z direction. That means that instead of moving and rotating the camera, the world is moved and rotated around the camera to construct the appropriate view.
 
 ```
 (3m) The Projection matrix transforms 3D data into 2D space.  There are two kinds: Orthographic and Perspective
