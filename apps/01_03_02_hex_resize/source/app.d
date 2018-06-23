@@ -1,5 +1,5 @@
 
-module app;  // 01_03_02_hex_resize
+module app;  // 01_03_02_hex_resize 
 import shaders; 
 import texturefuncs;
 import mytoolbox;
@@ -18,6 +18,8 @@ import derelict.glfw3.glfw3;
 import gl3n.linalg; // mat3
 
 GLfloat[] board;
+
+GLfloat[] NDCsquare;  // Normalized Device Coordinates
 
 // start at the bottom left corner of the NDC
 GLfloat x = -1.0;
@@ -126,6 +128,14 @@ void drawHexagon(GLfloat x, GLfloat y, Delta delta, GLfloat halfRise, GLfloat qu
     board ~= [x + quarRun + halfRun, y + delta.rise, 0.0]; 
     board ~= [x + quarRun,           y + delta.rise, 0.0];
     board ~= [x,                     y + halfRise,   0.0];                       
+}
+
+void drawNDCsquare()
+{   
+    NDCsquare ~= [-.995,  .995, 0.0];
+    NDCsquare ~= [-.995, -.995, 0.0];
+    NDCsquare ~= [ .995, -.995, 0.0];
+    NDCsquare ~= [ .995,  .995, 0.0];                   
 }
 
 void drawHexBoard()
@@ -245,11 +255,6 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     glGetIntegerv(GL_MAX_RENDERBUFFER_SIZE_EXT, &maxRenderBufferSize); 
     writeln("maxRenderBufferSize = ", maxRenderBufferSize);
 
-    // you must set the callbacks after creating the window
-
-                glfwSetKeyCallback(winMain, &onKeyEvent);
-    glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
-
     Shader[] shaders =
     [
              Shader(GL_VERTEX_SHADER, "source/vertexShader.glsl",      0),
@@ -271,12 +276,15 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     ];
 
     drawHexBoard();
+    drawNDCsquare();
 
     vertices = board;
 
-    GLuint VBO, VAO;
+    GLuint VBO, VBO1, VAO, VAO1;
     glGenVertexArrays(1, &VAO);
+   glGenVertexArrays(1, &VAO1);    
     glGenBuffers(1, &VBO);
+    glGenBuffers(1, &VBO1);
 
     // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
     glBindVertexArray(VAO);
@@ -284,10 +292,18 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.bytes, vertices.ptr, GL_STATIC_DRAW);
 
-
     enum describeBuff = defineVertexLayout!(int)([3]);
     mixin(describeBuff);
     pragma(msg, describeBuff);
+
+    glBindVertexArray(VAO1);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO1);
+    glBufferData(GL_ARRAY_BUFFER, NDCsquare.bytes, NDCsquare.ptr, GL_STATIC_DRAW);
+
+    enum describeBuff1 = defineVertexLayout!(int)([3]);
+    mixin(describeBuff1);
+    pragma(msg, describeBuff1);
 
     // Position attribute
     //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * GLfloat.sizeof, cast(const(void)*) 0);
@@ -323,6 +339,7 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
         glfwPollEvents();  // Check if any events have been activiated (key pressed, mouse
                            // moved etc.) and call corresponding response functions  
         //handleEvent(winMain); 
+
         Event event;   
         if (getNextEvent(winMain, event))
         {
@@ -334,6 +351,8 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
                     do_movement(event);
                     //moveCamera(event);
             }
+            if (event.type == EventType.frameBufferSize)   // was handled in handleEvent(winMain)
+                glViewport(0, 0, event.frameBufferSize.width, event.frameBufferSize.height);
             if (event.type == EventType.cursorInOrOut)
             {
                 //enableCursor(event);
@@ -377,6 +396,8 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
 
         glBindVertexArray(VAO);  // seeing as we only have a single VAO there's no need to bind it every time, 
 		                         // but we'll do so to keep things a bit more organized
+   
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
         int i = 0;
         while (i < vertices.length)
@@ -384,7 +405,12 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
             glDrawArrays(GL_LINE_LOOP, i, 6);
             i += 6;
         }
- 
+
+        glBindVertexArray(VAO1);
+
+        glBindBuffer(GL_ARRAY_BUFFER, VBO1);
+        glDrawArrays(GL_LINE_LOOP, 0, 4);
+
         // glBindVertexArray(0); // no need to unbind it every time 
  
         glfwSwapBuffers(winMain);
