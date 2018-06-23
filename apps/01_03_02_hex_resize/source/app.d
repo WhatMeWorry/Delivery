@@ -172,7 +172,7 @@ void setHexParameters()
 
 void do_movement(Event event)
 {
-    GLfloat magnify = 5.025;
+    GLfloat magnify = 1.00;
     writeln("Inside do_movement");    
     if (event.keyboard.key == Key.w)
         camera.ProcessKeyboard(Camera_Movement.FORWARD, (deltaTime * magnify));
@@ -189,7 +189,7 @@ const GLfloat howWide = .50;  // .50 is an arbitrary constant, a fraction of
 
 Camera camera;
 // Deltatime
-GLfloat deltaTime = 1.0f;  // Time between current frame and last frame
+GLfloat deltaTime = 0.01f;  // Time between current frame and last frame
 
 void main(string[] argv)
 {
@@ -205,8 +205,12 @@ void main(string[] argv)
     //mat4 projection = orthographicFunc(0.0, width, 0.0, height, -1.0f, 1.0f);
     mat4 projection = mat4.identity;  
 
-    mat4 view = camera.GetViewMatrix();  // not sure if I like the view being dependent on the camera class?
+    //projection = orthographicFunc(0.0, width, height, 0.0, -1.0f, 1.0f);
+    projection = orthographicFunc(-1.0, 1.0,   1.0, -1.0, 1.0,  10.0);
+
+    mat4 view = camera.GetViewMatrixFixedAhead();  // not sure if I like the view being dependent on the camera class?
                                          // maybe refactor this?
+    writeln("view matrix = ", view);
 
     GLfloat aspectRatio = cast(float) width / cast(float) height;
 
@@ -361,7 +365,8 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
         }  
 
         //GLint viewLoc = glGetUniformLocation(programID, "view");
-        view = camera.GetViewMatrix(); 
+        view = camera.GetViewMatrixFixedAhead(); 
+
         //view = mat4.identity;       
         glUniformMatrix4fv(viewLoc,  1, GL_TRUE, view.value_ptr);
         //writeln("view = ", view);    
