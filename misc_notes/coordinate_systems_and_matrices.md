@@ -96,9 +96,9 @@ Model * View * Projection is actually completely wrong for OpenGL. OpenGL uses c
 which means the canonical (formal math notation) is actually Projection * View * Model. Direct3D uses 
 row-major, which is where Model * View * Projection would actually be correct. 
 
-===============================================================================================================
 
-Pixel Aspect Ratio
+
+Pixel Aspect Ratio:
 
 Historically, (early 1980s) computers and video game consoles with their video raster displayed on a CRT screen
 were clearly wider or narrower than their height. To draw perfect circles instead of elongated ellipsoids you 
@@ -108,7 +108,7 @@ Nowadays, pixels on LCD monitors have square pixels. So pixel aspect ratio is no
 can be simply ignored.
 
 
-Display Aspect Ratio
+Display Aspect Ratio:
 
 is the proportional relationship between its width and its height.  It is expressed as two numbers separated by 
 a colon (x:y). Common aspect ratios for displays, past and present, include 5:4, 4:3, 16:10 and 16:9.
@@ -120,6 +120,8 @@ positions, I like to think of them as representing a percentage of leftness
 or rightness; of topness or bottomness; So the origin (Center) at (0,0)
 can be thought of as zero rightness or leftness, and zero topness or
 bottomness. 
+
+```
                   1.0 (top most position)
                    |  
                    |
@@ -131,6 +133,7 @@ bottomness.
                    |
                    |
                  -1.0 (bottom most position)
+```
 
 However, if your display aspect ratio is not square, then every
 position is going to be skewed.  So if I have a half unit circle
