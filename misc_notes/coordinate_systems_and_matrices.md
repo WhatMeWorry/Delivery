@@ -67,6 +67,8 @@ the world (and models) move around the camera.
 
 The camera in OpenGL cannot move and is defined to be located at (0,0,0) facing the negative Z direction. That means that instead of moving and rotating the camera, the world is moved and rotated around the camera to construct the appropriate view.
 
+This seems paradoxical. We've introduced a camera yet move all of the objects in the world to the camera's outlook! Why not just move the camera? Well, the camera is actually just a logical construct to make it easier to reason about. Remember, the only actual things we have are created are models. And yes, these objects are mathematical constructs of vertices, but they are nonetheless the only "real" thing we can work with.
+
 ```
 (3m) The Projection matrix transforms 3D data into 2D space. There are two kinds: Orthographic
 and Perspective. Orthographic projection has no depth perception; think of architectural 
