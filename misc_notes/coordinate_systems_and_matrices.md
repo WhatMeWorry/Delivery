@@ -17,7 +17,7 @@ World Coordinate System (2)   (aka World Space)
    View matrix    transform World space into Camera space
       ||          usually only need one of these
       ||
-View Coordinate System (3)   (aka Camera Space, Eye Space)
+View Coordinate System (3)   (aka View Space, Camera Space, Eye Space)
       ||
       ||   
    Projection Matrix (3m)
@@ -68,10 +68,12 @@ the world (and models) move around the camera.
 The camera in OpenGL cannot move and is defined to be located at (0,0,0) facing the negative Z direction. That means that instead of moving and rotating the camera, the world is moved and rotated around the camera to construct the appropriate view.
 
 ```
-(3m) The Projection matrix transforms 3D data into 2D space.  There are two kinds: Orthographic and Perspective
-Orthographic projection has no depth perception; think of architectural blue-prints or schematic drawings.
-Perspective is used to provide depth to a scene; it has a vanishing point.  The end result of the projection
-matrix is that all data has Normalized Device Coordinates or between -1.0 and 1.0.
+(3m) The Projection matrix transforms 3D data into 2D space. There are two kinds: Orthographic
+and Perspective. Orthographic projection has no depth perception; think of architectural 
+blue-prints, or schematic drawings. Or just close one of your eyes and try to reach out and 
+touch something. Perspective is used to provide depth to a scene; it has a vanishing point.  
+The end result of the projection matrix is that all data (vertices) are clipped to values 
+between -1.0 and 1.0. These values are formally called Normalized Device Coordinates.
 ```
 
 (4) Clip coordinates are processed to the -1.0 and 1.0 range and determine which vertices will end up on the screen.
