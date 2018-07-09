@@ -205,3 +205,58 @@ Look At Camera
 FPS Camera
 Arcball Orbit Camera
 
+
+https://solarianprogrammer.com/2013/05/22/opengl-101-matrices-projection-view-model/
+
+The view matrix
+
+By default, in OpenGL, the viewer is positioned on the z axis, it is like using a camera to take a shot. Imagine that your camera points to the origin of the Cartesian system. The up direction is parallel to the Oy axis and in the positive sense of Oy.
+
+The view matrix in OpenGL controls the way we look at a scene. In this article we are going to use a view matrix that simulates a moving camera, usually named lookAt.
+
+It is beyond the purpose of the present article to derive and present the way we create the view matrix, suffice to say that it is a 4x4 matrix, like the model matrix, and it is uniquely determined by 3 parameters:
+
+The eye, or the position of the viewer;
+
+The center, or the point where we the camera aims;
+
+The up, which defines the direction of the up for the viewer.
+
+The defaults in OpenGL are: the eye at (0, 0, -1); 
+                         the center at (0, 0, 0) and 
+                         the up is given by the positive direction of the Oy axis (0, 1, 0).
+
+Non 1:1 Aspect Ratio Compensation
+
+Obviously, the object is not altered by our unitary matrices multiplications. However, the square from the center of the image looks more like a rectangle. This is because the aspect ratio of our window 800:600 will distort the length of any segment that is not parallel with the Oy axis. We can correct this effect in two ways:
+
+Using a window with a 1:1 aspect ratio;
+
+Using the projection matrix to compensate the distortion of our window.
+
+Let’s try to use the second solution, we start by imposing:
+
+                 (width/height)  =  (right−left) / (top−bottom)
+               
+     multiply both sides by  have:
+
+right−left=width⋅(top−bottom)height
+from where:
+
+right=width⋅(top−bottom)2⋅height
+and
+
+    left = −right
+
+Assuming screen size of 800:600 for 4:3 gives us:
+
+```
+glm::mat4 Model, View, Projection;
+ 
+// Set the projection matrix
+// 4.0/3.0 is taken from the 800:600 aspect ratio
+Projection = glm::ortho(-4.0f/3.0f, 4.0f/3.0f, -1.0f, 1.0f, -1.0f, 1.0f);
+```
+
+
+
