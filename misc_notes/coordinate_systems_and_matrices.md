@@ -76,6 +76,8 @@ blue-prints, or schematic drawings. Or just close one of your eyes and try to re
 touch something. Perspective is used to provide depth to a scene; it has a vanishing point.  
 The end result of the projection matrix is that all data (vertices) are clipped to values 
 between -1.0 and 1.0. These values are formally called Normalized Device Coordinates.
+
+The default projection matrix is the identity matrix, which is the same as glOrtho(-1, 1, -1, 1, 1, -1).
 ```
 
 (4) Clip coordinates are processed to the -1.0 and 1.0 range and determine which vertices will end up on the screen.
