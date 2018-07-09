@@ -150,6 +150,42 @@ So how do we deal with this?
 
 
 
+https://www.3dgep.com/understanding-the-view-matrix/
+
+Understanding the View Matrix
+
+Understanding how the view matrix works in 3D space is one of the most underestimated concepts of 3D game programming.  
+The reason for this is the abstract nature of this elusive matrix.  The (((WRONG: world transformation) _model_ matrix 
+is the matrix that determines the position and orientation of an object in 3D space. The view matrix is used to 
+transform a model’s vertices from world-space to view-space.  Don’t be mistaken and think that these two things are 
+the same thing!
+
+In order to understand this correctly, we must think in terms of two different things:
+
+```
+The Camera Transformation Matrix: The transformation that places the camera in the correct position and orientation 
+in world space (this is the transformation that you would apply to a 3D model of the camera if you wanted to 
+represent it in the scene).
+
+The View Matrix: This matrix will transform vertices from world-space to view-space.  This matrix is the inverse of 
+the camera’s transformation matrix.
+```
+
+If we think of the camera as an object in the scene (like any other object that is placed in the scene) then we can say that even the camera has a transformation matrix that can be used to orient and position it in the world space of the scene (the world transform, or in the context of this article, I will refer to this transform as the “camera transform” to differentiate it from the “view transform”). But since we want to render the scene from the view of the camera, we need to find a transformation matrix that will transform the camera into “view space”. In other words, we need a transformation matrix that will place the camera object at the origin of the world pointing down the Z-axis (the positive or negative Z-axis depends on whether we are working in a left-handed or right-handed coordinate system. For an explanation on left-handed and right-handed coordinate systems, you can refer to my article titled Coordinate Systems). In other words, we need to find a matrix V such that:
+
+ I = VC
+ 
+Where C is the camera transform matrix, and V is the view matrix we are looking for that will transform the camera transform matrix into the identity matrix I.
+
+Well, it may be obvious that the matrix V is just the inverse of M. That is,
+
+  V = M (raised) −1  
+  
+Coincidently, The V matrix is used to transform any object in the scene from world space into view space (or camera space).
+
+The Camera Transformation
+
+The camera transformation is the transformation matrix that can be used to position and orient an object or a model in the scene that represents the camera.  If you wanted to represent several cameras in the scene and you wanted to visualize where each camera was placed in the world, then this transformation would be used to transform the vertices of the model that represents the camera from object-space into world space. This is the same as a world-matrix or model-matrix that positions any model in the scene.  This transformation should not be mistaken as the view matrix.  It cannot be used directly to transform vertices from world-space into view-space.
 
 
 
