@@ -188,4 +188,20 @@ The Camera Transformation
 The camera transformation is the transformation matrix that can be used to position and orient an object or a model in the scene that represents the camera.  If you wanted to represent several cameras in the scene and you wanted to visualize where each camera was placed in the world, then this transformation would be used to transform the vertices of the model that represents the camera from object-space into world space. This is the same as a world-matrix or model-matrix that positions any model in the scene.  This transformation should not be mistaken as the view matrix.  It cannot be used directly to transform vertices from world-space into view-space.
 
 
+And a vertex v can be transformed to clip-space by multiplying by the combined matrix MVP:
+
+v′=MVP∗v
+So that’s how it’s used, so how is the view matrix computed? There are several methods to compute the view matrix and the preferred method usually depends on how you intend to use it.
+
+A common method to derive the view matrix is to compute a Look-at matrix given the position of the camera in world space (usually referred to as the “eye” position), an “up” vector (which is usually [010]T), and a target point to look at in world space.
+
+If you are creating a first-person-shooter (FPS), you will probably not use the Look-at method to compute the view matrix. In this case, it would be much more convenient to use a method that computes the view matrix based on a position in world space and pitch (rotation about the X axis) and yaw (rotation about the Y axis) angles (usually we don’t want the camera to roll (rotation about the Z axis) in a FPS shooter).
+
+If you want to create a camera that can be used to pivot around a 3D object, then you would probably want to create an arcball camera.
+
+I will discuss these 3 typical camera models in the following sections.
+
+Look At Camera
+FPS Camera
+Arcball Orbit Camera
 
