@@ -208,23 +208,25 @@ void main(string[] argv)
     
     // Window dimensions
     //int width = 1200;  int height = 600;  // works
-    int width = 833;  int height = 431;  // works
+    //int width = 833;  int height = 431;  // works
+    int width = 1600;  int height = 777;
 
-
+    GLfloat aspectRatio = cast(float) width / cast(float) height;
 
     //mat4 projection = orthographicFunc(0.0, width, 0.0, height, -1.0f, 1.0f);
     mat4 projection = mat4.identity;  
 
     //projection = orthographicFunc(0.0, width, height, 0.0, -1.0f, 1.0f);
-    projection = orthographicFunc(-1.0, 1.0,   1.0, -1.0, 1.0,  10.0);
+    //projection = orthographicFunc(-1.0, 1.0,   1.0, -1.0, 1.0,  10.0);
+    projection = orthographicFunc(-aspectRatio, aspectRatio, 1.0, -1.0, 1.0, 10.0);   
 
     mat4 view = camera.GetViewMatrixFixedAhead();  // not sure if I like the view being dependent on the camera class?
                                          // maybe refactor this?
     writeln("view matrix = ", view);
 
-    GLfloat aspectRatio = cast(float) width / cast(float) height;
+    //GLfloat aspectRatio = cast(float) width / cast(float) height;
 
-    GLfloat reciprocalWindowScale = 1.0 / aspectRatio;
+    //GLfloat reciprocalWindowScale = 1.0 / aspectRatio;
 
     setHexParameters();
 
@@ -243,7 +245,8 @@ void main(string[] argv)
 glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     glfwSetCursorEnterCallback(winMain, &onCursorEnterLeave);  // triggered when cursor enters or leaves the window
 
-
+    showAllMonitors();
+    showMonitorVideoMode();
 
     // glgetInteger.. queries must be done AFTER opengl context is created!!!
 
@@ -309,9 +312,9 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * GLfloat.sizeof, cast(const(void)*) 0);
     //glEnableVertexAttribArray(0);
 
-    GLint reciprocalWindowScaleLoc = glGetUniformLocation(programID, "reciprocalWindowScale");
+    //GLint reciprocalWindowScaleLoc = glGetUniformLocation(programID, "reciprocalWindowScale");
 
-    glUniform1f(reciprocalWindowScaleLoc, reciprocalWindowScale);  
+    //glUniform1f(reciprocalWindowScaleLoc, reciprocalWindowScale);  
 
     GLint projLoc = glGetUniformLocation(programID, "projection");
     glUniformMatrix4fv(projLoc,  1, GL_FALSE, projection.value_ptr);
@@ -372,15 +375,28 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
             writeln("newWidth = ", newWidth);
             writeln("newHeight = ", newHeight);            
 
-            aspectRatio = cast(float) newWidth / cast(float) newHeight;
+            // THIS WORK! FREEZE THIS PROJECT
+
+            if (newWidth >= newHeight)
+            {
+                aspectRatio = cast(float) newWidth / cast(float) newHeight;
+                projection = orthographicFunc(-aspectRatio, aspectRatio, 1.0, -1.0, 1.0, 10.0); 
+            }                
+            else
+            {
+                aspectRatio = cast(float) newHeight / cast(float) newWidth;  
+                projection = orthographicFunc(-1.0, 1.0, aspectRatio, -aspectRatio, 1.0, 10.0);
+            }             
             writeln("aspectRatio = ", aspectRatio);
             width = newWidth;
             height = newHeight;
 
-            reciprocalWindowScale = 1.0 / aspectRatio;
-            writeln("reciprocalWindowScale = ", reciprocalWindowScale);
+             
+            glUniformMatrix4fv(projLoc,  1, GL_FALSE, projection.value_ptr);
+            //reciprocalWindowScale = 1.0 / aspectRatio;
+            //writeln("reciprocalWindowScale = ", reciprocalWindowScale);
  
-            glUniform1f(reciprocalWindowScaleLoc, reciprocalWindowScale); 
+            //glUniform1f(reciprocalWindowScaleLoc, reciprocalWindowScale); 
         }  
 
         //GLint viewLoc = glGetUniformLocation(programID, "view");
