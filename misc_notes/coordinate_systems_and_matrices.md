@@ -257,6 +257,20 @@ glm::mat4 Model, View, Projection;
 // 4.0/3.0 is taken from the 800:600 aspect ratio
 Projection = glm::ortho(-4.0f/3.0f, 4.0f/3.0f, -1.0f, 1.0f, -1.0f, 1.0f);
 ```
+This technique works in orthographic projection by "narrowing" the longer
+dimension so that it is equal shorter side. Thus creating a square display
+area; the window itself will still be a rectangle.  We reinforce this idea
+by displaying a NDC square within the 01_03_02_hex_resize project 
 
-
-
+```
+if (newWidth >= newHeight)
+{
+    aspectRatio = cast(float) newWidth / cast(float) newHeight;
+    projection = orthographicFunc(-aspectRatio, aspectRatio, 1.0, -1.0, 1.0, 10.0); 
+}                
+else
+{
+    aspectRatio = cast(float) newHeight / cast(float) newWidth;  
+    projection = orthographicFunc(-1.0, 1.0, aspectRatio, -aspectRatio, 1.0, 10.0);
+}
+```
