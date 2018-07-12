@@ -274,3 +274,23 @@ else
     projection = orthographicFunc(-1.0, 1.0, aspectRatio, -aspectRatio, 1.0, 10.0);
 }
 ```
+
+
+glViewPort is in screen pixel units: that's it, it has nothing to do with the 3D world "inside" your graphics card. It just tells wich part of the window will be used for rendering (or just will be visible).
+
+glOrtho instead changes the "inner" world and is OpenGL units: More OpenGL units will fit into the visible part of the screen, so "bigger" objects will fit easily into viewable area if you increase the ortho size.
+
+
+The technique below keeps the hexagons appropiately proportioned within any window size, but will enlarge or shrink the hex size
+based on the longer side of the rectangle.  
+```
+if (event.type == EventType.frameBufferSize)   // was handled in handleEvent(winMain)
+{
+    if (event.frameBufferSize.width >= event.frameBufferSize.height)
+        glViewport(0, 0, event.frameBufferSize.width, event.frameBufferSize.width);
+    else
+        glViewport(0, 0, event.frameBufferSize.height, event.frameBufferSize.height);
+}
+```
+
+
