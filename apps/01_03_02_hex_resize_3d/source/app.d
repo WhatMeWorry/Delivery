@@ -133,7 +133,7 @@ void main(string[] argv)
     //int width = 833;  int height = 431;  // works
     int width = 1600;  int height = 777;
 
-    GLfloat aspectRatio = cast(float) width / cast(float) height;
+    //GLfloat aspectRatio = cast(float) width / cast(float) height;
 
     //mat4 projection = orthographicFunc(0.0, width, 0.0, height, -1.0f, 1.0f);
     mat4 projection = mat4.identity;  
@@ -243,7 +243,11 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
 
     GLint viewLoc = glGetUniformLocation(programID, "view");
     glUniformMatrix4fv(viewLoc,  1, GL_TRUE, view.value_ptr);
-    //writeln("view = ", view);    
+
+    if (width >= height)
+        glViewport(0, 0, width, width);
+    else
+        glViewport(0, 0, height, height);      
 
     // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex 
 	// attribute's bound vertex buffer object so afterwards we can safely unbind
@@ -302,12 +306,12 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
 
             if (newWidth >= newHeight)
             {
-                aspectRatio = cast(float) newWidth / cast(float) newHeight;
+                //aspectRatio = cast(float) newWidth / cast(float) newHeight;
                 //projection = orthographicFunc(-aspectRatio, aspectRatio, 1.0, -1.0, 1.0, 10.0); 
             }                
             else
             {
-                aspectRatio = cast(float) newHeight / cast(float) newWidth;  
+                //aspectRatio = cast(float) newHeight / cast(float) newWidth;  
                 //projection = orthographicFunc(-1.0, 1.0, aspectRatio, -aspectRatio, 1.0, 10.0);
             }             
              
