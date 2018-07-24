@@ -293,4 +293,65 @@ if (event.type == EventType.frameBufferSize)   // was handled in handleEvent(win
 }
 ```
 
+I am trying to map the NDC to screen coordinates in 2D , what is the formula for this? 
 
+just to be precise i am trying to go from vertices i give opengl to screen coordinates i.e -1.0,0.0 etc to screen coordinates 200,300 etc in 2D space
+
+Vertices which you give to OpenGL are first converted to clip coordinates, either by multiplying them by the model-view and projection matrices (for the fixed-function pipeline), or by whatever transformations the vertex shader implements (gl_Position is in clip coordinates).
+
+After clipping, clip coordinates are converted to NDC by dividing by W. NDC are converted to window coordinates by the viewport transformation:
+
+```
+xw = (xndc+1)*(width/2)+x
+yw = (yndc+1)*(height/2)+y
+```
+where x,y,width,height are the parameters to glViewport().
+
+Note that window coordinates are relative to the lower-left corner of the window.
+
+
+
+if i have screen coordinates how would i go to ndc?
+```
+xndc = (xw-x)/(width/2)-1
+yndc = (yw-y)/(height/2)-1
+```
+
+
+
+
+Screen Coordinates
+
+Screen coordinates are simply calculated by expanding the normalized coordinates to the confines of your viewport.
+```
+screen.x = ((view.w * 0.5) * ndc.x) + ((w * 0.5) + view.x)
+screen.y = ((view.h * 0.5) * ndc.y) + ((h * 0.5) + view.y)
+screen.z = (((view.f - view.n) * 0.5) * ndc.z) + ((view.f + view.n) * 0.5)
+```
+Where,
+
+screen is the coordinate in screen-space
+ndc is the coordinate in normalized-space
+view.x is the viewport x origin
+view.y is the viewport y origin
+view.w is the viewport width
+view.h is the viewport height
+view.f is the viewport far
+view.n is the viewport near
+Converting from Screen to NDC
+
+As we have the conversion from NDC to Screen above, it is easy to calculate the reverse.
+```
+ndc.x = ((2.0 * screen.x) - (2.0 * x)) / w) - 1.0
+ndc.y = ((2.0 * screen.y) - (2.0 * y)) / h) - 1.0
+ndc.z = ((2.0 * screen.z) - f - n) / (f - n)) - 1.0
+```
+Example:
+
+viewport (w, h, n, f) = (800, 600, 1, 1000)
+
+screen.xyz = (400, 300, 200)
+ndc.xyz = (0.0, 0.0, -0.599)
+
+screen.xyz = (575, 100, 1)
+ndc.xyz = (0.4375, -0.666, -0.998)
