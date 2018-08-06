@@ -1,5 +1,6 @@
 module projectionfuncs;
 
+import std.stdio;
 import gl3n.linalg;  // mat4
 import gl3n.math: tan;
 
@@ -55,6 +56,11 @@ mat4 orthographicFunc(float left, float right, float bottom, float top, float ne
                    0,     0,      -2/dz,  tz,
                    0,     0,      0,      1);
     +/
+
+    writeln("dx = ", dx);
+    writeln("2/dx = ", 2/dx);
+    writeln("dy = ", dy);
+    writeln("2/dy = ", 2/dy);
 
     mat4 cm;  // column major
 

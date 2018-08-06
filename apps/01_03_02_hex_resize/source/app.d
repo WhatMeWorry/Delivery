@@ -378,14 +378,28 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
             // THIS WORK! FREEZE THIS PROJECT
 
             if (newWidth >= newHeight)
-            {
-                aspectRatio = cast(float) newWidth / cast(float) newHeight;
-                projection = orthographicFunc(-aspectRatio, aspectRatio, 1.0, -1.0, 1.0, 10.0); 
+            {                        // Window Width is > Height
+                // This code keeps the hexagons proportional but will pad with blank space in the
+                // left and right, thus keeping the clip space squared even though the window is not.               
+                //aspectRatio = cast(float) newWidth / cast(float) newHeight;
+                //projection = orthographicFunc(-aspectRatio, aspectRatio, 1.0, -1.0, 1.0, 10.0); 
+
+                // This code keeps the hexagons proportional but truncate any top and bottom overhangs 
+                // in the y dimension. 
+                aspectRatio = cast(float) newHeight / cast(float) newWidth;
+                projection = orthographicFunc(-1.0, 1.0, aspectRatio, -aspectRatio, 1.0, 10.0);                
             }                
             else
-            {
-                aspectRatio = cast(float) newHeight / cast(float) newWidth;  
-                projection = orthographicFunc(-1.0, 1.0, aspectRatio, -aspectRatio, 1.0, 10.0);
+            {                        // Window Height is > Width
+                // This code keeps the hexagons proportional but will pad with blank space in the
+                // top and bottom, thus keeping the clip space squared even though the window is not.               
+                //aspectRatio = cast(float) newHeight / cast(float) newWidth;  
+                //projection = orthographicFunc(-1.0, 1.0, aspectRatio, -aspectRatio, 1.0, 10.0);
+
+                // This code keeps the hexagons proportional but truncate any left and right overhangs 
+                // in the x dimension. 
+                aspectRatio = cast(float) newWidth / cast(float) newHeight;
+                projection = orthographicFunc(-aspectRatio, aspectRatio, 1.0, -1.0, 1.0, 10.0);                
             }             
             writeln("aspectRatio = ", aspectRatio);
             width = newWidth;
