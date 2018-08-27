@@ -201,9 +201,9 @@ If you want to create a camera that can be used to pivot around a 3D object, the
 
 I will discuss these 3 typical camera models in the following sections.
 
-Look At Camera
-FPS Camera
-Arcball Orbit Camera
+1. Look At Camera
+2. FPS Camera
+3. Arcball Orbit Camera
 
 
 https://solarianprogrammer.com/2013/05/22/opengl-101-matrices-projection-view-model/
