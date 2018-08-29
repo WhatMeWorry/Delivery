@@ -355,3 +355,14 @@ ndc.xyz = (0.0, 0.0, -0.599)
 
 screen.xyz = (575, 100, 1)
 ndc.xyz = (0.4375, -0.666, -0.998)
+
+
+The universe of OpenGL, where all the models, meshes, or objects can reside is one big box with dimensions of 
+
+typedef float GLfloat;
+typedef double GLdouble;
+
+You do not use double precision for graphics. Although all modern GPUs support it just fine, double precision math is often slower than single precision, and it has no observable advantage. Everything related to "graphics" (or let's say 99.99% since "everything" is a very definite wording) works just fine using float or GLfloat for that matter. Even some years ago when some GPUs worked with only 24-bit precision, there was no visible difference.
+
+In fact, when people use double because they think they should, then 99% of the time they are doing it wrong.
+
