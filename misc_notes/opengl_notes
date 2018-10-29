@@ -295,3 +295,22 @@ glEnd();
 
 
 
+=======================================================================================================
+
+
+The best way to picture this is that when you make this call:
+
+glVertexAttribPointer(0, 3, GL_FLOAT, false, Vertex.SIZE * 4, 0);
+you're specifying all the state needed to tell OpenGL where to get the data for attribute 0 (first argument) from, and how to read it. Most of that state is given directly by the arguments:
+
+it has 3 components
+the components are float values
+vertices are read with a stride of 20 bytes...
+... and starting at byte 0 of the buffer
+But there's an additional implied piece of state that is also stored away for attribute 0 when you make the call:
+
+the data is read from the buffer currently bound to GL_ARRAY_BUFFER
+In other words, the state associated with each attribute includes the id of the buffer the attribute data is sourced from. This can be the same buffer for multiple/all attributes, or it can be a different buffer for each attribute.
+
+Note that the same is not true for GL_ELEMENT_ARRAY_BUFFER. That one needs to be bound at the time of the glDrawElements() call. While it seems somewhat inconsistent, this is necessary because there's no equivalent to glVertexAttribPointer() for the index array. The API could have been defined to have this kind of call, but... it was not. The reason is most likely that it was simply not necessary, since only one index array can be used for a draw call, while multiple vertex buffers can be used.
+
