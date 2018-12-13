@@ -1,8 +1,12 @@
 
 
-Requirement: Git needs to be installed on you machine.
+Requirements: 
 
+Git needs to be installed on you machine.
 If not, go to https://git-scm.com/download
+
+Visual Studio Code needs to be installed.
+If not, go to https://code.visualstudio.com/download
 
 
 ================== Git(ting) an existing GitHub Repo ==============================
@@ -12,38 +16,42 @@ Go to WhatMeWorry/Delivery or https://github.com/WhatMeWorry/Delivery
 
 click on green "Clone or download" button and then "copy to clipboard"
 
-At desktop, open a git command line or Visual Studio Code.  (This document assume use of VSC)
+At desktop, open the Visual Studio Code application.
 
+At the drop down menus of VSC select:
 View > Integrated Terminal  (Ctrl+`)
 
+```
+kheaser@IT-ASST-SB MINGW64 ~
 $ pwd
-/c/Users/kheaser/SomeRepo
+/c/Users/kheaser
+```
 
-Now cd to where you want the gitted repo to reside:
+We want to put all of our repos under user kheaser so we are conviently at the 
+right location. You may certainly create a new directory or move to a different path.
 
-kheaser@IT-ASST-SB MINGW64 /c/Users/kheaser/Delivery (master)
-$ cd ..
 
-kheaser@IT-ASST-SB MINGW64 /c/Users/kheaser
-$ pwd
-/c/Users/kheaser       // Repo will now be gitted here!
+type in "git clone" and right click your mouse to paste the clipboard content from above.
+The type return.
 
-type in "git clone" and right click you mouse to paste the clipboard content
-type return.
-
+```
 $git clone https://github.com/WhatMeWorry/Delivery.git
 
 Cloning into 'Delivery'...
-remote: Counting objects: 1234, done.
-remote: Total 1234 (delta 0), reused 0 (delta 0), pack-reused 1234
-Receiving objects: 100% (1234/1234), 46.56 MiB | 9.21 MiB/s, done.
-Resolving deltas: 100% (886/886), done.
+remote: Enumerating objects: 4, done.
+remote: Counting objects: 100% (4/4), done.
+remote: Compressing objects: 100% (4/4), done.
+remote: Total 2216 (delta 0), reused 0 (delta 0), pack-reused 2212
+Receiving objects: 100% (2216/2216), 75.48 MiB | 6.74 MiB/s, done.
+Resolving deltas: 100% (1587/1587), done.
+Checking out files: 100% (445/445), done.
+```
 
-It turns out that by default, git copied the Delivery Repo to
+Git has now copied the Delivery Repo from GitHub to the local machine at
 C:\Users\kheaser\Delivery
 
-Within VSC, File > Open Folder
-and navigate to C:\Users\kheaser\Delivery and [Select Folder]
+Now from within VSC, select File > Open Folder
+and navigate to C:\Users\kheaser\ and highlight the folder Delivery. And [Select Folder]
 
 
 Now from Windows Explorer, Navigate to C:\Users\kheaser\Delivery\apps
