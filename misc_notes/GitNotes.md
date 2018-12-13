@@ -1,4 +1,10 @@
 
+
+Requirement: Git needs to be installed on you machine.
+
+If not, go to https://git-scm.com/download
+
+
 ================== Git(ting) an existing GitHub Repo ==============================
 
 
