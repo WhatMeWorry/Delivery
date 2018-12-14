@@ -14,12 +14,14 @@ If not, go to https://code.visualstudio.com/download
 
 Go to WhatMeWorry/Delivery or https://github.com/WhatMeWorry/Delivery
 
-click on green "Clone or download" button and then "copy to clipboard"
+Then click on the green **[Clone or download]** button and select the "copy to clipboard" icon
 
-At desktop, open the Visual Studio Code application.
+Now open the Visual Studio Code application.
 
 At the drop down menus of VSC select:
-View > Integrated Terminal  (Ctrl+`)
+**View > Integrated Terminal**  (Ctrl+`)
+
+Just to get ones bearing and to verify that terminal works, type in the command **pwd**
 
 ```
 kheaser@IT-ASST-SB MINGW64 ~
@@ -27,12 +29,11 @@ $ pwd
 /c/Users/kheaser
 ```
 
-We want to put all of our repos under user kheaser so we are conviently at the 
-right location. You may certainly create a new directory or move to a different path.
+We re going to put all of our local copies of Github repositories under user kheaser which we are conviently already at. You are not required to use this convention, but place them wherever you want.  
 
 
-type in "git clone" and right click your mouse to paste the clipboard content from above.
-The type return.
+In the Visual Studio Code terminal, type **git clone** and right click your mouse to paste the clipboard content from above.
+Hit Enter and you shoul see something like the following:
 
 ```
 $git clone https://github.com/WhatMeWorry/Delivery.git
@@ -47,15 +48,17 @@ Resolving deltas: 100% (1587/1587), done.
 Checking out files: 100% (445/445), done.
 ```
 
-Git has now copied the Delivery Repo from GitHub to the local machine at
+Git has now copied the Delivery Repo from GitHub website to your local machine at
 C:\Users\kheaser\Delivery
 
-Now from within VSC, select File > Open Folder
-and navigate to C:\Users\kheaser\ and highlight the folder Delivery. And [Select Folder]
+Now from within VSC, select **File > Open Folder**
+and navigate to **C:\Users\kheaser\\** and highlight the folder **Delivery**. Click on **[Select Folder]**
 
+Yous should now see all the files associated with the Delivery repo within VSC.
 
-Now from Windows Explorer, Navigate to C:\Users\kheaser\Delivery\apps
-and Shift + Rght Click and   Open Powershell/Command window here.
+Let's leave VSC for now and open Windows Explorer. Navigate to **C:\Users\kheaser\Delivery\\** (or wherever you placed it)
+and **Shift + Rght Click** on the **apps** folder and select **open powershell/command window here**
+
 
 
 ***
