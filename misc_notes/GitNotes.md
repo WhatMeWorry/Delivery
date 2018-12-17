@@ -72,7 +72,7 @@ Running The D/OpenGL examples
 ----------------------------------
 
 Open a Powershell/Command Window or Terminal and navigate to
-C:\Users\*user*\Delivery\apps>
+C:\Users\\*user\*\Delivery\apps>
 
 
 
