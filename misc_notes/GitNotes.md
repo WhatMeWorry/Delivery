@@ -1,14 +1,20 @@
 
 
-Requirements: 
+Requirements:
+
+Two main goals are to have a zero cost of entry and to be universally available. The following programs are free and generally open source as well; Additionally, all are available for the big three platforms: Linx, MacOS, and Windows. 
 
 Git needs to be installed on you machine.
-If not, go to https://git-scm.com/download
+If not, go to https://git-scm.com/download and download and install it.
 
-A D Language compiler needs to be installed. We will be using a LLVM-based D compiler called LDC.  A portable stand-alone binary compiler exists for common platforms (Linux, macOS and Windows).  Is not, go to  are available at the GitHub release page.
+A D Language compiler needs to be installed. We will be using a LLVM-based D compiler called LDC whhich is a portable, stand-alone, binary, compiler.  
+If not, go to https://github.com/ldc-developers/ldc/releases and download and install it.
 
 Visual Studio Code needs to be installed.
-If not, go to https://code.visualstudio.com/download
+If not, go to https://code.visualstudio.com/download and download and install it.
+
+DUB, the D package registry, needs to be installed.
+If not, go to https://code.dlang.org/download and download and install it.
 
 
 ================== Git(ting) an existing GitHub Repo ==============================
