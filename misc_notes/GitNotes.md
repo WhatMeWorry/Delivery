@@ -56,16 +56,43 @@ Resolving deltas: 100% (1587/1587), done.
 Checking out files: 100% (445/445), done.
 ```
 
-Git has now copied the Delivery Repo from GitHub website to your local machine at
+Git has now copied the Delivery Repository from GitHub website to your local machine at
 C:\Users\kheaser\Delivery
 
 Now from within VSC, select **File > Open Folder**
 and navigate to **C:\Users\kheaser\\** and highlight the folder **Delivery**. Click on **[Select Folder]**
 
-Yous should now see all the files associated with the Delivery repo within VSC.
+You should now see all the files associated with the Delivery repo within VSC.
 
 Let's leave VSC for now and open Windows Explorer. Navigate to **C:\Users\kheaser\Delivery\\** (or wherever you placed it)
 and **Shift + Rght Click** on the **apps** folder and select **open powershell/command window here**
+
+
+Running The D/OpenGL examples
+----------------------------------
+
+Open a Powershell/Command Window or Terminal and navigate to
+C:\Users\*user*\Delivery\apps>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
