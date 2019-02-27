@@ -66,7 +66,27 @@ shell32!RegenerateUserEnvironment which is called on Explorer initialization1. T
 HKCU\Volatile Environment key which, being volatile, persists until the profile's unload.
 
 
+==================================================================================================================
+
+A lot of software installation dialogs on Windows throw up a query to the installing user asking if this software should be installed for all 
+users or the current user.
+
 Consequently, they are only set when the user logins into their desktop session. NOT for secondary logons or services.
 No wonder people prefer USERPROFILE nowadays. For HOMEPATH to be set, SYSTEM must have permissions for the profile's 
 directory (they are initially set, of course, but may vanish when e.g. playing with Cygwin's chmod).
 
+
+In a nutshell...
+
+Install For All Users would be used when you want the program to be "active" for anyone who logs on to the computer 
+with their personal account (if there is more than one login). A good example would be an antivirus program, that 
+you would want to be available while any user is logged in.
+
+Install for Current User is normally used under an Administrator account for something that handles disk operations 
+and other admin-type functions, such as Acronis True Image, a keylogger (to track what non-admin users are doing while 
+logged on), and other disk-related or sensitive software.
+
+I will also point out that Install for Current User is often used to install regular programs when a user does not 
+have admin rights. A lot of programs now have options that will allow standard users to install a program for their 
+account only if they are not an administrator. Generally, administrative rights are required to install a program for 
+all users but not always for just the current user.
