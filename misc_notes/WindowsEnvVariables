@@ -35,7 +35,7 @@ Windows 10 default environment variables
 %PUBLIC%                   C:\Users\Public
 %PSModulePath%             %SystemRoot%\system32\WindowsPowerShell\v1.0\Modules\
 
-Although you can use environment variables to quickly access certain locations within Windows 10, you’ll typically use these 
+ Although you can use environment variables to quickly access certain locations within Windows 10, you’ll typically use these 
 variable when building an script or an application. Keep in mind that some of the variables mentioned are not location specific, 
 including %COMPUTERNAME%, %PATHEXT%, %PROMPT%, %USERDOMAIN%, %USERNAME%. While this guide is focused on Windows 10, it’s important 
 to note that these variable will also work on Windows 8.x, Windows 7, and Windows Vista.
