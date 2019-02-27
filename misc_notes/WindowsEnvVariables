@@ -90,3 +90,28 @@ I will also point out that Install for Current User is often used to install reg
 have admin rights. A lot of programs now have options that will allow standard users to install a program for their 
 account only if they are not an administrator. Generally, administrative rights are required to install a program for 
 all users but not always for just the current user.
+
+===========================================================================================================================
+
+
+Visual Studio Code supports Git by default, which means you don’t have to install any packages or extensions to use it, but
+since Visual Studio Code uses the Git installed on your computer, first you need to install Git.
+
+
+Using the 64 bit, "thumbdrive edition" or Windows Portable version of Git.  I hope to install all this on
+GitHub itself so the user can do a "one shop" stop for all of Delivery installation.
+
+Can't use git.exe directly.  Need to use either:
+
+git-bash.exe - opens a bash shell. In other words a MINGW64 shell windows. echo $PATH displays only Unix paths.
+git-cmd.exe - opens a Windows command window. echo %PATH% returns the users existing Windows paths.
+
+=============================================================================================================================
+
+
+
+
+
+
+
+
