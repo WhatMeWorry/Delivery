@@ -1,0 +1,117 @@
+
+For example, instead of browsing C:\Users\<UserName>\AppData\Roaming, you can simply open the Run command (Windows key + R), 
+type %APPDATA%, and hit Enter to access the same path. Or you can use the %HOMEPATH% variable to access the current user default 
+folders location — where the operating system stores the folders for Desktop, Documents, Downloads, OneDrive, etc.
+
+In this guide, you’ll learn the list of the most common environment variables you can use on Windows 10.
+
+Windows 10 default environment variables
+      VARIABLE	                 WINDOWS 10
+%ALLUSERSPROFILE%	         C:\ProgramData
+%APPDATA%                  C:\Users\{username}\AppData\Roaming
+%COMMONPROGRAMFILES%       C:\Program Files\Common Files
+%COMMONPROGRAMFILES(x86)%  C:\Program Files (x86)\Common Files
+%CommonProgramW6432%       C:\Program Files\Common Files
+%COMSPEC%                  C:\Windows\System32\cmd.exe
+%HOMEDRIVE%	               C:\
+%HOMEPATH%	               C:\Users\{username}
+%LOCALAPPDATA%             C:\Users\{username}\AppData\Local
+%LOGONSERVER%              \\{domain_logon_server}
+%PATH%                     C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem
+%PathExt%                  .com;.exe;.bat;.cmd;.vbs;.vbe;.js;.jse;.wsf;.wsh;.msc
+%PROGRAMDATA%              C:\ProgramData
+%PROGRAMFILES%             C:\Program Files
+%ProgramW6432%             C:\Program Files
+%PROGRAMFILES(X86)%        C:\Program Files (x86)
+%PROMPT%                   $P$G
+%SystemDrive%              C:
+%SystemRoot%               C:\Windows
+%TEMP%                     C:\Users\{username}\AppData\Local\Temp
+%TMP%	                     C:\Users\{username}\AppData\Local\Temp
+%USERDOMAIN%               {userdomain}
+%USERNAME%	               {username}
+%USERPROFILE%              C:\Users\{username}
+%WINDIR%                   C:\Windows
+%PUBLIC%                   C:\Users\Public
+%PSModulePath%             %SystemRoot%\system32\WindowsPowerShell\v1.0\Modules\
+
+ Although you can use environment variables to quickly access certain locations within Windows 10, you’ll typically use these 
+variable when building an script or an application. Keep in mind that some of the variables mentioned are not location specific, 
+including %COMPUTERNAME%, %PATHEXT%, %PROMPT%, %USERDOMAIN%, %USERNAME%. While this guide is focused on Windows 10, it’s important 
+to note that these variable will also work on Windows 8.x, Windows 7, and Windows Vista.
+
+
+==============================================================================================================
+
+HOMEDRIVE/HOMEPATH is where the user's personal files are: downloads, music, documents, etc.
+HOMESHARE is used instead of 
+HOMEDRIVE if the home directory uses UNC paths.
+
+USERPROFILE is used to store the user's application and OS configuration files and personalization settings. 
+It includes both local and roaming (Active Directory) folders. It seems like people favor using this more than 
+HOMEPATH nowadays.
+
+It's important to note that although HOMEDRIVE/HOMEPATH is often the same path as USERPROFILE, it's not always the case.
+
+USERPROFILE is set by userenv!LoadUserProfileW which is called when, well, loading the user's profile 
+(the HKEY_USERS\<sid> hive).
+
+
+This typically happens the first time a process is started for the user. If you specifically arranged not to load the 
+profile (e.g. with /noprofile for runas) then the process is run in the Default User profile which still has this 
+variable set - since the moment it was loaded at system's startup.
+
+HOMEDRIVE, HOMEPATH and HOMESHARE (as well as several other variables) are set by 
+shell32!RegenerateUserEnvironment which is called on Explorer initialization1. They are placed in the (volatile) 
+HKCU\Volatile Environment key which, being volatile, persists until the profile's unload.
+
+
+==================================================================================================================
+
+A lot of software installation dialogs on Windows throw up a query to the installing user asking if this software should be installed for all 
+users or the current user.
+
+Consequently, they are only set when the user logins into their desktop session. NOT for secondary logons or services.
+No wonder people prefer USERPROFILE nowadays. For HOMEPATH to be set, SYSTEM must have permissions for the profile's 
+directory (they are initially set, of course, but may vanish when e.g. playing with Cygwin's chmod).
+
+
+In a nutshell...
+
+Install For All Users would be used when you want the program to be "active" for anyone who logs on to the computer 
+with their personal account (if there is more than one login). A good example would be an antivirus program, that 
+you would want to be available while any user is logged in.
+
+Install for Current User is normally used under an Administrator account for something that handles disk operations 
+and other admin-type functions, such as Acronis True Image, a keylogger (to track what non-admin users are doing while 
+logged on), and other disk-related or sensitive software.
+
+I will also point out that Install for Current User is often used to install regular programs when a user does not 
+have admin rights. A lot of programs now have options that will allow standard users to install a program for their 
+account only if they are not an administrator. Generally, administrative rights are required to install a program for 
+all users but not always for just the current user.
+
+===========================================================================================================================
+
+
+Visual Studio Code supports Git by default, which means you don’t have to install any packages or extensions to use it, but
+since Visual Studio Code uses the Git installed on your computer, first you need to install Git.
+
+
+Using the 64 bit, "thumbdrive edition" or Windows Portable version of Git.  I hope to install all this on
+GitHub itself so the user can do a "one shop" stop for all of Delivery installation.
+
+Can't use git.exe directly.  Need to use either:
+
+git-bash.exe - opens a bash shell. In other words a MINGW64 shell windows. echo $PATH displays only Unix paths.
+git-cmd.exe - opens a Windows command window. echo %PATH% returns the users existing Windows paths.
+
+=============================================================================================================================
+
+
+
+
+
+
+
+
