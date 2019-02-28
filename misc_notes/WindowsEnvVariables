@@ -122,6 +122,14 @@ My GitHub web page will have a download button which will download an already co
 
 
 
+remote: error: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.
+remote: error: Trace: e2ed221b89286c8538acfc142ee11902
+remote: error: See http://git.io/iEPt8g for more information.
+remote: error: File windows/APortableGit.zip is 105.65 MB; this exceeds GitHub's file size limit of 100.00 MB
+To https://github.com/WhatMeWorry/Delivery.git
+ ! [remote rejected] master -> master (pre-receive hook declined)
+error: failed to push some refs to 'https://github.com/WhatMeWorry/Delivery.git'
+
 
 
 
