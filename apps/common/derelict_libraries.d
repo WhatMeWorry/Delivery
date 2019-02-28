@@ -126,7 +126,8 @@ void load_libraries()
 
     // Set the callback before calling load
     DerelictFI.missingSymbolCallback = &myMissingSymCallBackFI;
-    DerelictFI.load();      // Load the FreeImage library
+	 writeln("SharedLibVersion(3, 17, 0)");
+    DerelictFI.load(SharedLibVersion(3, 17, 0));      // Load the FreeImage library
 
     writeln("FreeImage library loaded");
 
