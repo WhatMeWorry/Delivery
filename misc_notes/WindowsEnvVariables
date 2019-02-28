@@ -108,6 +108,9 @@ git-cmd.exe - opens a Windows command window. echo %PATH% returns the users exis
 
 =============================================================================================================================
 
+My GitHub web page will have a download button which will download an already compiled executable with will download Portable
+"thumbdrive" Git and then run a "git clone Delivery" which will download the a prepositioned LDC2, DUB, and D Languange.
+
 
 
 
