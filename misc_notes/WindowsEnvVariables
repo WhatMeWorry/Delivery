@@ -7,7 +7,7 @@ In this guide, you’ll learn the list of the most common environment variables 
 
 Windows 10 default environment variables
       VARIABLE	                 WINDOWS 10
-%ALLUSERSPROFILE%	         C:\ProgramData
+%ALLUSERSPROFILE%          C:\ProgramData
 %APPDATA%                  C:\Users\{username}\AppData\Roaming
 %COMMONPROGRAMFILES%       C:\Program Files\Common Files
 %COMMONPROGRAMFILES(x86)%  C:\Program Files (x86)\Common Files
@@ -29,7 +29,7 @@ Windows 10 default environment variables
 %TEMP%                     C:\Users\{username}\AppData\Local\Temp
 %TMP%	                     C:\Users\{username}\AppData\Local\Temp
 %USERDOMAIN%               {userdomain}
-%USERNAME%	               {username}
+%USERNAME%                 {username}
 %USERPROFILE%              C:\Users\{username}
 %WINDIR%                   C:\Windows
 %PUBLIC%                   C:\Users\Public
@@ -94,8 +94,8 @@ all users but not always for just the current user.
 ===========================================================================================================================
 
 
-Visual Studio Code supports Git by default, which means you don’t have to install any packages or extensions to use it, but
-since Visual Studio Code uses the Git installed on your computer, first you need to install Git.
+Visual Studio Code supports Git by default, which means you don’t have to install any packages or extensions to use it; 
+However, Visual Studio Code requires Git to be previously installed before it can be used.
 
 
 Using the 64 bit, "thumbdrive edition" or Windows Portable version of Git.  I hope to install all this on
@@ -106,7 +106,15 @@ Can't use git.exe directly.  Need to use either:
 git-bash.exe - opens a bash shell. In other words a MINGW64 shell windows. echo $PATH displays only Unix paths.
 git-cmd.exe - opens a Windows command window. echo %PATH% returns the users existing Windows paths.
 
+Portable Git will be placed within the Delivery project as a compressed 7-zip file. (7-Zip is a free and open-source file archiver)
+
 =============================================================================================================================
+
+
+For installation of the LLVM D Compiler (henceforth, LDC), a pre-built, portable, stand-alone binary will be used. This is
+available for all common platforms (Linux, macOS and Windows) and is are available at the LDC GitHub release page.
+
+
 
 My GitHub web page will have a download button which will download an already compiled executable with will download Portable
 "thumbdrive" Git and then run a "git clone Delivery" which will download the a prepositioned LDC2, DUB, and D Languange.
