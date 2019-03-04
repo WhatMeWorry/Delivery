@@ -131,6 +131,10 @@ To https://github.com/WhatMeWorry/Delivery.git
 error: failed to push some refs to 'https://github.com/WhatMeWorry/Delivery.git'
 
 
+Had to take the Portable Git and 7zip it using compression level "Ultra" and compression method "LZMA2"
+This created a 7z Archive of 41,126 KB or 40.16 MB
+
+
 
 
 
