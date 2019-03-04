@@ -97,6 +97,26 @@ all users but not always for just the current user.
 Visual Studio Code supports Git by default, which means you don’t have to install any packages or extensions to use it; 
 However, Visual Studio Code requires Git to be previously installed before it can be used.
 
+When firing up Visual Studio Code, got a "Git not found. Install it or configure it using the 'git.path' setting.
+Source: Git (Extension)
+
+Visual Studio Code simply looks in your PATH for git. Many UI clients ship with a "Portable Git" for simplicity, and do not 
+add git to the path. If you add your existing git client to your PATH (so that it can find git.exe), Visual Studio Code 
+should enable Git source control management.
+
+Now you can configure Visual Studio Code (version 0.10.2, check for older versions) to use existing git installation.
+
+Just add the path to the git executable in your Visual Studio Code settings (File -> Preferences -> Settings ->
+User Settings -> Application -> Git  ) like this:
+
+{
+    // Is git enabled
+    "git.enabled": true,
+
+    // Path to the git executable
+    "git.path": "C:\\path\\to\\git.exe"
+}
+============================================================================================================================
 
 Using the 64 bit, "thumbdrive edition" or Windows Portable version of Git.  I hope to install all this on
 GitHub itself so the user can do a "one shop" stop for all of Delivery installation.
