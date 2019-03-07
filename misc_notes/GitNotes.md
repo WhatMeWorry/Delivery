@@ -177,3 +177,85 @@ otherwise there is no way, they are standard directories, just use your OS file/
 On Windows you could do something similar. Just search for directories named .git - which is what git uses to store its meta information.
 
 
+
+======================
+Delete the .git directory in the root-directory of your repository if you only want to delete the git-related information (branches, versions).
+
+If you want to delete everything (git-data, code, etc), just delete the whole directory.
+
+$ rm -rf .git
+Or to delete .gitignore and .gitmodules if any (via @aragaer):
+
+$ rm -rf .git*
+Then from the same ex-repository folder, to see if hidden folder .git is still there:
+
+$ ls -lah
+
+kheaser@IT-ASST MINGW64 ~/Delivery
+$ ls -al
+total 78
+drwxr-xr-x 1 kheaser 1049089     0 Mar  7 16:54  ./
+drwxr-xr-x 1 kheaser 1049089     0 Mar  7 09:11  ../
+-rw-r--r-- 1 kheaser 1049089   720 Feb 11 16:45  .gitignore
+drwxr-xr-x 1 kheaser 1049089     0 Feb 11 16:45  .vscode/
+drwxr-xr-x 1 kheaser 1049089     0 Feb 11 16:45  apps/
+-rw-r--r-- 1 kheaser 1049089    22 Feb 11 16:45  index.html
+drwxr-xr-x 1 kheaser 1049089     0 Feb 11 16:45  linux/
+drwxr-xr-x 1 kheaser 1049089     0 Feb 11 16:45  macos/
+drwxr-xr-x 1 kheaser 1049089     0 Mar  4 15:41  misc_notes/
+-rw-r--r-- 1 kheaser 1049089    81 Feb 11 16:45  README.md
+-rw-r--r-- 1 kheaser 1049089 28495 Feb 11 16:45 'Untitled picture.png'
+drwxr-xr-x 1 kheaser 1049089     0 Mar  4 16:19  windows/
+
+kheaser@IT-ASST MINGW64 ~/Delivery
+$ rm -rf .git*
+
+kheaser@IT-ASST MINGW64 ~/Delivery
+$ l s-alh
+bash: l: command not found
+
+kheaser@IT-ASST MINGW64 ~/Delivery
+$ ls -alh
+total 74K
+drwxr-xr-x 1 kheaser 1049089   0 Mar  7 16:55  ./
+drwxr-xr-x 1 kheaser 1049089   0 Mar  7 09:11  ../
+drwxr-xr-x 1 kheaser 1049089   0 Feb 11 16:45  .vscode/
+drwxr-xr-x 1 kheaser 1049089   0 Feb 11 16:45  apps/
+-rw-r--r-- 1 kheaser 1049089  22 Feb 11 16:45  index.html
+drwxr-xr-x 1 kheaser 1049089   0 Feb 11 16:45  linux/
+drwxr-xr-x 1 kheaser 1049089   0 Feb 11 16:45  macos/
+drwxr-xr-x 1 kheaser 1049089   0 Mar  4 15:41  misc_notes/
+-rw-r--r-- 1 kheaser 1049089  81 Feb 11 16:45  README.md
+-rw-r--r-- 1 kheaser 1049089 28K Feb 11 16:45 'Untitled picture.png'
+drwxr-xr-x 1 kheaser 1049089   0 Mar  4 16:19  windows/
+
+kheaser@IT-ASST MINGW64 ~/Delivery
+$ rm -rf .
+rm: refusing to remove '.' or '..' directory: skipping '.'
+
+kheaser@IT-ASST MINGW64 ~/Delivery
+$ ls
+ apps/   index.html   linux/   macos/   misc_notes/   README.md  'Untitled picture.png'   windows/
+
+kheaser@IT-ASST MINGW64 ~/Delivery
+$ cd ..
+
+kheaser@IT-ASST MINGW64 ~
+$ rm -rf Delivery
+rm: cannot remove 'Delivery': Device or resource busy
+
+kheaser@IT-ASST MINGW64 ~
+$ cd Delivery
+
+kheaser@IT-ASST MINGW64 ~/Delivery
+$ ls -alh
+total 12K
+drwxr-xr-x 1 kheaser 1049089 0 Mar  7 16:57 ./
+drwxr-xr-x 1 kheaser 1049089 0 Mar  7 09:11 ../
+
+kheaser@IT-ASST MINGW64 ~/Delivery
+
+=====================================================================================================================
+
+
+
