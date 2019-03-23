@@ -20,9 +20,8 @@ be used.
 1)  Install LLVM D Compiler (LDC)
 
     Goto https://github.com/ldc-developers/ldc/releases
-        Download  ldc2-1.5.0-win64-msvc.zip
-            extract .zip file to a new folder on c: drive.  It will automatically make a folder called \ldc2-1.5.0-win64-mscv
-			rename the folder to just ldc2 (to simplify step 4)
+        Scroll to the bottom of the web page. Download the 7-zip file ldc2-1.14.0-windows-x64.7
+            Right Click the file and open 7-zip and select Extract files..., Browse to C:\ and select OK.   This will automatically make a folder called ldc2-1.14.0-windows-x64.  Rename the folder to just ldc2 (to simplify step 3 below)
 			
 	No installation is required. Simply use the executables in the bin subfolder.
 
@@ -53,7 +52,10 @@ be used.
 	
     setx PATH %PATH%;c:\my-user-specifc-bin-path
     or
-    setx PATH "%PATH%;C:\ldc2\bin"
+    
+```    
+C:\>setx PATH "%PATH%;C:\ldc2\bin"
+```
 
 4)  Note: DUB is present in the c:\ldc2\bin folder as a convenience!
 
