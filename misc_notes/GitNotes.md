@@ -37,7 +37,7 @@ $ pwd
 /c/Users/kheaser
 ```
 
-We re going to put all of our local copies of Github repositories under user kheaser which we are conviently already at. You are not required to use this convention, but place them wherever you want.  
+We are going to put all of our local copies of Github repositories under user kheaser which we are conviently already at. You are not required to use this convention, but place them wherever you want.  
 
 
 In the Visual Studio Code terminal, type **git clone** and right click your mouse to paste the clipboard content from above.
@@ -59,12 +59,13 @@ Checking out files: 100% (445/445), done.
 Git has now copied the Delivery Repository from GitHub website to your local machine at
 C:\Users\kheaser\Delivery
 
-Or if customization is desired, you can clone to an arbitrarily named path/folder with git clone <repo> <directory>
+Or if customization is desired, you can clone to an new path/folder and repo name with git clone <repo> <directory>
 
-'''
+```
 $git clone https://github.com/WhatMeWorry/Delivery.git  C:\Users\kheaser\path\to\my\repos\LocalDelivery
 Cloning into '.\path\to\MyDelivery'...
 remote: Enumerating objects: 27, done.
+ . . . .
 ```
  
 
