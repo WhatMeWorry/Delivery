@@ -55,7 +55,7 @@ be used.
     Setx sets environment variables permanently. SETX can be used to set Environment Variables for the machine - all users (use /m option) or the currently logged on user (by default).  
     
 ```    
-C:\>setx /M PATH "%PATH%;C:\ldc2\bin"
+C:\>setx PATH "%PATH%;C:\ldc2\bin"
 
 SUCCESS: Specified value was saved.
 ```
