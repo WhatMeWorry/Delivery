@@ -21,7 +21,7 @@ be used.
 
     Goto https://github.com/ldc-developers/ldc/releases
         Scroll to the bottom of the web page. Download the 7-zip file ldc2-1.14.0-windows-x64.7
-            Right Click the file and open 7-zip and select Extract files..., Browse to C:\ and select OK.   This will automatically make a folder called ldc2-1.14.0-windows-x64.  Rename the folder to just ldc2 (to simplify step 3 below)
+            Right Click the file and open 7-zip and select Extract files..., Browse to C:\  Nnclick box to create an identically named folder. Then select OK.   This will automatically make a folder called ldc2-1.14.0-windows-x64.  Rename the folder C:\ldc2-1.14.0-windows-x64to just ldc2 (to simplify step 3 below)
 			
 	No installation is required. Simply use the executables in the bin subfolder.
 
