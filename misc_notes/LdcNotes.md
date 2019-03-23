@@ -17,8 +17,52 @@ Or at the very least, make it clearer on when the "installation" page or "releas
 be used.
 
 
+1)  Install LLVM D Compiler (LDC)
 
-============================ DUB.SDL =====================================================
+    Goto https://github.com/ldc-developers/ldc/releases
+        Download  ldc2-1.5.0-win64-msvc.zip
+            extract .zip file to a new folder on c: drive.  It will automatically make a folder called \ldc2-1.5.0-win64-mscv
+			rename the folder to just ldc2 (to simplify step 4)
+			
+	No installation is required. Simply use the executables in the bin subfolder.
+
+    Must have Microsoft C++ 2015 or 2017 installation, either via Visual Studio
+    or the standalone "Visual C++ Build Tools".	
+ 
+    "The new Visual Studio Build Tools provides a lightweight option for installing the tools you need without requiring the Visual Studio IDE.  visit http://aka.ms/visualcpp"
+ 
+    LDC relies on the MS linker and MSVCRT + WinSDK lib
+			
+2)  Goto https://www.visualstudio.com/downloads/?q=build+tool#build-tools-for-visual-studio-2017
+
+    vs_buildtools_1599795229  (setup application)
+
+    Under Other Tools and Frameworks
+    Build Tools for Visual Studio 2017   These Build Tools allow you to
+                                         build native and manage
+                                         MSBuild-based applications without 
+                                         requiring the Visual Studio IDE
+
+    Left all the default selected options as is.    
+
+3)  Will be using cmd.exe window.  Added path to PATH env variable of 
+
+    Set modifies the current shell's (window) environment values, and the change is available immediately, but it is temporary. The change will not affect other shells that are running, and as soon as you close the shell, the new value is lost until such time as you run set again.
+
+    setx modifies the value permenantly, which affects all future shells, but does not modify the environment of the shells already running. You have to exit the shell and reopen it before the change will be available, but the value will remain modified until you change it again.
+	
+    setx PATH %PATH%;c:\my-user-specifc-bin-path
+    or
+    setx PATH "%PATH%;C:\ldc2\bin"
+
+4)  Note: DUB is present in the c:\ldc2\bin folder as a convenience!
+
+
+
+
+
+
+============================ DUB.SDL =================
 
 name "00_01_print_ogl_ver"
 description "A minimal D application."
