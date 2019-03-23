@@ -51,12 +51,17 @@ be used.
     setx modifies the value permenantly, which affects all future shells, but does not modify the environment of the shells already running. You have to exit the shell and reopen it before the change will be available, but the value will remain modified until you change it again.
 	
     setx PATH %PATH%;c:\my-user-specifc-bin-path
-    or
+    or      
+    Setx sets environment variables permanently. SETX can be used to set Environment Variables for the machine (use /m option) or currently logged on user (by default).  
     
 ```    
-C:\>setx PATH "%PATH%;C:\ldc2\bin"
+C:\>setx PATH "%PATH%;C:\ldc2\bin  /m"
+
+SUCCESS: Specified value was saved.
 ```
 
+      
+      
 4)  Note: DUB is present in the c:\ldc2\bin folder as a convenience!
 
 
