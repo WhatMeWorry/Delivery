@@ -59,11 +59,11 @@ Checking out files: 100% (445/445), done.
 Git has now copied the Delivery Repository from GitHub website to your local machine at
 C:\Users\kheaser\Delivery
 
-Or if customization is desired, you can clone to an new path/folder and repo name with git clone <repo> <directory>
+Or if customization is desired, you can clone to a new path/folder and repo name with git clone <repo> <directory>
 
 ```
 $git clone https://github.com/WhatMeWorry/Delivery.git  C:\Users\kheaser\path\to\my\repos\LocalDelivery
-Cloning into '.\path\to\MyDelivery'...
+Cloning into '.\path\to\my\repos\LocalDelivery'...
 remote: Enumerating objects: 27, done.
  . . . .
 ```
