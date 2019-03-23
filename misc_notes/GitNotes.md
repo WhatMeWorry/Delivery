@@ -59,6 +59,15 @@ Checking out files: 100% (445/445), done.
 Git has now copied the Delivery Repository from GitHub website to your local machine at
 C:\Users\kheaser\Delivery
 
+Or if customization is desired, you can clone to an arbitrarily named path/folder with git clone <repo> <directory>
+
+'''
+$git clone https://github.com/WhatMeWorry/Delivery.git  C:\Users\kheaser\path\to\my\repos\LocalDelivery
+Cloning into '.\path\to\MyDelivery'...
+remote: Enumerating objects: 27, done.
+```
+ 
+
 Now from within VSC, select **File > Open Folder**
 and navigate to **C:\Users\kheaser\\** and highlight the folder **Delivery**. Click on **[Select Folder]**
 
