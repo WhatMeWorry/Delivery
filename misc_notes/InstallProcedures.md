@@ -49,7 +49,7 @@ generic@generic-ThinkCentre-M93p:~$ ldc2 --version
 LDC - the LLVM D compiler (1.8.0):
   based on DMD v2.078.3 and LLVM 5.0.1
   built with LDC - the LLVM D compiler (0.17.5)
-``
+```
 Install dub. 
 
 ```
@@ -101,7 +101,7 @@ Oops. Need gcc to build dub,
 generic@generic-ThinkCentre-M93p:~$ sudo apt install gcc
    o  o  o
 generic@generic-ThinkCentre-M93p:~$ sudo apt install curl
-
+```
 
 Building dependency tree       
 Reading state information... Done
