@@ -87,13 +87,43 @@ C:\Users\\*user\*\Delivery\apps>
 
 
 
+========== Git(ting) an existing GitHub Repo onto a Linux system (specifically Ubuntu ========
 
+Open command Terminal which should default to home directory of the current user. Our user
+here is simply called generic.
 
+```
+generic@generic-M93p:~$ pwd
+/home/generic
+```
+List the contents 
 
+```
+generic@generic-M93p:~$ ls
+Desktop  Documents  Music     Public  Templates     Videos
+dlang    Downloads  Pictures  snap
+```
 
+Download the repository or "repo" from the GitHub site.
 
+```
+generic@generic-M93p:~$ git clone https://github.com/WhatMeWorry/Delivery.git
+Cloning into 'Delivery'...
+remote: Enumerating objects: 67, done.
+remote: Counting objects: 100% (67/67), done.
+remote: Compressing objects: 100% (65/65), done.
+remote: Total 7216 (delta 43), reused 3 (delta 1), pack-reused 7149
+Receiving objects: 100% (7216/7216), 117.83 MiB | 5.22 MiB/s, done.
+Resolving deltas: 100% (2781/2781), done.
+```
+List the contents again:
 
+```
+generic@generic-M93p:~$ ls
+Delivery  Desktop  dlang  Documents  Downloads  Music  Pictures  Public  snap  Templates   Videos
+```
 
+And now you see the new repo Delivery that is local to your machine.
 
 
 
