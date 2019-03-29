@@ -113,8 +113,24 @@ duball: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically link
 
 
 
-==========================================================================================
+=============== Very Easy with  Ubuntu Linux ==================
 
+```
+generic@generic-M93p:~$ sudo apt-get install ldc
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+ldc is already the newest version (1:1.8.0-1).
+0 upgraded, 0 newly installed, 0 to remove and 110 not upgraded.
+
+generic@generic-M93p:~$ ldc2 --version
+LDC - the LLVM D compiler (1.14.0):
+  based on DMD v2.084.1 and LLVM 7.0.1
+  built with LDC - the LLVM D compiler (1.14.0)
+  Default target: x86_64-unknown-linux-gnu
+  Host CPU: haswell
+  http://dlang.org - http://wiki.dlang.org/LDC
+```
 
 
 
