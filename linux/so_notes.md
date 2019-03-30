@@ -117,6 +117,59 @@ Moved all the libSDL2_mixer-2.0.so.0 and libSDL2.so to Delivery/linux/dynamiclib
 
 
 
+============================== After leaving the Delivery Project and returning I got this error ===============
+
+```
+The LD_LIBRARY_PATH env variable now has paths:
+   ./../../linux/dynamiclibraries
+   /ignore/this/one
+   
+
+The PATH env variable now has paths:
+   /home/generic/dlang/ldc-1.14.0/bin
+   /usr/local/sbin
+   /usr/local/bin
+   /usr/sbin
+   /usr/bin
+   /sbin
+   /bin
+   /usr/games
+   /usr/local/games
+   /snap/bin
 
 
+derelict.util.exception.SharedLibLoadException@../../../.dub/packages/derelict-util-2.0.6/derelict-util/source/derelict/util/exception.d(35): Failed to load one or more shared libraries:
+	libSDL2.so - libsndio.so.6.1: cannot open shared object file: No such file or directory
+	libSDL2-2.0.so - libsndio.so.6.1: cannot open shared object file: No such file or directory
+	libSDL2-2.0.so.0 - libsndio.so.6.1: cannot open shared object file: No such file or directory
+	/usr/local/lib/libSDL2.so - /usr/local/lib/libSDL2.so: cannot open shared object file: No such file or directory
+	/usr/local/lib/libSDL2-2.0.so - /usr/local/lib/libSDL2-2.0.so: cannot open shared object file: No such file or directory
+	/usr/local/lib/libSDL2-2.0.so.0 - /usr/local/lib/libSDL2-2.0.so.0: cannot open shared object file: No such file or directory
+```
+So my program is looking for libSDL2.so - libsndio.so.6.1
+
+After doing a 
+
+```
+$ sudo apt-get install libsdl2-dev
+Reading package lists...
+```
+
+I get a libSDL2.so -> libSDL2-2.0.so.0.8.0
+
+```
+generic@generic-ThinkCentre-M93p:/usr/lib/x86_64-linux-gnu$ ls -al libSDL2*
+lrwxrwxrwx 1 root root      16 Feb 28 03:38 libSDL2-2.0.so -> libSDL2-2.0.so.0
+lrwxrwxrwx 1 root root      20 Feb 28 03:38 libSDL2-2.0.so.0 -> libSDL2-2.0.so.0.8.0
+-rw-r--r-- 1 root root 1240712 Feb 28 03:38 libSDL2-2.0.so.0.8.0
+-rw-r--r-- 1 root root 2325630 Feb 28 03:38 libSDL2.a
+-rw-r--r-- 1 root root    1292 Feb 28 03:38 libSDL2main.a
+lrwxrwxrwx 1 root root      20 Feb 28 03:38 libSDL2.so -> libSDL2-2.0.so.0.8.0
+`
+My dub.sdl has this dependench:``
+dependency "derelict-sdl2"    version="~>2.1.4"
+
+just for fun I changed the version to 3.1.0-alpha.4 and reran duball
+
+AND IT WORKED?????
 
