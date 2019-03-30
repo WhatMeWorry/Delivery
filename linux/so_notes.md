@@ -153,11 +153,15 @@ After doing a
 ```
 $ sudo apt-get install libsdl2-dev
 Reading package lists...
+
 ```
 
 I get a libSDL2.so -> libSDL2-2.0.so.0.8.0
 
 ```
+NOT To BE CONFUSED WITH:  generic@generic-ThinkCentre-M93p:/lib/x86_64-linux-gnu
+
+
 generic@generic-ThinkCentre-M93p:/usr/lib/x86_64-linux-gnu$ ls -al libSDL2*
 lrwxrwxrwx 1 root root      16 Feb 28 03:38 libSDL2-2.0.so -> libSDL2-2.0.so.0
 lrwxrwxrwx 1 root root      20 Feb 28 03:38 libSDL2-2.0.so.0 -> libSDL2-2.0.so.0.8.0
