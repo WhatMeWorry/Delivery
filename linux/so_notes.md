@@ -161,16 +161,17 @@ I get a libSDL2.so -> libSDL2-2.0.so.0.8.0
 ```
 NOT To BE CONFUSED WITH:  generic@generic-ThinkCentre-M93p:/lib/x86_64-linux-gnu
 
+generic@generic-ThinkCentre-M93p:/usr/lib/x86_64-linux-gnu$ ls -al | grep "\-> libSDL"
+lrwxrwxrwx   1 root root       16 Feb 28 03:38 libSDL2-2.0.so -> libSDL2-2.0.so.0
+lrwxrwxrwx   1 root root       20 Feb 28 03:38 libSDL2-2.0.so.0 -> libSDL2-2.0.so.0.8.0
+lrwxrwxrwx   1 root root       22 Nov  9  2017 libSDL2_mixer-2.0.so -> libSDL2_mixer-2.0.so.0
+lrwxrwxrwx   1 root root       26 Nov  9  2017 libSDL2_mixer-2.0.so.0 -> libSDL2_mixer-2.0.so.0.2.0
+lrwxrwxrwx   1 root root       26 Nov  9  2017 libSDL2_mixer.so -> libSDL2_mixer-2.0.so.0.2.0
+lrwxrwxrwx   1 root root       20 Feb 28 03:38 libSDL2.so -> libSDL2-2.0.so.0.8.0
 
-generic@generic-ThinkCentre-M93p:/usr/lib/x86_64-linux-gnu$ ls -al libSDL2*
-lrwxrwxrwx 1 root root      16 Feb 28 03:38 libSDL2-2.0.so -> libSDL2-2.0.so.0
-lrwxrwxrwx 1 root root      20 Feb 28 03:38 libSDL2-2.0.so.0 -> libSDL2-2.0.so.0.8.0
--rw-r--r-- 1 root root 1240712 Feb 28 03:38 libSDL2-2.0.so.0.8.0
--rw-r--r-- 1 root root 2325630 Feb 28 03:38 libSDL2.a
--rw-r--r-- 1 root root    1292 Feb 28 03:38 libSDL2main.a
-lrwxrwxrwx 1 root root      20 Feb 28 03:38 libSDL2.so -> libSDL2-2.0.so.0.8.0
-`
-My dub.sdl has this dependench:``
+```
+
+My dub.sdl has this dependench:
 dependency "derelict-sdl2"    version="~>2.1.4"
 
 just for fun I changed the version to 3.1.0-alpha.4 and reran duball
