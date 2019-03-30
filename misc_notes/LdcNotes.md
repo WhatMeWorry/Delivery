@@ -186,8 +186,17 @@ sudo apt install nautilus-admin
 Open a new version of Files (Nautilus) and right clocking on a folder will show Open as Administrator
 and right clocking on a file will show Edit as Administrator
 
+When Activated, run
+```
+echo $PATH
+/home/generic/dlang/ldc-1.14.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+```
 
+and place the path to the ldc compiler into /etc/environment file. Need to edit as admin.
 
+PATH="/home/generic/dlang/ldc-1.14.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+
+You will need to sign off and back on again for this new setting to take effect.
 
 
 
