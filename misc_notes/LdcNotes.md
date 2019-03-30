@@ -115,6 +115,8 @@ duball: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically link
 
 =============== Very Easy with  Ubuntu Linux ==================
 
+SUDO APT INSTALL LDC is dangerous because it package may not be stale!!!!  Depends on voulunteers.
+
 ```
 generic@generic-M93p:~$ sudo apt-get install ldc
 Reading package lists... Done
@@ -130,6 +132,33 @@ LDC - the LLVM D compiler (1.14.0):
   Default target: x86_64-unknown-linux-gnu
   Host CPU: haswell
   http://dlang.org - http://wiki.dlang.org/LDC
+```
+
+INSTEAD USE THE OFFICIAL INSTALLER...
+
+```
+mkdir -p ~/dlang && wget https://dlang.org/install.sh -O ~/dlang/install.sh
+
+chmod +x install.sh
+
+~/dlang/install.sh install ldc
+Downloading https://dlang.org/d-keyring.gpg
+################################################################################################################### 100.0%
+Downloading https://dlang.org/install.sh
+################################################################################################################### 100.0%
+gpg: keybox '/home/generic/.gnupg/pubring.kbx' created
+gpg: /home/generic/.gnupg/trustdb.gpg: trustdb created
+The latest version of this script was installed as ~/dlang/install.sh.
+It can be used it to install further D compilers.
+Run `~/dlang/install.sh --help` for usage information.
+
+Downloading and unpacking https://github.com/ldc-developers/ldc/releases/download/v1.14.0/ldc2-1.14.0-linux-x86_64.tar.xz
+################################################################################################################### 100.0%
+Using dub 1.13.0 shipped with ldc-1.14.0
+
+Run `source ~/dlang/ldc-1.14.0/activate` in your shell to use ldc-1.14.0.
+This will setup PATH, LIBRARY_PATH, LD_LIBRARY_PATH, DMD, DC, and PS1.
+Run `deactivate` later on to restore your environment.
 ```
 
 
