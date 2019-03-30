@@ -175,8 +175,16 @@ LDC - the LLVM D compiler (1.14.0):
 ```
 
 
+=============== How to permanently alter the env variables, to make LDC Active in all terminals.
 
+Install Nautilus Admin Tool
 
+```
+sudo apt install nautilus-admin
+
+```
+Open a new version of Files (Nautilus) and right clocking on a folder will show Open as Administrator
+and right clocking on a file will show Edit as Administrator
 
 
 
