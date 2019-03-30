@@ -174,4 +174,6 @@ just for fun I changed the version to 3.1.0-alpha.4 and reran duball
 AND IT WORKED?????
 
 
-At runtime, the Freetype shared library is required to be on the shared library search path of the user's system. On Windows, this is typically handled by distributing the Freetype DLL with your program. On other systems, it usually means the user must install the Freetype runtime library through a package manager. 
+At runtime, a shared (dynamic) library is required to be on the shared library search path of the user's system. 
+On Windows, this is typically handled by distributing the Freetype DLL with your program. On other systems, it 
+usually means the user must install the Freetype runtime library through a package manager. 
