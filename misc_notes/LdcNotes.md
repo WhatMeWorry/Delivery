@@ -161,8 +161,18 @@ This will setup PATH, LIBRARY_PATH, LD_LIBRARY_PATH, DMD, DC, and PS1.
 Run `deactivate` later on to restore your environment.
 ```
 
+And Don't Forget to Activate your environment.
 
-
+```
+generic@generic-ThinkCentre-M93p:~/dlang$ source ~/dlang/ldc-1.14.0/activate
+(ldc-1.14.0)generic@generic-ThinkCentre-M93p:~/dlang$ ldc2 --version
+LDC - the LLVM D compiler (1.14.0):
+  based on DMD v2.084.1 and LLVM 7.0.1
+  built with LDC - the LLVM D compiler (1.14.0)
+  Default target: x86_64-unknown-linux-gnu
+  Host CPU: haswell
+  http://dlang.org - http://wiki.dlang.org/LDC
+```
 
 
 
