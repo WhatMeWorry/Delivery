@@ -3,6 +3,8 @@
 On the official D Language home page,
 https://dlang.org/
 
+
+
 The "Downloads" tab takes you to,
 https://dlang.org/download.html
 
@@ -16,17 +18,27 @@ https://github.com/ldc-developers/ldc/releases
 Or at the very least, make it clearer on when the "installation" page or "releases" page should
 be used.
 
+FOR WINDOWS:
 
-1)  Install LLVM D Compiler (LDC)
+1)  How to Install LLVM D Compiler (LDC)
+    These instructions assume the use of 7-zip. I free pack/extract and compress/decompress utility.
 
     Goto https://github.com/ldc-developers/ldc/releases
-        Scroll to the bottom of the web page. Download the 7-zip file ldc2-1.14.0-windows-x64.7
-            Right Click the file and open 7-zip and select Extract files..., Browse to C:\  Nnclick box to create an identically named folder. Then select OK.   This will automatically make a folder called ldc2-1.14.0-windows-x64.  Rename the folder C:\ldc2-1.14.0-windows-x64to just ldc2 (to simplify step 3 below)
-			
-	No installation is required. Simply use the executables in the bin subfolder.
-
-    Must have Microsoft C++ 2015 or 2017 installation, either via Visual Studio
-    or the standalone "Visual C++ Build Tools".	
+        Scroll to most recent release of the web page. As of April 2019, select the LDC 1.14.0 release.  Now download the 7-zip file ldc2-x.x.x-windows-x64.7z file. You should now have a ldc2-x.xx.x-linux-x86_64.tar.xz file on your local system. 
+            	 
+            Right Click the file --> 7-zip --> Open Archive
+	    
+	    The file in the 7zip program will have just the .tar suffix.  The xz compression is gone.
+	    
+	    Now double click on the .tar file within 7-zip.  The file name will have just be ldc2-x.xx.x-linux-x86_64   The tar archival is gone.
+	    Notice the file path will be built up from the preceeding steps:
+            C:\Users\someuser\Downloads\ldc2-1.14.0-linux-x86_64.tar.xz\ldc2-1.14.0-linux-x86_64.tar\ldc2-1.14.0-linux-x86_64\
+	    The folder that you did the download should show all three:
+	    ldc2-1.14.0-linux-x86_64.tar.xz
+	    ldc2-1.14.0-linux-x86_64.tar
+	    ldc2-1.14.0-linux-x86_64  
+	    
+    Must have Microsoft C++ 2015 or 2017 installed. If not, a even better option is to just install the standalone "Visual C++ Build Tools".	
  
     "The new Visual Studio Build Tools provides a lightweight option for installing the tools you need without requiring the Visual Studio IDE.  visit http://aka.ms/visualcpp"
  
@@ -42,7 +54,7 @@ be used.
                                          MSBuild-based applications without 
                                          requiring the Visual Studio IDE
 
-    Left all the default selected options as is.    
+    Leave all the default selected options as is.    
 
 3)  Will be using cmd.exe window.  Added path to PATH env variable of 
 
@@ -52,7 +64,7 @@ be used.
 	
     setx PATH %PATH%;c:\my-user-specifc-bin-path
     or      
-    Setx sets environment variables permanently. SETX can be used to set Environment Variables for the machine - all users (use /m option) or the currently logged on user (by default).  
+    Setx sets environment variables permanently. SETX can be used to set Environment Variables for the machine - all users (use /m option) or the currently logged on user (default).  
     
 ```    
 C:\>setx PATH "%PATH%;C:\ldc2\bin"
