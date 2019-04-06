@@ -156,4 +156,13 @@ When you create a new project in Visual Studio, a precompiled header file named 
 
 ==========================================================================================================================
 
-Continue text here.
+ IMPORTANT
+
+There seems to be a similar way. Open the lib file with 7zip. If it's an imort lib, it would contain *.dll files. 
+
+Right Click on freeimage.lib --> Open Archive  and there was tons of .dll files.
+
+==========================================================================================================================
+
+
+
