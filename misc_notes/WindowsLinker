@@ -33,3 +33,80 @@ has
 link.exe
 lib.exe
 cl.exe
+
+
+```
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\bin\Hostx64\x64>DUMPBIN /EXPORTS freeimage.lib
+Microsoft (R) COFF/PE Dumper Version 14.20.27508.1
+Copyright (C) Microsoft Corporation.  All rights reserved.
+Dump of file freeimage.lib
+File Type: LIBRARY
+     Exports
+       ordinal    name
+                  FreeImage_AcquireMemory
+                  FreeImage_AdjustBrightness
+                  FreeImage_AdjustColors
+                        o   o   o
+                  FreeImage_ZLibGUnzip
+                  FreeImage_ZLibGZip
+                  FreeImage_ZLibUncompress
+  Summary
+          C9 .debug$S
+          14 .idata$2
+          14 .idata$3
+           8 .idata$4
+           8 .idata$5
+           E .idata$6  
+ ```          
+           
+And this file size is:
+
+```
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\bin\Hostx64\x64>dir freeimage.lib
+
+07/31/2018  01:23 PM            65,322 FreeImage.lib
+               1 File(s)         65,322 bytes
+```       
+
+And I did the same for freeimage.lib version 3.17.0
+
+```
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\bin\Hostx64\x64>DUMPBIN /EXPORTS freeimage.lib
+Microsoft (R) COFF/PE Dumper Version 14.20.27508.1
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+Dump of file freeimage.lib
+File Type: LIBRARY
+     Exports
+       ordinal    name
+                  FreeImage_AcquireMemory
+                  FreeImage_AdjustBrightness
+                  FreeImage_AdjustColors
+                  FreeImage_AdjustContrast
+                  FreeImage_AdjustCurve
+                     o   o   o
+                FreeImage_ZLibCRC32
+                  FreeImage_ZLibCompress
+                  FreeImage_ZLibGUnzip
+                  FreeImage_ZLibGZip
+                  FreeImage_ZLibUncompress
+
+  Summary
+
+          C9 .debug$S
+          14 .idata$2
+          14 .idata$3
+           8 .idata$4
+           8 .idata$5
+           E .idata$6    
+           
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\bin\Hostx64\x64>dir freeimage.lib
+03/15/2015  09:52 AM            63,592 FreeImage.lib
+               1 File(s)         63,592 bytes
+```
+
+So Version 3.17.0 was size 63,592 bytes with 249 functions.
+   Version 3.18.0 was size 65,322 butes with 255 functions.
+   
+This is expected since 3.18.0 naturally has more functionality than 3.17.0
+
