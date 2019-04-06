@@ -150,4 +150,10 @@ File Type: LIBRARY
          155 .text$mn
 ```
 
-Continu text here
+Tried creating a static library with precompiled headers, and Visual Studio created stdafx.h and stdafx.cpp in Header Files and Source Files respectively.  What are these files?
+
+When you create a new project in Visual Studio, a precompiled header file named "pch.h" is added to the project. (In earlier versions of Visual Studio, the file was called "stdafx.h".) The purpose of the file is to speed up the build process. Any stable header files, for example Standard Library headers such as <vector>, should be included here. The precompiled header is compiled only when it, or any files it includes, are modified.
+
+==========================================================================================================================
+
+Continue text here.
