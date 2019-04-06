@@ -1,0 +1,35 @@
+Prepare Your Development Environment
+
+Install the Windows SDK
+
+To write a Windows program in C or C++, you must install the Microsoft Windows Software Development Kit (SDK) or a development environment that includes the Windows SDK, such as Microsoft Visual C++. The Windows SDK contains the headers and libraries necessary to compile and link your application. The Windows SDK also contains command-line tools for building Windows applications, including the Visual C++ compiler and linker. Although you can compile and build Windows programs with the command-line tools, we recommend using a full-featured development environment such as Microsoft Visual Studio
+
+
+Set Include and Library Paths
+
+After you install the Windows SDK, make sure that your development environment points to the Include and Lib folders, which contain the header and library files.
+
+For Visual Studio, the Windows SDK includes a Visual Studio Configuration Tool. This tool updates Visual Studio to use the Windows SDK header and library paths. For more information about this tool, see the Windows SDK release notes (https://go.microsoft.com/fwlink/p/?linkid=182068). Alternatively, you can add the paths from Visual Studio. For more information, consult the Visual Studio help documentation.
+
+
+Command line tools
+To build a C/C++ project on the command line, Visual Studio provides these command-line tools:
+
+CL
+Use the compiler (cl.exe) to compile and link source code files into apps, libraries, and DLLs.
+
+Link
+Use the linker (link.exe) to link compiled object files and libraries into apps and DLLs.
+
+MSBuild
+Use MSBuild (msbuild.exe) and a project file (.vcxproj) to configure a build and invoke the toolset indirectly. This is equivalent to running the Build project or Build Solution command in the Visual Studio IDE. Running MSBuild from the command line is an advanced scenario and generally not recommended.
+
+
+Use Rapid Environment Editor (free Download)
+
+
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\bin\Hostx64\x64
+has
+link.exe
+lib.exe
+cl.exe
