@@ -125,3 +125,29 @@ So Version 3.17.0 was size 63,592 bytes with 249 functions.
    
 This is expected since 3.18.0 naturally has more functionality than 3.17.0
 
+
+=======================================================================================
+
+I created a .lib static library (with no precompiled headers) from scratch with Visual Studio 2017 (2019 was very confusing)
+called StaticLib.lib
+
+```
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\bin\Hostx64\x64>DUMPBIN /EXPORTS StaticLib.lib
+Microsoft (R) COFF/PE Dumper Version 14.20.27508.1
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file StaticLib.lib
+File Type: LIBRARY
+  Summary
+          88 .chks64
+        459C .debug$S
+          68 .debug$T
+         14B .drectve
+          1F .msvcjmc
+           4 .rtc$IMZ
+           4 .rtc$TMZ
+         155 .text$mn
+```
+
+Continu text here
