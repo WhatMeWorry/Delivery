@@ -157,3 +157,37 @@ Refreshing local packages (refresh existing: true)...
 Looking for local package map at C:\ProgramData\dub\packages\local-packages.json
 Looking for local package map at C:\Users\kheaser\AppData\Roaming\dub\packages\local-packages.json
 
+
+
+
+
+===============================================================================================
+
+
+dub upgrade must be done in directory where a dub.sdl resides.  For Instance:
+```
+C:\Users\kheaser\Delivery\apps>dub upgrade bindbc-freeimage
+There was no package description found for the application in 'C:\Users\kheaser\Delivery\apps'.
+Upgrading project in C:\Users\kheaser\Delivery\apps
+```
+The above upgrade fails, but when you cd to a directory with a dub.sdl file it works.
+
+```
+C:\Users\kheaser\Delivery\apps>cd Kyle
+
+C:\Users\kheaser\Delivery\apps\kyle>type dub.sdl
+name "kyle"
+description "test"
+authors "kheaser"
+copyright "Copyright ┬⌐ 2019, kheaser"
+license "proprietary"
+
+dependency "bindbc-freeimage" version="~>0.1.0"
+subConfiguration "bindbc-freeimage" "static"
+libs "freeimage"
+
+
+
+C:\Users\kheaser\Delivery\apps\kyle>dub upgrade bindbc-freeimage
+Upgrading project in C:\Users\kheaser\Delivery\apps\kyle
+```
