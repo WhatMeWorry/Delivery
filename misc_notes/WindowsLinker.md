@@ -154,15 +154,19 @@ Tried creating a static library with precompiled headers, and Visual Studio crea
 
 When you create a new project in Visual Studio, a precompiled header file named "pch.h" is added to the project. (In earlier versions of Visual Studio, the file was called "stdafx.h".) The purpose of the file is to speed up the build process. Any stable header files, for example Standard Library headers such as <vector>, should be included here. The precompiled header is compiled only when it, or any files it includes, are modified.
 
-==========================================================================================================================
+==================================================================================
 
  IMPORTANT
 
-There seems to be a similar way. Open the lib file with 7zip. If it's an imort lib, it would contain *.dll files. 
+There seems to be a similar way. Open the lib file with 7zip.  If it's an import lib, it would contain *.dll files
 
 Right Click on freeimage.lib --> Open Archive  and there was tons of .dll files.
 
-==========================================================================================================================
+So freeimage.lib is an IMPORT .lib file and note a static .lib file. 
+
+Did the same with my manually generated StaticLib.lib and there was nothing but .txt files.!!!
+
+====================================================================================
 
 
 
