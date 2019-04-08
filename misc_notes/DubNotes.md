@@ -131,6 +131,20 @@ Removed derelict-sdl2, version 2.1.4.
 C:\>dub list
 Packages present in the system and known to dub:
   derelict-sdl2 2.1.4: C:\dublocal\derelict-sdl2-2.1.4\derelict-sdl2\
+  
+C:\Users\Kyle\AppData\Roaming\dub\packages>dub remove bindbc-sdl
+Select version of 'bindbc-sdl' to remove from location 'user':
+1) 0.1.0
+2) 0.7.0
+3) all versions
+> 3
+Removing bindbc-sdl in C:\Users\Kyle\AppData\Roaming\dub\packages\bindbc-sdl-0.1.0\bindbc-sdl\
+Removed package: 'bindbc-sdl'
+Removed bindbc-sdl, version 0.1.0.
+Removing bindbc-sdl in C:\Users\Kyle\AppData\Roaming\dub\packages\bindbc-sdl-0.7.0\bindbc-sdl\
+Removed package: 'bindbc-sdl'
+Removed bindbc-sdl, version 0.7.0.
+
 ```
 If not useing the default package location, you must specify the whole path 
 ```
