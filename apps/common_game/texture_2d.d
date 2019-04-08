@@ -1,6 +1,6 @@
 module texture_2d;
 
-import derelict.opengl3.gl3;
+import bindbc.opengl;
 
 import std.stdio;
 

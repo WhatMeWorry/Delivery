@@ -2,7 +2,7 @@ module cameraModule;
 
 import gl3n.linalg;  // vec3, cross(), look_at()
 import std.math;
-import derelict.opengl3.gl3; // GLfloat
+import bindbc.opengl; // GLfloat
 import mytoolbox;    // toRadians
 import std.stdio;    // writeln
 

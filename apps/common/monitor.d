@@ -1,6 +1,7 @@
 module monitor;
 
-import derelict.glfw3.glfw3;
+
+import bindbc.glfw;
 import std.stdio;
 import std.conv;
 import mytoolbox;

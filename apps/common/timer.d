@@ -1,6 +1,6 @@
 module timer;
 
-import derelict.glfw3.glfw3;
+import bindbc.glfw;
 import std.stdio;
 
 //import mytoolbox;    // toRadians

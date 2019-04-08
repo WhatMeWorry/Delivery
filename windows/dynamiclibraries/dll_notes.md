@@ -15,7 +15,6 @@ This is an introduction to Git version control system. It teachs by doing: a ste
         Then unzipped to create Users\user\Downloads\assimp-3.1.1-win-binaries\bin64\assimp.dll (3,716 KB)
         and moved assimp.dll to this folder.
 
-
     - sdl2  sdl2_mixer
 
     - FreeImage
@@ -33,10 +32,8 @@ This is an introduction to Git version control system. It teachs by doing: a ste
         Got the most current lib-vc2015 glfw3.dll (82 KB) and copied it to this folder. Note: ignored lib-vc2012 and lib-vc2013.
     
     - FreeType
-        
-        The libfreetype-6.dll (1,187 KB) in this folder was obtained from:
-        C:\Users\user\AppData\Roaming\dub\packages\dlangui-0.9.8\dlangui\libs\windows\x86_64  ????
-
+        The freetype.dll here in this directory was built by me using Visual Studio 2019 Community. The source
+        was downloaded on April 2019.  This is version 2.10.0 and is of course a Windows .dll and build with "release" and "64 bit"
     
     - OpenGL
         opengl32.dll seems to be installed by default in C:\Windows\System32  

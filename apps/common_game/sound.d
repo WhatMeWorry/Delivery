@@ -4,7 +4,6 @@ module sound;
 import common;
 import common_game;
 
-import derelict.opengl3.gl3;
 import gl3n.linalg : mat4, vec2, vec3, vec4; 
 import std.random;
 import std.stdio;
@@ -14,8 +13,8 @@ import std.conv : to;
 import std.stdio;
 import std.string;
 import std.conv;
-import derelict.sdl2.sdl;
-import derelict.sdl2.mixer;  // import audio functionality
+import bindbc.sdl;
+import bindbc.sdl.mixer;  // import audio functionality
 
 import std.file;
 import core.thread;

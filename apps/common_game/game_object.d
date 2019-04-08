@@ -3,7 +3,7 @@ module game_object;
 import common;
 import common_game;
 
-import derelict.opengl3.gl3; // GLfloat, GLboolean
+import bindbc.opengl; // GLfloat, GLboolean
 import gl3n.linalg;          // vec2, vec3
 import mytoolbox;
 import std.stdio;

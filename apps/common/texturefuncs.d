@@ -1,10 +1,10 @@
 ﻿module texturefuncs;
 
-import derelict.opengl3.gl3;  // defines GLuint
+import bindbc.opengl;  // defines GLuint
 import std.stdio;             //  : writeln, writefln;
 import std.string;            // : toStringz; 
-import derelict.freetype.ft;  // defines FT_Face
-import derelict.freeimage.freeimage; // 
+import bindbc.freeimage;
+import bindbc.freetype;
 import mytoolbox;
 
 

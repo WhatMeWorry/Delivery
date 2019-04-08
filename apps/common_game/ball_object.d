@@ -5,7 +5,6 @@ import common;
 import common_game;
 
 import gl3n.linalg;
-import derelict.opengl3.gl3;
 import std.stdio;             // writeln
 
 // BallObject holds the state of the Ball object inheriting

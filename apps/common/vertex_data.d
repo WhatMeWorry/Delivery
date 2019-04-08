@@ -1,6 +1,6 @@
 module vertex_data;
 
-import derelict.opengl3.gl3;
+import bindbc.opengl;
 import gl3n.linalg;
 
 

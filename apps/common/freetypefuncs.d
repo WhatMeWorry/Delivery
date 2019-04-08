@@ -1,12 +1,12 @@
 module freetypefuncs;
 
-import derelict.freetype.ft;  // defines FT_Face
+import bindbc.freetype;  // defines FT_Face
 import std.stdio;
 import std.string;   // format()
 import std.conv; //   : to;
 import std.traits;
 import std.typetuple;
-import derelict.opengl3.gl3;  // defines GLubyte, GLchar, GLuint, GLfloat etc.
+import bindbc.opengl;  // defines GLubyte, GLchar, GLuint, GLfloat etc.
 import gl3n.linalg;           // vec3
 
 import common;
@@ -164,7 +164,7 @@ void initializeFreeTypeFace(ref FT_Face face, FT_Library library, const(char)* f
 
 void initializeFreeTypeAndFace(ref FT_Face face)
 {
-    DerelictFT.load();  // Load the FreeType library - Now FreeType functions can be called
+    //DerelictFT.load();  // Load the FreeType library - Now FreeType functions can be called
 
     //writeAndPause("after DerelictFT.load");
 
@@ -407,7 +407,7 @@ void initTextRenderingSystem(ref TextRenderingSystem textRenderSys)
 
 void initializeFreeTypeAndFace(ref FT_Library library, ref FT_Face face, const(char)* font)
 {
-    DerelictFT.load();  // Load the FreeType library - Now FreeType functions can be called
+    //DerelictFT.load();  // Load the FreeType library - Now FreeType functions can be called
 
     //writeAndPause("after DerelictFT.load");
 

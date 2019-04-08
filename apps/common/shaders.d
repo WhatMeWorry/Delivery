@@ -3,7 +3,7 @@ module shaders;
 
 import common;
 
-import derelict.opengl3.gl3;    // GLuint
+import bindbc.opengl;    // GLuint
 import std.stdio  : writeln;
 import std.file   : readText;   // getSize(), readText(), getcwd()
 import std.string : toStringz;  // toStringz() 

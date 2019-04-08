@@ -4,7 +4,7 @@ module power_ups;
 import common;
 import common_game;
 
-import derelict.opengl3.gl3;
+
 import gl3n.linalg : mat4, vec2, vec3, vec4; 
 import std.random;
 import std.stdio;
