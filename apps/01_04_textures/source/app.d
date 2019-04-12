@@ -14,13 +14,13 @@ import std.stdio;  // writeln
 import std.conv;   // toChars
 
 
+import bindbc.freetype;
+import bindbc.opengl;
 
 import derelict.util.loader;
 import derelict.util.sharedlib;
-import derelict.freetype.ft;
-import derelict.freeimage.freeimage;
-import derelict.opengl3.gl3;
-import derelict.glfw3.glfw3;
+import bindbc.freeimage;
+import bindbc.glfw;
      
 
 void main(string[] argv)

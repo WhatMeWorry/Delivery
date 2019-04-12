@@ -42,8 +42,8 @@ compiled but ignored.
 
 
 
-import derelict.opengl3.gl3;
-import derelict.glfw3.glfw3; 
+import bindbc.opengl;
+import bindbc.glfw; 
 import std.stdio;
 import mytoolbox;
 

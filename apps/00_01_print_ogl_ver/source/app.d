@@ -5,9 +5,11 @@ import std.stdio;
 import std.conv; //   : to;
 import std.string; // : toStringz;
 import std.stdio; //  : writeln, writefln;
-import derelict.opengl3.gl3;
-import derelict.glfw3.glfw3;
+import bindbc.opengl;
+import bindbc.glfw;
 import std.process;
+
+import derelict_libraries;
 //import derelict_libraries;
 
 /+
@@ -30,15 +32,10 @@ GLSL Version      OpenGL Version
 
 void main(string[] argv)
 {
-    DerelictGLFW3.load();
 
-    if (glfwInit() == 0)
-        throw new Exception("glfwInit failed");
+    load_libraries();
 
-    DerelictGL3.load();  // loads only the functions for OpenGL versions 1.0 and 1.1
-
-    writeln("DerelictGL3.load execute fine.");
-
+ 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);   // Lenovo Tiny PCs are at openGL 4.2    Lian Li PC-33B is OpenGL 4.4
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);   // iMac 27" are at opengl 4.1
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -55,9 +52,6 @@ void main(string[] argv)
 
     glfwMakeContextCurrent(window);  // required or else following output commands will not work.
 
-    DerelictGL3.reload();  // load versions 1.2+ and all supported ARB and EXT extensions
-
-    //auto ls = executeShell("mode con cols=100 lines=400");
 
     executeShell("mode con cols=100 lines=400");
 

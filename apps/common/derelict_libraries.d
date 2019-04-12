@@ -179,6 +179,8 @@ void load_FreeImage_Library()
 
     FISupport ret = loadFreeImage();
 
+    writeln("loadFreeImage returned ", ret);
+
     if (ret == fiSupport.fi317)
     {
         writeln("Freeimage Version 3.17.0 successfully loaded");
@@ -208,7 +210,7 @@ void load_FreeType_Library()
     // ftSupport is FTSupport.ft26, ft27, ... or ft210 depending on what version was requested in the dub.sdl file.
     // FTSupport is a superset of glSupport where FTSupport also has the bad library and no library values
 
-    FTSupport ret = loadFreetype();
+    FTSupport ret = loadFreeType();
 
     writeln("The dub.sdl file of this project requests FreeType version ", ftSupport);
 
@@ -311,7 +313,7 @@ void load_libraries()
  
     load_GLFW3_Library();  
 
-    load_FreeImage_Library();
+    //load_FreeImage_Library();
 
     // Load Open Graphics Library
 

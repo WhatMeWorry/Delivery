@@ -88,7 +88,7 @@ void main(string[] argv)
     int x = 0;
     float r = 0.001;
 
-    Texture2D tex = resource_manager.ResMgr.getTexture("face");
+    //Texture2D tex = resource_manager.ResMgr.getTexture("face");
 
     while (!glfwWindowShouldClose(winMain))    // Loop until the user closes the window
     {     

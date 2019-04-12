@@ -5,7 +5,7 @@ import core.thread;
 
 import derelict_libraries;
 // or
-import derelict.glfw3.glfw3;
+import bindbc.glfw;
 import event_buffer;
 
 

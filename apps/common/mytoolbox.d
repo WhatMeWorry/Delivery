@@ -5,10 +5,10 @@ import std.stdio;             // writeln()
 import std.process;           // executeShell()
 import std.traits;            // isDynamicArray!()
 import std.math;
-import bindbc.opengl;     // GL_FALSE
 import std.algorithm.iteration;  // sum
 import std.ascii;                // newline
 import std.conv;                 // to
+import bindbc.opengl;  // GL_FALSE
 
 
 

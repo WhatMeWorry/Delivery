@@ -57,7 +57,8 @@ GLuint makeShader(uint shaderType, string source)
     glShaderSource(shaderID, 1, &Cptr, null);
     glCompileShader(shaderID);
 
-    writeln(shaderType, " = ", shaderID);
+    writeln("shaderType = ", shaderType);
+
 
     // The compilation status will be stored as part of the shader object's state. 
     // This value will be set to GL_TRUE if the shader was compiled without errors 
@@ -65,8 +66,13 @@ GLuint makeShader(uint shaderType, string source)
     // glGetShaderiv with arguments shader and GL_COMPILE_STATUS.
 
     GLint compileStatus;
-    glGetShaderiv(shaderID, GL_COMPILE_STATUS, &compileStatus);
-    writeln("compile status = ", compileStatus);  
+    glGetShaderiv(shaderID, GL_COMPILE_STATUS, &compileStatus);  //returns GL_TRUE if compile was good
+    writeln("compileStatus = ", compileStatus);
+    if (compileStatus == GL_TRUE)
+        writeln("compile was successful");  
+    else
+        writeln("compile failed");         
+        
 
     GLint logLen;
     glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &logLen);
@@ -96,8 +102,11 @@ GLuint createProgramFromShaders(ref Shader[] shaders)
 
     foreach( i, shade; shaders)
     {
-        writeln("index = ", i);     
+        writeln("index = ", i);    
+        writeln("struct Shader { GLuint, string, GLuint }");
+        writeln("------------------"); 
         writeln("shade = ", shade);
+        writeln("------------------"); 
 
         string sourceCode = readFile(shade.file);
         shaders[i].ID = makeShader(shaders[i].type, sourceCode);

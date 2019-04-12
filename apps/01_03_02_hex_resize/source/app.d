@@ -11,10 +11,12 @@ import std.stdio;  // writeln
 import std.conv;   // toChars
 import derelict.util.loader;
 import derelict.util.sharedlib;
-import derelict.freetype.ft;
-import derelict.freeimage.freeimage;
-import derelict.opengl3.gl3;
-import derelict.glfw3.glfw3;
+
+import bindbc.freetype;
+import bindbc.freeimage;
+import bindbc.opengl;
+import bindbc.glfw;
+
 import gl3n.linalg; // mat3
 
 GLfloat[] board;
@@ -254,9 +256,9 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     glGetIntegerv(GL_MAX_VIEWPORT_DIMS, maxViewportDims.ptr);
     writeln("maxViewportDims = ", maxViewportDims);
 
-    GLint maxRenderBufferSize;
-    glGetIntegerv(GL_MAX_RENDERBUFFER_SIZE_EXT, &maxRenderBufferSize); 
-    writeln("maxRenderBufferSize = ", maxRenderBufferSize);
+    //GLint maxRenderBufferSize;
+    //glGetIntegerv(GL_MAX_RENDERBUFFER_SIZE_EXT, &maxRenderBufferSize); 
+    //writeln("maxRenderBufferSize = ", maxRenderBufferSize);
 
     Shader[] shaders =
     [
