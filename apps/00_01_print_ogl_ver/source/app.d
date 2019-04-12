@@ -35,7 +35,7 @@ void main(string[] argv)
 
     load_libraries();
 
- 
+
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);   // Lenovo Tiny PCs are at openGL 4.2    Lian Li PC-33B is OpenGL 4.4
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);   // iMac 27" are at opengl 4.1
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
