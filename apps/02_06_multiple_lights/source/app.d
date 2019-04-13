@@ -10,11 +10,11 @@ import gl3n.linalg; // vec3 mat4
 
 import derelict.util.loader;
 import derelict.util.sharedlib;
-import derelict.freetype.ft;
-import derelict.freeimage.freeimage;
-import derelict.opengl3.gl3;
-import derelict.glfw3.glfw3;
 
+import bindbc.freetype;
+import bindbc.freeimage;
+import bindbc.opengl;
+import bindbc.glfw;
 
 float angle;
 float distance = 3.0;
