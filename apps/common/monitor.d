@@ -47,11 +47,7 @@ void showMonitorProperties(GLFWmonitor* monitor)
     {
         //modes[i].width 
     }
-
-
-
 }
-
 
 
 void showAllMonitors()
@@ -126,16 +122,12 @@ void showAllMonitors()
 
         writeln("");
     }
-    writeln("");    
 
     GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
+    
     const char* name = glfwGetMonitorName(primaryMonitor);
     string dString = to!string(name);
-    //writeln("Primary monitor name = ", dString);
-    GLFWmonitor* mon = monitors[1];
-    const char* name1 = glfwGetMonitorName(mon); 
-    dString = to!string(name1);
-    //writeln("Primary monitor name = ", dString);   
+    writeln("Primary monitor name = ", dString);
 
 
     // The physical size of a monitor in millimetres, or an estimation of it, 

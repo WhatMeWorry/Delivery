@@ -12,16 +12,15 @@ import common_game;
 
 import std.stdio;  // writeln
 import std.conv;   // toChars
-
-
-import bindbc.freetype;
-import bindbc.opengl;
-
 import derelict.util.loader;
 import derelict.util.sharedlib;
+
+import bindbc.freetype;
 import bindbc.freeimage;
+import bindbc.opengl;
 import bindbc.glfw;
-     
+
+    
 
 void main(string[] argv)
 {

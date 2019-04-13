@@ -259,7 +259,7 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
     //GLint maxRenderBufferSize;
     //glGetIntegerv(GL_MAX_RENDERBUFFER_SIZE_EXT, &maxRenderBufferSize); 
     //writeln("maxRenderBufferSize = ", maxRenderBufferSize);
-
+ 
     Shader[] shaders =
     [
              Shader(GL_VERTEX_SHADER, "source/vertexShader.glsl",      0),
