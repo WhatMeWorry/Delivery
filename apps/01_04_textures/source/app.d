@@ -105,7 +105,11 @@ void main(string[] argv)
     GLuint texture1;
     GLuint texture2;
 
+    writeln("Before loadtexture");
+
     loadTexture(texture1, "../art/block_solid.png");
+
+       writeln("After loadtexture");
 
     loadTexture(texture2, "../art/block_solid.png");
 

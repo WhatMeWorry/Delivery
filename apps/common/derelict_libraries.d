@@ -19,46 +19,6 @@ import std.stdio;
 
 
 
-ShouldThrow myMissingSymCallBackFI( string symbolName )
-{
-    if (symbolName == "FreeImage_JPEGTransform"           ||
-        symbolName == "FreeImage_JPEGTransformU"          ||
-        symbolName == "FreeImage_JPEGCrop"                ||
-        symbolName == "FreeImage_JPEGCropU"               ||
-        symbolName == "FreeImage_JPEGTransformFromHandle" ||
-        symbolName == "FreeImage_JPEGTransformCombined"   ||
-        symbolName == "FreeImage_JPEGTransformCombinedU"  ||
-        symbolName == "FreeImage_JPEGTransformCombinedFromMemory"
-
-       )
-    {
-       return ShouldThrow.No;
-    }
-    else
-    {
-        return ShouldThrow.Yes;
-    }
-}
-
-
-ShouldThrow myMissingSymCallBackFT( string symbolName )
-{
-    if (symbolName == "FT_Stream_OpenBzip2"                     ||  // Windows libfreetype-6.dll
-        symbolName == "FT_Get_CID_Is_Internally_CID_Keyed"      ||
-        symbolName == "FT_Get_CID_From_Glyph_Index"             ||
-        symbolName == "FT_Get_CID_Registry_Ordering_Supplement"
-       )
-    {
-       return ShouldThrow.No;
-    }
-    else
-    {
-        return ShouldThrow.Yes;
-    }
-}
-
-
-
 ShouldThrow myMissingSymCallBackASSIMP3( string symbolName )
 {
     if (symbolName == "aiReleaseExportFormatDescription"  ||  // Windows assimp.dll
@@ -77,21 +37,23 @@ ShouldThrow myMissingSymCallBackASSIMP3( string symbolName )
 
 
 
-void load_GLFW3_Library()
+void load_GLFW_Library()
 {
-   // glfwSupport is set to GLFWSupport.gl30, gl31, or .gl32 during compile time depending on 
+    // glfwSupport is set to GLFWSupport.gl30, gl31, or .gl32 during compile time depending on 
     // what is in dub.sdl file.
 
-    GLFWSupport ret = loadGLFW();
+    writeln("The dub.sdl file of this project expects GLFW version ", glfwSupport);
 
-    writeln("loadGLFW returned ", ret);
+    immutable GLFWSupport glfwLib = loadGLFW();
 
-    if (ret == GLFWSupport.noLibrary) 
+    writeln("GLFW version detected on this system is ", glfwLib);
+
+    if (glfwLib == GLFWSupport.noLibrary) 
     {
         writeln("No FreeImage shared library was detected");
         exit(0);        
     }
-    else if (ret == GLFWSupport.badLibrary) 
+    else if (glfwLib == GLFWSupport.badLibrary) 
     {
         writeln("One or more symbols failed to load. The likely cause is that the shared");
         writeln("library has a lower version than bindbc-freeimage was configured for");       
@@ -100,32 +62,26 @@ void load_GLFW3_Library()
 
     // The function isGLFWLoaded returns true if any version of GLFW was successfully loaded and false otherwise.
  
-    //if (isGLFWLoaded())
+    if (isGLFWLoaded())
     {
-        GLFWSupport glfwVer = loadedGLFWVersion();
-        if (glfwVer == GLFWSupport.glfw30)
+        immutable GLFWSupport glfwVer = loadedGLFWVersion();
+        if ( (glfwVer == GLFWSupport.glfw30) ||
+             (glfwVer == GLFWSupport.glfw31) ||
+             (glfwVer == GLFWSupport.glfw32) )
         {
-            writeln("GLFW - Graphics Library FrameWork - Version 3.0 successfully loaded");
+            writeln("GLFW - Graphics Library FrameWork - Version ", glfwVer, " successfully loaded");
         } 
-        else if (glfwVer == GLFWSupport.glfw31)
-        {
-            writeln("GLFW - Graphics Library FrameWork - Version 3.1 successfully loaded");
-        }  
-        else if (glfwVer == GLFWSupport.glfw32)
-        {
-            writeln("GLFW - Graphics Library FrameWork - Version 3.2 successfully loaded");
-        }
         else
         {
             writeln("An unexpected version of GLFW - Graphics Library FrameWork - was loaded");
             exit(0);
         }
     }
-    //else
-    //{
-    //    writeln("No version of the GLFW library was loaded");
-    //    exit(0);       
-    //}
+    else
+    {
+        writeln("No version of the GLFW library was loaded");
+        exit(0);       
+    }
 
     if (glfwInit() == 0)
         throw new Exception("glfwInit failed");
@@ -139,34 +95,38 @@ void load_openGL_Library()
     // glSupport is GLSupport.gl46 , gl45, ... or gl1 depending on what version was assigned in the dub.sdl file.
     // GLSupport is a superset of glSupport where GLSupport also has the bad library, no library and no context
 
-    GLSupport ret = loadOpenGL();
+    // glSupport is initialized at compile time from the bindbc/dub.sdl OpenGL specification
 
-    writeln("loadGL returned ", ret);
+    writeln("The dub.sdl file of this project expects OpengGL version ", glSupport);
 
-    if (ret == GLSupport.noLibrary) 
+    immutable GLSupport glLib = loadOpenGL();
+
+    writeln("OpenGL version detected on this system is ", glLib);
+
+    if (glLib == GLSupport.noLibrary) 
     {
         writeln("No openGL library was detected");
         exit(0);        
     }
-    else if (ret == GLSupport.badLibrary) 
+    else if (glLib == GLSupport.badLibrary) 
     {
         writeln("One or more symbols failed to load. The likely cause is that this openGL");
         writeln("library has a lower version than bindbc-freeimage was configured for");       
         exit(0);                
     }
-    else if (ret == GLSupport.noContext) 
+    else if (glLib == GLSupport.noContext) 
     {
         writeln("A context must be created before openGL can be loaded");      
         exit(0);                
     }
-    else if (ret != glSupport) 
+    else if (glLib != glSupport) 
     {
-        writeln("OpenGL version ", glSupport, " was requested in the dub.sdl file. Version ", ret, " was loaded" );      
+        writeln("OpenGL version ", glSupport, " was requested in the dub.sdl file. Version ", glLib, " was loaded" );      
         exit(0);                
     }
     else
     {
-        writeln("OpenGL version ", ret, " was successfully loaded");
+        writeln("OpenGL version ", glLib, " was successfully loaded");
     }   
 }
 
@@ -174,27 +134,28 @@ void load_openGL_Library()
 
 void load_FreeImage_Library()
 {
-    // This version attempts to load the FreeImage shared library using well-known variations
-    // of the library name for the host system.
+    // fiSupport is initialized at compile time from the dub.sdl freeimage specification
 
-    FISupport ret = loadFreeImage();
+     writeln("The dub.sdl file of this project expects FreeImage version ", fiSupport);
 
-    writeln("loadFreeImage returned ", ret);
+    immutable FISupport fiLib = loadFreeImage();
 
-    if (ret == fiSupport.fi317)
+    writeln("FreeImage version detected on this system is ", fiLib);
+
+    if (fiLib == fiSupport.fi317)
     {
         writeln("Freeimage Version 3.17.0 successfully loaded");
     } 
-    else if (ret == fiSupport.fi318)
+    else if (fiLib == fiSupport.fi318)
     {
         writeln("Freeimage Version 3.18.0 successfully loaded");
     }  
-    else if (ret == FISupport.noLibrary) 
+    else if (fiLib == FISupport.noLibrary) 
     {
         writeln("No FreeImage shared library was detected");
         exit(0);        
     }
-    else if (ret == FISupport.badLibrary) 
+    else if (fiLib == FISupport.badLibrary) 
     {
         writeln("One or more symbols failed to load. The likely cause is that the shared");
         writeln("library has a lower version than bindbc-freeimage was configured for");       
@@ -209,32 +170,34 @@ void load_FreeType_Library()
 {
     // ftSupport is FTSupport.ft26, ft27, ... or ft210 depending on what version was requested in the dub.sdl file.
     // FTSupport is a superset of glSupport where FTSupport also has the bad library and no library values
+ 
+    // ftSupport is initialized at compile time from the dub.sdl freeType version command
 
-    FTSupport ret = loadFreeType();
+    writeln("The dub.sdl file of this project expects FreeType version ", ftSupport);
 
-    writeln("The dub.sdl file of this project requests FreeType version ", ftSupport);
+    immutable FTSupport ftLib = loadFreeType();
 
-    writeln("loadFreeType returned ", ret);
+    writeln("FreeImage version detected on this system is ", ftLib);
 
-    if (ret == FTSupport.noLibrary) 
+    if (ftLib == FTSupport.noLibrary) 
     {
         writeln("No FreeType library was detected");
         exit(0);        
     }
-    else if (ret == FTSupport.badLibrary) 
+    else if (ftLib == FTSupport.badLibrary) 
     {
         writeln("One or more symbols failed to load. The likely cause is that this FreeType library");
         writeln("loaded has a lower version than bindbc-freeimage was configured for");       
         exit(0);                
     }
-    else if (ret != ftSupport) 
+    else if (ftLib != ftSupport) 
     {
-        writeln("FreeType version ", ftSupport, " was requested in the dub.sdl file. Version ", ret, " was loaded" );      
+        writeln("FreeType version ", ftSupport, " was requested in the dub.sdl file. Version ", ftLib, " was loaded" );      
         exit(0);                
     }
     else
     {
-        writeln("FreeType version ", ret, " was successfully loaded");
+        writeln("FreeType version ", ftLib, " was successfully loaded");
     }   
 }
 
@@ -245,31 +208,33 @@ void load_SDL_Library()
     // sdlSupport is SDLSupport.sdl200, sdl201, ... or sdl209 depending on what version was specified in the dub.sdl file.
     // SDLSupport is a superset of sdlSupport where SDLSupport also has the bad library and no library values
 
-    SDLSupport ret = loadSDL();
+    // ftSupport is initialized at compile time from the dub.sdl freeType version command
 
     writeln("The dub.sdl file of this project requests FreeType version ", sdlSupport);
 
-    writeln("SDL version returned is ", ret);
+    immutable SDLSupport sdlLib = loadSDL();
 
-    if (ret == SDLSupport.noLibrary) 
+    writeln("SDL version detected on this system is ", sdlLib);
+
+    if (sdlLib == SDLSupport.noLibrary) 
     {
         writeln("No SDL library was detected");
         exit(0);        
     }
-    else if (ret == SDLSupport.badLibrary) 
+    else if (sdlLib == SDLSupport.badLibrary) 
     {
         writeln("One or more symbols failed to load. The likely cause is that this SDL library");
         writeln("loaded has a lower version than bindbc-sdl was configured for");       
         exit(0);                
     }
-    else if (ret != sdlSupport) 
+    else if (sdlLib != sdlSupport) 
     {
-        writeln("SDL version ", sdlSupport, " was requested in the dub.sdl file. Version ", ret, " was loaded" );      
+        writeln("SDL version ", sdlSupport, " was requested in the dub.sdl file. Version ", sdlLib, " was loaded" );      
         exit(0);                
     }
     else
     {
-        writeln("SDL version ", ret, " was successfully loaded");
+        writeln("SDL version ", sdlLib, " was successfully loaded");
     }   
 }
 
@@ -279,51 +244,49 @@ void load_SDL_Mixer_Library()
     // sdlMixerSupport is SDLMixerSupport.sdlMixer200, sdlMixer201 or sdlMixer202 depending on what version was specified in the dub.sdl file.
     // SDLMixerSupport is a superset of sdlSupport where SDLMixerSupport also has the bad library and no library values
 
-    SDLMixerSupport  ret = loadSDLMixer();
+    writeln("The dub.sdl file of this project requests SDL Mixer version ", sdlMixerSupport);
 
-    writeln("The dub.sdl file of this project requests SDL_Mixer version ", sdlMixerSupport);
+    immutable SDLMixerSupport  sdlMixLib = loadSDLMixer();
 
-    writeln("SDL version returned is ", ret);
+    writeln("SDL Mixer version detected on this system is  ", sdlMixLib);
 
-    if (ret == SDLMixerSupport.noLibrary) 
+    if (sdlMixLib == SDLMixerSupport.noLibrary) 
     {
         writeln("No SDL_Mixer library was detected");
         exit(0);        
     }
-    else if (ret == SDLMixerSupport.badLibrary) 
+    else if (sdlMixLib == SDLMixerSupport.badLibrary) 
     {
         writeln("One or more symbols failed to load. The likely cause is that this SDL_Mixer library");
         writeln("loaded has a lower version than bindbc-sdl was configured for");       
         exit(0);                
     }
-    else if (ret != sdlMixerSupport) 
+    else if (sdlMixLib != sdlMixerSupport) 
     {
-        writeln("SDL_Mixer version ", sdlMixerSupport, " was requested in the dub.sdl file. Version ", ret, " was loaded" );      
+        writeln("SDL_Mixer version ", sdlMixerSupport, " was requested in the dub.sdl file. Version ", sdlMixLib, " was loaded" );      
         exit(0);                
     }
     else
     {
-        writeln("SDL_Mixer version ", ret, " was successfully loaded");
+        writeln("SDL_Mixer version ", sdlMixLib, " was successfully loaded");
     }   
 }
+
+
+
 
 void load_libraries()
 {
     writeln("ENTERING LOAD_LIBRARIES");
  
-    load_GLFW3_Library();  
+    load_GLFW_Library();  
 
-    //load_FreeImage_Library();
-
-    // Load Open Graphics Library
-
-    //DerelictGL3.load();     // Load OpenGL versions 1.0 and 1.1
+    load_FreeImage_Library();
 
     // require the use of OpenGL version 4.1 at the very least
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);    // Lenovo Tiny PCs are at openGL 4.2    Lian Li PC-33B is OpenGL 4.4
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);    // iMac 27" are at opengl 4.1   Surface Book is at opengl 4.1
-
 
      // require a context that only supports the new OpenGL core functionality.
 
@@ -350,15 +313,13 @@ void load_libraries()
 
     glfwMakeContextCurrent(window);
 
-    //DerelictGL3.reload();   // Load OpenGL versions 1.2+
-
     load_openGL_Library();
 
     glfwDestroyWindow(window);
 
+  
     load_FreeType_Library();    
-
-    //DerelictSDL2.load();
+ 
 
     load_SDL_Library();
 
@@ -366,10 +327,8 @@ void load_libraries()
 
     DerelictASSIMP3.missingSymbolCallback = &myMissingSymCallBackASSIMP3;
 
-    // Load the Assimp3 library.
-    DerelictASSIMP3.load();
+   
+    DerelictASSIMP3.load();   // Load the Assimp3 library.
 
     // Now Assimp3 functions can be called.
-
-    writeln("DerelictASSIMP3 library loaded");
 }
