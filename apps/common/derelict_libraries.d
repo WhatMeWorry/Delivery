@@ -323,11 +323,10 @@ void load_libraries()
 
     load_SDL_Library();
 
-    //DerelictSDL2Mixer.load();
+    load_SDL_Mixer_Library();
 
     DerelictASSIMP3.missingSymbolCallback = &myMissingSymCallBackASSIMP3;
 
-   
     DerelictASSIMP3.load();   // Load the Assimp3 library.
 
     // Now Assimp3 functions can be called.
