@@ -6,19 +6,19 @@ license "proprietary"
 
 dependency "derelict-assimp3" version="~>1.3.0"
 dependency "derelict-util"    version="~>2.0.6" 
+dependency "gl3n"             version="~>1.3.1"
 
-dependency "bindbc-freeimage" version="~>0.1.0"
+dependency "bindbc-freeimage" version="~>0.1.1" 
 versions "FI_317"
-dependency "bindbc-sdl"       version="~>0.7.0"
+dependency "bindbc-sdl"       version="~>0.8.0"
 versions "SDL_202"
 versions "BindSDL_Mixer" 
-dependency "bindbc-freetype"  version="~>0.1.0"
+dependency "bindbc-freetype"  version="~>0.4.1"
 versions "FT_210"
-dependency "bindbc-opengl"    version="~>0.1.0"
+dependency "bindbc-opengl"    version="~>0.8.0"
 versions "GL_41"
-dependency "bindbc-glfw"      version="~>0.1.0"
+dependency "bindbc-glfw"      version="~>0.4.0"
 versions "GLFW_32"
-dependency "gl3n"             version="~>1.3.1"
 
 // If common is not an independent project (it has no dub configuration) 
 // then you can use `sourcePaths` (or `sourceFiles`) in the dub configuration 
