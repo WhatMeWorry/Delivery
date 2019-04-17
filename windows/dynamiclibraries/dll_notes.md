@@ -7,6 +7,8 @@ already exist on a system, but these DLLS are placed here for version consistenc
 ### Overview
 This is an introduction to Git version control system. It teachs by doing: a step by step walkthru of all the commands listed in the required order. It is believed that theory is better understood after the user first knows the lay of the land. For Git to become really powerful/useful, it needs to paired with a remote repository.  
 
+| Important: Visual Studio Code was not able to differentiate between file         | Are          | Cool  |
+| ------------- |:-------------:| -----:|
 
 ### Dynamic Libraries
     - Assimp (Assest )
@@ -20,9 +22,9 @@ This is an introduction to Git version control system. It teachs by doing: a ste
     - FreeImage
         Went to the official FreeImage website: http://freeimage.sourceforge.net and
 
-        downloaded FreeImage 3.17.0 [WIN32/WIN64]
+        downloaded FreeImage 3.18.0 [WIN32/WIN64]
 
-        Got the FreeImage.dll (6,253 KB) from C:\Users\user\Downloads\FreeImage3170Win32Win64\FreeImage\Dist\x64
+        Got the FreeImage.dll (6,780 KB) from C:\Users\user\Downloads\FreeImage3100Win32Win64\FreeImage\Dist\x64
         and moved it to this folder.
 
     - GLFW3
