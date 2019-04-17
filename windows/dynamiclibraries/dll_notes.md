@@ -7,7 +7,7 @@ already exist on a system, but these DLLS are placed here for version consistenc
 ### Overview
 This is an introduction to Git version control system. It teachs by doing: a step by step walkthru of all the commands listed in the required order. It is believed that theory is better understood after the user first knows the lay of the land. For Git to become really powerful/useful, it needs to paired with a remote repository.  
 
-| Important: Visual Studio Code / Git / Github was not able to differentiate between <br> different versions of .dll files. Push did not work. |
+| Important: Visual Studio Code / Git / Github was not able to <br> differentiate between different versions of .dll files. <br> Push did not work. Had to upload the correct .dll files from Github site.  |
 | -------------------------------------------------------                                         |
 
 ### Dynamic Libraries
