@@ -116,6 +116,27 @@ dub list
 Packages present in the system and known to dub:
 
 ```
+
+In Linux, to completely remove local Dub packages with the rm command:
+-f = to ignore non-existent files, never prompt
+-r = to remove directories and their contents recursively
+-v = to explain what is being done
+
+```
+$ dub list
+Packages present in the system and known to dub:
+  bindbc-freeimage 0.1.1: /home/generic/.dub/packages/bindbc-freeimage-0.1.1/bindbc-freeimage/
+  bindbc-glfw 0.4.0: /home/generic/.dub/packages/bindbc-glfw-0.4.0/bindbc-glfw/
+     o   o   o
+     
+$ sudo rm -frv .dub
+removed '.dub/packages/bindbc-freeimage-0.1.1/bindbc-freeimage/.dub/build/dynamic-debug-linux.posix-x86_64-ldc_2084-7AD98CBFBCB678B6EDD1C29FF9DD5AE2/libBindBC_FI.a'
+
+dub list
+Packages present in the system and known to dub:
+
+```
+
 ***
 
 #### How to delete Dub packages
