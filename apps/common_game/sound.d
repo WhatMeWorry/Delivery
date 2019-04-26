@@ -32,8 +32,6 @@ enum ONCE = 0;  // 1 = loop twice  2 = loop thrice...
 enum MIX_ERROR = -1;
 enum SDL_ERROR = -1;
 
-enum OK = 0;
-
 enum WHAT_IS_CURRENT_VOLUME = -1;
 
 enum channels { MONO = 1, STEREO  = 2};
@@ -106,7 +104,7 @@ void initAndOpenSoundAndLoadTracks()
 
     int flags = MIX_INIT_MP3;
     int result = Mix_Init(flags);
-    if (result != OK) 
+    if (result != flags) 
     {
         writeln("Could not initialize mixer. result = ", result);
         writeln("Mix_Init: ", Mix_GetError());
