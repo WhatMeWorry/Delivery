@@ -1,13 +1,18 @@
+
 ## This document describes the .LIB (Static Libraries) used by Windows. It summarizes which
 static libraries are used and when and where they were originally downloaded from. Some LIBs may
 already exist on a system, but these LIBs are placed here for version consistency and convenience.
 
+| Important: Visual Studio Code / Git / Github was not able to <br> differentiate between different versions of .dll files. Push did <br> not work. Had to manually upload the .dll files from Github.
+| :-------------------------------------------------------                                         |
+
+
 ### Static Libraries
 
-    - Assimp (Assest )
+    - Assimp (Assest)
         
     - sdl2  sdl2_mixer
-
+    
     - FreeImage
   
     - GLFW3
