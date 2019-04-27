@@ -5,6 +5,8 @@ already exist on a system, but these LIBs are placed here for version consistenc
 ### Static Libraries
 
 - GLFW3
-        At the official  https://www.glfw.org/download.html  There is a Windows pre-compiled binaries. Click and download the "64-bits Windows binaries. Using 7-zip, right click on the glfw-3.3.bin.WIN64.zip and the select 7-zip > Open Archive.  Double click on the  glfw-3.3.bin.WIN64 node and then ou will see lib-vc2012, lib-vc2013, ... lib-vc2019. Got the most current lib-vc2019 glfw3.lib (82 KB) and copied it to this folder.
+        At the official  https://www.glfw.org/download.html site. There is a Windows pre-compiled binaries. Click and download the "64-bits Windows binaries. Using 7-zip, right click on the glfw-3.3.bin.WIN64.zip and then select 7-zip > Extract to glfw-3.3.bin.WIN64. select 7-zip > Open Archive.  Open this new extracted folder glfw-3.3.bin.WIN64 node and then you will see lib-vc2012, lib-vc2013, ... lib-vc2019. Got the most current lib-vc2019 glfw3.lib (>> KB) and copied it to this folder.
+        
+        
         
 
