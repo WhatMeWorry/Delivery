@@ -103,8 +103,24 @@ void initAndOpenSoundAndLoadTracks()
 
 
     int flags = MIX_INIT_MP3;
+
     int result = Mix_Init(flags);
-    if (result != flags) 
+
+    int success;
+    writeln("flags = ", flags);
+    writeln("result = ", result);
+
+    version(Windows)
+    {
+        success = 0;   // Mix_Init on Windows returns zero on success???
+    }
+    else
+    {
+        success = flags;
+    }
+ 
+
+    if (result != success) 
     {
         writeln("Could not initialize mixer. result = ", result);
         writeln("Mix_Init: ", Mix_GetError());
