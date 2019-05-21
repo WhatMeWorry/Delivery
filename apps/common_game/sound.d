@@ -102,31 +102,18 @@ void initAndOpenSoundAndLoadTracks()
     }
 
 
-    int flags = MIX_INIT_MP3;
+    // For those of you using OGG, MOD, FLAC, or MP3 sound formats other than WAV, look 
+    // into using Mix_Init() to initialize decoders and Mix_Quit() to close the decoders. 
+    // I'm only using WAV audo files, so this has been commented out
 
-    int result = Mix_Init(flags);
+    // int result = Mix_Init(MIX_INIT_FLAC | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG);
 
-    int success;
-    writeln("flags = ", flags);
-    writeln("result = ", result);
-
-    version(Windows)
-    {
-        success = 0;   // Mix_Init on Windows returns zero on success???
-    }
-    else
-    {
-        success = flags;
-    }
- 
-
-    if (result != success) 
-    {
-        writeln("Could not initialize mixer. result = ", result);
-        writeln("Mix_Init: ", Mix_GetError());
-        exit(1);
-    }
-    writeln("Mix_Init: is successful with flags = ", flags);   
+    // if (result != musicFormats) 
+    // {
+    //     writeln("Could not initialize mixer. result = ", result);
+    //     writeln("Mix_Init: ", Mix_GetError());
+    //     exit(1);
+    // }
 
     int    audioRate     = 22050;
     ushort audioFormat   = AUDIO_S16SYS;
