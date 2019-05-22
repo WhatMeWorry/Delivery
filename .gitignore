@@ -17,6 +17,9 @@
 # Ignore contents of all `bin` directories.  That is, store no executables.
 /apps/*/bin/*
 
+# Dont store in GitHub the .gitignore files in lower levels of file system.
+/apps/*/.gitignore
+
 # Executables  (Linux and Mac OS handled by more generic /apps/*/bin/*)
 *.exe
 
