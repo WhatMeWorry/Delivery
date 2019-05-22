@@ -22,7 +22,7 @@ This is an introduction to Git version control system. It teachs by doing: a ste
     - FreeImage
         Went to the official FreeImage website: http://freeimage.sourceforge.net and
 
-        downloaded FreeImage 3.18.0 [WIN32/WIN64]
+        downloaded FreeImage 3.17.0 [WIN32/WIN64]
 
         Got the FreeImage.dll (6,780 KB) from C:\Users\user\Downloads\FreeImage3100Win32Win64\FreeImage\Dist\x64
         and moved it to this folder.
