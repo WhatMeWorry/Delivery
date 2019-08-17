@@ -16,27 +16,28 @@ Download the Latest Release. LDC 1.16.0 at the time of this writing. Since we ar
 The LLVM compiler for D language is called LDC (LLCM D Compiler). This is for version 2 of the D Language so the command is actually named ldc2. 
 
 ***
+
 Side Note: 7-zip file archiver
 
-Note: this install procedure assumes you have the 7-Zip utility already installed. If not, go to https://www.7-zip.org/ and download it. Right click the downloaded application (7z1900-x64) and select "Run as Administrator".  7 zip must be installed as administrator. Keep things simple and just use the default destination folder C:Program Files\7-Zip\ and select [Install] button
+Note: this install procedure assumes you have the 7-Zip utility already installed. If not, go to https://www.7-zip.org/ and download either the 64 bit Windows 10 .exe or .msi installer.  Right click the downloaded application (7z1900-x64) and select "Run as Administrator".  7 zip must be installed as administrator. Keep things simple and just use the default destination folder C:Program Files\7-Zip\ and select [Install] button
 
-Now we need to add a path in the PATH environment variable that points to this new location for 7-zip.exe
-
-
+We don't need to add a path in the PATH environment variable that points to this new location for 7-zip.exe because the Windows File Explorer automaticaly knows about 7 zip. 
 
 ***
 
+Since ldc2-x.xx.0-Windows-x64.7z do not have a built-in installer, we'll have to manually massage it a bit.
 
+Select the latest ldc2-x.xx.x-Windows-x64.7z and download it.
 
+After the download is finished, on right click the file --> 7-zip --> Open Archive
 
+You should now have a ldc2-x.xx.x-linux-x86_64.tar.xz file on your local system.
 
+ Right Click the file --> 7-zip --> Open Archive
+The file in the 7zip program will have just the .tar suffix. The xz compression is gone.
 
-Since ldc2-1.16.0-Windows-x64.7z does not have an built-in installer, we'll have to manually massage it a bit.
-
-Go to the ldc2-1.16.0-Windows-x64.7z downloaded file and 
-
-
-
+Now double click on the .tar file within 7-zip. The file name will have just be ldc2-x.xx.x-linux-x86_64 The tar archival is gone. Notice the file path will be built up from the preceeding steps: C:\Users\someuser\Downloads\ldc2-1.14.0-linux-x86_64.tar.xz\ldc2-1.14.0-linux-x86_64.tar\ldc2-1.14.0-linux-x86_64
+The folder that you did the download should show all three: ldc2-1.14.0-linux-x86_64.tar.xz ldc2-1.14.0-linux-x86_64.tar ldc2-1.14.0-linux-x86_64
 
 ***
 
