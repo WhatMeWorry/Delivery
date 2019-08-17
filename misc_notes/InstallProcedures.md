@@ -29,28 +29,74 @@ Since ldc2-x.xx.0-Windows-x64.7z do not have a built-in installer, we'll have to
 
 Select the latest ldc2-x.xx.x-Windows-x64.7z and download it.
 
-After the download is finished, on right click the file --> 7-zip --> Open Archive
+After the download is finished, right click the file --> 7-zip --> Extract Here
 
-You should now have a ldc2-x.xx.x-linux-x86_64.tar.xz file on your local system.
+You should now see a folder created called ldc2-x.xx.x-Windows-x64.  You can now delete the .7z file.
 
- Right Click the file --> 7-zip --> Open Archive
-The file in the 7zip program will have just the .tar suffix. The xz compression is gone.
+***
+Like dmd, ldc's directory structure in the compressed archive is good to go.
+Extract into a directory and add it to your PATH variable.
 
-Now double click on the .tar file within 7-zip. The file name will have just be ldc2-x.xx.x-linux-x86_64 The tar archival is gone. Notice the file path will be built up from the preceeding steps: C:\Users\someuser\Downloads\ldc2-1.14.0-linux-x86_64.tar.xz\ldc2-1.14.0-linux-x86_64.tar\ldc2-1.14.0-linux-x86_64
-The folder that you did the download should show all three: ldc2-1.14.0-linux-x86_64.tar.xz ldc2-1.14.0-linux-x86_64.tar ldc2-1.14.0-linux-x86_64
+For example here is my directory structure for both:
+
+C:\development\D\dmd_2.087.0\windows\bin\dmd.exe
+C:\development\D\ldc2-1.16.0-windows-multilib\bin\ldc2.exe
+***
+
+Now open a cmd window which should open to you %userprofile% env variable
+```
+Microsoft Windows [Version 10.0.14393]
+(c) 2016 Microsoft Corporation. All rights reserved.
+
+C:\Users\kheaser>mkdir D_development
+
+C:\Users\kheaser>
+```
+Now with two Windows File Explores windows, cut the ldc2-x.xx.x-Windows-x64 folder and paste it into the C:\Users\<username>\D_development folder.
 
 ***
 
+Now add this new path C:\Users\<username>\D_development\ldc2-x.xx.x-Windows-x64\bin to the PATH environment variable.
+
+this can be done using Rapid Environment Editor standalone tool, or in the command line using SETX
 
 
+***
+Side Note about SETX
 
+Set modifies the current shell's (window) environment values, and the change is available immediately, but it is temporary. The change will not affect other shells that are running, and as soon as you close the shell, the new value is lost until such time as you run set again.
 
+setx modifies the value permenantly, which affects all future shells, but does not modify the environment of the shells already running. You have to exit the shell and reopen it before the change will be available, but the value will remain modified until you change it again.
 
+setx PATH %PATH%;c:\my-user-specifc-bin-path or
+Setx sets environment variables permanently. SETX can be used to set Environment Variables for the machine - all users (use /m option) or the currently logged on user (default).
 
+***
 
+```
+setx PATH %PATH%;C:\Users\<username>\D_development\ldc2-x.xx.x-Windows-x64\bin
 
+```
 
+To verify that the compiler has been setup properly and all is well, open new cmd line window and type ldc2.
+You should see lots of documentation on how to use it.
 
+```
+C:\Users\kheaser>ldc2
+OVERVIEW: LDC - the LLVM D compiler
+
+USAGE: ldc2 [options] files --run Runs the resulting program, passing the remaining arguments to it
+
+OPTIONS:
+
+General options:
+
+  -D                                            - Generate documentation
+  -Dd=<directory>                               - Write documentation file to <directory>
+  -Df=<filename>                                - Write documentation file to <filename>
+  -H                                            - Generate 'header' file
+  -Hd=<directory>                               - Write 'header' file to <directory>
+```
 
 
 
