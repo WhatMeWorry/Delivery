@@ -1,4 +1,53 @@
 
+
+The following assumes Windows 10 (will make a another section for Linux)
+
+Delivery uses the D Language.
+
+Delivery uses four software components: Compiler/linker, Package Manager, Git/Github and Editor.
+
+The LLVM compiler for D language is called LDC (LLCM D Compiler). This is for version 2 of the D Language so the command is actually refered to as ldc2. 
+
+D has three available compilers, but we will use the LLVM D compiler.  Available at  https://github.com/ldc-developers/ldc/releases
+Download the Latest Release. LDC 1.16.0 at the time of this writing. Since we are assuming Windows 10, select ldc2-1.16.0-Windows-x64.7z
+
+Note: this assumes you have the file archiver 7-Zip utility already installed. If not, go to https://www.7-zip.org/ and install it.
+
+Since ldc2-1.16.0-Windows-x64.7z does not have an built-in installer, we'll have to manually massage it a bit.
+
+Go to the ldc2-1.16.0-Windows-x64.7z downloaded file and 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 To install on a Linux, specifically Ubuntu 10.0 machine.
 
 Open terminal and
