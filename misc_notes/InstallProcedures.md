@@ -6,12 +6,30 @@ Delivery uses the D Language.
 
 Delivery uses four software components: Compiler/linker, Package Manager, Git/Github and Editor.
 
-The LLVM compiler for D language is called LDC (LLCM D Compiler). This is for version 2 of the D Language so the command is actually refered to as ldc2. 
+
+***
+Installing the compiler
 
 D has three available compilers, but we will use the LLVM D compiler.  Available at  https://github.com/ldc-developers/ldc/releases
 Download the Latest Release. LDC 1.16.0 at the time of this writing. Since we are assuming Windows 10, select ldc2-1.16.0-Windows-x64.7z
 
-Note: this assumes you have the file archiver 7-Zip utility already installed. If not, go to https://www.7-zip.org/ and install it.
+The LLVM compiler for D language is called LDC (LLCM D Compiler). This is for version 2 of the D Language so the command is actually named ldc2. 
+
+***
+Side Note: 7-zip file archiver
+
+Note: this install procedure assumes you have the 7-Zip utility already installed. If not, go to https://www.7-zip.org/ and download it. Right click the downloaded application (7z1900-x64) and select "Run as Administrator".  7 zip must be installed as administrator. Keep things simple and just use the default destination folder C:Program Files\7-Zip\ and select [Install] button
+
+Now we need to add a path in the PATH environment variable that points to this new location for 7-zip.exe
+
+
+
+***
+
+
+
+
+
 
 Since ldc2-1.16.0-Windows-x64.7z does not have an built-in installer, we'll have to manually massage it a bit.
 
@@ -20,7 +38,7 @@ Go to the ldc2-1.16.0-Windows-x64.7z downloaded file and
 
 
 
-
+***
 
 
 
