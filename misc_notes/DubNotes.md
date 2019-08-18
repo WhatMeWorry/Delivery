@@ -13,7 +13,7 @@ Packages present in the system and known to dub:
 ***
 
 After deciding on the package you want, use the dub fetch command to download it.
-the cache options may be either __user__, __system__ or __local__ 
+the cache options may be either __system__, __user__ or __local__ 
 
 * __system__ will download the package to C:\\ProgramData\\dub\\packages
 * __user__ will download the package to either C:\\Users\\_username_\\AppData\\Local\\dub\\packages\\ or C:\\Users\\_username_\\AppData\\Roaming\\dub\\packages depending if the Windows computer is part of a domain or workgroup
