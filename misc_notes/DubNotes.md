@@ -266,6 +266,7 @@ Upgrading project in C:\Users\kheaser\Delivery\apps\kyle
 
 ***
 
+```
 C:\ProgramData\dub\packages\scone-2.1.2\scone\examples>ldc2  -I=C:\ProgramData\dub\packages\scone-2.1.2\scone\source\ example_1.d
 example_1.d(26): Error: function scone.color.foreground(Color color) is not callable using argument types (int)
 example_1.d(26):        cannot pass argument uniform(0, 16) of type int to parameter Color color
@@ -273,7 +274,7 @@ example_1.d(27): Error: function scone.color.background(Color color) is not call
 example_1.d(27):        cannot pass argument uniform(0, 16) of type int to parameter Color color
 C:\ProgramData\dub\packages\scone-2.1.2\scone\source\scone\window.d(211): Deprecation: foreach: loop index implicitly converted from size_t to uint
 C:\ProgramData\dub\packages\scone-2.1.2\scone\source\scone\window.d(213): Deprecation: foreach: loop index implicitly converted from size_t to uint
-
+```
 
 ***
 
