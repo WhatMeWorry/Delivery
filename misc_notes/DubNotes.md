@@ -120,9 +120,12 @@ C:\Users\kheaser\AppData\Roaming\dub\packages>dir /a
 To completely clean off Dub entirely, do the following on Windows:
 
 ```
-cd C:\Users\kheaser\AppData\Roaming
-// or (not sure how the Roaming or Local gets set
-cd C:\Users\kheaser\AppData\Local
+cd C:\Users\_username_\AppData\Roaming
+// or
+cd C:\Users\<username>\AppData\Local
+// or
+cd C:\ProgramData\
+
 
 rd /s /q dub
 
