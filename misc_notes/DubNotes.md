@@ -89,6 +89,14 @@ Packages present in the system and known to dub:
   derelict-sdl2 2.1.4: C:\Users\kheaser\AppData\Roaming\dub\packages\derelict-sdl2-2.1.4\derelict-sdl2\
   derelict-sdl2 2.1.4: C:\ProgramData\dub\packages\derelict-sdl2-2.1.4\derelict-sdl2\  
 ```
+The above package has been placed in all three directories for illustrative purposes. You normally would only have one repository downloaded because otherwise duplicate symbol names can arise.  For instance, a package called scone has been downloaded to both user and system. Trying to do a __dub build scone__ command results in duplicate names. Here the user package conflicts with the identical system package.
+
+```
+C:\ProgramData\dub\packages\scone-2.1.2\scone>dub build scone
+
+C:\D\dmd2\windows\bin\..\..\src\druntime\import\core\stdc\stddef.d(15,1): Error: package name 'core' conflicts with usage as a module name in file C:\Users\kheaser\AppData\Local\dub\packages\scone-2.1.0\scone\source\scone\core.d
+dmd failed with exit code 1.
+```
 
 ***
 
