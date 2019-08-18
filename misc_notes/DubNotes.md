@@ -13,7 +13,7 @@ Packages present in the system and known to dub:
 ***
 
 After deciding on the package you want, use the dub fetch command to download it.
-the cache options may be either __system__, __user__ or __local__ 
+the cache options may be either __system__, __user__ or __local__. If not specified, dub defaults to user.
 
 * __system__ will download the package to C:\\ProgramData\\dub\\packages
 * __user__ will download the package to either C:\\Users\\_username_\\AppData\\Local\\dub\\packages\\ or C:\\Users\\_username_\\AppData\\Roaming\\dub\\packages depending if the Windows computer is part of a domain or workgroup
@@ -97,6 +97,23 @@ C:\ProgramData\dub\packages\scone-2.1.2\scone>dub build scone
 C:\D\dmd2\windows\bin\..\..\src\druntime\import\core\stdc\stddef.d(15,1): Error: package name 'core' conflicts with usage as a module name in file C:\Users\kheaser\AppData\Local\dub\packages\scone-2.1.0\scone\source\scone\core.d
 dmd failed with exit code 1.
 ```
+***
+
+Once a package is downloaded, 
+C:\ProgramData\dub\packages\scone-2.1.2\scone
+
+```
+C:\Users\kheaser>dub build scone
+Building package scone in C:\ProgramData\dub\packages\scone-2.1.2\scone\
+Performing "debug" build using dmd for x86.
+scone 2.1.2: building configuration "library"...
+```
+After the build command, a new directory called bin is created with the just created scone library: 
+C:\ProgramData\dub\packages\scone-2.1.2\scone\bin\scone.lib
+This is specified by the dub.json file
+"targetPath": "bin/",
+"name": "scone"
+"configurations": "targetType": "library"
 
 ***
 
