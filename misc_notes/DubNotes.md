@@ -278,4 +278,23 @@ C:\ProgramData\dub\packages\scone-2.1.2\scone\source\scone\window.d(213): Deprec
 
 ***
 
+C:\ProgramData\dub\packages\scone-2.1.2\scone\examples>dmd -c  -I=C:\ProgramData\dub\packages\scone-2.1.2\scone\source\ example_2.d
 
+C:\ProgramData\dub\packages\scone-2.1.2\scone\examples>link.exe
+OPTLINK (R) for Win32  Release 8.00.17
+Copyright (C) Digital Mars 1989-2013  All rights reserved.
+http://www.digitalmars.com/ctg/optlink.html
+OBJ Files: (.obj):example_2
+Output File: (example_2.exe):
+Map File: (.map):
+Libraries and Paths: (.lib):scone.lib
+Definition File: (.def):
+Resource Files: (.res):
+
+C:\ProgramData\dub\packages\scone-2.1.2\scone\examples>example_2.exe
+
+object.Error@(0): Stack Overflow
+
+C:\ProgramData\dub\packages\scone-2.1.2\scone\examples>example_2
+
+object.Error@(0): Stack Overflow
