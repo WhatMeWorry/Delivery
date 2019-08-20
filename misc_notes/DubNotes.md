@@ -94,12 +94,13 @@ The above package has been placed in all three directories for illustrative purp
 ```
 C:\ProgramData\dub\packages\scone-2.1.2\scone>dub build scone
 
-C:\D\dmd2\windows\bin\..\..\src\druntime\import\core\stdc\stddef.d(15,1): Error: package name 'core' conflicts with usage as a module name in file C:\Users\kheaser\AppData\Local\dub\packages\scone-2.1.0\scone\source\scone\core.d
-dmd failed with exit code 1.
+C:\D\dmd2\windows\bin\..\..\src\druntime\import\core\stdc\stddef.d(15,1): Error: package name 'core' conflicts with usage 
+as a module name in file C:\Users\kheaser\AppData\Local\dub\packages\scone-2.1.0\scone\source\scone\core.d
+
 ```
 ***
 
-Once a package is downloaded, 
+Once a package is downloaded, it needs to be built.  
 C:\ProgramData\dub\packages\scone-2.1.2\scone
 
 ```
@@ -109,10 +110,14 @@ Performing "debug" build using dmd for x86.
 scone 2.1.2: building configuration "library"...
 ```
 After the build command, a new directory called bin is created with the just created scone library: 
+&nbsp;
 C:\ProgramData\dub\packages\scone-2.1.2\scone\bin\scone.lib
 This is specified by the dub.json file
+&nbsp;
 "targetPath": "bin/",
+&nbsp;
 "name": "scone"
+&nbsp;
 "configurations": "targetType": "library"
 
 ***
