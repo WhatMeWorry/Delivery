@@ -94,8 +94,9 @@ The above package has been placed in all three directories for illustrative purp
 ```
 C:\ProgramData\dub\packages\scone-2.1.2\scone>dub build scone
 
-C:\D\dmd2\windows\bin\..\..\src\druntime\import\core\stdc\stddef.d(15,1): Error: package name 'core' conflicts with usage 
-as a module name in file C:\Users\kheaser\AppData\Local\dub\packages\scone-2.1.0\scone\source\scone\core.d
+C:\D\dmd2\windows\bin\..\..\src\druntime\import\core\stdc\stddef.d(15,1): Error: package name 'core' 
+conflicts with usage as a module name in file 
+C:\Users\kheaser\AppData\Local\dub\packages\scone-2.1.0\scone\source\scone\core.d
 
 ```
 ***
@@ -113,11 +114,9 @@ After the build command, a new directory called bin is created with the just cre
 &nbsp;
 C:\ProgramData\dub\packages\scone-2.1.2\scone\bin\scone.lib
 This is specified by the dub.json file
-&nbsp;
+
 "targetPath": "bin/",
-&nbsp;
 "name": "scone"
-&nbsp;
 "configurations": "targetType": "library"
 
 ***
@@ -217,10 +216,114 @@ Deregistered package: derelict-sdl2 (version: 2.1.4)
 C:\>dub list
 Packages present in the system and known to dub:
 ```
-
 ***
 
 
+
+
+How to make a user created dub project use an existing dub package.
+There are hundreds of packages of existing libraries in the DUB repository.  We are going to make a little custom application which will use the package scone. We'll call thus tutorial tiny.
+
+```
+C:\Users\kheaser\D_development>dub init tiny
+Package recipe format (sdl/json) [json]: sdl
+Name [tiny]:
+Description [A minimal D application.]:
+Author name [kheaser]:
+License [proprietary]:
+Copyright string [Copyright ┬⌐ 2019, kheaser]:
+Add dependency (leave empty to skip) []: scone
+Added dependency scone ~>2.1.2
+Add dependency (leave empty to skip) []:
+Successfully created an empty project in 'C:\Users\kheaser\D_development\tiny'.
+Package successfully created in tiny
+```
+When running a dub project, need to be in the root of the project
+
+```
+C:\Users\kheaser\D_development>dub build tiny
+Failed to find a package named 'tiny'.
+```
+Change to current working directory to the tiny project
+
+```
+C:\Users\kheaser\D_development>cd tiny
+```
+And try the build command again:
+
+```
+C:\Users\kheaser\D_development\tiny>dub build tiny
+Building package tiny in C:\Users\kheaser\D_development\tiny\
+Performing "debug" build using dmd for x86.
+scone 2.1.2: building configuration "library"...
+tiny ~master: building configuration "application"...
+Linking...
+```
+The build will create a file __app.d__ in a new folder __source__
+
+```
+C:\Users\kheaser\D_development\tiny>dir source
+
+08/20/2019  04:25 PM    <DIR>          .
+08/20/2019  04:25 PM    <DIR>          ..
+08/20/2019  04:25 PM                89 app.d
+               1 File(s)             89 bytes
+               2 Dir(s)  321,120,731,136 bytes free
+```
+The build command in dub only compiles. To execute your binary do: 
+```
+C:\Users\kheaser\D_development\tiny>dub run
+Performing "debug" build using dmd for x86.
+scone 2.1.2: target for configuration "library" is up to date.
+tiny ~master: target for configuration "application" is up to date.
+To force a rebuild of up-to-date targets, run again with --force.
+Running .\tiny.exe
+Edit source/app.d to start your project.
+```
+filler
+
+```
+C:\Users\kheaser\D_development\tiny>dub build --arch=x86_64 --compiler=ldc2 --build=release
+Performing "release" build using ldc2 for x86_64.
+scone 2.1.2: building configuration "library"...
+C:\ProgramData\dub\packages\scone-2.1.2\scone\source\scone\window.d(211,13): Deprecation: foreach: loop index implicitly converted from size_t to uint
+C:\ProgramData\dub\packages\scone-2.1.2\scone\source\scone\window.d(213,17): Deprecation: foreach: loop index implicitly converted from size_t to uint
+tiny ~master: building configuration "application"...
+```
+All the code files in __source__ directory (just __app.d__ in our case) will be compiled and linked into the executable __tiny.exe__.
+
+Notice that scone was also compiled because this is the package specified in the __dub.sdl__ file created in the previous __dub init__ command.
+
+Now add __import scone;__ line so we can import all the symbols so we will be able to use all the functionality provied by the scone package.  Since the symbols are imported, we can use all the functional goodness that the scone package offers. 
+```
+import std.stdio;
+import scone;
+
+void main()
+{   window.resize(80,24);
+    window.title = "Tiny Example";
+	window.print;
+	foreach(n; 0..800000) { window.print; }
+}
+```
+
+Now recompile and run this new code:
+
+```
+C:\Users\kheaser\D_development\tiny>dub build --arch=x86_64 --compiler=ldc2
+Performing "debug" build using ldc2 for x86_64.
+scone 2.1.2: target for configuration "library" is up to date.
+tiny ~master: target for configuration "application" is up to date.
+To force a rebuild of up-to-date targets, run again with --force.
+```
+Now run the new program with
+
+```
+C:\Users\kheaser\D_development\tiny>tiny.exe
+```
+and a small window should pop up named "Tiny Exampls"
+
+***
 
 
 have very simple dub.sdl with just:
