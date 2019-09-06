@@ -1,6 +1,6 @@
 module ball_object;
 
-import app;     // for traits flag 
+//import app;     // for traits flag 
 import common;
 import common_game;
 
@@ -18,11 +18,11 @@ public:
     // Ball state
     GLfloat   radius;
     GLboolean stuck;
-    static if (__traits(compiles,powUps) && powUps)
-    {
+    //static if (__traits(compiles,powUps) && powUps)
+    //{
     GLboolean sticky;
     GLboolean passThrough;
-    }
+    //}
     // Constructor(s)
     //this();
     this(vec2 pos, GLfloat radius, vec2 velocity, Texture2D sprite)

@@ -3,6 +3,8 @@ description "A minimal D application."
 authors     "Kyle"
 copyright   "Copyright © 2017, Kyle"
 license     "proprietary"
+buildType   "release"
+targetType  "executable"
 
 dependency "derelict-assimp3" version="~>1.3.0"
 dependency "derelict-util"    version="~>2.0.6" 
@@ -27,6 +29,9 @@ versions "GLFW_32"
 // Or you could copy it around into the source directory of any project that 
 // uses it and dub will compile it automatically
 
+importPaths "../common"
+sourcePaths "../common"
+/*
 sourceFiles "../common/package.d"
 sourceFiles "../common/camera.d"
 sourceFiles "../common/cameraModule.d"
@@ -42,7 +47,12 @@ sourceFiles "../common/vertex_data.d"
 sourceFiles "../common/mesh.d"
 sourceFiles "../common/model.d"
 sourceFiles "../common/monitor.d"
+*/
+importPaths "../common_game"
+sourcePaths "../common_game"
 
+mainSourceFile "/source/app.d"
+/*
 sourceFiles "../common_game/package.d"
 sourceFiles "../common_game/game.d"
 sourceFiles "../common_game/resource_manager.d"
@@ -57,5 +67,5 @@ sourceFiles "../common_game/post_processor.d"
 sourceFiles "../common_game/power_ups.d"
 sourceFiles "../common_game/sound.d"
 sourceFiles "../common_game/text_renderer.d"
-
+*/
 targetPath "./bin"

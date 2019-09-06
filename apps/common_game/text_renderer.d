@@ -1,6 +1,6 @@
 module text_renderer;
 
-import app;
+//import app;
 
 import common;
 import common_game;

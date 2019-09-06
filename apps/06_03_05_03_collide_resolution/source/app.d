@@ -40,7 +40,7 @@ extern(C) static void onInternalKeyEvent(GLFWwindow* window, int key, int scanco
 
 void main(string[] argv)
 {
-    Game breakout = new Game(1600, 1200);  // originally (800, 600)
+    Game breakout = new Game(800, 600);  // originally (800, 600)
 
     load_libraries();
 

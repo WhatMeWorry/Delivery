@@ -50,7 +50,7 @@ import mytoolbox;
 
 //import common_game.game;
 /+
-import app;  // for bool enum effects 
+//import app;  // for bool enum effects 
 import game;  // needed for postProc
 import post_processor;  // needed for new PostProcessor
 import common_game;     // needed for  resource_manager.ResMgr.getShader("effects")
@@ -498,7 +498,7 @@ Note, that on some systems window coordinates and pixel coordinates can be the s
 +/
 
 
-extern(C) void onKeyEvent(GLFWwindow* window, int key, int scancode, int action, int modifier) nothrow
+extern(C) void onKeyEventBuffer(GLFWwindow* window, int key, int scancode, int action, int modifier) nothrow
 {
     try  // try is needed because of the nothrow
     {
@@ -603,7 +603,7 @@ extern(C) void onCursorEnterOrLeaveWindow(GLFWwindow* window, int entered) nothr
 }
  
 
-extern(C) void onMouseButton(GLFWwindow* window, int button, int action, int modifierKeys) nothrow
+extern(C) void onMouseButtonEventBuffer(GLFWwindow* window, int button, int action, int modifierKeys) nothrow
 {
     try  // try is needed because of the nothrow
     {
@@ -632,7 +632,7 @@ extern(C) void onMouseButton(GLFWwindow* window, int button, int action, int mod
 //        +----------------------+ 
 //                           (400,400)
 
-extern(C) void onCursorPosition(GLFWwindow* window, double x, double y) nothrow
+extern(C) void onCursorPositionEventBuffer(GLFWwindow* window, double x, double y) nothrow
 {
     try  // try is needed because of the nothrow
     {
@@ -661,7 +661,7 @@ extern(C) void onCursorPosition(GLFWwindow* window, double x, double y) nothrow
  }
 +/
 
-extern(C) void onFrameBufferResize(GLFWwindow* window, int width, int height) nothrow
+extern(C) void onFrameBufferResizeEventBuffer(GLFWwindow* window, int width, int height) nothrow
 {
     try  // try is needed because of the nothrow
     {

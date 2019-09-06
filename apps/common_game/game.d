@@ -648,7 +648,7 @@ public:
         }
 
         // Check for collisions
-        this.doCollisions_03();
+        this.doCollisions_04();
 
         static if (__traits(compiles, effects) && effects)  // only include this code block if using game effects      
         {
@@ -826,6 +826,91 @@ public:
                     if (!box.isSolid)   // is box is destructable 
                     {
                         box.destroyed = true;
+                    }
+                    else  // if block is solid, enable shake effect
+                    {
+                        //writeAndPause("Block is solid");
+                    }
+
+                    // Collision resolution
+                    Direction dir = collide[1];
+                    vec2 diff_vector = collide[2];
+                    if (dir == Direction.LEFT || dir == Direction.RIGHT) // Horizontal collision
+                    {
+                        //writeln("Horizontal collision");
+                        //writeAndPause("within dir == Direction.LEFT || dir == Direction.RIGHT");
+                        ball.velocity.x = -ball.velocity.x; // Reverse horizontal velocity
+                        // Relocate
+                        GLfloat penetration = ball.radius - abs(diff_vector.x);
+                        if (dir == Direction.LEFT)
+                            ball.position.x += penetration; // Move ball to right
+                        else
+                            ball.position.x -= penetration; // Move ball to left;
+                    }
+                    else // Vertical collision
+                    {
+                        //writeln("Vertical collision");
+                        //writeAndPause("within dir == Direction.UP || dir == Direction.DOWN");
+                        ball.velocity.y = -ball.velocity.y; // Reverse vertical velocity
+                        // Relocate
+                        GLfloat penetration = ball.radius - abs(diff_vector.y);
+ 
+                        if (dir == Direction.UP)
+                            ball.position.y -= penetration; // move ball up
+                        else
+                            ball.position.y += penetration; // move ball down
+                    }
+                }
+            }    
+        }
+
+        
+        // And finally check collisions for player's paddle (unless stuck)
+
+        Collision result = doesCircleCollideWithRect(ball, paddle);
+
+        if (!ball.stuck && result[0])
+        {
+            //writeAndPause("Ball has struck paddle");
+            // Check where it hit the board, and change velocity based on where it hit the board
+            GLfloat centerPaddle = paddle.position.x + (paddle.size.x / 2);
+            GLfloat distance = (ball.position.x + ball.radius) - centerPaddle;
+            GLfloat percentage = distance / (paddle.size.x / 2);
+            // Then move accordingly
+            GLfloat strength = 2.0f;
+            vec2 oldVelocity = ball.velocity;
+            ball.velocity.x = BallVelocity.x * percentage * strength; 
+
+            // Keep speed consistent over both axes (multiply by length of old velocity, 
+            // so total strength is not changed)
+
+            ball.velocity = (ball.velocity).normalized * (oldVelocity.length); 
+
+            // Fix sticky paddle
+            ball.velocity.y = -1 * abs(ball.velocity.y);
+        }
+
+    }
+
+
+
+
+
+    void doCollisions_04()
+    {
+        foreach(i, ref box; this.levels[this.currentLevel].bricks)
+        {
+            Collision collide;  // Collision is a tuple not a struct.
+
+            if (!box.destroyed)   // skip boxes that have been previously destroyed
+            {
+                collide = doesCircleCollideWithRect(ball, box);
+
+                if (collide[0]) // If collision is true
+                {
+                    if (!box.isSolid)   // is box is destructable 
+                    {
+                        box.destroyed = true;
                         static if (__traits(compiles,powUps) && powUps)
                             this.spawnPowerUps(box);
                         static if (__traits(compiles, audio) && audio)
@@ -833,14 +918,20 @@ public:
                             playSound("SOLID");
                         }
                     }
-                    else  // if block is solid, enable shake effect
+                    else  // if block is solid, enable shake effect (if effects enabled)
                     {
-                        shakeTime = 0.05f;
-                        postProc.shake = true;
+                        //writeAndPause("Block is solid");
+                        static if (__traits(compiles, effects) && effects)  // only include this code block if using game effects
+                        {
+                            shakeTime = 0.05f;    // these two lines crap?
+                            postProc.shake = true;
+                        }                     
+
                         static if (__traits(compiles, audio) && audio)
                         {
                             playSound("BLEEP");
                         }
+                    
  
                     }
 
@@ -930,6 +1021,7 @@ public:
             static if (__traits(compiles,powUps) && powUps)
             {
                 ball.stuck = ball.sticky;
+                //ball.stuck = true;
             }
             static if (__traits(compiles, audio) && audio)
             {
@@ -939,7 +1031,6 @@ public:
 
 
     }
-
 
 
 /+ http://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection?rq=1
@@ -1146,7 +1237,8 @@ function RectCircleColliding(circle, rect) {
         }
         else if (pup.type == "sticky")
         {
-            ball.sticky = GL_TRUE;
+            //ball.sticky = GL_TRUE;
+            ball.stuck = true;
             paddle.color = vec3(1.0f, 0.5f, 1.0f);
         }
         else if (pup.type == "pass-through")

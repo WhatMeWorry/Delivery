@@ -12,7 +12,7 @@ import mytoolbox;
 
 
 //import common_game.game;
-import app;  // for bool enum effects 
+// import app;  // for bool enum effects 
 import game;  // needed for postProc
 import post_processor;  // needed for new PostProcessor
 import common_game;     // needed for  resource_manager.ResMgr.getShader("effects")
