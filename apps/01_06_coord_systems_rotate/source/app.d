@@ -1,18 +1,26 @@
 
 module app;  // 01_06_coordinate_systems_3d_rotate
 
-import common;
 
-import std.stdio;   // writeln
-import gl3n.linalg; // vec3 mat4
 
-import derelict.util.loader;
-import derelict.util.sharedlib;
+import std.stdio;     // writeln
+import std.math : PI; // PI
 
-import bindbc.freetype;
-import bindbc.freeimage;
-import bindbc.opengl;
-import bindbc.glfw;
+import shaders;         // without - Error: undefined identifier Shader, createProgramFromShaders, ...
+import event_handler;   // without - Error: undefined identifier onKeyEvent, onFrameBufferResize, handleEvent
+import mytoolbox;       // without - Error: no property bytes for type float[]
+import cameraModule;    // withoug - Error: undefined identifier Camera
+import projectionfuncs; // without - Error: undefined identifier orthographicFunc 
+import monitor;         // without - Error: undefined identifier showAllMonitors, showMonitorVideoMode
+import texturefuncs;    // without - Error: undefined identifier loadTexture
+import vertex_data;     // without - Error: undefined identifier initializeCube, initializeCubePositions
+
+import dynamic_libs.glfw;       // without - Error: undefined identifier load_GLFW_Library, glfwCreateWindow
+import dynamic_libs.opengl;     // without - Error: undefined identifier load_openGL_Library
+import dynamic_libs.freeimage;  // without - Error: undefined identifier load_FreeImage_Library
+
+import gl3n.linalg;     // without - Error: undefined identifier vec3, mat4
+
 
 float angle;
 
@@ -21,7 +29,11 @@ enum width = 800;  enum height = 600;
 
 void main(string[] argv)
 {
-    load_libraries();
+    load_GLFW_Library();
+
+    load_openGL_Library(); 
+
+    load_FreeImage_Library(); 
 
     auto winMain = glfwCreateWindow(width, height, "01_06_coord_systems_rotate", null, null);
 

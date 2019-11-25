@@ -1,27 +1,35 @@
 
 module app;  // 01_06_coordinate_systems
 
-import common;
 
-import std.stdio;   // writeln
-import gl3n.linalg; // mat4
+import std.stdio;     // writeln
 
-import derelict.util.loader;
-import derelict.util.sharedlib;
+import shaders;         // without - Error: undefined identifier Shader, createProgramFromShaders, ...
+import event_handler;   // without - Error: undefined identifier onKeyEvent, onFrameBufferResize, handleEvent
+import mytoolbox;       // without - Error: no property bytes for type float[]
+import cameraModule;    // withoug - Error: undefined identifier Camera
+import projectionfuncs; // without - Error: undefined identifier orthographicFunc 
+import monitor;         // without - Error: undefined identifier showAllMonitors, showMonitorVideoMode
+import texturefuncs;    // without - Error: undefined identifier loadTexture
 
-import bindbc.freetype;
-import bindbc.freeimage;
-import bindbc.opengl;
-import bindbc.glfw;
 
+import dynamic_libs.glfw;       // without - Error: undefined identifier load_GLFW_Library, glfwCreateWindow
+import dynamic_libs.opengl;     // without - Error: undefined identifier load_openGL_Library
+import dynamic_libs.freeimage;  // without - Error: undefined identifier load_FreeImage_Library
+
+import gl3n.linalg;     // without - Error: undefined identifier vec3, mat4
 
 // Window dimensions
 enum width = 800;  enum height = 600;
 
 void main(string[] argv)
 {
-    load_libraries();
+    load_GLFW_Library();
 
+    load_openGL_Library(); 
+
+    load_FreeImage_Library(); 
+    
     auto winMain = glfwCreateWindow(width, height, "01_06_coord_systems", null, null);
 
     glfwMakeContextCurrent(winMain); 
