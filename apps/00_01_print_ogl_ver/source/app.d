@@ -1,16 +1,16 @@
 
 module app; // 00_01_display_opengl_version
 
-import std.stdio;
-import std.conv; //   : to;
-import std.string; // : toStringz;
-import std.stdio; //  : writeln, writefln;
-import bindbc.opengl;
-import bindbc.glfw;
-import std.process;
+import std.stdio;    // : writeln, writefln;
+import std.string;   // : fromStringz;
+import std.process;  // : executeShell;
 
-import derelict_libraries;
-//import derelict_libraries;
+import bindbc.opengl;  // : GLint, glGetIntegerv, glGetString;
+import bindbc.glfw;    // : glfwWindowHint, glfwMakeContextCurrent, glfwCreateWindow
+
+import dynamic_libs.glfw;
+import dynamic_libs.opengl;
+
 
 /+
 There's a specific mapping between OpenGL version and supported GLSL version:
@@ -33,7 +33,11 @@ GLSL Version      OpenGL Version
 void main(string[] argv)
 {
 
-    load_libraries();
+    //load_libraries();
+
+    load_GLFW_Library();
+
+    load_openGL_Library();  
 
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);   // Lenovo Tiny PCs are at openGL 4.2    Lian Li PC-33B is OpenGL 4.4
@@ -61,35 +65,7 @@ void main(string[] argv)
 
     writeln("GL Version (integer): ", major, ".", minor);
 
-    // const GLubyte *version = glGetString(GL_VERSION);  // C++ and openLG code
-
-    // documentatino from std.string shows
-    //pure @system inout(char)[] fromStringz(inout(char)* cString);
-
-    // both
-
-    // char openglVersion[100] = to!string(glGetString(GL_VERSION));    // this compiles with no errors or warnings
-
-    // char openglVersion[100] = fromStringz(glGetString(GL_VERSION));  // this compiles with no errors or warnings
-
-
-    // The OpenGL specification requires strings returned by glGetString to be
-    // static, i.e. the pointer will always be valid
-
-    // fromStringz returns a slice of the C string, which means that
-    // if the C string doesn't survive after the return call, or if you plan to
-    // keep your D string around outside of the call site, you can get a crash.
-
-    // Generally, though, to!string is what you want. It allocates memory for the string and copies it.
-
-    // char vendor[100] = fromStringz(glGetString(GL_VENDOR));  // this compiles with no errors or warnings
-
-    //string vendor = fromStringz(glGetString(GL_VENDOR));   // vendor is a slice of the dynamic-array owned by D's run-time system.
-    // cannot implicitly convert expression (fromStringz((*glGetString)(7936u))) of type const(char)[] to string
-
-    //pure @system inout(char)[] fromStringz(inout(char)* cString);
-
-    /+ These all syntaxes work
+    /+ All these syntaxes work
     const(char)[] vendor = fromStringz(glGetString(GL_VENDOR));
 
     auto myActualVendorCopy = to!string(glGetString(GL_VENDOR));
@@ -131,7 +107,7 @@ void main(string[] argv)
     writeln("openglVersion ", openglVersion);
     writeln("glslVersion ", glslVersion);
 
-    glfwDestroyWindow(window); // The window contest is only need for the .reload() funcion.
-
+    glfwDestroyWindow(window);
+    
     //executeShell("pause");
 }

@@ -1,20 +1,20 @@
 
 module app;  // 01_03_01_hex_study
-import shaders; 
-import texturefuncs;
-import mytoolbox;
-import derelict_libraries;
-import event_handler;
-import common_game;
-import std.stdio;  // writeln
-import std.conv;   // toChars
-import derelict.util.loader;
-import derelict.util.sharedlib;
 
-import bindbc.freetype;
-import bindbc.freeimage;
-import bindbc.opengl;
-import bindbc.glfw;
+
+import std.stdio;     // writeln
+
+import shaders;       // without - Error: undefined identifier Shader, createProgramFromShaders, ...
+import event_handler; // without - Error: undefined identifier onKeyEvent, onFrameBufferResize, handleEvent
+import mytoolbox;     // without - Error: no property bytes for type float[]
+ 
+import dynamic_libs.glfw;    // without - Error: undefined identifier load_GLFW_Library, glfwCreateWindow
+import dynamic_libs.opengl;  // without - Error: undefined identifier load_openGL_Library
+
+
+
+
+
 
 GLfloat[] board;
 
@@ -56,7 +56,12 @@ void main(string[] argv)
     GLfloat quarRun  = delta.run  * 0.25;
     GLfloat halfRise = delta.rise / 2.0;
 
-    load_libraries();
+    load_GLFW_Library();
+
+    load_openGL_Library();  
+
+    //load_libraries();
+
 
     // window must be square
 

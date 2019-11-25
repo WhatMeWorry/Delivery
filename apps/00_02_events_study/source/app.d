@@ -1,12 +1,20 @@
-import std.stdio;
+
+module app; // 00_02_events_study
+
+
+import event_buffer;
 import mytoolbox;
+
+import std.stdio;
 import std.concurrency;
 import core.thread;
 
-import derelict_libraries;
-// or
+
+import bindbc.opengl;  // GLint, glGetIntegerv, glGetString;
 import bindbc.glfw;
-import event_buffer;
+
+import dynamic_libs.glfw;
+import dynamic_libs.opengl;
 
 
 void createEvents(shared EventBuffer eventBuffer)
@@ -42,7 +50,11 @@ void createEvents(shared EventBuffer eventBuffer)
 
 void main()
 {
-    load_libraries();
+    //load_libraries();
+
+    load_GLFW_Library();
+
+    load_openGL_Library();  
 
     shared EventBuffer eventBuffer = shared EventBuffer(24);
 

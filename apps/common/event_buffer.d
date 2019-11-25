@@ -42,10 +42,10 @@ compiled but ignored.
 
 
 
-import bindbc.opengl;
+import bindbc.opengl;  // glViewport
 import bindbc.glfw; 
 import std.stdio;
-import mytoolbox;
+//import mytoolbox;
 
 
 //import common_game.game;
@@ -395,6 +395,7 @@ shared public struct EventBuffer
     {
         writeln("creating queue in EventBuffer constructor");
         queue = new Event[size]; 
+        writeln("After creating queue in EventBuffer constructor");
     }
 
     // Modulus operator is "%" which is the remainder of dividing 'first' by 'second' first % second

@@ -1,21 +1,19 @@
 
 module app;  // 01_03_00_hexagon
-import shaders; 
-import texturefuncs;
-import mytoolbox;
-import derelict_libraries;
-import event_handler;
-import common_game;
-import std.stdio;  // writeln
-import std.conv;   // toChars
-import derelict.util.loader;
-import derelict.util.sharedlib;
 
-import bindbc.freetype;
-import bindbc.freeimage;
-import bindbc.opengl;
-import bindbc.glfw;
-     
+
+import std.stdio;     // writeln
+
+import shaders;       // without - Error: undefined identifier Shader, createProgramFromShaders, ...
+import event_handler; // without - Error: undefined identifier onKeyEvent, onFrameBufferResize, handleEvent
+import mytoolbox;     // without - Error: no property bytes for type float[]
+ 
+import dynamic_libs.glfw;    // without - Error: undefined identifier load_GLFW_Library, glfwCreateWindow
+import dynamic_libs.opengl;  // without - Error: undefined identifier load_openGL_Library
+
+
+
+
 bool squares = false;
 bool hexes = true;
 
@@ -47,7 +45,9 @@ void drawHexagon()
 
 void main(string[] argv)
 {
-    load_libraries();
+    load_GLFW_Library();
+
+    load_openGL_Library();  
 
     // window must be square
 

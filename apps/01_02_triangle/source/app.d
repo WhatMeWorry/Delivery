@@ -1,31 +1,22 @@
 
 module app;  // 01_02_triangle
 
-//import common;
+
 import shaders;
-import texturefuncs;
 import mytoolbox;
-import derelict_libraries;
 import event_handler;
 
-import common_game;
-
 import std.stdio;  // writeln
-import std.conv;   // toChars
 
+import dynamic_libs.glfw;      // without - Error: undefined identifier load_GLFW_Library
+import dynamic_libs.opengl;    // without - Error: undefined identifier load_openGL_Library
 
-
-import derelict.util.loader;
-import derelict.util.sharedlib;
-
-import bindbc.freetype;
-import bindbc.opengl;
-import bindbc.freeimage;
-import bindbc.glfw;  
 
 void main(string[] argv)
 {
-    load_libraries();
+    load_GLFW_Library();
+
+    load_openGL_Library();  
 
     auto winMain = glfwCreateWindow(800, 600, "01_02_triangle", null, null);
 

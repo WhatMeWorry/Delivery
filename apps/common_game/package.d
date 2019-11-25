@@ -2,16 +2,16 @@
 module common_game;
 
 
-public import game;
-public import resource_manager;
-public import texture_2d;
-public import shader_breakout;
-public import sprite_renderer;
-public import game_level;
-public import game_object;
-public import ball_object;
-public import particles;
-public import post_processor;
-public import power_ups;
-public import sound;
-public import text_renderer;
+public import common_game.game;
+public import common_game.resource_manager;
+public import common_game.texture_2d;
+public import common_game.shader_breakout;
+public import common_game.sprite_renderer;
+public import common_game.game_level;
+public import common_game.game_object;
+public import common_game.ball_object;
+public import common_game.particles;
+public import common_game.post_processor;
+public import common_game.power_ups;
+public import common_game.sound;
+public import common_game.text_renderer;

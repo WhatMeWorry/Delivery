@@ -4,7 +4,7 @@ import bindbc.opengl;  // defines GLuint
 import std.stdio;             //  : writeln, writefln;
 import std.string;            // : toStringz; 
 import bindbc.freeimage;
-import bindbc.freetype;
+//import bindbc.freetype;
 import mytoolbox;
 
 
@@ -146,8 +146,14 @@ void loadTexture(ref GLuint texture, string fileName)
 
     //string fileName = "container.jpg";
 
+    writeln("In loadtexture");
+
+
     // Determine the format of the image.
     // Note: The second paramter ('size') is currently unused, and we should use 0 for it.
+
+    writeln(" fileName = ", fileName);
+
     FREE_IMAGE_FORMAT formatFromFile = FreeImage_GetFileType(toStringz(fileName) , 0);
     writeln("formatFromFile is ", formatFromFile);
     FREE_IMAGE_FORMAT formatFromFileName = FreeImage_GetFIFFromFilename(toStringz(fileName));
@@ -247,7 +253,7 @@ void loadTexture(ref GLuint texture, string fileName)
 
 
 
-
+/*
 
 void loadTextureFromBitmap(ref GLuint texture, ref FT_Face face)
 {
@@ -291,5 +297,5 @@ void loadTextureFromBitmap(ref GLuint texture, ref FT_Face face)
     glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
 }
 
-
+*/
 

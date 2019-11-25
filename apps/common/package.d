@@ -1,20 +1,20 @@
 
 module common;
 
-public import camera;
-public import cameraModule;
-public import derelict_libraries;
-//public import event_buffer;
-public import event_handler;
-public import freetypefuncs;
-public import mytoolbox;
-public import projectionfuncs;
-public import shaders;
-public import texturefuncs;
-public import timer;
-public import vertex_data;
-public import mesh;
-public import model;
-public import monitor;
+public import common.camera;
+public import common.cameraModule;
+public import common.derelict_libraries;
+public import common.event_buffer;
+public import common.event_handler;
+public import common.freetypefuncs;
+public import common.mytoolbox;
+public import common.projectionfuncs;
+public import common.shaders;
+public import common.texturefuncs;
+public import common.timer;
+public import common.vertex_data;
+public import common.mesh;
+public import common.model;
+public import common.monitor;
 
 

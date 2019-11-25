@@ -8,15 +8,15 @@ import bindbc.opengl;
 //import derelict.glfw3.glfw3; 
 import bindbc.glfw;
 import std.stdio;
-import mytoolbox;
+//import mytoolbox;
 
 
 //import common_game.game;
 // import app;  // for bool enum effects 
-import game;  // needed for postProc
-import post_processor;  // needed for new PostProcessor
-import common_game;     // needed for  resource_manager.ResMgr.getShader("effects")
-import resource_manager;  // needed for  resource_manager.ResMgr.getShader("effects")
+//import game;  // needed for postProc
+//import post_processor;  // needed for new PostProcessor
+//import common_game;     // needed for  resource_manager.ResMgr.getShader("effects")
+//import resource_manager;  // needed for  resource_manager.ResMgr.getShader("effects")
 
 enum EventType
 {

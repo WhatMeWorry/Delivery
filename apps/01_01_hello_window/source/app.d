@@ -1,11 +1,19 @@
 
 module app;  // 01_01_hello_window
 
-import derelict_libraries;
-import mytoolbox;   // printEnvVariable
+
 import std.stdio;   // writeln
 import std.system;  // defines enum OS  OS os = OS.win64;
 import std.file;    // getcwd
+
+import mytoolbox;   // printEnvVariable
+
+import bindbc.glfw;   // glfwSwapBuffers, flgwPollEvents, glfwTerminate
+import bindbc.opengl; // glClear, glClearColor
+
+import dynamic_libs.glfw;      // without - Error: undefined identifier load_GLFW_Library
+import dynamic_libs.opengl;    // without - Error: undefined identifier load_openGL_Library
+
 
 
 const uint width = 800, height = 600;
@@ -46,7 +54,12 @@ void main(char[][] args)
 
     writeln("This executable was started at location: ", currentWorkingDirectory);
 
-    load_libraries();
+
+    load_GLFW_Library();
+
+    load_openGL_Library();  
+
+    //load_libraries();
 
     writeln("After load_libraries in app.d");
 

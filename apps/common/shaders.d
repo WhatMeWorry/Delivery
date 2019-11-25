@@ -1,7 +1,7 @@
 
 module shaders;
 
-import common;
+//import common;
 
 import bindbc.opengl;    // GLuint
 import std.stdio  : writeln;

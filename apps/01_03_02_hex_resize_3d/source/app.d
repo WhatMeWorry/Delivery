@@ -1,23 +1,20 @@
 
 module app;  // 01_03_02_hex_resize_3d 
-import shaders; 
-import texturefuncs;
-import mytoolbox;
-import derelict_libraries;
-import event_handler;
-import common; // freetypefuncs.d
-import common_game;
-import std.stdio;  // writeln
-import std.conv;   // toChars
-import derelict.util.loader;
-import derelict.util.sharedlib;
 
-import bindbc.freetype;
-import bindbc.freeimage;
-import bindbc.opengl;
-import bindbc.glfw;
+import std.stdio;     // writeln
 
-import gl3n.linalg; // mat3
+import shaders;         // without - Error: undefined identifier Shader, createProgramFromShaders, ...
+import event_handler;   // without - Error: undefined identifier onKeyEvent, onFrameBufferResize, handleEvent
+import mytoolbox;       // without - Error: no property bytes for type float[]
+import cameraModule;    // withoug - Error: undefined identifier Camera
+import projectionfuncs; // without - Error: undefined identifier orthographicFunc 
+import monitor;         // without - Error: undefined identifier showAllMonitors, showMonitorVideoMode
+
+
+import dynamic_libs.glfw;    // without - Error: undefined identifier load_GLFW_Library, glfwCreateWindow
+import dynamic_libs.opengl;  // without - Error: undefined identifier load_openGL_Library
+import gl3n.linalg;          // without - Error: undefined identifier vec3, mat4
+
 
 GLfloat[] board;
 
@@ -153,7 +150,12 @@ void main(string[] argv)
 
     setHexParameters();
 
-    load_libraries();
+    load_GLFW_Library();
+
+    load_openGL_Library();  
+
+    //load_libraries();
+
 
     // window must be square
 
@@ -208,7 +210,7 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
 
     GLuint VBO, VBO1, VAO, VAO1;
     glGenVertexArrays(1, &VAO);
-   glGenVertexArrays(1, &VAO1);    
+    glGenVertexArrays(1, &VAO1);    
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &VBO1);
 

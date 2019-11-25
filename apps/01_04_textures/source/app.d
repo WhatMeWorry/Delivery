@@ -1,30 +1,32 @@
 
 module app;  // 01_04_textures
 
-//import common;
-import shaders;
-import texturefuncs;
-import mytoolbox;
-import derelict_libraries;
-import event_handler;
 
-import common_game;
+import std.stdio;     // writeln
 
-import std.stdio;  // writeln
-import std.conv;   // toChars
-import derelict.util.loader;
-import derelict.util.sharedlib;
+import shaders;         // without - Error: undefined identifier Shader, createProgramFromShaders, ...
+import event_handler;   // without - Error: undefined identifier onKeyEvent, onFrameBufferResize, handleEvent
+import mytoolbox;       // without - Error: no property bytes for type float[]
+import cameraModule;    // withoug - Error: undefined identifier Camera
+import projectionfuncs; // without - Error: undefined identifier orthographicFunc 
+import monitor;         // without - Error: undefined identifier showAllMonitors, showMonitorVideoMode
+import texturefuncs;    // without - Error: undefined identifier loadTexture
 
-import bindbc.freetype;
-import bindbc.freeimage;
-import bindbc.opengl;
-import bindbc.glfw;
 
+import dynamic_libs.glfw;       // without - Error: undefined identifier load_GLFW_Library, glfwCreateWindow
+import dynamic_libs.opengl;     // without - Error: undefined identifier load_openGL_Library
+import dynamic_libs.freeimage;  // without - Error: undefined identifier load_FreeImage_Library
+
+import gl3n.linalg;     // without - Error: undefined identifier vec3, mat4
     
 
 void main(string[] argv)
 {
-    load_libraries();
+    load_GLFW_Library();
+
+    load_openGL_Library(); 
+
+    load_FreeImage_Library(); 
 
     auto winMain = glfwCreateWindow(800, 600, "01_04_textures", null, null);
 

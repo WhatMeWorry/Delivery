@@ -4,30 +4,25 @@ authors "Kyle"
 copyright "Copyright © 2017, Kyle"
 license "proprietary"
 
-dependency "derelict-assimp3" version="~>1.3.0"
-dependency "derelict-util"    version="~>2.0.6" 
-dependency "gl3n"             version="~>1.3.1"
 
-dependency "bindbc-freeimage" version="~>0.1.1" 
-versions "FI_317"
-dependency "bindbc-sdl"       version="~>0.8.0"
-versions "SDL_202"
-versions "BindSDL_Mixer" 
-dependency "bindbc-freetype"  version="~>0.5.0"
-versions "FT_210"
+dependency "bindbc-glfw"      version="~>0.4.0"    // required for  import bindbc.glfw;  
+versions "GLFW_32"
 dependency "bindbc-opengl"    version="~>0.8.0"
 versions "GL_41"
-dependency "bindbc-glfw"      version="~>0.4.0"
-versions "GLFW_32"
 
-// If common is not an independent project (it has no dub configuration) 
+
+importPaths "../"    // needed for import common.mytoolbox; since common is outside (above) the project
+
+
+// Since common is not an independent project (it has no dub configuration) 
 // then you can use `sourcePaths` (or `sourceFiles`) in the dub configuration 
 // of any projects that need it.
 
-// Or you could copy it around into the source directory of any project that 
-// uses it and dub will compile it automatically
 
-sourceFiles "../common/derelict_libraries.d"
 sourceFiles "../common/mytoolbox.d"
+
+sourceFiles "../dynamic_libs/glfw"
+sourceFiles "../dynamic_libs/opengl"
+
 
 targetPath "./bin"
