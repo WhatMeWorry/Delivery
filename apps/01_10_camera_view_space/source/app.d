@@ -23,23 +23,6 @@ import dynamic_libs.freeimage;  // without - Error: undefined identifier load_Fr
 import gl3n.linalg;     // without - Error: undefined identifier vec3, mat4
 
 
-/*
-import common;
-
-import gl3n.linalg; // vec3 mat4
-import std.stdio;   // writeln
-import std.math;    // sin cos 
-
-import derelict.util.loader;
-import derelict.util.sharedlib;
-
-import bindbc.freetype;
-import bindbc.freeimage;
-import bindbc.opengl;
-import bindbc.glfw;
-*/
-
-
 float angle;
 float distance = 3.0;
 

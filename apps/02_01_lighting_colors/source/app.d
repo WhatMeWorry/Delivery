@@ -1,19 +1,24 @@
 
 module app;    // 02_01_lighting_colors
 
-import common;
+
+import std.stdio;     // writeln
+
+import shaders;         // without - Error: undefined identifier Shader, createProgramFromShaders, ...
+import event_handler;   // without - Error: undefined identifier onKeyEvent, onFrameBufferResize, handleEvent
+import mytoolbox;       // without - Error: no property bytes for type float[]
+import cameraModule;    // withoug - Error: undefined identifier Camera
+import projectionfuncs; // without - Error: undefined identifier orthographicFunc 
+import monitor;         // without - Error: undefined identifier showAllMonitors, showMonitorVideoMode
+import texturefuncs;    // without - Error: undefined identifier loadTexture
+import vertex_data;     // without - Error: undefined identifier initializeCube, initializeCubePositions
+import timer;           // without - Error:  undefined identifier ManualTimer, AutoRestartTimer
+
+import dynamic_libs.glfw;       // without - Error: undefined identifier load_GLFW_Library, glfwCreateWindow
+import dynamic_libs.opengl;     // without - Error: undefined identifier load_openGL_Library
+import dynamic_libs.freeimage;  // without - Error: undefined identifier load_FreeImage_Library
 
 import gl3n.linalg; // vec3
-import std.math;    //  sin cose
-import std.stdio;   // writeln
-
-import derelict.util.loader;
-import derelict.util.sharedlib;
-
-import bindbc.freetype;
-import bindbc.freeimage;
-import bindbc.opengl;
-import bindbc.glfw;
 
 
 extern(C) void processMouse(double xpos, double ypos) nothrow
@@ -87,7 +92,11 @@ void main(string[] argv)
     // Camera
     camera = new Camera(vec3(0.0f, 0.0f, 3.0f));
 
-    load_libraries();
+    load_GLFW_Library();
+
+    load_openGL_Library(); 
+
+    load_FreeImage_Library(); 
 
     auto winMain = glfwCreateWindow(800, 600, "02_01_lighting_colors", null, null);
 

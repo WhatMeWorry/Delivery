@@ -3,6 +3,9 @@ description "A minimal D application."
 authors "Kyle"
 copyright "Copyright © 2017, Kyle"
 license "proprietary"
+buildType   "release"
+targetType  "executable"
+mainSourceFile "/source/app.d"
 
 
 dependency "bindbc-glfw"      version="~>0.4.0"    // required for  import bindbc.glfw;  

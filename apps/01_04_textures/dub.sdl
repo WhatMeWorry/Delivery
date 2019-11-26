@@ -5,6 +5,7 @@ copyright   "Copyright © 2017, Kyle"
 license     "proprietary"
 buildType   "release"
 targetType  "executable"
+mainSourceFile "/source/app.d"
 
 
 dependency "bindbc-opengl"    version="~>0.8.0"

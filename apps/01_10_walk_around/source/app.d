@@ -1,19 +1,23 @@
 ﻿
 module app;  // 01_10_walk_around
 
-import common;
+import std.stdio;     // writeln
+
+import shaders;         // without - Error: undefined identifier Shader, createProgramFromShaders, ...
+import event_handler;   // without - Error: undefined identifier onKeyEvent, onFrameBufferResize, handleEvent
+import mytoolbox;       // without - Error: no property bytes for type float[]
+import cameraModule;    // withoug - Error: undefined identifier Camera
+import projectionfuncs; // without - Error: undefined identifier orthographicFunc 
+import monitor;         // without - Error: undefined identifier showAllMonitors, showMonitorVideoMode
+import texturefuncs;    // without - Error: undefined identifier loadTexture
+import vertex_data;     // without - Error: undefined identifier initializeCube, initializeCubePositions
+import timer;           // without - Error:  undefined identifier ManualTimer, AutoRestartTimer
+
+import dynamic_libs.glfw;       // without - Error: undefined identifier load_GLFW_Library, glfwCreateWindow
+import dynamic_libs.opengl;     // without - Error: undefined identifier load_openGL_Library
+import dynamic_libs.freeimage;  // without - Error: undefined identifier load_FreeImage_Library
 
 import gl3n.linalg; // vec3
-import std.stdio;   // writeln
-import std.math;    // sin cos
-
-import derelict.util.loader;
-import derelict.util.sharedlib;
-
-import bindbc.freetype;
-import bindbc.freeimage;
-import bindbc.opengl;
-import bindbc.glfw;
 
 ManualTimer mt1;
 AutoRestartTimer at2;
@@ -56,7 +60,11 @@ enum width = 800;  enum height = 600;
 
 void main(string[] argv)
 {
-    load_libraries();
+    load_GLFW_Library();
+
+    load_openGL_Library(); 
+
+    load_FreeImage_Library(); 
 
     auto winMain = glfwCreateWindow(width, height, "01_10_walk_around", null, null);
 
