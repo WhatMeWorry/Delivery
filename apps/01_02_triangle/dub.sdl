@@ -3,6 +3,10 @@ description "A minimal D application."
 authors "kheaser"
 copyright "Copyright © 2018, kheaser"
 license "proprietary"
+buildType   "release"
+targetType  "executable"
+mainSourceFile "/source/app.d"
+targetPath "./bin"
 
 
 dependency "bindbc-opengl"    version="~>0.8.0"
@@ -24,4 +28,4 @@ sourceFiles "../common/mytoolbox.d"
 sourceFiles "../dynamic_libs/glfw"
 sourceFiles "../dynamic_libs/opengl"
 
-targetPath "./bin"
+

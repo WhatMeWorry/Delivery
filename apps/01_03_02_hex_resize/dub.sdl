@@ -6,6 +6,7 @@ license "proprietary"
 buildType   "release"
 targetType  "executable"
 mainSourceFile "/source/app.d"
+targetPath "./bin"
 
 dependency "bindbc-opengl"    version="~>0.8.0"
 versions "GL_41"
@@ -30,4 +31,3 @@ sourceFiles "../common/monitor.d"
 sourceFiles "../dynamic_libs/glfw"    // without - Error: undefined identifier load_GLFW_Library
 sourceFiles "../dynamic_libs/opengl"  // without - Error: undefined identifier load_openGL_Library
 
-targetPath "./bin"

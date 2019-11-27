@@ -12,13 +12,11 @@ dependency "bindbc-opengl"    version="~>0.8.0"
 versions "GL_41"
 dependency "bindbc-glfw"      version="~>0.4.0"
 versions "GLFW_32"
+targetPath "./bin"
 
 // If common is not an independent project (it has no dub configuration) 
 // then you can use `sourcePaths` (or `sourceFiles`) in the dub configuration 
 // of any projects that need it.
-
-// Or you could copy it around into the source directory of any project that 
-// uses it and dub will compile it automatically
 
 importPaths ".."  // importPaths "../"  also works as well
 
@@ -32,10 +30,3 @@ sourceFiles "../common/event_buffer.d"
 sourceFiles "../dynamic_libs/glfw"
 sourceFiles "../dynamic_libs/opengl"
 
-/*
-sourceFiles "../common/derelict_libraries.d"
-sourceFiles "../common/mytoolbox.d"
-sourceFiles "../common/event_buffer.d"
-*/
-
-targetPath "./bin"  // The destination path of the output binary - this setting does not support the platform attribute

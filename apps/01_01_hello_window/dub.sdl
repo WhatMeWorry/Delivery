@@ -6,6 +6,7 @@ license "proprietary"
 buildType   "release"
 targetType  "executable"
 mainSourceFile "/source/app.d"
+targetPath "./bin"
 
 
 dependency "bindbc-glfw"      version="~>0.4.0"    // required for  import bindbc.glfw;  
@@ -27,5 +28,3 @@ sourceFiles "../common/mytoolbox.d"
 sourceFiles "../dynamic_libs/glfw"
 sourceFiles "../dynamic_libs/opengl"
 
-
-targetPath "./bin"

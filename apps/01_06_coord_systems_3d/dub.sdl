@@ -6,6 +6,7 @@ license "proprietary"
 buildType   "release"
 targetType  "executable"
 mainSourceFile "/source/app.d"
+targetPath "./bin"
 
 
 dependency "bindbc-opengl"    version="~>0.8.0"
@@ -15,7 +16,6 @@ versions "GLFW_32"
 dependency "gl3n"             version="~>1.3.1"
 dependency "bindbc-freeimage" version="~>0.1.1" 
 versions "FI_317"
-
 
 // If common is not an independent project (it has no dub configuration) 
 // then you can use `sourcePaths` (or `sourceFiles`) in the dub configuration 
@@ -34,4 +34,3 @@ sourceFiles "../dynamic_libs/glfw"      // without - Error: undefined identifier
 sourceFiles "../dynamic_libs/opengl"    // without - Error: undefined identifier load_openGL_Library
 sourceFiles "../dynamic_libs/freeimage" // without - Error: undefined identifier load_FreeImage_Library
 
-targetPath "./bin"

@@ -6,7 +6,7 @@ license "proprietary"
 buildType   "release"
 targetType  "executable"
 mainSourceFile "/source/app.d"
-
+targetPath "./bin" 
 
 dependency "bindbc-opengl"    version="~>0.8.0"
 versions "GL_41"
@@ -32,8 +32,3 @@ importPaths "../dynamic_libs"   // no errors.  So path is relative to location o
 sourceFiles "../dynamic_libs/glfw"
 sourceFiles "../dynamic_libs/opengl"
 
-
-//sourceFiles "../common/derelict_libraries.d"
-//sourceFiles "../common/mytoolbox.d"
-
-targetPath "./bin"  // The destination path of the output binary - this setting does not support the platform attribute

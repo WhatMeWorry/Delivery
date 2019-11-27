@@ -6,6 +6,7 @@ license "proprietary"
 buildType   "release"
 targetType  "executable"
 mainSourceFile "/source/app.d"
+targetPath "./bin"
 
 dependency "bindbc-opengl"    version="~>0.8.0"
 versions "GL_41"
@@ -16,9 +17,6 @@ versions "GLFW_32"
 // then you can use `sourcePaths` (or `sourceFiles`) in the dub configuration 
 // of any projects that need it.
 
-
-//importPaths ".."    // needed for import common.event_handler; since common is outside (above) the project
-
                                           // without -
 sourceFiles "../common/event_handler.d"   // source\app.d(11,8): Error: module `event_handler` is in file 'event_handler.d' which cannot be read
                                           // line 11 in app.d is  import event_handler;
@@ -27,5 +25,3 @@ sourceFiles "../common/mytoolbox.d"
 
 sourceFiles "../dynamic_libs/glfw"    // without - Error: undefined identifier load_GLFW_Library
 sourceFiles "../dynamic_libs/opengl"  // without - Error: undefined identifier load_openGL_Library
-
-targetPath "./bin"
