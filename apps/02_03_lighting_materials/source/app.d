@@ -19,6 +19,7 @@ import model;           // without - Error:  undefined identifier model
 import dynamic_libs.glfw;       // without - Error: undefined identifier load_GLFW_Library, glfwCreateWindow
 import dynamic_libs.opengl;     // without - Error: undefined identifier load_openGL_Library
 import dynamic_libs.freeimage;  // without - Error: undefined identifier load_FreeImage_Library
+import dynamic_libs.assimp;
 
 import gl3n.linalg : vec3, mat4;
 
@@ -117,6 +118,8 @@ void main(string[] argv)
     load_openGL_Library(); 
 
     load_FreeImage_Library();
+
+    load_Assimp_Library();
 
     auto winMain = glfwCreateWindow(width, height, "02_03_lighting_materials", null, null);
 

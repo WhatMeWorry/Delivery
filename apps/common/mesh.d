@@ -1,7 +1,15 @@
 
 module mesh;
 
-import common;
+
+// import bindbc.opengl : GLuint, glActiveTexture, glBindTexture, glUniform1f, glBindVertexArray;
+
+import bindbc.opengl;  // without - Error: undefined identifier glXXXXX and GL_XXXXX
+
+public import derelict.assimp3.assimp : aiString;  // needed for aiString
+
+import shaders : Shader;  // without - Error: undefined identifier Shader
+
 import gl3n.linalg; // vec3, vec2
 import mytoolbox;  
 

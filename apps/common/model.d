@@ -1,8 +1,19 @@
 
 module model;
 
-import common;
+//import common;
 
+public import derelict.assimp3.assimp;  // needed for aiString, aiNode, aiScene, aiMaterial, aiTextureType, etc.
+
+// import bindbc.opengl : GLint;   // without - Error: undefined identifier GLint
+import bindbc.opengl;  // without - Error: undefined identifier glXXXXX and GL_XXXXX
+
+import bindbc.freeimage;  // without - Error: undefined identifier FreeImage_XXXXX
+
+import mesh : Texture, Mesh, Vertex;    // without - Error: undefined identifier Texture,
+import shaders : Shader;        // without - Error: undefined identifier Shader
+
+import mytoolbox;
 
 import std.stdio   : writeln;
 import std.string  : toStringz, lastIndexOf;

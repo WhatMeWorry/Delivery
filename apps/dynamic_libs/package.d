@@ -16,4 +16,5 @@ public import dynamic_libs.glfw;
 public import dynamic_libs.opengl;
 public import dynamic_libs.sdl;
 public import dynamic_libs.sdlmixer;
+public import dynamic_libs.assimp;
 
