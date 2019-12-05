@@ -1,6 +1,9 @@
 
 module dynamic_libs.freetype;
 
+import std.stdio : writeln;
+import core.stdc.stdlib : exit;
+
 public import bindbc.freetype;
 
 

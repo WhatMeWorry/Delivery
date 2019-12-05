@@ -1,19 +1,27 @@
 module game;
 
+/*
 import app;
 
 import common;
 import common_game;
-
+*/
 //import derelict.opengl3.gl3;
 import gl3n.linalg;               // vec2
-import std.algorithm.comparison;  // clamp
 import std.stdio;                 // writeln
 import std.typecons;              // Tuple
 import std.math;                  // abs  pow  fmax  fmin
 import std.algorithm.comparison;  // clamp
 import std.random : dice;
 import std.conv : to;
+
+import dynamic_libs.opengl : GLboolean, GLfloat, GLuint;   // without - Error: undefined identifier GLboolean
+
+import sprite_renderer : SpriteRenderer; // without - Error: undefined identifier SpriteRenderer
+//import common_game.ball_object;     // BallObject
+//import common_game.game_object;     // GameObject
+//import common_game.particles;       // ParticleGenerator
+//import common_game.post_processor;  // PostProcessor
 
 // current state of the game
 enum GameState 

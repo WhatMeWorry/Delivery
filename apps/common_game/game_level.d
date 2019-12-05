@@ -1,7 +1,7 @@
 module game_level;
 
-import common;
-import common_game;
+//import common;
+//import common_game;
 
 import std.stdio;
 import gl3n.linalg; // vec2  vec3

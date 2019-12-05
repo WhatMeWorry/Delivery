@@ -1,7 +1,7 @@
 module game_object;
 
-import common;
-import common_game;
+//import common;
+//import common_game;
 
 import bindbc.opengl; // GLfloat, GLboolean
 import gl3n.linalg;          // vec2, vec3

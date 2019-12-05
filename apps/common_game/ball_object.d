@@ -1,8 +1,8 @@
 module ball_object;
 
 //import app;     // for traits flag 
-import common;
-import common_game;
+//import common;
+//import common_game;
 
 import gl3n.linalg;
 import std.stdio;             // writeln

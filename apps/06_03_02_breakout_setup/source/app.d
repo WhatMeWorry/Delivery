@@ -2,6 +2,37 @@
 
 module app;
 
+
+import std.math;    // cos
+import std.stdio;   // writeln
+import std.conv;    // to
+import gl3n.linalg; // vec3 mat4
+
+import std.stdio : writeln; 
+
+import shaders;         // without - Error: undefined identifier Shader, createProgramFromShaders, ...
+import event_handler;   // without - Error: undefined identifier onKeyEvent, onFrameBufferResize, handleEvent
+import mytoolbox;       // without - Error: no property bytes for type float[]
+import cameraModule;    // withoug - Error: undefined identifier Camera
+import projectionfuncs; // without - Error: undefined identifier orthographicFunc 
+import monitor;         // without - Error: undefined identifier showAllMonitors, showMonitorVideoMode
+import texturefuncs;    // without - Error: undefined identifier loadTexture
+import vertex_data;     // without - Error: undefined identifier initializeCube, initializeCubePositions
+import timer;           // without - Error:  undefined identifier ManualTimer, AutoRestartTimer
+import model;           // without - Error:  undefined identifier model
+import freetypefuncs;
+
+import game; // without - Error:  undefined identifier Game
+//import common_game.ball_object;
+
+import dynamic_libs.glfw;       // without - Error: undefined identifier load_GLFW_Library, glfwCreateWindow
+import dynamic_libs.opengl;     // without - Error: undefined identifier load_openGL_Library
+import dynamic_libs.freeimage;  // without - Error: undefined identifier load_FreeImage_Library
+import dynamic_libs.assimp;
+import dynamic_libs.freetype;
+
+
+/*
 import common;
 import common_game;
 
@@ -18,6 +49,7 @@ import bindbc.freetype;
 import bindbc.freeimage;
 import bindbc.opengl;
 import bindbc.glfw;
+*/
 
 enum bool particulate = false;
 enum bool effects     = false;

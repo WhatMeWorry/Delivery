@@ -2,8 +2,8 @@ module text_renderer;
 
 //import app;
 
-import common;
-import common_game;
+//import common;
+//import common_game;
 //import derelict.opengl3.gl3;
 
 import std.stdio;

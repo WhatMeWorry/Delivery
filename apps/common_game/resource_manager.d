@@ -1,7 +1,7 @@
 module resource_manager;
 
-import common;
-import common_game;
+//import common;
+//import common_game;
 
 import std.stdio;
 import mytoolbox;

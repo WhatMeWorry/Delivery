@@ -1,15 +1,19 @@
 module freetypefuncs;
 
-import bindbc.freetype;  // defines FT_Face
 import std.stdio;
 import std.string;   // format()
 import std.conv; //   : to;
 import std.traits;
 import std.typetuple;
-import bindbc.opengl;  // defines GLubyte, GLchar, GLuint, GLfloat etc.
+
+import shaders;          // Error: undefined identifier Shader
+import projectionfuncs;  // without - Error: undefined identifier orthographicFunc
+
+import bindbc.freetype;  // defines FT_Face
+import bindbc.opengl;    // defines GLubyte, GLchar, GLuint, GLfloat etc.
+
 import gl3n.linalg;           // vec3
 
-import common;
 
 import mytoolbox;
 

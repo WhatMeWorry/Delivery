@@ -1,8 +1,8 @@
 
 module power_ups;
 
-import common;
-import common_game;
+//import common;
+//import common_game;
 
 
 import gl3n.linalg : mat4, vec2, vec3, vec4; 
