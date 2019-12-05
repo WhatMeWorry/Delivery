@@ -1,19 +1,27 @@
 
 module app;  // 04_01_depth_testing
 
-import common;
+import std.stdio : writeln; 
+import std.math : PI;
 
-import gl3n.linalg; // vec3
-import std.stdio;   // writeln
-import std.math;    // sin cos
+import shaders;         // without - Error: undefined identifier Shader, createProgramFromShaders, ...
+import event_handler;   // without - Error: undefined identifier onKeyEvent, onFrameBufferResize, handleEvent
+import mytoolbox;       // without - Error: no property bytes for type float[]
+import cameraModule;    // withoug - Error: undefined identifier Camera
+import projectionfuncs; // without - Error: undefined identifier orthographicFunc 
+import monitor;         // without - Error: undefined identifier showAllMonitors, showMonitorVideoMode
+import texturefuncs;    // without - Error: undefined identifier loadTexture
+import vertex_data;     // without - Error: undefined identifier initializeCube, initializeCubePositions
+import timer;           // without - Error:  undefined identifier ManualTimer, AutoRestartTimer
+import model;           // without - Error:  undefined identifier model
 
-import derelict.util.loader;
-import derelict.util.sharedlib;
+import dynamic_libs.glfw;       // without - Error: undefined identifier load_GLFW_Library, glfwCreateWindow
+import dynamic_libs.opengl;     // without - Error: undefined identifier load_openGL_Library
+import dynamic_libs.freeimage;  // without - Error: undefined identifier load_FreeImage_Library
+import dynamic_libs.assimp;
 
-import bindbc.freetype;
-import bindbc.freeimage;
-import bindbc.opengl;
-import bindbc.glfw;
+import gl3n.linalg : vec3, mat4;
+
 
 // Window dimensions
 enum width = 1280;  enum height = 720;
@@ -90,11 +98,17 @@ void main(string[] argv)
     pragma(msg, "After main");
     // Camera
     camera = new Camera(vec3(0.0, 0.0, 3.0));
-   pragma(msg, "LINE 91");
-    load_libraries();
-   pragma(msg, "LINE 93");	
+
+    load_GLFW_Library();
+
+    load_openGL_Library(); 
+
+    load_FreeImage_Library();
+
+    load_Assimp_Library();
+   
     auto winMain = glfwCreateWindow(800, 600, "04_01_depth_testing", null, null);
-   pragma(msg, "LINE 95");
+
     glfwMakeContextCurrent(winMain); 
  
     // you must set the callbacks after creating the window
