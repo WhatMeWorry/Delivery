@@ -3,9 +3,11 @@ module sprite_renderer;
 //import common;
 //import common_game;
 
-import dynamic_libs.opengl : GLfloat, GLuint, GL_TRUE, GL_FALSE;   // without - Error: undefined identifiers
-import dynamic_libs.text_renderer : ShaderBreakout; 
-import dynamic_libs.texture_2d : Texture2D;
+import mytoolbox;
+
+import dynamic_libs.opengl;  // : GLfloat, GLuint, GL_TRUE, GL_FALSE;   // without - Error: undefined identifiers
+import shader_breakout : ShaderBreakout; 
+import texture_2d : Texture2D;
 
 
 import gl3n.linalg;  // vec2  vec3

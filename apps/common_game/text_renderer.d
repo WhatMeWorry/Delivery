@@ -2,6 +2,15 @@ module text_renderer;
 
 //import app;
 
+import mytoolbox;
+
+import dynamic_libs.opengl; // : GLubyte, GLchar, GLfloat, GLuint;   // without - Error: undefined identifiers
+import dynamic_libs.freetype;
+
+import shader_breakout : ShaderBreakout;
+import resource_manager;
+import projectionfuncs;
+
 //import common;
 //import common_game;
 //import derelict.opengl3.gl3;

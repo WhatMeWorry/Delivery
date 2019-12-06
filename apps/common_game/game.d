@@ -15,13 +15,23 @@ import std.algorithm.comparison;  // clamp
 import std.random : dice;
 import std.conv : to;
 
-import dynamic_libs.opengl : GLboolean, GLfloat, GLuint;   // without - Error: undefined identifier GLboolean
+import texturefuncs;  // common
+import projectionfuncs; 
 
-import sprite_renderer : SpriteRenderer; // without - Error: undefined identifier SpriteRenderer
-//import common_game.ball_object;     // BallObject
-//import common_game.game_object;     // GameObject
-//import common_game.particles;       // ParticleGenerator
-//import common_game.post_processor;  // PostProcessor
+import dynamic_libs.opengl : GLboolean, GLfloat, GLuint, GL_TRUE, GL_FALSE;   // without - Error: undefined identifier GLboolean
+import dynamic_libs.glfw;
+
+import sprite_renderer;    // without - Error: undefined identifier SpriteRenderer
+import ball_object     : BallObject;        // BallObject
+import game_object     : GameObject;        // GameObject
+import particles       : ParticleGenerator; // ParticleGenerator
+import post_processor  : PostProcessor;     // PostProcessor
+import game_level      : GameLevel;         //
+
+import shader_breakout : ShaderBreakout; 
+import texture_2d : Texture2D;
+
+import resource_manager;
 
 // current state of the game
 enum GameState 

@@ -6,6 +6,15 @@ module resource_manager;
 import std.stdio;
 import mytoolbox;
 
+import dynamic_libs.opengl;
+
+import shaders;
+
+
+
+import texture_2d : Texture2D;
+import shader_breakout : ShaderBreakout;
+
 // In Visual Studio 2010, the text cursor has changed from the blinking line, 
 // to a blinking grey box around the characters. When I type overwrites the text 
 // in front of it.  I'm not sure how to get this off? 

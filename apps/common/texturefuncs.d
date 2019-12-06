@@ -27,6 +27,8 @@ void loadTextureKCH_Unique(ref GLuint texture, string fileName)
     // Load, create texture and generate mipmaps
     int width, height;
 
+    writeln("Loading texture from file: ", fileName);
+
     //string fileName = "container.jpg";
 
     // Determine the format of the image.

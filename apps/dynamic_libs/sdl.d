@@ -1,6 +1,9 @@
 
 module dynamic_libs.sdl;
 
+import std.stdio;
+import core.stdc.stdlib : exit;
+
 public import bindbc.sdl;
 
 

@@ -4,10 +4,16 @@ module post_processor;
 //import common;
 //import common_game;
 
+import mytoolbox;
 
 import gl3n.linalg : mat4, vec2, vec3, vec4; 
 import std.random;
 import std.stdio;
+
+import dynamic_libs.opengl;
+
+import texture_2d : Texture2D;
+import shader_breakout : ShaderBreakout;
 
 /+
 

@@ -3,31 +3,53 @@ description "A minimal D application."
 authors "kheaser"
 copyright "Copyright © 2017, kheaser"
 license "proprietary"
+buildType   "release"
+targetType  "executable"
+mainSourceFile "/source/app.d"
+targetPath "./bin"
 
-dependency "derelict-assimp3" version="~>1.3.0"
-dependency "derelict-util"    version="~>2.0.6" 
-dependency "gl3n"             version="~>1.3.1"
 
-dependency "bindbc-freeimage" version="~>0.1.1" 
-versions "FI_317"
-dependency "bindbc-sdl"       version="~>0.8.0"
-versions "SDL_202"
-versions "BindSDL_Mixer" 
-dependency "bindbc-freetype"  version="~>0.5.0"
-versions "FT_210"
 dependency "bindbc-opengl"    version="~>0.8.0"
 versions "GL_41"
 dependency "bindbc-glfw"      version="~>0.4.0"
 versions "GLFW_32"
+dependency "gl3n"             version="~>1.3.1"
+dependency "bindbc-freeimage" version="~>0.1.1" 
+versions "FI_317"
+dependency "bindbc-assimp"    version="~>0.0.1"
+dependency "bindbc-freetype"  version="~>0.5.0"
+versions "FT_210"
 
-buildType   "release"
-targetType  "executable"
-mainSourceFile "/source/app.d"
 
-importPaths "../common"
-sourcePaths "../common"
+sourceFiles "../common/camera.d"
+sourceFiles "../common/event_handler.d" 
+sourceFiles "../common/shaders.d" 
+sourceFiles "../common/mytoolbox.d"
+sourceFiles "../common/cameraModule.d"
+sourceFiles "../common/projectionfuncs.d"
+sourceFiles "../common/monitor.d"
+sourceFiles "../common/texturefuncs.d"
+sourceFiles "../common/vertex_data.d"
+sourceFiles "../common/timer.d"
+sourceFiles "../common/model.d"
+sourceFiles "../common/mesh.d"
+sourceFiles "../common/freetypefuncs.d"
 
-importPaths "../common_game"
-sourcePaths "../common_game"
+sourceFiles "../common_game/game.d"
+sourceFiles "../common_game/sprite_renderer.d" // without - Error: undefined identifier SpriteRenderer
+sourceFiles "../common_game/text_renderer.d"
+sourceFiles "../common_game/texture_2d.d"
+sourceFiles "../common_game/shader_breakout.d"
+sourceFiles "../common_game/ball_object.d"     // BallObject
+sourceFiles "../common_game/game_object.d"     // GameObject
+sourceFiles "../common_game/particles.d"       // ParticleGenerator
+sourceFiles "../common_game/post_processor.d"  // PostProcessor
+sourceFiles "../common_game/game_level.d"      // GameLevel
+sourceFiles "../common_game/resource_manager.d"
 
-targetPath "./bin"
+sourceFiles "../dynamic_libs/glfw"      // without - Error: undefined identifier load_GLFW_Library
+sourceFiles "../dynamic_libs/opengl"    // without - Error: undefined identifier load_openGL_Library
+sourceFiles "../dynamic_libs/freeimage" // without - Error: undefined identifier load_FreeImage_Library
+sourceFiles "../dynamic_libs/assimp"
+sourceFiles "../dynamic_libs/freetype"
+

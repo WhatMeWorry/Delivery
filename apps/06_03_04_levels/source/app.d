@@ -1,17 +1,36 @@
 module app;
 
-import common;
-import common_game;
 
 import std.math;    // cos
 import std.stdio;   // writeln
 import std.conv;    // to
 import gl3n.linalg; // vec3 mat4
 
-import derelict.util.loader;
-import derelict.util.sharedlib;
-import bindbc.freetype;
-import bindbc.opengl;
+import std.stdio : writeln; 
+
+import shaders;         // without - Error: undefined identifier Shader, createProgramFromShaders, ...
+import event_handler;   // without - Error: undefined identifier onKeyEvent, onFrameBufferResize, handleEvent
+import mytoolbox;       // without - Error: no property bytes for type float[]
+import cameraModule;    // withoug - Error: undefined identifier Camera
+import projectionfuncs; // without - Error: undefined identifier orthographicFunc 
+import monitor;         // without - Error: undefined identifier showAllMonitors, showMonitorVideoMode
+import texturefuncs;    // without - Error: undefined identifier loadTexture
+import vertex_data;     // without - Error: undefined identifier initializeCube, initializeCubePositions
+import timer;           // without - Error:  undefined identifier ManualTimer, AutoRestartTimer
+import model;           // without - Error:  undefined identifier model
+import freetypefuncs;
+
+import resource_manager;
+import texture_2d;
+
+import game; // without - Error:  undefined identifier Game
+
+import dynamic_libs.glfw;       // without - Error: undefined identifier load_GLFW_Library, glfwCreateWindow
+import dynamic_libs.opengl;     // without - Error: undefined identifier load_openGL_Library
+import dynamic_libs.freeimage;  // without - Error: undefined identifier load_FreeImage_Library
+import dynamic_libs.assimp;
+import dynamic_libs.freetype;
+
 
 enum bool particulate = false;
 enum bool effects     = false;
@@ -39,7 +58,15 @@ void main(string[] argv)
 {
     Game breakout = new Game(800, 600);
 
-    load_libraries();
+    load_GLFW_Library();
+
+    load_openGL_Library(); 
+
+    load_FreeType_Library();
+
+    load_FreeImage_Library();
+    
+    load_Assimp_Library();
 
     auto winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_04_levels", null, null);
 

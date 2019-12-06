@@ -8,6 +8,14 @@ import gl3n.linalg; // vec2  vec3
 import std.string;  // strip
 import std.conv;    // to
 
+import mytoolbox;
+
+import resource_manager;
+
+import dynamic_libs.opengl : GLboolean, GLuint, GL_TRUE, GL_FALSE, GLfloat; 
+
+import sprite_renderer : SpriteRenderer; // without - Error: undefined identifier SpriteRenderer
+import game_object : GameObject; 
 
 /// GameLevel holds all Tiles as part of a Breakout level and 
 /// hosts functionality to Load/render levels from the harddisk.

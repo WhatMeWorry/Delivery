@@ -8,7 +8,12 @@ import gl3n.linalg : mat4, vec2, vec3, vec4;
 import std.random;
 import std.stdio;
 
+import mytoolbox;
 
+import dynamic_libs.opengl; 
+import texture_2d : Texture2D;
+import shader_breakout : ShaderBreakout;
+import game_object : GameObject;         // GameObject
 
 // Represents a single particle and its state
 struct Particle 

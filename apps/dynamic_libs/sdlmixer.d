@@ -1,6 +1,9 @@
 
 module dynamic_libs.sdlmixer;
 
+import std.stdio;
+import core.stdc.stdlib : exit;
+
 public import bindbc.sdl.mixer;
 
 

@@ -23,7 +23,6 @@ import model;           // without - Error:  undefined identifier model
 import freetypefuncs;
 
 import game; // without - Error:  undefined identifier Game
-//import common_game.ball_object;
 
 import dynamic_libs.glfw;       // without - Error: undefined identifier load_GLFW_Library, glfwCreateWindow
 import dynamic_libs.opengl;     // without - Error: undefined identifier load_openGL_Library
@@ -31,25 +30,6 @@ import dynamic_libs.freeimage;  // without - Error: undefined identifier load_Fr
 import dynamic_libs.assimp;
 import dynamic_libs.freetype;
 
-
-/*
-import common;
-import common_game;
-
-
-import std.math;    // cos
-import std.stdio;   // writeln
-import std.conv;    // to
-import gl3n.linalg; // vec3 mat4
-
-import derelict.util.loader;
-import derelict.util.sharedlib;
-
-import bindbc.freetype;
-import bindbc.freeimage;
-import bindbc.opengl;
-import bindbc.glfw;
-*/
 
 enum bool particulate = false;
 enum bool effects     = false;
@@ -62,7 +42,15 @@ void main(string[] argv)
 {
     Game breakout = new Game(800, 600);
 
-    load_libraries();
+    load_GLFW_Library();
+
+    load_openGL_Library(); 
+
+    load_FreeType_Library();
+
+    load_FreeImage_Library();
+    
+    load_Assimp_Library();
 
     auto winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_02_beakout_setup", null, null);
 

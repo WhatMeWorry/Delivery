@@ -8,6 +8,7 @@ import std.stdio;    // writeln
 import std.conv;     // to
 import gl3n.linalg;  // vec3 mat4
 
+import dynamic_libs.opengl;  // : GLboolean, GLchar, GLfloat, GLint, GLuint; 
 
 // General purpsoe shader object. Compiles from file, generates
 // compile/link-time error messages and hosts several utility 

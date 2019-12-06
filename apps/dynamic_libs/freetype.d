@@ -19,7 +19,7 @@ void load_FreeType_Library()
 
     immutable FTSupport ftLib = loadFreeType();
 
-    writeln("FreeImage version detected on this system is ", ftLib);
+    writeln("FreeType version detected on this system is ", ftLib);
 
     if (ftLib == FTSupport.noLibrary) 
     {
@@ -29,7 +29,7 @@ void load_FreeType_Library()
     else if (ftLib == FTSupport.badLibrary) 
     {
         writeln("One or more symbols failed to load. The likely cause is that this FreeType library");
-        writeln("loaded has a lower version than bindbc-freeimage was configured for");       
+        writeln("loaded has a lower version than bindbc-freetype was configured for");       
         exit(0);                
     }
     else if (ftLib != ftSupport) 

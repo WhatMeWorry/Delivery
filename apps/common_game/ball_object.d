@@ -7,6 +7,11 @@ module ball_object;
 import gl3n.linalg;
 import std.stdio;             // writeln
 
+import dynamic_libs.opengl : GLboolean, GLfloat, GLuint; 
+
+import game_object : GameObject;  //  Error: undefined identifier GameObject
+import texture_2d : Texture2D;    // 
+
 // BallObject holds the state of the Ball object inheriting
 // relevant state data from GameObject. Contains some extra
 // functionality specific to Breakout's ball object that
