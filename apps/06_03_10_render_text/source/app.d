@@ -35,23 +35,6 @@ import dynamic_libs.freetype;
 import dynamic_libs.sdl;
 import dynamic_libs.sdlmixer;
 
-/*
-import common;
-import common_game;
-
-import std.math;    // cos
-import std.stdio;   // writeln
-import std.conv;    // to
-import gl3n.linalg; // vec3 mat4
-
-import derelict.util.loader;
-import derelict.util.sharedlib;
-
-import bindbc.freetype;
-import bindbc.freeimage;
-import bindbc.opengl;
-import bindbc.glfw;
-*/
 
 bool[1024] keys;
 
