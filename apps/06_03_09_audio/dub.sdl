@@ -49,6 +49,8 @@ sourceFiles "../common_game/particles.d"       // ParticleGenerator
 sourceFiles "../common_game/post_processor.d"  // PostProcessor
 sourceFiles "../common_game/game_level.d"      // GameLevel
 sourceFiles "../common_game/resource_manager.d"
+sourceFiles "../common_game/sound.d"
+sourceFiles "../common_game/text_renderer.d"
 
 sourceFiles "../dynamic_libs/glfw"      // without - Error: undefined identifier load_GLFW_Library
 sourceFiles "../dynamic_libs/opengl"    // without - Error: undefined identifier load_openGL_Library

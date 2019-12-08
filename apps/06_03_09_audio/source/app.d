@@ -23,6 +23,7 @@ import freetypefuncs;
 
 import resource_manager;
 import texture_2d;
+import sound;
 
 import game; // without - Error:  undefined identifier Game
 
