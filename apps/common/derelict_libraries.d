@@ -1,6 +1,8 @@
 
 module derelict_libraries;
 
+/*
+
 //public import derelict.glfw3;
 public import bindbc.glfw;       
 public import bindbc.opengl;
@@ -331,3 +333,4 @@ void load_libraries()
 
     // Now Assimp3 functions can be called.
 }
+*/

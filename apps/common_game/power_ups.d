@@ -4,6 +4,10 @@ module power_ups;
 //import common;
 //import common_game;
 
+import dynamic_libs.opengl;
+import game_object : GameObject;  //  Error: undefined identifier GameObject
+import texture_2d : Texture2D;
+
 
 import gl3n.linalg : mat4, vec2, vec3, vec4; 
 import std.random;
