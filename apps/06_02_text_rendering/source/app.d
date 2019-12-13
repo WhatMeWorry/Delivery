@@ -87,7 +87,9 @@ Camera camera;
 
 // In D, all structs are value types.  This will actually create an object called textRenderSys
 TextRenderingSystem textRenderSys;
-
+TextRenderingSystem textRenderSys1;
+TextRenderingSystem textRenderSys2;
+TextRenderingSystem textRenderSys3;
 
 void main(string[] argv)
 {
@@ -112,12 +114,19 @@ void main(string[] argv)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    string[] fonts = [ "../fonts/ocraext.ttf",  "../fonts/EagleLake-Regular.ttf", 
+                      "../fonts/courbd.ttf", "../fonts/phoenixrising.ttf" ];
 
-
-    initTextRenderingSystem(textRenderSys);
+    initTextRenderingSystem(textRenderSys, fonts[0]);
     writeln("textRenderSys.progID = ", textRenderSys.progID);
     writeln("textRenderSys.VAO = ", textRenderSys.VAO);
     writeln("textRenderSys.VBO = ", textRenderSys.VBO);
+
+    initTextRenderingSystem(textRenderSys1, fonts[1]);
+    initTextRenderingSystem(textRenderSys2, fonts[2]);
+    initTextRenderingSystem(textRenderSys3, fonts[3]);
+
+
 
     auto RED = vec3(1.0, 0.0, 0.0);
 
@@ -131,14 +140,17 @@ void main(string[] argv)
         glClear(GL_COLOR_BUFFER_BIT);
 
         renderText(textRenderSys.font, textRenderSys.VAO, textRenderSys.VBO, textRenderSys.progID, 
-                   "This is sample Courier Bold text", 25.0f, 75.0f, 3.5f, vec3(0.0, 0.0f, 0.0f));
+                   "Courier Bold text at (x,y) = (0.0)", 0.0f, 0.0f, 1.5f, vec3(0.0, 0.0f, 0.0f));
 
         // Play with scale value
-        //renderText(courierBold, VAO, VBO, progID, "This changes scale to 0.5", 25.0f, 75.0f, 0.5f, vec3(0.5, 0.8f, 0.2f));
+        renderText(textRenderSys1.font, textRenderSys1.VAO, textRenderSys1.VBO, textRenderSys1.progID,
+                   "This changes scale to 0.5", 350.0f, 350.0f, 2.5f, vec3(0.0, 1.0f, 0.0f));
 
-        //renderText(phoenixRising, VAO, VBO, progID, "Phoenix Rising  scale = 2.33", 25.0f, 150.0f, 2.33f, RED);
+        renderText(textRenderSys2.font, textRenderSys2.VAO, textRenderSys2.VBO, textRenderSys2.progID,
+                   "Phoenix Rising  scale = 2.33", 25.0f, 150.0f, 2.33f, RED);
 
-        //renderText(eagleLake, VAO, VBO, progID, "(C) Eagle Lake LearnOpenGL.com", 25.0f, 500.0f, 1.0f, vec3(0.8, 0.8f, 0.8f));
+        renderText(textRenderSys3.font, textRenderSys3.VAO, textRenderSys3.VBO, textRenderSys3.progID,
+                   "(C) Eagle Lake LearnOpenGL.com", 25.0f, 500.0f, 1.0f, vec3(0.8, 0.8f, 0.8f));
 
         glfwSwapBuffers(winMain);   // Swap front and back buffers 
     }

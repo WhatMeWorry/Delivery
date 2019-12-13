@@ -324,7 +324,7 @@ void renderText(ref Glyph[GLchar] characters, GLuint VAO, GLuint VBO, GLuint pro
 }
 
 
-void initTextRenderingSystem(ref TextRenderingSystem textRenderSys)
+void initTextRenderingSystem(ref TextRenderingSystem textRenderSys, string fileName)
 {
     Shader[] shaders =
     [
@@ -339,11 +339,11 @@ void initTextRenderingSystem(ref TextRenderingSystem textRenderSys)
     glUniformMatrix4fv(glGetUniformLocation(textRenderSys.progID, "projection"), 1, GL_FALSE, &projection[0][0]); //WORKS
 
     FT_Library library; 
-    FT_Face courierBoldFont;   // Load font as face
+    FT_Face face;   // Load font as face
 
-    initializeFreeTypeAndFace(library, courierBoldFont,   "../fonts/ocraext.ttf");
+    initializeFreeTypeAndFace(library, face, fileName /* "../fonts/ocraext.ttf" */ );
 
-    initializeCharacters(courierBoldFont, textRenderSys.font);
+    initializeCharacters(face, textRenderSys.font);
 
 
     // Configure VAO/VBO for texture quads
@@ -409,7 +409,7 @@ void initTextRenderingSystem(ref TextRenderingSystem textRenderSys)
 +/
 
 
-void initializeFreeTypeAndFace(ref FT_Library library, ref FT_Face face, const(char)* font)
+void initializeFreeTypeAndFace(ref FT_Library library, ref FT_Face face, string /+ const(char)* +/ font)
 {
     //DerelictFT.load();  // Load the FreeType library - Now FreeType functions can be called
 
@@ -426,12 +426,12 @@ void initializeFreeTypeAndFace(ref FT_Library library, ref FT_Face face, const(c
     FT_Library_Version(library, &v0, &v1, &v2);
     writeln("FreeType version = ", v0, ".", v1, ".", v2);
 
-    //writeAndPause("Check FreeType version just displayed");
+    writeAndPause("Check FreeType version just displayed");
 
     // A face describes a given typeface and style. For example, ‘Times New Roman Regular’ 
     // and ‘Times New Roman Italic’ correspond to two different faces.
 
-    int error = FT_New_Face(library, font, 0, &face);  // 0 means success
+    int error = FT_New_Face(library, toStringz(font), 0, &face);  // 0 means success
     if (error)
     {
         writeAndPause("FT_New_Face failed loading font");       
@@ -440,6 +440,7 @@ void initializeFreeTypeAndFace(ref FT_Library library, ref FT_Face face, const(c
     if (error == FT_Err_Unknown_File_Format)
         writeAndPause("Unknown file format");        
 
-    writeln("FT_New_Face succeeded");
+    writeln("font file = ", font);
+    writeAndPause("FT_New_Face succeeded");
 
 }
