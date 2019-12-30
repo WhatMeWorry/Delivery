@@ -7,6 +7,11 @@ import common;
 import common_game;
 */
 //import derelict.opengl3.gl3;
+
+//import app;
+
+import globals;
+
 import gl3n.linalg;               // vec2
 import std.stdio;                 // writeln
 import std.typecons;              // Tuple
@@ -32,6 +37,7 @@ import shader_breakout : ShaderBreakout;
 import texture_2d : Texture2D;
 
 import resource_manager;
+
 
 // current state of the game
 enum GameState 
@@ -381,7 +387,8 @@ public:
 
         // ..\common_game\game.d(371,21): Error: module particles is not an expression
         // particles conflicted with module particles.d   Had to pick another flag variable name
-        static if (__traits(compiles, particulate) && particulate)   // inject code only if using post processor effects
+        //static if (__traits(compiles, particulate) && particulate)   // inject code only if using post processor effects
+        if (particulate)       
         {  
         resource_manager.ResMgr.loadShader("source/VertexShaderParticle.glsl", 
                                            "source/FragmentShaderParticle.glsl", 

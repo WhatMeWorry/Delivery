@@ -33,11 +33,7 @@ import dynamic_libs.assimp;
 import dynamic_libs.freetype;
 
 
-enum bool particulate = true;
-enum bool effects     = false;
-enum bool powUps      = false;
-enum bool audio       = false;
-enum bool screenText  = false;
+import globals;
 
 
 bool[1024] keys;
