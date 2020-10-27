@@ -58,9 +58,7 @@ operable program or batch file.
 
 C:\>setx PATH "%PATH%;C:\ldc\bin"
 SUCCESS: Specified value was saved.
-
-
-
+```
 	    
     Must have Microsoft C++ 2015 or 2017 installed. If not, a even better option is to just install the standalone "Visual C++ Build Tools".	
  
