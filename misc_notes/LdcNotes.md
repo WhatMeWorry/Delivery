@@ -17,22 +17,50 @@ Or at the very least, make it clearer when the "installation" page or "releases"
 FOR WINDOWS:
 
 1)  How to Install LLVM D Compiler (LDC)
-    These instructions assume the use of 7-zip.  A free pack/extract/compress/decompress utility.
+    These instructions assumes 7-zip is already installed. 7-zip is a free pack/extract/compress/decompress utility.
 
     Goto https://github.com/ldc-developers/ldc/releases
-        Scroll to most recent release of the web page. As of April 2019, select the LDC 1.14.0 release.  Now download the 7-zip file ldc2-x.x.x-windows-x64.7z file. You should now have a ldc2-x.xx.x-linux-x86_64.tar.xz file on your local system. 
+        Scroll to most recent release of the web page. As of October 2020, select the LDC 1.24.0 release.  Now download the 7-zip file ldc2-x.x.x-windows-x64.7z file. 
+	Probably in your download filder. Now  
             	 
-         Right Click the file --> 7-zip --> Open Archive
+         Right Click the file --> 7-zip --> Extract here
 	    
-	 The file in the 7zip program will have just the .tar suffix.  The xz compression is gone.
-	    
-	 Now double click on the .tar file within 7-zip.  The file name will have just be ldc2-x.xx.x-linux-x86_64   The tar archival is gone.
-	    Notice the file path will be built up from the preceeding steps:
-            C:\Users\someuser\Downloads\ldc2-1.14.0-linux-x86_64.tar.xz\ldc2-1.14.0-linux-x86_64.tar\ldc2-1.14.0-linux-x86_64\
-	    The folder that you did the download should show all three:
-	    ldc2-1.14.0-linux-x86_64.tar.xz
-	    ldc2-1.14.0-linux-x86_64.tar
-	    ldc2-1.14.0-linux-x86_64  
+         A ldc2-1.xx.0-windows-x86_64\ folder will be created.
+	 
+	 Make a directory off the root called ldc
+	 
+```
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community>cd \
+C:\>mkdir ldc
+```
+
+Now go to the ldc2-1.xx.0-windows-x86_64\ folder, copy all of its contents, and then paste into the ldc folder.
+
+```
+C:\>dir \ldc
+ Volume in drive C is Windows
+ Directory of C:\ldc
+12/03/2019  01:33 PM    <DIR>          .
+12/03/2019  01:33 PM    <DIR>          ..
+10/16/2019  04:49 PM    <DIR>          bin
+10/16/2019  04:47 PM    <DIR>          etc
+10/16/2019  04:47 PM    <DIR>          import
+10/16/2019  04:47 PM    <DIR>          lib
+10/16/2019  04:47 PM            27,268 LICENSE
+10/16/2019  04:47 PM             2,140 README.txt
+```
+
+
+```
+C:\>ldc
+'ldc' is not recognized as an internal or external command,
+operable program or batch file.
+
+C:\>setx PATH "%PATH%;C:\ldc\bin"
+SUCCESS: Specified value was saved.
+
+
+
 	    
     Must have Microsoft C++ 2015 or 2017 installed. If not, a even better option is to just install the standalone "Visual C++ Build Tools".	
  
@@ -63,7 +91,7 @@ FOR WINDOWS:
     Setx sets environment variables permanently. SETX can be used to set Environment Variables for the machine - all users (use /m option) or the currently logged on user (default).  
     
 ```    
-C:\>setx PATH "%PATH%;C:\ldc2\bin"
+C:\>setx PATH "%PATH%;C:\ldc\bin"
 
 SUCCESS: Specified value was saved.
 ```
