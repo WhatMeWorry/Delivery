@@ -13,7 +13,9 @@ void load_GLFW_Library()
 
     writeln("The dub.sdl file of this project expects GLFW version ", glfwSupport);
 
-    immutable GLFWSupport glfwLib = loadGLFW();
+    import std.file : getcwd;  
+    writeln("present working directory: ", getcwd());	
+    immutable GLFWSupport glfwLib = loadGLFW("./../../windows/dynamic_libraries/glfw3.dll");
 
     writeln("GLFW version detected on this system is ", glfwLib);
 
