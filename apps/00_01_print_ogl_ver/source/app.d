@@ -1,4 +1,5 @@
 
+
 module app; // 00_01_display_opengl_version
 
 import std.stdio;    // : writeln, writefln;
@@ -34,6 +35,10 @@ void main(string[] argv)
 {
 
     //load_libraries();
+	
+	import std.file : getcwd;
+	
+	writeln("app.d present working directory: ", getcwd());
 
     load_GLFW_Library();
 
@@ -57,7 +62,7 @@ void main(string[] argv)
     glfwMakeContextCurrent(window);  // required or else following output commands will not work.
 
 
-    executeShell("mode con cols=100 lines=400");
+    //executeShell("mode con cols=100 lines=400");
 
     GLint major, minor;
     glGetIntegerv(GL_MAJOR_VERSION, &major);
@@ -98,7 +103,8 @@ void main(string[] argv)
 
     foreach (i, element; extArray)
     {
-        writeln(i, ": ", element);
+        //writeln(i, ": ", element);
+        write(i, ": ", element);
     }
 
     writeln("GL Version (integer): ", major, ".", minor);
