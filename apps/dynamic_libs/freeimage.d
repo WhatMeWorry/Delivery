@@ -13,7 +13,10 @@ void load_FreeImage_Library()
 
      writeln("The dub.sdl file of this project expects FreeImage version ", fiSupport);
 
-    immutable FISupport fiLib = loadFreeImage();
+    import std.file : getcwd;  
+    writeln("Within Load_FreeImage_Library() - present working directory is: ", getcwd());	
+
+    immutable FISupport fiLib = loadFreeImage("./../../windows/dynamic_libraries/FreeImage.dll");
 
     writeln("FreeImage version detected on this system is ", fiLib);
 
