@@ -147,9 +147,10 @@ Also windows ends all it executables with the .exe extension.
 import std.stdio;
 import std.system;  // defines enum OS     OS os = OS.win64;
 import std.algorithm.searching : endsWith, canFind;
-static import std.algorithm.iteration;
+//static import std.algorithm.iteration;
+import std.algorithm.iteration : splitter;
 import std.process : Config, environment, executeShell, execute, spawnShell, spawnProcess, wait;
-import std.string : removechars;
+import std.string;
 
 // Class std.process.environment
 // Manipulates environment variables using an associative-array-like interface.
@@ -175,12 +176,11 @@ auto findExecutable(string exec)
 
 auto splitUpPaths(string envPath)
 {
-    version(linux)
-        auto paths = std.algorithm.iteration.splitter(envPath, ':');  // Linux uses colon
-    else version(Win64)
-        auto paths = std.algorithm.iteration.splitter(envPath, ';');  // Windows uses semi-colons;
-    else version(OSX)
-        auto paths = std.algorithm.iteration.splitter(envPath, ':');  // MacOS uses colon
+    version(Windows)
+        auto paths = envPath.splitter(';');   // Windows uses semi-colons;
+    else version(linux)
+        auto paths = envPath.splitter(':');   // Linux uses colon separator
+		
     return paths;
 }
 
@@ -198,6 +198,8 @@ void main(char[][] args)
 
     string progName = args[0].idup;  // get the command that called this program
                                      // (should be duball.exe of duball )
+    writeln("the command that called this program (duball.exe) was: ", progName);
+						
     version(linux)
     {
 
@@ -214,8 +216,12 @@ void main(char[][] args)
 
     // Check that ldc2 (LLVM D Compiler) is installed on this system 
 
-    auto found = findExecutable("ldc2");
-    writeln("\n", "ldc2", " was found at: ", found.output);  
+    //auto found = findExecutable("ldc2");
+    //writeln("\n", "ldc2", " was found at: ", found.output);  
+	
+    auto found = findExecutable("dmd");
+    writeln("\n", "dmd", " was found at: ", found.output);  
+		
 
     // Check that dub is installed on this system
 
