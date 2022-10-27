@@ -151,6 +151,18 @@ import std.algorithm.searching : endsWith, canFind;
 import std.algorithm.iteration : splitter;
 import std.process : Config, environment, executeShell, execute, spawnShell, spawnProcess, wait;
 import std.string;
+import std.file : getcwd;
+
+
+/+
+where /R c:\ dmd
+c:\Users\kheaser\OneDrive - Ela Area Public Library\Documents\GitHub\Delivery\windows\compilers_and_utilities\dmd.exe
+c:\Users\kheaser\OneDrive - Ela Area Public Library\Documents\GitHub\Delivery\windows\compilers_and_utilities\D\dmd2\windows\bin\dmd.exe
+c:\Users\kheaser\OneDrive - Ela Area Public Library\Documents\GitHub\Delivery\windows\compilers_and_utilities\D\dmd2\windows\bin64\dmd.exe
+c:\Users\kheaser\OneDrive - Ela Area Public Library\Downloads\dmd2\windows\bin\dmd.exe
+c:\Users\kheaser\OneDrive - Ela Area Public Library\Downloads\dmd2\windows\bin64\dmd.exe
+
++/
 
 // Class std.process.environment
 // Manipulates environment variables using an associative-array-like interface.
@@ -161,7 +173,7 @@ auto findExecutable(string exec)
     version(linux)
         string command = "whereis ";  // Linux uses whereis
     else version(Windows)
-        string command = "where ";    // Windows uses where;
+        string command = "where ";    // Windows cmd shell uses where - does not work with Powershell
     else version(OSX)
         string command = "which ";    // Mac uses which
 
@@ -197,7 +209,7 @@ void main(char[][] args)
     }
 
     string progName = args[0].idup;  // get the command that called this program
-                                     // (should be duball.exe of duball )
+                                     // (should be duball.exe or duball )
     writeln("the command that called this program (duball.exe) was: ", progName);
 						
     version(linux)
@@ -246,10 +258,13 @@ void main(char[][] args)
 
     } else version(Win64)
     {
+        // Make sure the directory path to DMD2 and Optlink is listed in your PATH environment variable. 
+        // This directory is usually C:\DMD\dmd2\windows\bin on Windows.
+	
         // ldc2 and dub are automatically placed in C:\ldc2\bin whose path is 
         // automatically added to $PATH
 
-        string  dynamicPath = `.\..\..\windows\dynamiclibraries;`;    // needed for glfw3.dll
+        string dynamicPath = `.\..\..\windows\dynamiclibraries;`;    // needed for glfw3.dll
         envPath = dynamicPath ~ envPath;  // Prepend dynamiclibraries path to $PATH
         environment["PATH"] = envPath;  // Update with new       
 
@@ -318,14 +333,37 @@ void main(char[][] args)
 
 
     args[0] = "dub".dup;  // overwrite dubwin, dubmac, or dublin with the generic dup command
+	
+    string currentDirectory = getcwd();	
+	
+	writeln("currentDirectory = ", currentDirectory);
 
-    writeln("calling spawnProcess with args = ", args);
+ 
 
     /+
     By default, the child process inherits the environment of the parent process, along
     with any additional variables specified in the env parameter. If the same variable
     exists in both the parent's environment and in env, the latter takes precedence.
     +/
+	
+	string absolutePath = currentDirectory ~ `\..\..\windows\compilers_and_utilities\dub`;
+	
+	args[0] = absolutePath.dup;
+	
+	
+	
+	
+	
+    writeln("args[0] = ", args[0]);	
+	
+	
+    writeln("############## calling spawnProcess with args = ", args);	
+	
+	
+    foreach(arg; args)
+    {
+        writeln("<<<<<>>>>>   ", arg);
+    }
 
     auto pid = spawnProcess(args,
                             std.stdio.stdin,

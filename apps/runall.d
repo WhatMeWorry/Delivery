@@ -10,13 +10,17 @@ import std.regex: regex, matchFirst;
 
 void main(char[][] args)
 {
-    writeln("present working directory: ", getcwd());
+    string fixedLocation = getcwd();  // use this as a fixed location to use to find other files relative to this position.
+	
+    writeln("=================== runall.exe is in present working directory: ", fixedLocation);
+	writeln("");
+		
     // Iterate the current directory in breadth
     foreach (string i; dirEntries("", SpanMode.shallow))
     {
         writeln(i);
 
-        auto m = matchFirst(i, regex(`^\d\d_`));
+        auto m = matchFirst(i, regex(`^\d\d_`));  // \d\d matches any unicode digit at beginning of directory name
 
         if (isDir(i) && !m.empty)   // must be a directory with name begining with: xx_ where x = [0..9]
         {
@@ -24,7 +28,7 @@ void main(char[][] args)
             //string binDir = i ~ `\source`;
             string binDir = i;
             chdir(binDir);                       // go down into the subdirectory
-            writeln("present working subdirectory: ", getcwd());                  
+            writeln("*************** present working subdirectory: ", getcwd());                  
             //foreach (string j; dirEntries("", SpanMode.shallow))
             //{
                 //writeln("               ", j);   
@@ -46,7 +50,8 @@ void main(char[][] args)
                     +/
                     version(Windows)  
                     {
-                        auto pid = spawnShell(`..\duball.exe run --arch=x86_64 --force`);    
+					    string compilePath = fixedLocation ~ `\..\windows\compilers_and_utilities\\`;
+                        auto pid = spawnShell(`..\duball.exe run --compiler="` ~ compilePath ~ `" --arch=x86_64 --force`);				
                     } 
                     else  // OSX or Linux
                     {
