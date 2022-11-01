@@ -6,7 +6,6 @@ module envstudy;
 import std.stdio;
 import std.system;  // defines enum OS     OS os = OS.win64;
 import std.algorithm.searching : endsWith, canFind, findSplit;
-//static import std.algorithm.iteration;
 import std.algorithm.iteration : splitter;
 import std.algorithm.mutation: remove;
 import std.process : Config, environment, executeShell, execute, spawnShell, spawnProcess, wait;
@@ -149,16 +148,6 @@ void addPath(ref string[] paths)
         // SID
         // S-1-5-21-3823976785-3597194045-4221507747-1779
 		
-        /+
-        Pid spawnShell(scope const(char)[] command,
-               File stdin = std.stdio.stdin,
-               File stdout = std.stdio.stdout,
-               File stderr = std.stdio.stderr,
-               scope const string[string] env = null,
-               Config config = Config.none,
-               scope const(char)[] workDir = null,
-               scope string shellPath = nativeShell)		
-        +/		
 		
 		File cmdResult;  
 	    string cmdLine = `echo %username%`;
@@ -185,18 +174,6 @@ void addPath(ref string[] paths)
         string s = `wmic useraccount where name="` ~ name ~ `" get sid`;
         writeln("#", s, "#");			
 		
-
-/+		
-        foreach(i, ref token; tokens)
-        {
-            strip(token, " ");
-            //writeln("$", token, "$");	
-            if (token.length == 0)
-            {
-                tokens.remove(i);
-            }			
-        }
-+/				
         //writeln("environment variables are inherited from parent process to child process.");
         //writeln("After modifying them, you will have to restart your IDE, or terminal window,"); 
         //writeln("in order for them to udpate.");

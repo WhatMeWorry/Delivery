@@ -9,10 +9,10 @@ mainSourceFile "/source/app.d"
 targetPath "./bin"
 
 
-dependency "bindbc-glfw"      version="~>0.4.0"    // required for  import bindbc.glfw;  
-versions "GLFW_32"
-dependency "bindbc-opengl"    version="~>0.8.0"
-versions "GL_41"
+dependency "bindbc-opengl"    version="~>1.0.3"
+versions "GL_46"
+dependency "bindbc-glfw"      version="~>1.0.1"
+versions "GLFW_33"
 
 
 importPaths "../"    // needed for import common.mytoolbox; since common is outside (above) the project

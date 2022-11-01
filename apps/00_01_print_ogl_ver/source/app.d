@@ -68,6 +68,7 @@ void main(string[] argv)
     glGetIntegerv(GL_MAJOR_VERSION, &major);
     glGetIntegerv(GL_MINOR_VERSION, &minor);
 
+
     writeln("GL Version (integer): ", major, ".", minor);
 
     /+ All these syntaxes work

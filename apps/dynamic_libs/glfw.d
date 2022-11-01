@@ -38,7 +38,8 @@ void load_GLFW_Library()
         immutable GLFWSupport glfwVer = loadedGLFWVersion();
         if ( (glfwVer == GLFWSupport.glfw30) ||
              (glfwVer == GLFWSupport.glfw31) ||
-             (glfwVer == GLFWSupport.glfw32) )
+             (glfwVer == GLFWSupport.glfw32) ||
+             (glfwVer == GLFWSupport.glfw33)			                                 )
         {
             writeln("GLFW - Graphics Library FrameWork - Version ", glfwVer, " successfully loaded");
         } 

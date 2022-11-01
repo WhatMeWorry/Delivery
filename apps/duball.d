@@ -3,6 +3,39 @@
 ..\duball.exe run --compiler=ldc2 --arch=x86_64 --force
 +/
 
+/+
+    defined in std.system
+
+    Information about the target operating system, environment, and CPU.
+
+    enum OS
+    {
+        win32 = 1, /// Microsoft 32 bit Windows systems
+        win64,     /// Microsoft 64 bit Windows systems
+        linux,     /// All Linux Systems
+        osx,       /// Mac OS X
+        freeBSD,   /// FreeBSD
+        netBSD,    /// NetBSD
+        solaris,   /// Solaris
+        android,   /// Android
+        otherPosix /// Other Posix Systems
+    }
+
+
+    Defined in Language
+
+    Version identifiers do not conflict with other identifiers in the code, they
+    are in a separate name space. Predefined version identifiers are global.
+    Predefined Version Identifiers
+    Version Identifier    Description
+    ------------------    ---------------------
+    Windows               Microsoft Windows systems
+    Win32                 Microsoft 32-bit Windows systems
+    Win64                 Microsoft 64-bit Windows systems
+    linux                 All Linux systems
+    OSX                   Mac OS X
+  +/
+
 module duball;
 
 // Procedure for using this tool to create a new project
@@ -54,10 +87,6 @@ myapp exited with code 0
 cd D:\projects>cd 02_02_basic_lighting
 
 Edit the dub.sdl (add the dependencies and sourceFiles).  Just copy a previous one.
-
-
-
-
 +/
 
 /+
@@ -147,11 +176,11 @@ Also windows ends all it executables with the .exe extension.
 import std.stdio;
 import std.system;  // defines enum OS     OS os = OS.win64;
 import std.algorithm.searching : endsWith, canFind;
-//static import std.algorithm.iteration;
 import std.algorithm.iteration : splitter;
 import std.process : Config, environment, executeShell, execute, spawnShell, spawnProcess, wait;
 import std.string;
 import std.file : getcwd;
+import std.exception: enforce;
 
 
 /+
@@ -178,10 +207,8 @@ auto findExecutable(string exec)
         string command = "which ";    // Mac uses which
 
     auto at = executeShell(command ~ exec);
-    if (at.status != 0)
-    {    
-        throw new Exception(exec, " is not found on this system");
-    }
+    enforce(at.status == 0, exec, " is not found on this system");
+ 
     return at;
 }
 
@@ -196,16 +223,16 @@ auto splitUpPaths(string envPath)
     return paths;
 }
 
+
+
 void main(char[][] args)
 {
     // here we use the system provided enum and the variable os defined as
     // immutable OS os;  // The OS that the program was compiled for.
 
-    writeln("This program was compiled for a ", os, " system");
-    writeln("and called with the following arguments");
-    foreach (arg; args)
+    foreach (i, arg; args)
     {
-        writeln(arg);
+        //writeln("duball arg ", i, " *", arg, "*");
     }
 
     string progName = args[0].idup;  // get the command that called this program
@@ -226,25 +253,21 @@ void main(char[][] args)
 
     }
 
-    // Check that ldc2 (LLVM D Compiler) is installed on this system 
-
-    //auto found = findExecutable("ldc2");
-    //writeln("\n", "ldc2", " was found at: ", found.output);  
+    // Check that dmd is installed on this system 
 	
     auto found = findExecutable("dmd");
-    writeln("\n", "dmd", " was found at: ", found.output);  
+    //writeln("\n", "dmd", " was found at: ", found.output);  
 		
-
     // Check that dub is installed on this system
 
     found = findExecutable("dub");
-    writeln("\n", "dub", " was found at: ", found.output);      
+    //writeln("\n", "dub", " was found at: ", found.output);      
 
-    string envPath = environment["PATH"];  // get the environment variable PATH.
+    //string envPath = environment["PATH"];  // get the environment variable PATH.
 
     //writeln(" The environment variable $PATH on this machine is: ", envPath);
 
-    auto paths = splitUpPaths(envPath);
+    //auto paths = splitUpPaths(envPath);
 
     version(linux)
     {
@@ -253,7 +276,7 @@ void main(char[][] args)
 
         // This error appeared on Antergos Linux
         // object.Exception@std/process.d(3171): Environment variable not found: LD_LIBRARY_PATH
-        // when commented out the following line:
+ 
         environment["LD_LIBRARY_PATH"] = `./../../linux/dynamiclibraries:/ignore/this/one:`;        
 
     } else version(Win64)
@@ -265,8 +288,8 @@ void main(char[][] args)
         // automatically added to $PATH
 
         string dynamicPath = `.\..\..\windows\dynamiclibraries;`;    // needed for glfw3.dll
-        envPath = dynamicPath ~ envPath;  // Prepend dynamiclibraries path to $PATH
-        environment["PATH"] = envPath;  // Update with new       
+        //envPath = dynamicPath ~ envPath;  // Prepend dynamiclibraries path to $PATH
+        //environment["PATH"] = envPath;  // Update with new       
 
         /+ Microsoft quote "LIB, if defined. The LINK tools uses the LIB path when
            searching for an object or library (example, libucrt.lib) +/
@@ -280,65 +303,30 @@ void main(char[][] args)
 
     } else version(OSX)
     {
-        // ldc2 and dub are automatically placed in default user binary directories at install time
-        // so paths don't need to be modified to run these two 
-
-        // Dynamic (.dylib) libs can be placed at a nonstandard location in your file system, but only in
-        // one of these environment variables: LD_LIBRARY_PATH, DYLD_FALLBACK_LIBRARY_PATH, or DYLD_LIBRARY_PATH
-
-        // Note: either LD_LIBRARY_PATH or DYLD_LIBRARY_PATH works with the below path. 
-
-        // This error appeared on Mac OS High Sierra 
-        // object.Exception@std/process.d(3067): Environment variable not found: LD_LIBRARY_PATH 
-        // when commented out the following line: 
+     
         environment["LD_LIBRARY_PATH"] = `./../../macos/dynamiclibraries`; 
-
-        // This error appeared on Mac OS High Sierra       
-        // object.Exception@std/process.d(3067): Environment variable not found: DYLD_LIBRARY_PATH 
-        // when commented out the following line: 
         environment["DYLD_LIBRARY_PATH"] = `./../../macos/dynamiclibraries`;      
     }
-
-/+
-    if ((!canFind(envPath, compilerPath)) | (!canFind(envPath, dubPath)) | (!canFind(envPath, dynamicPath)))
-    {
-        //writeln("CANT FIND PATHS ===========================");
-        version(Windows)
-            envPath = compilerPath ~ dubPath ~ dynamicPath ~ envPath;
-        else
-            envPath = compilerPath ~ dubPath ~ dynamicPath ~ envPath;  // maybe call these soPath
-
-        //writeln("new path = ", envPath);
-
-        environment["PATH"] = envPath;  // Update with new DMD and DUB paths
-
-        envPath = environment["PATH"];    // get the environment variable PATH.
-        //writeln("added new paths = ", envPath);
-    }
-+/
-
 
     //string newPathVar = compilerPath ~ dubPath ~ envPath;
 
     //environment["PATH"] = newPathVar;  // Update the PATH environment
 
 
+    /+
     paths = splitUpPaths(envPath);
-
     writeln("\n","The PATH env variable now has paths:");
     foreach(path; paths)
     {
         writeln("   ",path);
     }
-
+    +/
 
     args[0] = "dub".dup;  // overwrite dubwin, dubmac, or dublin with the generic dup command
 	
     string currentDirectory = getcwd();	
 	
-	writeln("currentDirectory = ", currentDirectory);
-
- 
+	//writeln("currentDirectory = ", currentDirectory);
 
     /+
     By default, the child process inherits the environment of the parent process, along
@@ -350,19 +338,11 @@ void main(char[][] args)
 	
 	args[0] = absolutePath.dup;
 	
-	
-	
-	
-	
-    writeln("args[0] = ", args[0]);	
-	
-	
-    writeln("############## calling spawnProcess with args = ", args);	
-	
+    writeln("FULL COMMAND LINE = *", args, "*");	
 	
     foreach(arg; args)
     {
-        writeln("<<<<<>>>>>   ", arg);
+        //writeln("<<", arg, ">>");
     }
 
     auto pid = spawnProcess(args,
@@ -379,37 +359,6 @@ void main(char[][] args)
     }
 
 
- /+
-    defined in std.system
-
-    Information about the target operating system, environment, and CPU.
-
-    enum OS
-    {
-        win32 = 1, /// Microsoft 32 bit Windows systems
-        win64,     /// Microsoft 64 bit Windows systems
-        linux,     /// All Linux Systems
-        osx,       /// Mac OS X
-        freeBSD,   /// FreeBSD
-        netBSD,    /// NetBSD
-        solaris,   /// Solaris
-        android,   /// Android
-        otherPosix /// Other Posix Systems
-    }
-
-
-    Defined in Language
-
-    Version identifiers do not conflict with other identifiers in the code, they
-    are in a separate name space. Predefined version identifiers are global.
-    Predefined Version Identifiers
-    Version Identifier    Description
-    ------------------    ---------------------
-    Windows               Microsoft Windows systems
-    Win32                 Microsoft 32-bit Windows systems
-    Win64                 Microsoft 64-bit Windows systems
-    linux                 All Linux systems
-    OSX                   Mac OS X
-  +/
+ 
 
 }

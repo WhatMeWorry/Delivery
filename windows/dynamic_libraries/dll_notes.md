@@ -28,10 +28,10 @@ This is an introduction to Git version control system. It teachs by doing: a ste
         and moved it to this folder.
 
     - GLFW3
-        At the official  http://www.glfw.org/  There is a pre-built Windows pre-compiled binary for 64-bits. Then 
-        downloaded glfw-3.2.1.bin.WIN64
-        
-        Got the most current lib-vc2015 glfw3.dll (82 KB) and copied it to this folder. Note: ignored lib-vc2012 and lib-vc2013.
+        At the official  http://www.glfw.org/  Selected GLFW 3.3.8. Then selected "Windows pre-compiled binaries". Then selected 64-bit Windows binaries. Then 
+        downloaded glfw-3.3.8.bin.WIN64.
+		
+        Copied the most current lib-vc2022 glfw3.dll (212 KB) into this folder.
     
     - FreeType
         The freetype.dll here in this directory was built by me using Visual Studio 2019 Community. The source

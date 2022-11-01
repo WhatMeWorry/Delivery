@@ -6,13 +6,12 @@ license "proprietary"
 buildType   "release"
 targetType  "executable"
 mainSourceFile "/source/app.d"
+targetPath "./bin" 
 
-
-dependency "bindbc-opengl"    version="~>0.8.0"
-versions "GL_41"
-dependency "bindbc-glfw"      version="~>0.4.0"
-versions "GLFW_32"
-targetPath "./bin"
+dependency "bindbc-opengl"    version="~>1.0.3"
+versions "GL_46"
+dependency "bindbc-glfw"      version="~>1.0.1"
+versions "GLFW_33"
 
 // If common is not an independent project (it has no dub configuration) 
 // then you can use `sourcePaths` (or `sourceFiles`) in the dub configuration 
@@ -25,7 +24,6 @@ sourceFiles "../common/mytoolbox.d"
 sourceFiles "../common/event_buffer.d"
 
 //sourcePaths "../common"    // Trys to compile all the source .d files in common source
-
 
 sourceFiles "../dynamic_libs/glfw"
 sourceFiles "../dynamic_libs/opengl"
