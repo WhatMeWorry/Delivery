@@ -16,7 +16,7 @@ void load_SDL_Library()
 
     writeln("The dub.sdl file of this project requests FreeType version ", sdlSupport);
 
-    immutable SDLSupport sdlLib = loadSDL();
+    immutable SDLSupport sdlLib = loadSDL("./../../windows/dynamic_libraries/SDL2.dll");
 
     writeln("SDL version detected on this system is ", sdlLib);
 

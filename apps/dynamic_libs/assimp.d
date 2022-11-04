@@ -1,11 +1,11 @@
 
 module dynamic_libs.assimp;
 
-public import bindbc.assimp;
-//public import derelict.assimp3.assimp;
+//public import bindbc.assimp;
+public import derelict.assimp3.assimp;
 
-//public import derelict.util.exception;   // needed for the return type enum ShouldThrow.
-//public import derelict.util.sharedlib;
+public import derelict.util.exception;   // needed for the return type enum ShouldThrow.
+public import derelict.util.sharedlib;
 
 
 // import path[5] = ..\..\..\AppData\Local\dub\packages\derelict-assimp3-1.3.0\derelict-assimp3\source
@@ -15,7 +15,7 @@ import std.stdio;
 import core.stdc.stdlib : exit;
 
 
-/*
+
 ShouldThrow myMissingSymCallBackASSIMP3( string symbolName )
 {
     if (symbolName == "aiReleaseExportFormatDescription"  ||  // Windows assimp.dll
@@ -30,15 +30,16 @@ ShouldThrow myMissingSymCallBackASSIMP3( string symbolName )
         return ShouldThrow.Yes;
     }
 }
-*/
 
 
+// bindbc-assimp is no longer being actively developed and required an ealier version
+// of bindbc-loader which conflicted with bindbc-opengl and bindbc-glfw. Had to revert to Dereliect-assimp
 
 void load_Assimp_Library()
 {
     // Derelict is absolete but bindbc.assimp is not ready for prime time.
 
-    //DerelictASSIMP3.missingSymbolCallback = &myMissingSymCallBackASSIMP3;
+    DerelictASSIMP3.missingSymbolCallback = &myMissingSymCallBackASSIMP3;
 
     //DerelictASSIMP3.load();   // Load the Assimp3 library.
 
@@ -46,16 +47,19 @@ void load_Assimp_Library()
     //    Lansatac/sandbox-engine
     //       source/assimp/AssImpMeshDataRepository.d
 
-    /*
+    
     version(Windows)
     {
-        DerelictASSIMP3.load("./../../../windows/dynamiclibraries/assimp.dll");
+        import std.file : getcwd;
+        writeln("present working subdirectory: ", getcwd());
+		// C:\Users\kheaser\Documents\GitHub\Delivery\apps\02_03_lighting_materials
+        DerelictASSIMP3.load("./../../windows/dynamic_libraries/assimp.dll");
     }
     else
     {
         DerelictASSIMP3.load();
     }
-    */
+    
 
     // From Githup    
     //     mlizard32/Glib
@@ -64,10 +68,13 @@ void load_Assimp_Library()
     //  pragma(lib, "DerelictASSIMP3.lib");
     //  DerelictASSIMP3.load("..//..//Libs//Assimp32.dll");
 
+    /+
     version(Windows) 
     {
         loadAssimp("./../../../windows/dynamiclibraries/assimp.dll");
     }
+    +/
+	
     // This version attempts to load the Assimp shared library using well-known variations
     // of the library name for the host system.
 

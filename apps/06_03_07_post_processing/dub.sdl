@@ -9,17 +9,16 @@ mainSourceFile "/source/app.d"
 targetPath "./bin"
 
 
-dependency "bindbc-opengl"    version="~>0.8.0"
-versions "GL_41"
-dependency "bindbc-glfw"      version="~>0.4.0"
-versions "GLFW_32"
-dependency "gl3n"             version="~>1.3.1"
-dependency "bindbc-freeimage" version="~>0.1.1" 
+dependency "bindbc-opengl"    version="~>1.0.3"
+versions "GL_46"
+dependency "bindbc-glfw"      version="~>1.0.1"
+versions "GLFW_33"
+dependency "gl3n"             version="~>1.4.1"
+dependency "bindbc-freeimage" version="~>1.0.2" 
 versions "FI_317"
-dependency "bindbc-assimp"    version="~>0.0.1"
-dependency "bindbc-freetype"  version="~>0.5.0"
+dependency "derelict-assimp3" version="~>1.3.0"
+dependency "bindbc-freetype"  version="~>1.0.3"
 versions "FT_210"
-
 
 sourceFiles "../common/camera.d"
 sourceFiles "../common/event_handler.d" 
@@ -46,6 +45,7 @@ sourceFiles "../common_game/particles.d"       // ParticleGenerator
 sourceFiles "../common_game/post_processor.d"  // PostProcessor
 sourceFiles "../common_game/game_level.d"      // GameLevel
 sourceFiles "../common_game/resource_manager.d"
+sourceFiles "../common_game/globals.d"
 
 sourceFiles "../dynamic_libs/glfw"      // without - Error: undefined identifier load_GLFW_Library
 sourceFiles "../dynamic_libs/opengl"    // without - Error: undefined identifier load_openGL_Library

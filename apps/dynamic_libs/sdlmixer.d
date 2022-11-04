@@ -15,7 +15,7 @@ void load_SDL_Mixer_Library()
 
     writeln("The dub.sdl file of this project requests SDL Mixer version ", sdlMixerSupport);
 
-    immutable SDLMixerSupport  sdlMixLib = loadSDLMixer();
+    immutable SDLMixerSupport  sdlMixLib = loadSDLMixer("./../../windows/dynamic_libraries/SDL2_mixer.dll");
 
     writeln("SDL Mixer version detected on this system is  ", sdlMixLib);
 

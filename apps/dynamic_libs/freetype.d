@@ -16,7 +16,12 @@ void load_FreeType_Library()
     // ftSupport is initialized at compile time from the dub.sdl freeType version command
 
     writeln("The dub.sdl file of this project expects FreeType version ", ftSupport);
-
+	
+    version(Windows) 
+    {
+        loadFreeType("./../../windows/dynamic_libraries/freetype.dll");
+    }	
+    /+
     immutable FTSupport ftLib = loadFreeType();
 
     writeln("FreeType version detected on this system is ", ftLib);
@@ -40,5 +45,6 @@ void load_FreeType_Library()
     else
     {
         writeln("FreeType version ", ftLib, " was successfully loaded");
-    }   
+    }
+    +/	
 }

@@ -3,14 +3,16 @@ module model;
 
 //import common;
 
-//public import derelict.assimp3.assimp;  // needed for aiString, aiNode, aiScene, aiMaterial, aiTextureType, etc.
+public import derelict.assimp3.assimp;  // needed for aiString, aiNode, aiScene, aiMaterial, aiTextureType, etc.
+public import derelict.assimp3.types;  // needed for aiPostProcessSteps and aiTextureType
+// public import bindbc.assimp;  // needed for aiString, aiNode, aiScene, aiMaterial, aiTextureType, etc.
 
 // import bindbc.opengl : GLint;   // without - Error: undefined identifier GLint
 import bindbc.opengl;  // without - Error: undefined identifier glXXXXX and GL_XXXXX
 
 import bindbc.freeimage;  // without - Error: undefined identifier FreeImage_XXXXX
 
-public import bindbc.assimp;  // needed for aiString, aiNode, aiScene, aiMaterial, aiTextureType, etc.
+
 
 import mesh : Texture, Mesh, Vertex;    // without - Error: undefined identifier Texture,
 import shaders : Shader;        // without - Error: undefined identifier Shader
@@ -55,7 +57,8 @@ public:
     }
 
 private:
-public import bindbc.assimp; 
+    // public import bindbc.assimp; 
+	public import derelict.assimp3.assimp;
     // Loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
     void loadModel(string path)
     {
@@ -67,10 +70,13 @@ public import bindbc.assimp;
         //                                          aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
         // This is C API for AssImp
+		
+        import derelict.assimp3.types : aiPostProcessSteps;
+		
         const aiScene* scene = aiImportFile(cStr.ptr, // parameter signature says const char *pFile
-                                            aiPostProcessSteps.Triangulate | 
-                                            aiPostProcessSteps.FlipUVs |
-                                            aiPostProcessSteps.CalcTangentSpace);
+                                            aiProcess_Triangulate |
+                                            aiProcess_FlipUVs |
+                                            aiProcess_CalcTangentSpace);
         if(!scene)
             writeAndPause("aiImportFile failed on file " ~ path);
         else
@@ -338,22 +344,22 @@ public import bindbc.assimp;
             //immutable char* str = toStringz("path\to\file");  // or dStr.toStringz
 
             // 1. Diffuse maps
-            Texture[] diffuseMaps = this.loadMaterialTextures(material, aiTextureType.DIFFUSE, "texture_diffuse");
+            Texture[] diffuseMaps = this.loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
             //textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
             textures ~= diffuseMaps;
 
             // 2. Specular maps
-            Texture[] specularMaps = this.loadMaterialTextures(material, aiTextureType.SPECULAR, "texture_specular");
+            Texture[] specularMaps = this.loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
             //textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
             textures ~= specularMaps;
 
             // 3. Normal maps
-            Texture[] normalMaps = this.loadMaterialTextures(material, aiTextureType.HEIGHT, "texture_normal");
+            Texture[] normalMaps = this.loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
             //textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
             textures ~= normalMaps;
 
             // 4. Height maps
-            Texture[] heightMaps = this.loadMaterialTextures(material, aiTextureType.AMBIENT, "texture_height");
+            Texture[] heightMaps = this.loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
             //textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
             textures ~= heightMaps;
         }

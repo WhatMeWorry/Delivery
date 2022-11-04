@@ -8,7 +8,6 @@ import std.math;
 import std.algorithm.iteration;  // sum
 import std.ascii;                // newline
 import std.conv;                 // to
-import bindbc.opengl;  // GL_FALSE
 
 
 
@@ -23,7 +22,7 @@ glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * GLfloat.sizeof, cast(const(v
 glEnableVertexAttribArray(2);
 +/
 
-string defineVertexLayout(T)(T[] arr, bool normalization = GL_FALSE)
+string defineVertexLayout(T)(T[] arr, bool normalization = false)
 {
     auto s = sum(arr);
     auto offset = 0;

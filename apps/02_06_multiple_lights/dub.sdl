@@ -16,7 +16,7 @@ versions "GLFW_33"
 dependency "gl3n"             version="~>1.4.1"
 dependency "bindbc-freeimage" version="~>1.0.2" 
 versions "FI_317"
-dependency "bindbc-assimp"    version="~>0.0.1"  // ..\common\mesh.d(9,8): Error: module assimp in file 'bindbc\assimp.d' cannot be read
+dependency "derelict-assimp3" version="~>1.3.0"
 
 // If common is not an independent project (it has no dub configuration) 
 // then you can use `sourcePaths` (or `sourceFiles`) in the dub configuration 

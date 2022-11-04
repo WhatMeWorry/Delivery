@@ -6,9 +6,9 @@ module mesh;
 
 import bindbc.opengl;  // without - Error: undefined identifier glXXXXX and GL_XXXXX
 
-import bindbc.assimp : aiString;  // needed for aiString
+//import bindbc.assimp : aiString;  // needed for aiString
  
-//public import derelict.assimp3.assimp : aiString;  // needed for aiString
+public import derelict.assimp3.assimp : aiString;  // needed for aiString
 
 import shaders : Shader;  // without - Error: undefined identifier Shader
 

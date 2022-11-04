@@ -1,4 +1,4 @@
-name "04_09_geometry_shader"
+name "04_10_instancing"
 description "A minimal D application."
 authors "kheaser"
 copyright "Copyright © 2018, kheaser"
@@ -16,7 +16,7 @@ versions "GLFW_33"
 dependency "gl3n"             version="~>1.4.1"
 dependency "bindbc-freeimage" version="~>1.0.2" 
 versions "FI_317"
-dependency "bindbc-assimp"    version="~>0.0.1"
+dependency "derelict-assimp3" version="~>1.3.0"
 
 
 

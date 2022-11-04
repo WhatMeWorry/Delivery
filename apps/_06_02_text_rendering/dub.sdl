@@ -1,4 +1,4 @@
-name "03_01_model_loading"
+name "06_02_text_rendering"
 description "A minimal D application."
 authors "kheaser"
 copyright "Copyright © 2017, kheaser"
@@ -16,9 +16,12 @@ versions "GLFW_33"
 dependency "gl3n"             version="~>1.4.1"
 dependency "bindbc-freeimage" version="~>1.0.2" 
 versions "FI_317"
-dependency "bindbc-assimp"    version="~>0.0.1"
+dependency "derelict-assimp3" version="~>1.3.0"
+dependency "bindbc-freetype"  version="~>1.0.3"
+versions "FT_210"
 
 
+sourceFiles "../common/camera.d"
 sourceFiles "../common/event_handler.d" 
 sourceFiles "../common/shaders.d" 
 sourceFiles "../common/mytoolbox.d"
@@ -30,8 +33,11 @@ sourceFiles "../common/vertex_data.d"
 sourceFiles "../common/timer.d"
 sourceFiles "../common/model.d"
 sourceFiles "../common/mesh.d"
+sourceFiles "../common/freetypefuncs.d"
+
 
 sourceFiles "../dynamic_libs/glfw"      // without - Error: undefined identifier load_GLFW_Library
 sourceFiles "../dynamic_libs/opengl"    // without - Error: undefined identifier load_openGL_Library
 sourceFiles "../dynamic_libs/freeimage" // without - Error: undefined identifier load_FreeImage_Library
 sourceFiles "../dynamic_libs/assimp"
+sourceFiles "../dynamic_libs/freetype"

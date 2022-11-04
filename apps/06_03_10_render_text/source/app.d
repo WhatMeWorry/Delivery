@@ -130,8 +130,8 @@ void main(string[] argv)
 
     // Start Game within Menu State
     breakout.state = GameState.GAME_ACTIVE;
-
-    initTextRenderingSystem(textRenderSys);
+                                           // relative to this file's location
+    initTextRenderingSystem(textRenderSys, "./../../fonts/ocraext.ttf" );  // "../fonts/ocraext.ttf"
 
     while (!glfwWindowShouldClose(winMain))    // Loop until the user closes the window
     {     
