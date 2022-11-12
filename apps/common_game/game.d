@@ -32,6 +32,9 @@ import game_object     : GameObject;        // GameObject
 import particles       : ParticleGenerator; // ParticleGenerator
 import post_processor  : PostProcessor;     // PostProcessor
 import game_level      : GameLevel;         //
+import power_ups       : PowerUp;
+import text_renderer   : TextRenderer; 
+import sound           : playSound;
 
 import shader_breakout : ShaderBreakout; 
 import texture_2d : Texture2D;
@@ -136,8 +139,9 @@ public:
     static if (__traits(compiles, screenText) && screenText)
     {
     GLuint  lives;
+    TextRenderer textRend;
     }
-
+	
     // Constructor/Destructor
     this(GLuint width, GLuint height)
     {
@@ -379,7 +383,7 @@ public:
 
 
     // Initialize game state (load all shaders/textures/levels)
-    void initGame()
+    void initGame(GLFWwindow* winMain)
     {
         resource_manager.ResMgr.loadShader("source/VertexShader.glsl", 
                                            "source/FragmentShader.glsl", 
@@ -516,9 +520,13 @@ public:
         // Renderer = new SpriteRenderer(ResourceManager::GetShader("sprite"));
 
         renderer = new SpriteRenderer(resource_manager.ResMgr.getShader("sprite"));
+		
+		writeln("After  renderer = new SpriteRenderer");
 
         static if (__traits(compiles, particulate) && particulate)
         {
+		        writeln("Before  partGen = new ParticleGenerator");
+
         partGen = new ParticleGenerator(resource_manager.ResMgr.getShader("particle"), 
                                         resource_manager.ResMgr.getTexture("particle"), 
                                         500);
@@ -533,7 +541,13 @@ public:
 
 
         int pixelWidth, pixelHeight;
+        writeln("winMain = ", winMain);
+        writeln("Before  glfwGetFramebufferSize");
+		
         glfwGetFramebufferSize(winMain, &pixelWidth, &pixelHeight); 
+		
+		writeln("pixelWidth x pixelHeight = ", pixelWidth, " x ", pixelHeight);
+		writeln("Before  postProc = new PostProcessor");
 
         postProc = new PostProcessor(resource_manager.ResMgr.getShader("effects"),
                                      pixelWidth, pixelHeight);  

@@ -23,48 +23,7 @@ dependency "bindbc-sdl"       version="~>1.2.2"
 versions "SDL_202"
 versions "BindSDL_Mixer" 
 
-/*
-sourceFiles "../common/camera.d"
-sourceFiles "../common/event_handler.d" 
-sourceFiles "../common/shaders.d" 
-sourceFiles "../common/mytoolbox.d"
-sourceFiles "../common/cameraModule.d"
-sourceFiles "../common/projectionfuncs.d"
-sourceFiles "../common/monitor.d"
-sourceFiles "../common/texturefuncs.d"
-sourceFiles "../common/vertex_data.d"
-sourceFiles "../common/timer.d"
-sourceFiles "../common/model.d"
-sourceFiles "../common/mesh.d"
-sourceFiles "../common/freetypefuncs.d"
-*/
 
 sourcePaths "../common"
-
-/*
-sourceFiles "../common_game/game.d"
-sourceFiles "../common_game/sprite_renderer.d" // without - Error: undefined identifier SpriteRenderer
-sourceFiles "../common_game/text_renderer.d"
-sourceFiles "../common_game/texture_2d.d"
-sourceFiles "../common_game/shader_breakout.d"
-sourceFiles "../common_game/ball_object.d"     // BallObject
-sourceFiles "../common_game/game_object.d"     // GameObject
-sourceFiles "../common_game/particles.d"       // ParticleGenerator
-sourceFiles "../common_game/post_processor.d"  // PostProcessor
-sourceFiles "../common_game/game_level.d"      // GameLevel
-sourceFiles "../common_game/resource_manager.d"
-sourceFiles "../common_game/sound.d"
-*/
 sourcePaths "../common_game"
-
-/*
-sourceFiles "../dynamic_libs/glfw"      // without - Error: undefined identifier load_GLFW_Library
-sourceFiles "../dynamic_libs/opengl"    // without - Error: undefined identifier load_openGL_Library
-sourceFiles "../dynamic_libs/freeimage" // without - Error: undefined identifier load_FreeImage_Library
-sourceFiles "../dynamic_libs/assimp"
-sourceFiles "../dynamic_libs/freetype"
-sourceFiles "../dynamic_libs/sdl"
-sourceFiles "../dynamic_libs/sdlmixer"
-*/
-
 sourcePaths "../dynamic_libs"

@@ -23,6 +23,7 @@ import freetypefuncs;
 
 import resource_manager;
 import texture_2d;
+import sound;
 
 import game; // without - Error:  undefined identifier Game
 
@@ -31,7 +32,8 @@ import dynamic_libs.opengl;     // without - Error: undefined identifier load_op
 import dynamic_libs.freeimage;  // without - Error: undefined identifier load_FreeImage_Library
 import dynamic_libs.assimp;
 import dynamic_libs.freetype;
-
+import dynamic_libs.sdl;
+import dynamic_libs.sdlmixer;
 
 bool[1024] keys;
 
@@ -106,6 +108,18 @@ void main(string[] argv)
     load_FreeImage_Library();
     
     load_Assimp_Library();
+		
+    load_SDL_Library();
+
+    load_SDL_Mixer_Library();    
+
+    initAndOpenSoundAndLoadTracks();
+
+    if (isMusicNotPlaying())
+    {
+        playSound("BREAKOUT");
+	}	
+	
 
     winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_08_power_ups", null, null);
 
@@ -140,7 +154,7 @@ void main(string[] argv)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Initialize game
-    breakout.initGame();
+    breakout.initGame(winMain);
 
     // DeltaTime variables
     GLfloat deltaTime = 0.0f;

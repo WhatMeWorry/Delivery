@@ -116,7 +116,7 @@ void main(string[] argv)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Initialize game
-    breakout.initGame();
+    breakout.initGame(winMain);
 
     // DeltaTime variables
     GLfloat deltaTime = 0.0f;

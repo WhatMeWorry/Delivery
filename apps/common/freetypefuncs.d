@@ -16,7 +16,7 @@ import gl3n.linalg;           // vec3
 
 
 import mytoolbox;
-
+import std.file;
 
 // Holds all state information relevant to a character as loaded using FreeType
 struct Glyph 
@@ -431,6 +431,14 @@ void initializeFreeTypeAndFace(ref FT_Library library, ref FT_Face face, string 
     // A face describes a given typeface and style. For example, ‘Times New Roman Regular’ 
     // and ‘Times New Roman Italic’ correspond to two different faces.
 
+    writeln("font file = ", font);
+	if (font.exists)
+	    writeln("FILE EXISTS ");
+	else
+	    writeln(" FILE IS NOT FOUND");
+		
+    writeAndPause("");
+	
     int error = FT_New_Face(library, toStringz(font), 0, &face);  // 0 means success
     if (error)
     {
@@ -441,6 +449,8 @@ void initializeFreeTypeAndFace(ref FT_Library library, ref FT_Face face, string 
         writeAndPause("Unknown file format");        
 
     writeln("font file = ", font);
+	writeln("error = ", error);
     writeAndPause("FT_New_Face succeeded");
+	
 
 }

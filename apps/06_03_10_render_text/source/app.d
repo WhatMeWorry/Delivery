@@ -38,11 +38,12 @@ import dynamic_libs.sdlmixer;
 
 bool[1024] keys;
 
-enum bool particulate = true;
-enum bool effects     = true;
-enum bool powUps      = true;
-enum bool audio       = true;
-enum bool screenText  = true;
+// replaced by globals.d 
+//enum bool particulate = true;
+//enum bool effects     = true;
+//enum bool powUps      = true;
+//enum bool audio       = true;
+//enum bool screenText  = true;
 
 
 extern(C) static void onInternalKeyEvent(GLFWwindow* window, int key, int scancode, int action, int modifier) nothrow
@@ -63,6 +64,9 @@ extern(C) static void onInternalKeyEvent(GLFWwindow* window, int key, int scanco
 TextRenderer textRend;
 
 TextRenderingSystem textRenderSys;  // works
+
+// __gshared int x;
+// __gshared stores the variable in the classic global data segment.
 
 GLFWwindow* winMain;  // need to make global so post_processor can acces winMain;  Kludge.
 
@@ -90,7 +94,11 @@ void main(string[] argv)
     {
         playSound("BREAKOUT");
 	}
+	
+	writeln("**************** AFTER isMusicNotPlaying *********************************");
 
+
+	
     winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_10_render_text", null, null);
 
     glfwMakeContextCurrent(winMain); 
@@ -114,6 +122,7 @@ void main(string[] argv)
 
     int pixelWidth, pixelHeight;
     glfwGetFramebufferSize(winMain, &pixelWidth, &pixelHeight);  
+	writeln("winMain = ", winMain);
     glViewport(0, 0, pixelWidth, pixelHeight);
 
     // Set OpenGL options
@@ -122,7 +131,7 @@ void main(string[] argv)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Initialize game
-    breakout.initGame();
+    breakout.initGame(winMain);
 
     // DeltaTime variables
     GLfloat deltaTime = 0.0f;
@@ -130,8 +139,15 @@ void main(string[] argv)
 
     // Start Game within Menu State
     breakout.state = GameState.GAME_ACTIVE;
+	
+    writeln("**************** BEFORE initTextRenderingSystem***************************************");	
+	
                                            // relative to this file's location
-    initTextRenderingSystem(textRenderSys, "./../../fonts/ocraext.ttf" );  // "../fonts/ocraext.ttf"
+										   
+										   
+    initTextRenderingSystem(textRenderSys, "../fonts/ocraext.ttf" );  // "../fonts/ocraext.ttf"
+	
+	writeln("****************** AFTER initTextRenderingSystem ************************");
 
     while (!glfwWindowShouldClose(winMain))    // Loop until the user closes the window
     {     

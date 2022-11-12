@@ -278,6 +278,7 @@ void loadSound(ref Track track)
  
 void playSound(string str)
 {
+    writeln("In playSound with str = ", str);
     Track track = tracks[str];   
     writeln("inside playSound track.ptr = ", track.ptr);	
     if (track.purpose == Sound.MUSIC)

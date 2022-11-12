@@ -10,11 +10,12 @@ public import animal.dog;
 public import animal.horse;
 */
 
+public import dynamic_libs.assimp;
 public import dynamic_libs.freeimage;
 public import dynamic_libs.freetype;
 public import dynamic_libs.glfw;
 public import dynamic_libs.opengl;
 public import dynamic_libs.sdl;
 public import dynamic_libs.sdlmixer;
-public import dynamic_libs.assimp;
+
 
