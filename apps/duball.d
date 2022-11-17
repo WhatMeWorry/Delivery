@@ -202,7 +202,9 @@ auto findExecutable(string exec)
     version(linux)
         string command = "whereis ";  // Linux uses whereis
     else version(Windows)
-        string command = "where ";    // Windows cmd shell uses where - does not work with Powershell
+    {
+        string command = `where /R c:\ `;    // Windows cmd shell uses where - does not work with Powershell		
+    }
     else version(OSX)
         string command = "which ";    // Mac uses which
 
@@ -256,16 +258,13 @@ void main(char[][] args)
     // Check that dmd is installed on this system 
 	
     auto found = findExecutable("dmd");
-    //writeln("\n", "dmd", " was found at: ", found.output);  
+    writeln("\n", "dmd", " was found at: ", found.output);  
 		
     // Check that dub is installed on this system
 
-    found = findExecutable("dub");
+    //found = findExecutable("dub");
     //writeln("\n", "dub", " was found at: ", found.output);      
 
-    //string envPath = environment["PATH"];  // get the environment variable PATH.
-
-    //writeln(" The environment variable $PATH on this machine is: ", envPath);
 
     //auto paths = splitUpPaths(envPath);
 
@@ -334,7 +333,7 @@ void main(char[][] args)
     exists in both the parent's environment and in env, the latter takes precedence.
     +/
 	
-	string absolutePath = currentDirectory ~ `\..\..\windows\compilers_and_utilities\dub`;
+	string absolutePath = currentDirectory ~ `\..\..\windows\compilers_and_utilities\dmd2\windows\bin64\dub.exe`;
 	
 	args[0] = absolutePath.dup;
 	

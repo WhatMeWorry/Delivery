@@ -42,7 +42,8 @@ void main(char[][] args)
 				// the --compiler argument can either be  path\to\compiler\<compiler> or just 
 				// <compiler> where the path is defined in the PATH environment variable
 				
-				string compiler = "dmd";  // gcc or ldc
+				//string compiler = "dmd";  // gcc or ldc
+                string compiler = `..\..\windows\compilers_and_utilities\dmd2\windows\bin64\dmd`;				
                 auto pid = spawnShell(`..\duball.exe run --compiler="` ~ compiler ~ `" --arch=x86_64 --force`);				
             } 
             else  // OSX or Linux

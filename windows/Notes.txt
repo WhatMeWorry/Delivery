@@ -19,3 +19,12 @@ C:\Users\kheaser\OneDrive - Ela Area Public Library\Documents\GitHub\Delivery\wi
 
 Note: the .exe files (dmd.exe, dub.exe, etc.) won't stored github unless the ignore file allows it.
 
+
+where /R c:\ dmd.exe
+c:\D\dmd2\windows\bin\dmd.exe
+c:\D\dmd2\windows\bin64\dmd.exe
+c:\Users\kheaser\OneDrive - Ela Area Public Library\D\dmd2\windows\bin\dmd.exe
+c:\Users\kheaser\OneDrive - Ela Area Public Library\D\dmd2\windows\bin64\dmd.exe
+c:\Users\kheaser\OneDrive - Ela Area Public Library\Documents\GitHub\Delivery\windows\compilers_and_utilities\dmd2\windows\bin\dmd.exe
+c:\Users\kheaser\OneDrive - Ela Area Public Library\Documents\GitHub\Delivery\windows\compilers_and_utilities\dmd2\windows\bin64\dmd.exe
+
