@@ -21,7 +21,8 @@
 /apps/*/.gitignore
 
 # Executables  (Linux and Mac OS handled by more generic /apps/*/bin/*)
-*.exe
+# want to store the dmd.exe and dub.exe etc in \windows\compilers_and_utilities
+# *.exe
 
 # DUB
 .dub

@@ -1,0 +1,21 @@
+
+
+Downloaded D Lang dmd Windows installer
+
+
+// dmd-2.101.0.exe            : to install used admin
+C:\Users\kheaser\OneDrive - Ela Area Public Library\Downloads>dmd-2.101.0.exe /f
+
+// where /R c:\ dmd.exe       : to find where the dmd was default installed
+C:\Users\kheaser\OneDrive - Ela Area Public Library\Documents\GitHub\Delivery\apps>where /R c:\ dmd.exe
+c:\D\dmd2\windows\bin\dmd.exe
+c:\D\dmd2\windows\bin64\dmd.exe         (dmd.exe, dub.exe, lld-link.exe)
+c:\Users\kheaser\OneDrive - Ela Area Public Library\D\dmd2\windows\bin\dmd.exe
+c:\Users\kheaser\OneDrive - Ela Area Public Library\D\dmd2\windows\bin64\dmd.exe
+
+
+copy c:\D\dmd2 to the github Delivery repository \windows\compilers_and_utilities 
+C:\Users\kheaser\OneDrive - Ela Area Public Library\Documents\GitHub\Delivery\windows\compilers_and_utilities\dmd2
+
+Note: the .exe files (dmd.exe, dub.exe, etc.) won't stored github unless the ignore file allows it.
+
