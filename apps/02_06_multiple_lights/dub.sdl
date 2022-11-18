@@ -1,0 +1,31 @@
+name "02_06_multiple_lights"
+description "A minimal D application."
+authors "kheaser"
+copyright "Copyright © 2017, kheaser"
+license "proprietary"
+buildType   "release"
+targetType  "executable"
+mainSourceFile "/source/app.d"
+targetPath "./bin"
+
+
+dependency "bindbc-opengl"    version="~>1.0.3"
+versions "GL_46"
+dependency "bindbc-glfw"      version="~>1.0.1"
+versions "GLFW_33"
+dependency "gl3n"             version="~>1.4.1"
+dependency "bindbc-freeimage" version="~>1.0.2" 
+versions "FI_317"
+dependency "derelict-assimp3" version="~>1.3.0"
+dependency "bindbc-freetype"  version="~>1.0.3"
+versions "FT_210"
+dependency "bindbc-sdl"       version="~>1.2.2"
+versions "SDL_202"
+versions "BindSDL_Mixer"
+
+// If common is not an independent project (it has no dub configuration) 
+// then you can use `sourcePaths` (or `sourceFiles`) in the dub configuration 
+// of any projects that need it.
+
+sourcePaths "../common"
+sourcePaths "../dynamic_libs"
