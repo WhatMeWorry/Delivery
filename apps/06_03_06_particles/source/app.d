@@ -35,14 +35,10 @@ import dynamic_libs.freetype;
 import dynamic_libs.sdl;
 import dynamic_libs.sdlmixer;
 
+import globals;
+
+
 bool[1024] keys;
-
-enum bool particulate = true;
-enum bool effects     = true;
-enum bool powUps      = true;
-enum bool audio       = true;
-enum bool screenText  = false;
-
 
 extern(C) static void onInternalKeyEvent(GLFWwindow* window, int key, int scancode, int action, int modifier) nothrow
 {
@@ -57,12 +53,10 @@ extern(C) static void onInternalKeyEvent(GLFWwindow* window, int key, int scanco
     }
 }
 
-GLFWwindow* winMain;  // need to make global so post_processor can acces winMain;  Kludge.
-
 void main(string[] argv)
 {
     Game breakout = new Game(800, 600);  // originally (800, 600)  // (1600, 1200) for 4K monitors
- 
+
     load_GLFW_Library();
 
     load_openGL_Library(); 
@@ -77,33 +71,25 @@ void main(string[] argv)
 
     load_SDL_Mixer_Library();    
 
-    initAndOpenSoundAndLoadTracks();
+    initAndOpenSoundAndLoadTracks();	
 
-    if (isMusicNotPlaying())
-    {
-        playSound("BREAKOUT");
-	}
-
-
-    winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_09_audio", null, null);
-
+    auto winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_06_particles", null, null);
 
     glfwMakeContextCurrent(winMain); 
 
+    showMonitorVideoMode();
 
     // you must set the callbacks after creating the window
           glfwSetCursorPosCallback(winMain, &onCursorPosition);
         glfwSetMouseButtonCallback(winMain, &onMouseButton);
     glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
-        glfwSetCursorEnterCallback(winMain, &onCursorEnterLeave);
-
-    // you must set the callbacks after creating the window
-    glfwSetKeyCallback(winMain, &onInternalKeyEvent);
+        glfwSetCursorEnterCallback(winMain, &onCursorEnterLeave);         
+                glfwSetKeyCallback(winMain, &onInternalKeyEvent);
 
     // GLFW Options
     glfwSetInputMode(winMain, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
-
+    // Define the viewport dimensions
     int pixelWidth, pixelHeight;
     glfwGetFramebufferSize(winMain, &pixelWidth, &pixelHeight);  
     glViewport(0, 0, pixelWidth, pixelHeight);
@@ -123,12 +109,6 @@ void main(string[] argv)
     // Start Game within Menu State
     breakout.state = GameState.GAME_ACTIVE;
 
-    // how to create and apply textures to 3D geometry data...
-    int x = 0;
-    float r = 0.001;
-
-    //Texture2D tex = resource_manager.ResMgr.getTexture("face");
-
     while (!glfwWindowShouldClose(winMain))    // Loop until the user closes the window
     {     
         // Calculate delta time
@@ -137,7 +117,7 @@ void main(string[] argv)
         lastFrame = currentFrame;
         glfwPollEvents();
 
-        handleEvent(winMain);
+        handleEvent(winMain);  
 
         deltaTime = 0.001f;
         // Manage user input
@@ -148,7 +128,7 @@ void main(string[] argv)
         breakout.update_04(deltaTime);
 
         // Render
-        //glClearColor(0.1f, 0.3f, 0.4f, 1.0f);  // originally
+ 
         glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
@@ -158,5 +138,4 @@ void main(string[] argv)
     }
     return;
 }
-
 

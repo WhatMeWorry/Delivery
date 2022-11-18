@@ -1,4 +1,4 @@
-name "06_03_08_power_ups"
+name "06_03_05_03_collide_resolution"
 description "A minimal D application."
 authors "kheaser"
 copyright "Copyright © 2017, kheaser"
@@ -7,7 +7,6 @@ buildType   "release"
 targetType  "executable"
 mainSourceFile "/source/app.d"
 targetPath "./bin"
-
 
 dependency "bindbc-opengl"    version="~>1.0.3"
 versions "GL_46"

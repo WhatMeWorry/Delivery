@@ -1,4 +1,3 @@
-
 module app;
 
 
@@ -23,7 +22,6 @@ import freetypefuncs;
 
 import resource_manager;
 import texture_2d;
-import sound;
 
 import game; // without - Error:  undefined identifier Game
 
@@ -32,17 +30,16 @@ import dynamic_libs.opengl;     // without - Error: undefined identifier load_op
 import dynamic_libs.freeimage;  // without - Error: undefined identifier load_FreeImage_Library
 import dynamic_libs.assimp;
 import dynamic_libs.freetype;
-import dynamic_libs.sdl;
-import dynamic_libs.sdlmixer;
 
-bool[1024] keys;
 
-enum bool particulate = true;
-enum bool effects     = true;
-enum bool powUps      = true;
-enum bool audio       = true;
+enum bool particulate = false;
+enum bool effects     = false;
+enum bool powUps      = false;
+enum bool audio       = false;
 enum bool screenText  = false;
 
+
+bool[1024] keys;
 
 extern(C) static void onInternalKeyEvent(GLFWwindow* window, int key, int scancode, int action, int modifier) nothrow
 {
@@ -51,18 +48,16 @@ extern(C) static void onInternalKeyEvent(GLFWwindow* window, int key, int scanco
     if (key >= 0 && key < 1024)
     {
         if (action == GLFW_PRESS)
-            Game.keys[key] = true;
+            keys[key] = true;
         else if (action == GLFW_RELEASE)
-            Game.keys[key] = false;
+            keys[key] = false;
     }
 }
 
-GLFWwindow* winMain;  // need to make global so post_processor can acces winMain;  Kludge.
-
 void main(string[] argv)
 {
-    Game breakout = new Game(800, 600);  // originally (800, 600)  // (1600, 1200) for 4K monitors
- 
+    Game breakout = new Game(800, 600);
+
     load_GLFW_Library();
 
     load_openGL_Library(); 
@@ -73,29 +68,17 @@ void main(string[] argv)
     
     load_Assimp_Library();
 
-    load_SDL_Library();
-
-    load_SDL_Mixer_Library();    
-
-    initAndOpenSoundAndLoadTracks();
-
-    if (isMusicNotPlaying())
-    {
-        playSound("BREAKOUT");
-	}
-
-
-    winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_09_audio", null, null);
-
+    auto winMain = glfwCreateWindow(breakout.width, breakout.height, "06_03_04_levels", null, null);
 
     glfwMakeContextCurrent(winMain); 
 
-
-    // you must set the callbacks after creating the window
+   // you must set the callbacks after creating the window
+ 
+                //glfwSetKeyCallback(winMain, &onKeyEvent);
           glfwSetCursorPosCallback(winMain, &onCursorPosition);
         glfwSetMouseButtonCallback(winMain, &onMouseButton);
     glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
-        glfwSetCursorEnterCallback(winMain, &onCursorEnterLeave);
+        glfwSetCursorEnterCallback(winMain, &onCursorEnterLeave);        
 
     // you must set the callbacks after creating the window
     glfwSetKeyCallback(winMain, &onInternalKeyEvent);
@@ -103,15 +86,20 @@ void main(string[] argv)
     // GLFW Options
     glfwSetInputMode(winMain, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
+    // Define the viewport dimensions
+    //glViewport(0, 0, breakout.width, breakout.height);  // replaced with glfwGetFramebufferSize()
+                                                          // for Mac OS.
 
-    int pixelWidth, pixelHeight;
-    glfwGetFramebufferSize(winMain, &pixelWidth, &pixelHeight);  
-    glViewport(0, 0, pixelWidth, pixelHeight);
+    int w;
+    int h;
+    glfwGetFramebufferSize(winMain, &w, &h);
+    glViewport(0, 0, w, h);
 
     // Set OpenGL options
     glEnable(GL_CULL_FACE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 
     // Initialize game
     breakout.initGame(winMain);
@@ -137,26 +125,33 @@ void main(string[] argv)
         lastFrame = currentFrame;
         glfwPollEvents();
 
-        handleEvent(winMain);
+        handleEvent(winMain);        
 
         deltaTime = 0.001f;
         // Manage user input
         breakout.processInput(deltaTime);
 
         // Update Game state
-
-        breakout.update_04(deltaTime);
+        breakout.update(deltaTime);
 
         // Render
         //glClearColor(0.1f, 0.3f, 0.4f, 1.0f);  // originally
         glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+
         glClear(GL_COLOR_BUFFER_BIT);
 
-        breakout.renderGameWithParticles();
+        //x =+ 5;  // surprised this compiled
+        x += 1;
+        r += 0.01;   // .005; 
+
+        if (x > 400)
+        {
+            x = 0;
+        }
+
+        breakout.renderGame();
 
         glfwSwapBuffers(winMain);
     }
     return;
 }
-
-

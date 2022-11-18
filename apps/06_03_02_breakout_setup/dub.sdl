@@ -1,4 +1,4 @@
-name "06_03_08_power_ups"
+name "06_03_02_breakout_setup"
 description "A minimal D application."
 authors "kheaser"
 copyright "Copyright © 2017, kheaser"
@@ -21,9 +21,9 @@ dependency "bindbc-freetype"  version="~>1.0.3"
 versions "FT_210"
 dependency "bindbc-sdl"       version="~>1.2.2"
 versions "SDL_202"
-versions "BindSDL_Mixer" 
-
+versions "BindSDL_Mixer"
 
 sourcePaths "../common"
 sourcePaths "../common_game"
 sourcePaths "../dynamic_libs"
+
