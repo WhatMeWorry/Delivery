@@ -57,10 +57,10 @@ mat4 orthographicFunc(float left, float right, float bottom, float top, float ne
                    0,     0,      0,      1);
     +/
 
-    writeln("dx = ", dx);
-    writeln("2/dx = ", 2/dx);
-    writeln("dy = ", dy);
-    writeln("2/dy = ", 2/dy);
+    // writeln("dx = ", dx);
+    // writeln("2/dx = ", 2/dx);
+    // writeln("dy = ", dy);
+    // writeln("2/dy = ", 2/dy);
 
     mat4 cm;  // column major
 
