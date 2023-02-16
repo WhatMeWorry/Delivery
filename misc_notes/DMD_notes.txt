@@ -1,0 +1,262 @@
+
+From dlang.org Don't click on "Download Windows Installer. Instead, click on "Other Downloads"
+
+In DMD column, select Download
+
+Windows > 7z > dmd.x.xxx.x.windows.7z > Show in folder
+
+Right click on dmd.x.xxx.x.windows > 7-Zip > Extract to "dmd.x.xxx.x.windows"
+
+delete the 7z Archive folder of dmd.x.xxx.x.windows
+
+(file.d)  [directory]
+
+C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2
+C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\html
+C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\samples
+C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\src
+C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\src\dmd
+C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\src\druntime  (object.d)
+C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\src\druntime\core [gc, internal, stdc, sync, thread ...]
+                                                           
+C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\src\druntime\etc  [linux]
+C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\src\phobos
+
+C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\src\phobos [etc, std, test, tools]
+C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\src\phobos\std  (stdio.d, string.d, 
+                                                                  [algorithm, container, datetime, format, math, rante, regex, uni ...]
+C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows
+
+C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64 (dmd.exe, dub.exe, lld-link.exe, mscvr120.dll, sc.ini)
+
+[Environment]
+DFLAGS="-I%@P%\..\..\src\phobos"  "-I%@P%\..\..\src\druntime\import"
+
+        phobos library source code      druntime to object.d and druntime\import\core     
+
+C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\lib64 (curl.lib, phobos64.lib)
+
+
+====================================================================================================================
+
+From another directory, lets say  C:\Users\Admin\Desktop
+
+try to run dmd.exe
+
+C:\Users\Admin\Desktop>dmd
+'dmd' is not recognized as an internal or external command,
+operable program or batch file.
+
+C:\Users\Admin\Desktop>C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\dmd
+DMD64 D Compiler v2.102.1-dirty
+Copyright (C) 1999-2023 by The D Language Foundation, All Rights Reserved written by Walter Bright
+    output truncated 
+	
+	
+
+================================================================
+
+hello.d
+----------------------
+void main()
+{
+    int i = 3;
+}
+----------------------
+
+
+C:\Users\Admin\Desktop>C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\dmd hello.d -v
+
+predefs   DigitalMars LittleEndian D_Version2 all D_SIMD Windows Win64 CRuntime_Microsoft CppRuntime_Microsoft D_InlineAsm_X86_64 X86_64 D_LP64 assert D_PreConditions D_PostConditions D_Invariants D_ModuleInfo D_Exceptions D_TypeInfo D_HardFloat
+binary    C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\dmd
+version   v2.102.1-dirty
+config    C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\sc.ini
+DFLAGS    -IC:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos -IC:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import
+parse     hello
+importall hello                                                                                                       (DRUNTIME) 22 .d files
+import    object                            (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\object.d)
+import    core.internal.hash                (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\hash.d)
+import    core.internal.traits              (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\traits.d)
+import    core.internal.entrypoint          (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\entrypoint.d)
+import    core.internal.array.appending     (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\array\appending.d)
+import    core.internal.array.comparison    (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\array\comparison.d)
+import    core.internal.array.equality      (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\array\equality.d)
+import    core.internal.array.casting       (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\array\casting.d)
+import    core.internal.array.concatenation (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\array\concatenation.d)
+import    core.internal.array.construction  (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\array\construction.d)
+import    core.internal.array.arrayassign   (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\array\arrayassign.d)
+import    core.internal.array.capacity      (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\array\capacity.d)
+import    core.internal.dassert             (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\dassert.d)
+import    core.atomic                       (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\atomic.d)
+import    core.internal.attributes          (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\attributes.d)
+import    core.internal.atomic              (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\atomic.d)
+import    core.internal.destruction         (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\destruction.d)
+import    core.internal.moving              (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\moving.d)
+import    core.internal.postblit            (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\postblit.d)
+import    core.internal.switch_             (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\switch_.d)
+import    core.lifetime                     (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\lifetime.d)
+import    core.builtins                     (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\builtins.d)
+semantic  hello
+entry     main          hello.d
+semantic2 hello
+semantic3 hello
+code      hello
+function  D main
+function  hello._d_cmain!().main
+C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\lld-link.exe /NOLOGO "hello.obj"   /DEFAULTLIB:phobos64  /LIBPATH:"C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\lib64\mingw"
+
+
+
+hello.d
+----------------------
+import std.stdio : writeln;
+void main()
+{
+    int i = 3;
+    writeln("Hello");
+}
+----------------------
+
+C:\Users\Admin\Desktop>C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\dmd hello.d -v
+
+C:\Users\Admin\Desktop>C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\dmd hello.d -v
+predefs   DigitalMars LittleEndian D_Version2 all D_SIMD Windows Win64 CRuntime_Microsoft CppRuntime_Microsoft D_InlineAsm_X86_64 X86_64 D_LP64 assert D_PreConditions D_PostConditions D_Invariants D_ModuleInfo D_Exceptions D_TypeInfo D_HardFloat
+binary    C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\dmd
+version   v2.102.1-dirty
+config    C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\sc.ini
+DFLAGS    -IC:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos -IC:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import
+parse     hello
+importall hello                                                                                                     (DRUNTIME) 44 .d files
+                                                                                                                    (PHOBOS)   29 .d files                                      
+import    std.stdio                         (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\stdio.d)
+import    core.stdc.stddef                  (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\stdc\stddef.d)
+import    object                            (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\object.d)
+import    core.internal.hash                (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\hash.d)
+import    core.internal.traits              (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\traits.d)
+import    core.internal.entrypoint          (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\entrypoint.d)
+import    core.internal.array.appending     (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\array\appending.d)
+import    core.internal.array.comparison    (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\array\comparison.d)
+import    core.internal.array.equality      (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\array\equality.d)
+import    core.internal.array.casting       (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\array\casting.d)
+import    core.internal.array.concatenation (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\array\concatenation.d)
+import    core.internal.array.construction  (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\array\construction.d)
+import    core.internal.array.arrayassign   (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\array\arrayassign.d)
+import    core.internal.array.capacity      (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\array\capacity.d)
+import    core.internal.dassert             (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\dassert.d)
+import    core.atomic                       (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\atomic.d)
+import    core.internal.attributes          (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\attributes.d)
+import    core.internal.atomic              (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\atomic.d)
+import    core.internal.destruction         (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\destruction.d)
+import    core.internal.moving              (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\moving.d)
+import    core.internal.postblit            (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\postblit.d)
+import    core.internal.switch_             (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\switch_.d)
+import    core.lifetime                     (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\lifetime.d)
+import    core.builtins                     (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\builtins.d)
+import    std.algorithm.mutation            (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\algorithm\mutation.d)
+import    std.traits                        (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\traits.d)
+import    std.meta                          (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\meta.d)
+import    std.range.primitives              (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\range\primitives.d)
+import    std.typecons                      (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\typecons.d)
+import    std.format.spec                   (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\format\spec.d)
+import    std.format.write                  (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\format\write.d)
+import    std.format.internal.write         (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\format\internal\write.d)
+import    std.internal.attributes           (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\internal\attributes.d)
+import    std.range                         (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\range\package.d)
+import    std.array                         (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\array.d)
+import    std.functional                    (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\functional.d)
+import    std.conv                          (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\conv.d)
+import    std.ascii                         (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\ascii.d)
+import    std.range.interfaces              (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\range\interfaces.d)
+import    core.sys.windows.basetsd          (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\sys\windows\basetsd.d)
+import    core.stdc.stdio                   (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\stdc\stdio.d)
+import    core.stdc.stdint                  (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\stdc\stdint.d)
+import    core.stdc.config                  (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\stdc\config.d)
+import    core.stdc.signal                  (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\stdc\signal.d)
+import    core.stdc.wchar_                  (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\stdc\wchar_.d)
+import    core.stdc.stdarg                  (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\stdc\stdarg.d)
+import    core.stdc.time                    (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\stdc\time.d)
+import    core.sys.windows.stdc.time        (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\sys\windows\stdc\time.d)
+semantic  hello
+import    std.exception                     (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\exception.d)
+import    core.sys.windows.winbase          (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\sys\windows\winbase.d)
+import    core.sys.windows.windef           (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\sys\windows\windef.d)
+import    core.sys.windows.winnt            (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\sys\windows\winnt.d)
+import    core.sys.windows.winerror         (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\sys\windows\winerror.d)
+import    core.sys.windows.w32api           (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\sys\windows\w32api.d)
+import    core.sys.windows.basetyps         (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\sys\windows\basetyps.d)
+import    core.sys.windows.winver           (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\sys\windows\winver.d)
+import    core.sys.windows.sdkddkver        (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\sys\windows\sdkddkver.d)
+import    std.windows.syserror              (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\windows\syserror.d)
+import    std.windows.charset               (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\windows\charset.d)
+import    core.sys.windows.winnls           (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\sys\windows\winnls.d)
+import    std.string                        (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\string.d)
+import    std.format                        (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\format\package.d)
+import    std.format.read                   (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\format\read.d)
+import    std.format.internal.read          (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\format\internal\read.d)
+import    std.uni                           (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\uni\package.d)
+import    std.internal.unicode_tables       (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\internal\unicode_tables.d)
+import    std.algorithm.comparison          (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\algorithm\comparison.d)
+import    std.algorithm.searching           (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\algorithm\searching.d)
+import    std.internal.cstring              (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\internal\cstring.d)
+library   kernel32
+library   version
+library   kernel32
+import    core.memory                       (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\memory.d)
+import    core.stdc.errno                   (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\stdc\errno.d)
+import    core.time                         (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\time.d)
+import    core.exception                    (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\exception.d)
+import    core.internal.string              (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\string.d)
+import    core.stdc.string                  (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\stdc\string.d)
+entry     main          hello.d
+semantic2 hello
+semantic3 hello
+import    std.utf                           (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos\std\utf.d)
+import    core.internal.array.duplication   (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\array\duplication.d)
+import    core.internal.array.utils         (C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import\core\internal\array\utils.d)
+code      hello
+function  D main
+function  hello._d_cmain!().main
+function  std.stdio.writeln!string.writeln
+function  std.stdio.File.LockingTextWriter.put!string.put
+function  std.stdio.File.LockingTextWriter.put!string.put.__dgliteral3
+function  std.stdio.trustedFwrite!char.trustedFwrite
+function  std.exception.enforce!(ErrnoException).enforce!int.enforce
+function  std.exception.bailOut!(ErrnoException).bailOut
+function  object.idup!(const(char)).idup
+function  core.internal.array.duplication._dup!(const(char), immutable(char))._dup
+function  core.internal.array.duplication._dupCtfe!(const(char), immutable(char))._dupCtfe
+function  core.internal.array.appending._d_arrayappendcTXImpl!(string, immutable(char))._d_arrayappendcTX
+function  core.internal.array.utils._d_HookTraceImpl!(string, _d_arrayappendcTX, "Cannot append to array if compiling without support for runtime type information!")._d_HookTraceImpl
+function  std.stdio.File.LockingTextWriter.put!(immutable(char)).put
+function  std.range.primitives.empty!(char[]).empty
+function  std.utf.stride!(char[]).stride
+function  std.utf.decodeFront!(Flag.no, char[]).decodeFront
+function  std.utf.decodeFront!(Flag.no, char[]).decodeFront
+function  std.utf.decodeImpl!(true, Flag.no, const(char)[]).decodeImpl
+function  std.utf.decodeImpl!(true, Flag.no, const(char)[]).decodeImpl.invalidUTF
+function  std.utf.decodeImpl!(true, Flag.no, const(char)[]).decodeImpl.outOfBounds
+function  std.utf.decodeImpl!(true, Flag.no, const(char)[]).decodeImpl.exception!(const(char)[]).exception
+function  std.utf.encode!Flag.no.encode
+function  std.utf._utfException!Flag.no._utfException
+function  std.stdio.File.LockingTextWriter.put!char.put
+C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\lld-link.exe /NOLOGO "hello.obj"   /DEFAULTLIB:phobos64  /LIBPATH:"C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\lib64\mingw"
+
+================================================================
+
+running the executable:
+
+C:\Users\Admin\Desktop>hello.exe
+
+(NOTHING OUTPUT)
+
+C:\Users\Admin\Desktop>copy C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\msvcr120.dll .
+        1 file(s) copied.
+		
+C:\Users\Admin\Desktop>hello.exe
+Hello		  (Works! with msvcr120.dll)
+
+
+
+
+
+
