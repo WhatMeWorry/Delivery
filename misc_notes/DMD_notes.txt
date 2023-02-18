@@ -249,11 +249,27 @@ C:\Users\Admin\Desktop>hello.exe
 
 (NOTHING OUTPUT)
 
-C:\Users\Admin\Desktop>copy C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\msvcr120.dll .
+C:\Users\Admin\Desktop> COPY  C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\msvcr120.dll .
         1 file(s) copied.
 		
 C:\Users\Admin\Desktop>hello.exe
 Hello		  (Works! with msvcr120.dll)
+
+
+
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+Github Desktop Client (Windows)
+
+Go to:  desktop.github.com
+
+download Windows 64 client.
+
+run GitHubDesktopSetup-x64.exe
+
+
+
 
 
 
