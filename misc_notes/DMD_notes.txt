@@ -258,7 +258,7 @@ Hello		  (Works! with msvcr120.dll)
 
 
 
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX GitHub Client XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 Github Desktop Client (Windows)
 
@@ -272,6 +272,96 @@ run GitHubDesktopSetup-x64.exe
 
 
 
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Download and Unzip Project XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+Go to
+
+https://github.com/WhatMeWorry/Delivery
+
+and 
+
+Code > Download ZIP
+
+The Right Click on Delivery-master.zip > Extract to "Delivery-master\"
+
+C:\Users\Admin\Downloads\Delivery-master\apps
+
+>cd C:\Users\Admin\Downloads\Delivery-master
+
+>cd apps
+
+// Compile and Link runall.d  (Note: the path to the dmd also 
+
+C:\Users\Admin\Downloads\Delivery-master\apps>  C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\dmd -v runall.d
+
+cd ..\..
+
+C:\Users\Admin\Downloads>  C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\dmd -v runall.d
+predefs   DigitalMars LittleEndian D_Version2 all D_SIMD Windows Win64 CRuntime_Microsoft CppRuntime_Microsoft D_InlineAsm_X86_64 X86_64 D_LP64 assert D_PreConditions D_PostConditions D_Invariants D_ModuleInfo D_Exceptions D_TypeInfo D_HardFloat
+binary    C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\dmd
+version   v2.102.1-dirty
+config    C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\sc.ini
+DFLAGS    -IC:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos -IC:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import
+Error: cannot find input file `runall.d`
+import path[0] = C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\phobos
+import path[1] = C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\..\..\src\druntime\import
+
+
+C:\Users\Admin\Downloads>  C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\dmd -v C:path\to\runall.d
+OR                                                 path to dmd executable                                 path to d source being compiled
+C:\Users\Admin\Downloads>  C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\dmd -v C:\Users\Admin\Downloads\Delivery-master\apps\runall.d
+
+
+C:\Users\Admin\Downloads>dir
+
+ Directory of C:\Users\Admin\Downloads
+
+02/18/2023  02:59 PM         1,248,256 runall.exe
+02/18/2023  02:59 PM         2,149,284 runall.obj
+
+
+The output from compiler and linker is the current directory where the dmd command was started!  As shown, this proves the current working 
+directory was C:\Users\Admin\Downloads\ whereas the source .d code was at C:\Users\Admin\Downloads\Delivery-master\apps\
+
+
+-of=filename
+Set output file name to filename in the output directory. The output file can be an object file, executable file, 
+or library file depending on the other switches.
+
+
+
+
+C:\Users\Admin\Downloads>C:\Users\Admin\Downloads\dmd.2.102.1.windows\dmd2\windows\bin64\dmd -m64 C:\Users\Admin\Downloads\Delivery-master\apps\runall.d -of=C:\Users\Admin\Downloads\Delivery-master\apps\runny.exe
+
+C:\Users\Admin\Downloads\Delivery-master\apps>dir runn*
+02/18/2023  03:24 PM         1,248,256 runny.exe
+02/18/2023  03:24 PM         2,149,284 runny.obj
+ 
+C:\Users\Admin\Downloads\Delivery-master\apps>runny.exe
+
+   (SEE NOTHING)
+
+COPY MSVCR120.DLL from bin64 to This directory:
+
+C:\Users\Admin\Downloads\Delivery-master\apps>dir
+
+02/15/2023  05:58 PM           963,240 msvcr120.dll
+02/18/2023  03:24 PM         1,248,256 runny.exe
+02/18/2023  03:24 PM         2,149,284 runny.obj
+
+C:\Users\Admin\Downloads\Delivery-master\apps>runny.exe
+runall.exe is in present working directory: C:\Users\Admin\Downloads\Delivery-master\apps
+Directory: 01_10_walk_around
+present working subdirectory: C:\Users\Admin\Downloads\Delivery-master\apps\01_10_walk_around
+the command that called this program (duball.exe) was: ..\duball.exe
+   ...
+   ...
+   And works!
+   ...
+   ...
+   
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 
 
