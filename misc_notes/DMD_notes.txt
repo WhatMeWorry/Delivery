@@ -370,6 +370,19 @@ Windows searches for the DLL in the following locations in order:
 5) The directories in the Path.
 
 
+
+In a command prompt you can do:
+
+set PATH=C:\somedir;%PATH%
+
+but this only changes it for the command prompt (and any apps launched from the command prompt).\
+
+Display, set, or remove CMD environment variables. Changes made with SET will remain only for the duration of the current CMD session.
+
+setx can edit the system PATH variable (the /m switch) permanently.
+
+The Setx command also retrieves the values of registry keys and writes them to text files. This command provides the only command-line or programmatic way to directly and permanently set system environment values.
+
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 
