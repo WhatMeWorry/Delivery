@@ -360,8 +360,23 @@ the command that called this program (duball.exe) was: ..\duball.exe
    ...
    ...
    
+Question: How to get each C:\Users\Admin\Downloads\Delivery-master\apps\XX_XX_d_project.exe to find the msvcr120.dll?
+
+Windows searches for the DLL in the following locations in order:
+1) The .exe file directory.
+2) The current directory.
+3) The %SystemRoot%\SYSTEM32 directory.
+4) The %SystemRoot% directory.
+5) The directories in the Path.
+
 
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+
+
+
+
 
 
 
