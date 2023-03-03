@@ -12,8 +12,9 @@ module runall;
 import std.file : isDir, getcwd, dirEntries, SpanMode, chdir;
 import std.stdio;
 import std.algorithm.comparison : cmp;
-import std.process : Config, spawnProcess, wait, spawnShell;
+import std.process : Config, spawnProcess, wait, spawnShell, execute;
 import std.regex: regex, matchFirst;
+import core.stdc.stdlib: exit;
 
 void main(char[][] args)
 {
@@ -26,7 +27,7 @@ void main(char[][] args)
     {
         auto m = matchFirst(dir, regex(`^\d\d_`));  // \d\d matches any unicode digit at beginning of directory name
 
-        if (isDir(dir) && !m.empty)   // must be a directory with name begining with: xx_ where x = [0..9]
+        if (isDir(dir) && !m.empty)   // must be a directory with name begining xx_ where x = [0..9]
         {
             writeln("Directory: ", dir);
             string binDir = dir;
@@ -37,14 +38,20 @@ void main(char[][] args)
 			
             version(Windows)  
             {
-                //string compilePath = fixedLocation ~ `\..\windows\compilers_and_utilities\\`;
+                // string compilePath = fixedLocation ~ `\..\windows\compilers_and_utilities\\`;
 				
 				// the --compiler argument can either be  path\to\compiler\<compiler> or just 
 				// <compiler> where the path is defined in the PATH environment variable
 				
-				//string compiler = "dmd";  // gcc or ldc
-                string compiler = `..\..\windows\compilers_and_utilities\dmd2\windows\bin64\dmd`;				
-                auto pid = spawnShell(`..\duball.exe run --compiler="` ~ compiler ~ `" --arch=x86_64 --force`);				
+				// string compiler = "dmd";  // gcc or ldc
+                
+				// import std.datetime.systime;
+                // writeln("timestamp before spawnShell = ", Clock.currTime());  
+				
+                // auto pid = spawnShell(`..\duball.exe run --compiler="` ~ compiler ~ `" --arch=x86_64 --force`);
+				
+                auto pid = spawnShell(`..\duball.exe run --compiler=dmd --arch=x86_64 --force`);	
+                //auto pid = spawnShell(`time /T`);				
             } 
             else  // OSX or Linux
             {
@@ -61,9 +68,24 @@ void main(char[][] args)
             chdir("..");   // go up to the project      
         }
 		
-        string lineIn;
-        writeln("Enter to continue");  
-        readf(" %s\n", &lineIn);    // ← \n at the end
-   
+        //string lineIn;
+        //writeln("Enter to continue");  
+        //readf(" %s\n", &lineIn);    // ← \n at the end
+        // kyle = execute(["pause"]);
+        //auto pid = spawnShell("pause");	
+        //wait(pid);		
+		
+		// https://forum.dlang.org/thread/vkxhtvukjomsnschxain@forum.dlang.org
+		
+		writeln("Press Enter key to continue or Q/q to quit");
+        char c;
+        readf("%c", &c);
+		if ((c == 'Q') || (c == 'q'))
+        {
+            exit(0);	
+        }
+		
+		
+		
     }
 }
