@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <!--
-    Copyright (c) 1999-2022 by the D Language Foundation
+    Copyright (c) 1999-2023 by the D Language Foundation
     All Rights Reserved.
     https://dlang.org/foundation_overview.html
   -->
@@ -40,7 +40,6 @@
 <ul class='expand-content'>    <li><a href='https://dlang.org/blog'>Blog</a></li>
     <li><a href='../orgs-using-d.html'>Orgs using D</a></li>
     <li><a href='https://twitter.com/search?q=%23dlang'>Twitter</a></li>
-    <li><a href='../calendar.html'>Calendar</a></li>
     <li class="menu-divider"><a href='https://forum.dlang.org'>Forums</a></li>
     <li><a href='irc://irc.libera.chat/d'>IRC</a></li>
     <li><a href='https://discord.gg/bMZk9Q4'>Community Discord</a></li>
@@ -75,7 +74,7 @@
     <div id="search-box">        <form method="get" action="https://google.com/search">
             <input type="hidden" id="domains" name="domains" value="dlang.org">
             <input type="hidden" id="sourceid" name="sourceid" value="google-search">
-            <span id="search-query"><input id="q" name="q" placeholder="Search"></span><span id="search-dropdown"><span class="helper">                <select id="sitesearch" name="sitesearch" size="1">
+            <span id="search-query"><input id="q" name="q" placeholder="Google Search"></span><span id="search-dropdown"><span class="helper">                <select id="sitesearch" name="sitesearch" size="1">
                     <option value="dlang.org">Entire Site</option>
                     <option selected value="dlang.org/spec">Language</option>
                     <option  value="dlang.org/phobos">Library</option>
@@ -167,6 +166,7 @@
     <li><a href="#array-ops">Array Indexing and Slicing Operators Overloading</a><ol>        <li><a href="#array">Index Operator Overloading</a></li>
         <li><a href="#slice">Slice Operator Overloading</a></li>
         <li><a href="#dollar">Dollar Operator Overloading</a></li>
+        <li><a href="#index-slicing-example">Complete Example</a></li>
     </ol></li>
     <li><a href="#dispatch">Forwarding</a></li>
     <li><a href="#old-style">D1 style operator overloading</a></li>
@@ -223,6 +223,7 @@
         <p>For example, in order to overload the <span class="d_inlinecode donthyphenate notranslate">-</span> (negation) operator for struct S, and
         no other operator:</p>
 <div class="blankline"></div>
+<div class="runnable-examples">
 <pre class="d_code notranslate"><span class="d_keyword">struct</span> S
 {
     <span class="d_keyword">int</span> m;
@@ -233,10 +234,17 @@
     }
 }
 
-<span class="d_keyword">int</span> foo(S s)
+<span class="d_keyword">void</span> main()
 {
-    <span class="d_keyword">return</span> -s;
+    S s = {2};
+    <span class="d_keyword">assert</span>(-s == -2);
 }
+</pre>
+
+</div>
+<div class="blankline"></div>
+<div class="spec-boxes note"><b>Note:</b> <em>opUnary</em> above can also be declared using a template parameter specialization:</div>
+<pre class="d_code notranslate">    <span class="d_keyword">int</span> opUnary(string s : <span class="d_string">"-"</span>)()
 </pre>
 <div class="blankline"></div>
 <h3><a class="anchor" title="Permalink to this section" id="postincrement_postdecrement_operators" href="#postincrement_postdecrement_operators">Postincrement <i>e</i><span class="d_inlinecode donthyphenate notranslate">++</span> and Postdecrement <i>e</i><span class="d_inlinecode donthyphenate notranslate">--</span> Operators</a></h3>
@@ -246,11 +254,15 @@
         </p>
 <div class="blankline"></div>
         <center><table><caption>Postfix Operator Rewrites</caption>        <tr><th class="donthyphenate"><b><i>op</i></b></th><th class="donthyphenate"><b><i>rewrite</i></b></th></tr>
-        <tr><td>        <i>e</i><span class="d_inlinecode donthyphenate notranslate">--</span></td><td>        <span class="d_inlinecode donthyphenate notranslate">(auto t =</span> <i>e</i><span class="d_inlinecode donthyphenate notranslate">, --</span><i>e</i><span class="d_inlinecode donthyphenate notranslate">, t)</span></td></tr>
-        <tr><td>        <i>e</i><span class="d_inlinecode donthyphenate notranslate">++</span></td><td>        <span class="d_inlinecode donthyphenate notranslate">(auto t =</span> <i>e</i><span class="d_inlinecode donthyphenate notranslate">, ++</span><i>e</i><span class="d_inlinecode donthyphenate notranslate">, t)</span></td></tr>
+        <tr><td>        <i>e</i><span class="d_inlinecode donthyphenate notranslate">--</span></td><td>        <span class="d_inlinecode donthyphenate notranslate">(auto t =</span> <i>e</i><span class="d_inlinecode donthyphenate notranslate">, </span><i>e</i><span class="d_inlinecode donthyphenate notranslate">.opUnary!"--"</span><span class="d_inlinecode donthyphenate notranslate">, t)</span></td></tr>
+        <tr><td>        <i>e</i><span class="d_inlinecode donthyphenate notranslate">++</span></td><td>        <span class="d_inlinecode donthyphenate notranslate">(auto t =</span> <i>e</i><span class="d_inlinecode donthyphenate notranslate">, </span><i>e</i><span class="d_inlinecode donthyphenate notranslate">.opUnary!"++"</span><span class="d_inlinecode donthyphenate notranslate">, t)</span></td></tr>
         </table></center>
 <div class="blankline"></div>
 <h3><a class="anchor" title="Permalink to this section" id="index_unary_operators" href="#index_unary_operators">Overloading Index Unary Operators</a></h3>
+<div class="blankline"></div>
+        <p>Indexing can be <a href="#array">overloaded</a>.
+        A unary operation on an index expression can also be overloaded independently.
+        This works for multidimensional indexing.</p>
 <div class="blankline"></div>
         <center><table><caption>Overloadable Index Unary Operators</caption>        <tr><th class="donthyphenate"><b><i>op</i></b></th><th class="donthyphenate"><b><i>rewrite</i></b></th></tr>
         <tr><td>        <span class="d_inlinecode donthyphenate notranslate">-</span><i>a</i><span class="d_inlinecode donthyphenate notranslate">[</span><i>b</i><sub>1</sub>, <i>b</i><sub>2</sub>, ... <i>b</i><sub>n</sub><span class="d_inlinecode donthyphenate notranslate">]</span></td><td>        <i>a</i><span class="d_inlinecode donthyphenate notranslate">.opIndexUnary!("-")(</span><i>b</i><sub>1</sub>, <i>b</i><sub>2</sub>, ... <i>b</i><sub>n</sub><span class="d_inlinecode donthyphenate notranslate">)</span></td></tr>
@@ -266,7 +278,27 @@
         </td></tr>
         </table></center>
 <div class="blankline"></div>
+<div class="runnable-examples">
+<pre class="d_code notranslate"><span class="d_keyword">struct</span> S
+{
+    <span class="d_keyword">private</span> <span class="d_keyword">int</span>[] a;
+
+    <span class="d_keyword">void</span> opIndexUnary(string s: <span class="d_string">"++"</span>)(size_t i) { ++a[i]; }
+}
+
+S s = {[4]};
+++s[0];
+<span class="d_keyword">assert</span>(s.a[0] == 5);
+</pre>
+
+</div>
+<div class="blankline"></div>
 <h3><a class="anchor" title="Permalink to this section" id="slice_unary_operators" href="#slice_unary_operators">Overloading Slice Unary Operators</a></h3>
+<div class="blankline"></div>
+        <p>Slicing can be <a href="#slice">overloaded</a>.
+        A unary operation on a slice can also be overloaded independently.
+        <span class="d_inlinecode donthyphenate notranslate">opIndexUnary</span> is defined either with no function arguments for a full slice,
+        or with two arguments for the start and end indices of the slice.</p>
 <div class="blankline"></div>
         <center><table><caption>Overloadable Slice Unary Operators</caption>        <tr><th class="donthyphenate"><b><i>op</i></b></th><th class="donthyphenate"><b><i>rewrite</i></b></th></tr>
         <tr><td>        <span class="d_inlinecode donthyphenate notranslate">-</span><i>a</i><span class="d_inlinecode donthyphenate notranslate">[</span><i>i</i>..<i>j</i><span class="d_inlinecode donthyphenate notranslate">]</span></td><td>        <i>a</i><span class="d_inlinecode donthyphenate notranslate">.opIndexUnary!("-")(</span><i>a</i><span class="d_inlinecode donthyphenate notranslate">.opSlice(</span><i>i</i>, <i>j</i><span class="d_inlinecode donthyphenate notranslate">))</span>
@@ -306,10 +338,25 @@
         </td></tr>
         </table></center>
 <div class="blankline"></div>
-        <p>For backward compatibility, if the above rewrites fail to compile and
+<div class="runnable-examples">
+<pre class="d_code notranslate"><span class="d_keyword">struct</span> S
+{
+    <span class="d_keyword">private</span> <span class="d_keyword">int</span>[] a;
+
+    <span class="d_keyword">void</span> opIndexUnary(string s: <span class="d_string">"--"</span>)() { --a[]; }
+}
+
+S s = {[1, 2]};
+--s[];
+<span class="d_keyword">assert</span>(s.a == [0, 1]);
+</pre>
+
+</div>
+<div class="blankline"></div>
+        <div class="spec-boxes note"><b>Note:</b> For backward compatibility, if the above rewrites fail to compile and
         <span class="d_inlinecode donthyphenate notranslate">opSliceUnary</span> is defined, then the rewrites
         <span class="d_inlinecode donthyphenate notranslate">a.opSliceUnary!(op)(i, j)</span> and
-        <span class="d_inlinecode donthyphenate notranslate">a.opSliceUnary!(op)</span> are tried instead, respectively.</p>
+        <span class="d_inlinecode donthyphenate notranslate">a.opSliceUnary!(op)</span> are tried instead, respectively.</div>
 <div class="blankline"></div>
 <h2><span id="Cast"><a class="anchor" title="Permalink to this section" id="cast" href="#cast">Cast Operator Overloading</a></span></h2>
 <div class="blankline"></div>
@@ -322,7 +369,7 @@
 <div class="blankline"></div>
     <p>Note that <span class="d_inlinecode donthyphenate notranslate">opCast</span> is only ever used with an explicit <span class="d_inlinecode donthyphenate notranslate">cast</span>
         expression, except in the case of boolean operations (see next
-        section)</p>
+        section).</p>
 <div class="blankline"></div>
 <h3><a class="anchor" title="Permalink to this section" id="boolean_operators" href="#boolean_operators">Boolean Operations</a></h3>
 <div class="blankline"></div>
@@ -421,6 +468,7 @@ b.opBinaryRight!(<span class="metacode"><span class="d_string">"op"</span></span
         <span class="d_inlinecode donthyphenate notranslate">opCmp</span>.</p>
 <div class="blankline"></div>
         <p>The equality and inequality operators are treated separately
+        from comparison operators
         because while practically all user-defined types can be compared for
         equality, only a subset of types have a meaningful ordering. For
         example, while it makes sense to determine if two RGB color vectors are
@@ -532,7 +580,37 @@ b.opBinaryRight!(<span class="metacode"><span class="d_string">"op"</span></span
         If they resolve to different functions, the best matching one is used.
         If they both match the same, but are different functions, an ambiguity
         error results.</p>
-<div class="blankline"></div>
+<pre class="d_code notranslate"><span class="d_keyword">struct</span> B
+{
+    <span class="d_keyword">int</span> opCmp(<span class="d_keyword">int</span>)         { <span class="d_keyword">return</span> -1; }
+    <span class="d_keyword">int</span> opCmp(<span class="d_keyword">ref</span> <span class="d_keyword">const</span> S) { <span class="d_keyword">return</span> -1; }
+    <span class="d_keyword">int</span> opCmp(<span class="d_keyword">ref</span> <span class="d_keyword">const</span> C) { <span class="d_keyword">return</span> -1; }
+}
+
+<span class="d_keyword">struct</span> S
+{
+    <span class="d_keyword">int</span> opCmp(<span class="d_keyword">ref</span> <span class="d_keyword">const</span> S) { <span class="d_keyword">return</span> 1; }
+    <span class="d_keyword">int</span> opCmp(<span class="d_keyword">ref</span> B)       { <span class="d_keyword">return</span> 0; }
+}
+
+<span class="d_keyword">struct</span> C
+{
+    <span class="d_keyword">int</span> opCmp(<span class="d_keyword">ref</span> <span class="d_keyword">const</span> B) { <span class="d_keyword">return</span> 0; }
+}
+
+<span class="d_keyword">void</span> main()
+{
+    S s;
+    <span class="d_keyword">const</span> S cs;
+    B b;
+    C c;
+    <span class="d_keyword">assert</span>(s &gt; s);      <span class="d_comment">// s.opCmp(s) &gt; 0
+</span>    <span class="d_keyword">assert</span>(!(s &lt; b));   <span class="d_comment">// s.opCmp(b) &gt; 0  - S.opCmp(ref B) is exact match
+</span>    <span class="d_keyword">assert</span>(!(b &lt; s));   <span class="d_comment">// s.opCmp(b) &lt; 0  - S.opCmp(ref B) is exact match
+</span>    <span class="d_keyword">assert</span>(b &lt; cs);     <span class="d_comment">// b.opCmp(s) &lt; 0  - B.opCmp(ref const S) is  exact match
+</span>    <span class="d_keyword">static</span> <span class="d_keyword">assert</span>(!<span class="d_keyword">__traits</span>(compiles, b &lt; c)); <span class="d_comment">// both C.opCmp and B.opcmp match exactly
+</span>}
+</pre>
         <p>If overriding <span class="d_inlinecode donthyphenate notranslate">Object.opCmp()</span> for classes, the class member
         function signature should look like:</p>
 <pre class="d_code notranslate"><span class="d_keyword">class</span> C
@@ -556,6 +634,30 @@ b.opBinaryRight!(<span class="metacode"><span class="d_string">"op"</span></span
         <span class="d_inlinecode donthyphenate notranslate">opCmp</span>, then it is up to the programmer to supply an appropriate
         version of <span class="d_inlinecode donthyphenate notranslate">opEquals</span>.  Otherwise, inequalities like <span class="d_inlinecode donthyphenate notranslate">a &lt;= b</span>
         will behave inconsistently with equalities like <span class="d_inlinecode donthyphenate notranslate">a == b</span>.</p>
+<div class="blankline"></div>
+<div class="runnable-examples">
+<pre class="d_code notranslate"><span class="d_keyword">struct</span> S
+{
+    <span class="d_keyword">int</span> i, j;
+    <span class="d_keyword">int</span> opCmp(<span class="d_keyword">ref</span> <span class="d_keyword">const</span> S s) <span class="d_keyword">const</span> { <span class="d_keyword">return</span> (i &gt; s.i) - (i &lt; s.i); } <span class="d_comment">// ignore j
+</span>}
+
+S a = {2, 3};
+S b = {2, 1};
+S c = {3, 0};
+<span class="d_keyword">assert</span>(a &lt; c);
+<span class="d_keyword">assert</span>(a &lt;= b);
+<span class="d_keyword">assert</span>(!(a &lt; b)); <span class="d_comment">// opCmp ignores j
+</span><span class="d_keyword">assert</span>(a != b);   <span class="d_comment">// generated opEquals tests both i and j members
+</span></pre>
+
+</div>
+<div class="blankline"></div>
+<div class="spec-boxes best-practice"><b>Best Practices:</b> Using <span class="d_inlinecode donthyphenate notranslate">(i &gt; s.i) - (i &lt; s.i)</span> instead of <span class="d_inlinecode donthyphenate notranslate">i - s.i</span> to
+compare integers avoids overflow.</div>
+
+
+<div class="blankline"></div>
 <div class="blankline"></div>
 <h2><span id="FunctionCall"><a class="anchor" title="Permalink to this section" id="function-call" href="#function-call">Function Call Operator Overloading <span class="d_inlinecode donthyphenate notranslate">f()</span></a></span></h2>
 <div class="blankline"></div>
@@ -590,19 +692,24 @@ b.opBinaryRight!(<span class="metacode"><span class="d_string">"op"</span></span
         so that it takes priority over <span class="d_inlinecode donthyphenate notranslate">opCall</span> in <span class="d_inlinecode donthyphenate notranslate">Type(...)</span> syntax.
         </p>
 <div class="blankline"></div>
+    <div class="runnable-examples">
 <pre class="d_code notranslate"><span class="d_keyword">struct</span> Multiplier
 {
     <span class="d_keyword">int</span> factor;
     <span class="d_keyword">this</span>(<span class="d_keyword">int</span> num) { factor = num; }
     <span class="d_keyword">int</span> opCall(<span class="d_keyword">int</span> value) { <span class="d_keyword">return</span> value * factor; }
 }
-<span class="d_keyword">void</span> test()
+
+<span class="d_keyword">void</span> main()
 {
     Multiplier m = Multiplier(10);  <span class="d_comment">// invoke constructor
-</span>    <span class="d_keyword">int</span> result = m(5);              <span class="d_comment">// invoke opCall
+</span>    <span class="d_keyword">assert</span>(m.factor == 10);
+    <span class="d_keyword">int</span> result = m(5);              <span class="d_comment">// invoke opCall
 </span>    <span class="d_keyword">assert</span>(result == 50);
 }
 </pre>
+    
+</div>
 <div class="blankline"></div>
 <h3><a class="anchor" title="Permalink to this section" id="static-opcall" href="#static-opcall">Static opCall</a></h3>
 <div class="blankline"></div>
@@ -760,6 +867,21 @@ c = <span class="d_keyword">new</span> C();  <span class="d_comment">// Rebindin
 <pre class="d_code notranslate">a.opOpAssign!(<span class="metacode"><span class="d_string">"op"</span></span>)(b)
 </pre>
 <div class="blankline"></div>
+Example:
+<div class="runnable-examples">
+<pre class="d_code notranslate"><span class="d_keyword">struct</span> S
+{
+    <span class="d_keyword">int</span> i;
+    <span class="d_keyword">void</span> opOpAssign(string op: <span class="d_string">"+"</span>)(<span class="d_keyword">int</span> rhs) { i += rhs; }
+}
+
+S s = {2};
+s += 3;
+<span class="d_keyword">assert</span>(s.i == 5);
+</pre>
+
+</div>
+<div class="blankline"></div>
 <h3><a class="anchor" title="Permalink to this section" id="index_op_assignment" href="#index_op_assignment">Index Op Assignment Operator Overloading</a></h3>
 <div class="blankline"></div>
         <p>If the left hand side of an <i>op</i>= is an index expression on
@@ -810,99 +932,6 @@ c = <span class="d_keyword">new</span> C();  <span class="d_comment">// Rebindin
         These may be combined to implement multidimensional arrays.
         </p>
 <div class="blankline"></div>
-        <p>The code example below shows a simple implementation of a
-        2-dimensional array with overloaded indexing and slicing operators. The
-        explanations of the various constructs employed are given in the
-        sections following.</p>
-<div class="blankline"></div>
-<pre class="d_code notranslate"><span class="d_keyword">struct</span> Array2D(E)
-{
-    E[] impl;
-    <span class="d_keyword">int</span> stride;
-    <span class="d_keyword">int</span> width, height;
-
-    <span class="d_keyword">this</span>(<span class="d_keyword">int</span> width, <span class="d_keyword">int</span> height, E[] initialData = [])
-    {
-        impl = initialData;
-        <span class="d_keyword">this</span>.stride = <span class="d_keyword">this</span>.width = width;
-        <span class="d_keyword">this</span>.height = height;
-        impl.length = width * height;
-    }
-
-    <span class="d_comment">// Index a single element, e.g., arr[0, 1]
-</span>    <span class="d_keyword">ref</span> E opIndex(<span class="d_keyword">int</span> i, <span class="d_keyword">int</span> j) { <span class="d_keyword">return</span> impl[i + stride*j]; }
-
-    <span class="d_comment">// Array slicing, e.g., arr[1..2, 1..2], arr[2, 0..&dollar;], arr[0..&dollar;, 1].
-</span>    Array2D opIndex(<span class="d_keyword">int</span>[2] r1, <span class="d_keyword">int</span>[2] r2)
-    {
-        Array2D result;
-
-        <span class="d_keyword">auto</span> startOffset = r1[0] + r2[0]*stride;
-        <span class="d_keyword">auto</span> endOffset = r1[1] + (r2[1] - 1)*stride;
-        result.impl = <span class="d_keyword">this</span>.impl[startOffset .. endOffset];
-
-        result.stride = <span class="d_keyword">this</span>.stride;
-        result.width = r1[1] - r1[0];
-        result.height = r2[1] - r2[0];
-
-        <span class="d_keyword">return</span> result;
-    }
-    <span class="d_keyword">auto</span> opIndex(<span class="d_keyword">int</span>[2] r1, <span class="d_keyword">int</span> j) { <span class="d_keyword">return</span> opIndex(r1, [j, j+1]); }
-    <span class="d_keyword">auto</span> opIndex(<span class="d_keyword">int</span> i, <span class="d_keyword">int</span>[2] r2) { <span class="d_keyword">return</span> opIndex([i, i+1], r2); }
-
-    <span class="d_comment">// Support for `x..y` notation in slicing operator for the given dimension.
-</span>    <span class="d_keyword">int</span>[2] opSlice(size_t dim)(<span class="d_keyword">int</span> start, <span class="d_keyword">int</span> end)
-        <span class="d_keyword">if</span> (dim &gt;= 0 &amp;&amp; dim &lt; 2)
-    <span class="d_keyword">in</span> { <span class="d_keyword">assert</span>(start &gt;= 0 &amp;&amp; end &lt;= <span class="d_keyword">this</span>.opDollar!dim); }
-    <span class="d_keyword">do</span>
-    {
-        <span class="d_keyword">return</span> [start, end];
-    }
-
-    <span class="d_comment">// Support `&dollar;` in slicing notation, e.g., arr[1..&dollar;, 0..&dollar;-1].
-</span>    @property <span class="d_keyword">int</span> opDollar(size_t dim : 0)() { <span class="d_keyword">return</span> width; }
-    @property <span class="d_keyword">int</span> opDollar(size_t dim : 1)() { <span class="d_keyword">return</span> height; }
-}
-
-<span class="d_keyword">unittest</span>
-{
-    <span class="d_keyword">auto</span> arr = Array2D!<span class="d_keyword">int</span>(4, 3, [
-        0, 1, 2,  3,
-        4, 5, 6,  7,
-        8, 9, 10, 11
-    ]);
-
-    <span class="d_comment">// Basic indexing
-</span>    <span class="d_keyword">assert</span>(arr[0, 0] == 0);
-    <span class="d_keyword">assert</span>(arr[1, 0] == 1);
-    <span class="d_keyword">assert</span>(arr[0, 1] == 4);
-
-    <span class="d_comment">// Use of opDollar
-</span>    <span class="d_keyword">assert</span>(arr[$-1, 0] == 3);
-    <span class="d_keyword">assert</span>(arr[0, $-1] == 8);   <span class="d_comment">// Note the value of &dollar; differs by dimension
-</span>    <span class="d_keyword">assert</span>(arr[$-1, $-1] == 11);
-
-    <span class="d_comment">// Slicing
-</span>    <span class="d_keyword">auto</span> slice1 = arr[1..$, 0..$];
-    <span class="d_keyword">assert</span>(slice1[0, 0] == 1 &amp;&amp; slice1[1, 0] == 2  &amp;&amp; slice1[2, 0] == 3 &amp;&amp;
-           slice1[0, 1] == 5 &amp;&amp; slice1[1, 1] == 6  &amp;&amp; slice1[2, 1] == 7 &amp;&amp;
-           slice1[0, 2] == 9 &amp;&amp; slice1[1, 2] == 10 &amp;&amp; slice1[2, 2] == 11);
-
-    <span class="d_keyword">auto</span> slice2 = slice1[0..2, 1..$];
-    <span class="d_keyword">assert</span>(slice2[0, 0] == 5 &amp;&amp; slice2[1, 0] == 6 &amp;&amp;
-           slice2[0, 1] == 9 &amp;&amp; slice2[1, 1] == 10);
-
-    <span class="d_comment">// Thin slices
-</span>    <span class="d_keyword">auto</span> slice3 = arr[2, 0..$];
-    <span class="d_keyword">assert</span>(slice3[0, 0] == 2 &amp;&amp;
-           slice3[0, 1] == 6 &amp;&amp;
-           slice3[0, 2] == 10);
-
-    <span class="d_keyword">auto</span> slice4 = arr[0..3, 2];
-    <span class="d_keyword">assert</span>(slice4[0, 0] == 8 &amp;&amp; slice4[1, 0] == 9 &amp;&amp; slice4[2, 0] == 10);
-}
-</pre>
-<div class="blankline"></div>
 <h3><span id="Array"><a class="anchor" title="Permalink to this section" id="array" href="#array">Index Operator Overloading</a></span></h3>
 <div class="blankline"></div>
         <p>Expressions of the form <span class="d_inlinecode donthyphenate notranslate">arr[</span><i>b</i><sub>1</sub>, <i>b</i><sub>2</sub>, ... <i>b</i><sub>n</sub><span class="d_inlinecode donthyphenate notranslate">]</span> are translated
@@ -940,6 +969,7 @@ c = <span class="d_keyword">new</span> C();  <span class="d_comment">// Rebindin
         <p>To overload <span class="d_inlinecode donthyphenate notranslate">a[]</span>, simply define <span class="d_inlinecode donthyphenate notranslate">opIndex</span> with no parameters:
         </p>
 <div class="blankline"></div>
+<div class="runnable-examples">
 <pre class="d_code notranslate"><span class="d_keyword">struct</span> S
 {
     <span class="d_keyword">int</span>[] impl;
@@ -948,25 +978,50 @@ c = <span class="d_keyword">new</span> C();  <span class="d_comment">// Rebindin
         <span class="d_keyword">return</span> impl[];
     }
 }
-<span class="d_keyword">void</span> test()
+
+<span class="d_keyword">void</span> main()
 {
     <span class="d_keyword">auto</span> s = S([1,2,3]);
-    <span class="d_keyword">auto</span> t = s[]; <span class="d_comment">// calls s.opIndex()
+    <span class="d_keyword">int</span>[] t = s[]; <span class="d_comment">// calls s.opIndex()
 </span>    <span class="d_keyword">assert</span>(t == [1,2,3]);
 }
 </pre>
+
+</div>
 <div class="blankline"></div>
-        <p>To overload array indexing of the form <span class="d_inlinecode donthyphenate notranslate">a[</span><i>i</i>..<i>j</i><span class="d_inlinecode donthyphenate notranslate">,</span> ...<span class="d_inlinecode donthyphenate notranslate">]</span>,
+        <p>To overload array slicing of the form <span class="d_inlinecode donthyphenate notranslate">a[</span><i>i</i>..<i>j</i><span class="d_inlinecode donthyphenate notranslate">]</span>,
         two steps are needed.  First, the expressions of the form <i>i</i>..<i>j</i> are
-        translated via <span class="d_inlinecode donthyphenate notranslate">opSlice</span> into user-defined objects that encapsulate
-        the endpoints <i>i</i> and <i>j</i>. Then these user-defined objects are
-        passed to <span class="d_inlinecode donthyphenate notranslate">opIndex</span> to perform the actual slicing. This design was
+        translated via <span class="d_inlinecode donthyphenate notranslate">opSlice!0</span> into objects that encapsulate
+        the endpoints <i>i</i> and <i>j</i>. Then these objects are
+        passed to <span class="d_inlinecode donthyphenate notranslate">opIndex</span> to perform the actual slicing.</p>
+<div class="blankline"></div>
+<div class="runnable-examples">
+<pre class="d_code notranslate"><span class="d_keyword">struct</span> S
+{
+    <span class="d_keyword">int</span>[] impl;
+
+    <span class="d_keyword">int</span>[] opSlice(size_t dim: 0)(size_t i, size_t j)
+    {
+        <span class="d_keyword">return</span> impl[i..j];
+    }
+    <span class="d_keyword">int</span>[] opIndex()(<span class="d_keyword">int</span>[] slice) { <span class="d_keyword">return</span> slice; }
+}
+
+<span class="d_keyword">void</span> main()
+{
+    <span class="d_keyword">auto</span> s = S([1, 2, 3]);
+    <span class="d_keyword">int</span>[] t = s[0..2]; <span class="d_comment">// calls s.opIndex(s.opSlice(0, 2))
+</span>    <span class="d_keyword">assert</span>(t == [1, 2]);
+}
+</pre>
+
+</div>
+<div class="blankline"></div>
+        <p>This design was
         chosen in order to support mixed indexing and slicing in
         multidimensional arrays; for example, in translating expressions like
         <span class="d_inlinecode donthyphenate notranslate">arr[1, 2..3, 4]</span>.
-        </p>
-<div class="blankline"></div>
-        <p>More precisely, an expression of the form <span class="d_inlinecode donthyphenate notranslate">arr[</span><i>b</i><sub>1</sub>, <i>b</i><sub>2</sub>, ... <i>b</i><sub>n</sub><span class="d_inlinecode donthyphenate notranslate">]</span>
+        More precisely, an expression of the form <span class="d_inlinecode donthyphenate notranslate">arr[</span><i>b</i><sub>1</sub>, <i>b</i><sub>2</sub>, ... <i>b</i><sub>n</sub><span class="d_inlinecode donthyphenate notranslate">]</span>
         is translated into <span class="d_inlinecode donthyphenate notranslate">arr.opIndex(</span><i>c</i><sub>1</sub>, <i>c</i><sub>2</sub>, ... <i>c</i><sub>n</sub><span class="d_inlinecode donthyphenate notranslate">)</span>.
         Each argument <i>b</i><sub>i</sub> can be either a single expression,
         in which case it is passed directly as the corresponding argument <i>        c</i><sub>i</sub> to <span class="d_inlinecode donthyphenate notranslate">opIndex</span>; or it can be a slice expression of
@@ -1013,13 +1068,13 @@ __tmp.opIndexAssign(c, 1, __tmp.opSlice!1(2,3), __tmp.opDollar!2 - 1);
         once.
         </p>
 <div class="blankline"></div>
-        <p>For backward compatibility, <span class="d_inlinecode donthyphenate notranslate">a[]</span> and <span class="d_inlinecode donthyphenate notranslate">a[</span><i>i</i>..<i>j</i><span class="d_inlinecode donthyphenate notranslate">]</span> can
+        <div class="spec-boxes note"><b>Note:</b> For backward compatibility, <span class="d_inlinecode donthyphenate notranslate">a[]</span> and <span class="d_inlinecode donthyphenate notranslate">a[</span><i>i</i>..<i>j</i><span class="d_inlinecode donthyphenate notranslate">]</span> can
         also be overloaded by implementing <span class="d_inlinecode donthyphenate notranslate">opSlice()</span> with no arguments and
         <span class="d_inlinecode donthyphenate notranslate">opSlice(</span><i>i</i>, <i>j</i><span class="d_inlinecode donthyphenate notranslate">)</span> with two arguments,
         respectively.  This only applies for one-dimensional slicing, and dates
         from when D did not have full support for multidimensional arrays. This
         usage of <span class="d_inlinecode donthyphenate notranslate">opSlice</span> is discouraged.
-        </p>
+        </div>
 <div class="blankline"></div>
 <h3><span id="Dollar"><a class="anchor" title="Permalink to this section" id="dollar" href="#dollar">Dollar Operator Overloading</a></span></h3>
 <div class="blankline"></div>
@@ -1098,6 +1153,104 @@ arr.opIndex(__tmp1 - sqrt(__tmp1), 0, __tmp2 - 1);
         than one argument.
         </p>
 <div class="blankline"></div>
+<h3><a class="anchor" title="Permalink to this section" id="index-slicing-example" href="#index-slicing-example">Complete Example</a></h3>
+<div class="blankline"></div>
+        <p>The code example below shows a simple implementation of a
+        2-dimensional array with overloaded indexing and slicing operators. The
+        explanations of the various constructs employed are given in the
+        sections following.</p>
+<div class="blankline"></div>
+<div class="runnable-examples">
+<pre class="d_code notranslate"><span class="d_keyword">struct</span> Array2D(E)
+{
+    E[] impl;
+    <span class="d_keyword">int</span> stride;
+    <span class="d_keyword">int</span> width, height;
+
+    <span class="d_keyword">this</span>(<span class="d_keyword">int</span> width, <span class="d_keyword">int</span> height, E[] initialData = [])
+    {
+        impl = initialData;
+        <span class="d_keyword">this</span>.stride = <span class="d_keyword">this</span>.width = width;
+        <span class="d_keyword">this</span>.height = height;
+        impl.length = width * height;
+    }
+
+    <span class="d_comment">// Index a single element, e.g., arr[0, 1]
+</span>    <span class="d_keyword">ref</span> E opIndex(<span class="d_keyword">int</span> i, <span class="d_keyword">int</span> j) { <span class="d_keyword">return</span> impl[i + stride*j]; }
+
+    <span class="d_comment">// Array slicing, e.g., arr[1..2, 1..2], arr[2, 0..&dollar;], arr[0..&dollar;, 1].
+</span>    Array2D opIndex(<span class="d_keyword">int</span>[2] r1, <span class="d_keyword">int</span>[2] r2)
+    {
+        Array2D result;
+
+        <span class="d_keyword">auto</span> startOffset = r1[0] + r2[0]*stride;
+        <span class="d_keyword">auto</span> endOffset = r1[1] + (r2[1] - 1)*stride;
+        result.impl = <span class="d_keyword">this</span>.impl[startOffset .. endOffset];
+
+        result.stride = <span class="d_keyword">this</span>.stride;
+        result.width = r1[1] - r1[0];
+        result.height = r2[1] - r2[0];
+
+        <span class="d_keyword">return</span> result;
+    }
+    <span class="d_keyword">auto</span> opIndex(<span class="d_keyword">int</span>[2] r1, <span class="d_keyword">int</span> j) { <span class="d_keyword">return</span> opIndex(r1, [j, j+1]); }
+    <span class="d_keyword">auto</span> opIndex(<span class="d_keyword">int</span> i, <span class="d_keyword">int</span>[2] r2) { <span class="d_keyword">return</span> opIndex([i, i+1], r2); }
+
+    <span class="d_comment">// Support for `x..y` notation in slicing operator for the given dimension.
+</span>    <span class="d_keyword">int</span>[2] opSlice(size_t dim)(<span class="d_keyword">int</span> start, <span class="d_keyword">int</span> end)
+        <span class="d_keyword">if</span> (dim &gt;= 0 &amp;&amp; dim &lt; 2)
+    <span class="d_keyword">in</span> { <span class="d_keyword">assert</span>(start &gt;= 0 &amp;&amp; end &lt;= <span class="d_keyword">this</span>.opDollar!dim); }
+    <span class="d_keyword">do</span>
+    {
+        <span class="d_keyword">return</span> [start, end];
+    }
+
+    <span class="d_comment">// Support `&dollar;` in slicing notation, e.g., arr[1..&dollar;, 0..&dollar;-1].
+</span>    @property <span class="d_keyword">int</span> opDollar(size_t dim : 0)() { <span class="d_keyword">return</span> width; }
+    @property <span class="d_keyword">int</span> opDollar(size_t dim : 1)() { <span class="d_keyword">return</span> height; }
+}
+
+<span class="d_keyword">void</span> main()
+{
+    <span class="d_keyword">auto</span> arr = Array2D!<span class="d_keyword">int</span>(4, 3, [
+        0, 1, 2,  3,
+        4, 5, 6,  7,
+        8, 9, 10, 11
+    ]);
+
+    <span class="d_comment">// Basic indexing
+</span>    <span class="d_keyword">assert</span>(arr[0, 0] == 0);
+    <span class="d_keyword">assert</span>(arr[1, 0] == 1);
+    <span class="d_keyword">assert</span>(arr[0, 1] == 4);
+
+    <span class="d_comment">// Use of opDollar
+</span>    <span class="d_keyword">assert</span>(arr[$-1, 0] == 3);
+    <span class="d_keyword">assert</span>(arr[0, $-1] == 8);   <span class="d_comment">// Note the value of &dollar; differs by dimension
+</span>    <span class="d_keyword">assert</span>(arr[$-1, $-1] == 11);
+
+    <span class="d_comment">// Slicing
+</span>    <span class="d_keyword">auto</span> slice1 = arr[1..$, 0..$];
+    <span class="d_keyword">assert</span>(slice1[0, 0] == 1 &amp;&amp; slice1[1, 0] == 2  &amp;&amp; slice1[2, 0] == 3 &amp;&amp;
+           slice1[0, 1] == 5 &amp;&amp; slice1[1, 1] == 6  &amp;&amp; slice1[2, 1] == 7 &amp;&amp;
+           slice1[0, 2] == 9 &amp;&amp; slice1[1, 2] == 10 &amp;&amp; slice1[2, 2] == 11);
+
+    <span class="d_keyword">auto</span> slice2 = slice1[0..2, 1..$];
+    <span class="d_keyword">assert</span>(slice2[0, 0] == 5 &amp;&amp; slice2[1, 0] == 6 &amp;&amp;
+           slice2[0, 1] == 9 &amp;&amp; slice2[1, 1] == 10);
+
+    <span class="d_comment">// Thin slices
+</span>    <span class="d_keyword">auto</span> slice3 = arr[2, 0..$];
+    <span class="d_keyword">assert</span>(slice3[0, 0] == 2 &amp;&amp;
+           slice3[0, 1] == 6 &amp;&amp;
+           slice3[0, 2] == 10);
+
+    <span class="d_keyword">auto</span> slice4 = arr[0..3, 2];
+    <span class="d_keyword">assert</span>(slice4[0, 0] == 8 &amp;&amp; slice4[1, 0] == 9 &amp;&amp; slice4[2, 0] == 10);
+}
+</pre>
+
+</div>
+<div class="blankline"></div>
 <div class="blankline"></div>
 <h2><span id="Dispatch"><a class="anchor" title="Permalink to this section" id="dispatch" href="#dispatch">Forwarding</a></span></h2>
 <div class="blankline"></div>
@@ -1161,8 +1314,8 @@ arr.opIndex(__tmp1 - sqrt(__tmp1), 0, __tmp2 - 1);
 
 
 
-        <div class="smallprint" id="copyright">Copyright &copy; 1999-2022 by the <a href="../foundation_overview.html">D Language Foundation</a> | Page generated by
-<a href="../spec/ddoc.html">Ddoc</a> on Mon Nov 14 18:07:03 2022
+        <div class="smallprint" id="copyright">Copyright &copy; 1999-2023 by the <a href="../foundation_overview.html">D Language Foundation</a> | Page generated by
+<a href="../spec/ddoc.html">Ddoc</a> on Wed Mar  1 14:57:11 2023
 </div>
     </div>
 </div>

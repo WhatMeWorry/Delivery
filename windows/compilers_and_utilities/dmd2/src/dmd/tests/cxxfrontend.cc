@@ -2,7 +2,7 @@
  * Test the C++ compiler interface of the
  * $(LINK2 https://www.dlang.org, D programming language).
  *
- * Copyright:   Copyright (C) 2017-2019 by The D Language Foundation, All Rights Reserved
+ * Copyright:   Copyright (C) 2017-2023 by The D Language Foundation, All Rights Reserved
  * Authors:     Iain Buclaw
  * License:     $(LINK2 https://www.boost.org/LICENSE_1_0.txt, Boost License 1.0)
  * Source:      $(LINK2 https://github.com/dlang/dmd/blob/master/src/tests/cxxfrontend.c, _cxxfrontend.c)
@@ -413,8 +413,14 @@ void test_location()
 {
     Loc loc1 = Loc("test.d", 24, 42);
     assert(loc1.equals(Loc("test.d", 24, 42)));
-    assert(strcmp(loc1.toChars(true, MESSAGESTYLEdigitalmars), "test.d(24,42)") == 0);
-    assert(strcmp(loc1.toChars(true, MESSAGESTYLEgnu), "test.d:24:42") == 0);
+    assert(strcmp(loc1.toChars(true, MessageStyle::digitalmars), "test.d(24,42)") == 0);
+    assert(strcmp(loc1.toChars(true, MessageStyle::gnu), "test.d:24:42") == 0);
+
+    assert(strcmp(loc1.toChars(), "test.d(24)") == 0);
+    Loc::set(true, MessageStyle::digitalmars);
+    assert(strcmp(loc1.toChars(), "test.d(24,42)") == 0);
+    Loc::set(false, MessageStyle::gnu);
+    assert(strcmp(loc1.toChars(), "test.d:24") == 0);
 }
 
 /**********************************/
@@ -686,9 +692,9 @@ public:
     }
     void visitUserAttributes(Dsymbol *sym)
     {
-        if (!sym->userAttribDecl)
+        if (!sym->userAttribDecl())
             return;
-        Expressions *attrs = sym->userAttribDecl->getAttributes();
+        Expressions *attrs = sym->userAttribDecl()->getAttributes();
         if (attrs)
         {
             expandTuples(attrs);

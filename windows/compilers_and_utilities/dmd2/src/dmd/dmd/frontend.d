@@ -1,7 +1,7 @@
 /**
  * Contains high-level interfaces for interacting with DMD as a library.
  *
- * Copyright:   Copyright (C) 1999-2022 by The D Language Foundation, All Rights Reserved
+ * Copyright:   Copyright (C) 1999-2023 by The D Language Foundation, All Rights Reserved
  * Authors:     $(LINK2 https://www.digitalmars.com, Walter Bright)
  * License:     $(LINK2 https://www.boost.org/LICENSE_1_0.txt, Boost License 1.0)
  * Source:      $(LINK2 https://github.com/dlang/dmd/blob/master/src/dmd/id.d, _id.d)
@@ -12,8 +12,9 @@ module dmd.frontend;
 
 import dmd.astcodegen : ASTCodegen;
 import dmd.dmodule : Module;
-import dmd.globals : CHECKENABLE, Loc, DiagnosticReporting;
+import dmd.globals : CHECKENABLE, DiagnosticReporting;
 import dmd.errors;
+import dmd.location;
 
 import std.range.primitives : isInputRange, ElementType;
 import std.traits : isNarrowString;
@@ -388,7 +389,8 @@ Tuple!(Module, "module_", Diagnostics, "diagnostics") parseModule(AST = ASTCodeg
 {
     import dmd.root.file : File, Buffer;
 
-    import dmd.globals : Loc, global;
+    import dmd.globals : global;
+    import dmd.location;
     import dmd.parse : Parser;
     import dmd.identifier : Identifier;
     import dmd.tokens : TOK;

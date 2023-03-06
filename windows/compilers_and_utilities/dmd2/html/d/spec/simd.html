@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <!--
-    Copyright (c) 1999-2022 by the D Language Foundation
+    Copyright (c) 1999-2023 by the D Language Foundation
     All Rights Reserved.
     https://dlang.org/foundation_overview.html
   -->
@@ -40,7 +40,6 @@
 <ul class='expand-content'>    <li><a href='https://dlang.org/blog'>Blog</a></li>
     <li><a href='../orgs-using-d.html'>Orgs using D</a></li>
     <li><a href='https://twitter.com/search?q=%23dlang'>Twitter</a></li>
-    <li><a href='../calendar.html'>Calendar</a></li>
     <li class="menu-divider"><a href='https://forum.dlang.org'>Forums</a></li>
     <li><a href='irc://irc.libera.chat/d'>IRC</a></li>
     <li><a href='https://discord.gg/bMZk9Q4'>Community Discord</a></li>
@@ -75,7 +74,7 @@
     <div id="search-box">        <form method="get" action="https://google.com/search">
             <input type="hidden" id="domains" name="domains" value="dlang.org">
             <input type="hidden" id="sourceid" name="sourceid" value="google-search">
-            <span id="search-query"><input id="q" name="q" placeholder="Search"></span><span id="search-dropdown"><span class="helper">                <select id="sitesearch" name="sitesearch" size="1">
+            <span id="search-query"><input id="q" name="q" placeholder="Google Search"></span><span id="search-dropdown"><span class="helper">                <select id="sitesearch" name="sitesearch" size="1">
                     <option value="dlang.org">Entire Site</option>
                     <option selected value="dlang.org/spec">Language</option>
                     <option  value="dlang.org/phobos">Library</option>
@@ -172,8 +171,14 @@
 <div class="blankline"></div>
         <div class="spec-boxes implementation-defined"><b>Implementation Defined:</b> Which vector types are supported depends
         on the target. The implementation is expected to only support
-        the vector types that are implemented in the target's hardware.
+        the vector types and operations that are implemented in the target's hardware.
         </div>
+
+
+<div class="blankline"></div>
+        <div class="spec-boxes rationale"><b>Rationale:</b> Emulating unsupported vector types and operations can exhibit
+        such poor performance that the user is likely better off selecting a different
+        algorithm than relying on emulation.</div>
 
 
 <div class="blankline"></div>
@@ -191,17 +196,18 @@
 <pre class="d_code notranslate"><span class="d_keyword">import</span> core.simd;
 </pre>
 <div class="blankline"></div>
-        <div class="spec-boxes implementation-defined"><b>Implementation Defined:</b> <div class="blankline"></div>
-        <p>These types and operations will be the ones defined for the architecture
+        <div class="spec-boxes implementation-defined"><b>Implementation Defined:</b>         These types and operations will be the ones defined for the architecture
         the compiler is targeting. If a particular CPU family has varying
         support for vector types, an additional runtime check may be necessary.
         The compiler does not emit runtime checks; those must be done by the
         programmer.
-        </p>
+        </div>
+
+
 <div class="blankline"></div>
-        <p>Depending on the architecture, compiler flags may be required to
+        <div class="spec-boxes implementation-defined"><b>Implementation Defined:</b> Depending on the target architecture, compiler flags
+        may be required to
         activate support for SIMD types.
-        </p>
         </div>
 
 
@@ -244,7 +250,8 @@
 <div class="blankline"></div>
 <h3><a class="anchor" title="Permalink to this section" id="conversions" href="#conversions">Conversions</a></h3>
 <div class="blankline"></div>
-        <p>Vector types of the same size can be implicitly converted among
+        <p>Vector types of the same size (number_of_elements * size_of_element)
+        can be implicitly converted among
         each other, this is done as a reinterpret cast (a type paint).
         Vector types can be cast to their <a href="../spec/type.html#VectorBaseType"><i>VectorBaseType</i></a>.</p>
 <div class="blankline"></div>
@@ -290,7 +297,7 @@ v = 3 + v;   <span class="d_comment">// add 3 to each element in v
 <div class="blankline"></div>
 <pre class="d_code notranslate">float4 a,b;
 <span class="d_keyword">static</span> <span class="d_keyword">if</span> (<span class="d_keyword">__traits</span>(compiles, a+b))
-    ... yes, it <span class="d_keyword">is</span> supported ...
+    ... yes, add <span class="d_keyword">is</span> supported <span class="d_keyword">for</span> float4 ...
 <span class="d_keyword">else</span>
     ... nope, use workaround ...
 </pre>
@@ -300,7 +307,8 @@ v = 3 + v;   <span class="d_comment">// add 3 to each element in v
         <a href="../phobos/core_cpuid.html">core.cpuid</a>.
         </p>
 <div class="blankline"></div>
-        <p>A typical workaround would be to use array vector operations instead:</p>
+        <p>A typical workaround for unsupported vector operations would be to
+        use array operations instead:</p>
 <div class="blankline"></div>
 <pre class="d_code notranslate">float4 a,b;
 <span class="d_keyword">static</span> <span class="d_keyword">if</span> (<span class="d_keyword">__traits</span>(compiles, a/b))
@@ -346,7 +354,7 @@ v = 3 + v;   <span class="d_comment">// add 3 to each element in v
         <tr><td>double4</td><td>4 <span class="d_inlinecode donthyphenate notranslate">double</span>s</td><td><span class="d_inlinecode donthyphenate notranslate">double __attribute__((vector_size(32)))</span></td></tr>
         </table></center>
 <div class="blankline"></div>
-        <p>Note: for 32 bit gcc, it's <span class="d_inlinecode donthyphenate notranslate">long long</span> instead of <span class="d_inlinecode donthyphenate notranslate">long</span>.</p>
+        <div class="spec-boxes note"><b>Note:</b> for 32 bit gcc and clang, it's <span class="d_inlinecode donthyphenate notranslate">long long</span> instead of <span class="d_inlinecode donthyphenate notranslate">long</span>.</div>
 <div class="blankline"></div>
         <center><table><caption>Supported 128-bit Vector Operators</caption>        <tr><th class="donthyphenate"><b>Operator</b></th><th class="donthyphenate"><b>void16</b></th><th class="donthyphenate"><b>byte16</b></th><th class="donthyphenate"><b>ubyte16</b></th><th class="donthyphenate"><b>short8</b></th><th class="donthyphenate"><b>ushort8</b></th><th class="donthyphenate"><b>int4</b></th><th class="donthyphenate"><b>uint4</b></th><th class="donthyphenate"><b>long2</b></th><th class="donthyphenate"><b>ulong2</b></th><th class="donthyphenate"><b>float4</b></th><th class="donthyphenate"><b>double2</b></th></tr>
         <tr><td>=</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td></tr>
@@ -364,6 +372,12 @@ v = 3 + v;   <span class="d_comment">// add 3 to each element in v
         <tr><td><span class="d_inlinecode donthyphenate notranslate">&amp;</span>=</td><td>&ndash;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&ndash;</td><td>&ndash;</td></tr>
         <tr><td>|=</td><td>&ndash;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&ndash;</td><td>&ndash;</td></tr>
         <tr><td><span class="d_inlinecode donthyphenate notranslate">^=</span></td><td>&ndash;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&ndash;</td><td>&ndash;</td></tr>
+        <tr><td>==</td><td>&ndash;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td></tr>
+        <tr><td>!=</td><td>&ndash;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td></tr>
+        <tr><td>&lt;</td><td>&ndash;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td></tr>
+        <tr><td>&lt;=</td><td>&ndash;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td></tr>
+        <tr><td>&gt;=</td><td>&ndash;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td></tr>
+        <tr><td>&gt;</td><td>&ndash;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td></tr>
         <tr><td><i>unary</i><span class="d_inlinecode donthyphenate notranslate">~</span></td><td>&ndash;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&ndash;</td><td>&ndash;</td></tr>
         <tr><td><i>unary</i>+</td><td>&ndash;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td></tr>
         <tr><td><i>unary</i>-</td><td>&ndash;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td></tr>
@@ -385,6 +399,12 @@ v = 3 + v;   <span class="d_comment">// add 3 to each element in v
         <tr><td><span class="d_inlinecode donthyphenate notranslate">&amp;</span>=</td><td>&ndash;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&ndash;</td><td>&ndash;</td></tr>
         <tr><td>|=</td><td>&ndash;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&ndash;</td><td>&ndash;</td></tr>
         <tr><td><span class="d_inlinecode donthyphenate notranslate">^=</span></td><td>&ndash;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&ndash;</td><td>&ndash;</td></tr>
+        <tr><td>==</td><td>&ndash;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td></tr>
+        <tr><td>!=</td><td>&ndash;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td></tr>
+        <tr><td>&lt;</td><td>&ndash;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td></tr>
+        <tr><td>&lt;=</td><td>&ndash;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td></tr>
+        <tr><td>&gt;=</td><td>&ndash;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td></tr>
+        <tr><td>&gt;</td><td>&ndash;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td></tr>
         <tr><td><i>unary</i><span class="d_inlinecode donthyphenate notranslate">~</span></td><td>&ndash;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&ndash;</td><td>&ndash;</td></tr>
         <tr><td><i>unary</i>+</td><td>&ndash;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td></tr>
         <tr><td><i>unary</i>-</td><td>&ndash;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td><td>&times;</td></tr>
@@ -406,8 +426,8 @@ v = 3 + v;   <span class="d_comment">// add 3 to each element in v
 
 
 
-        <div class="smallprint" id="copyright">Copyright &copy; 1999-2022 by the <a href="../foundation_overview.html">D Language Foundation</a> | Page generated by
-<a href="../spec/ddoc.html">Ddoc</a> on Mon Nov 14 18:07:05 2022
+        <div class="smallprint" id="copyright">Copyright &copy; 1999-2023 by the <a href="../foundation_overview.html">D Language Foundation</a> | Page generated by
+<a href="../spec/ddoc.html">Ddoc</a> on Wed Mar  1 14:57:12 2023
 </div>
     </div>
 </div>

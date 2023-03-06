@@ -1,7 +1,7 @@
 /**
  * Glue code for Objective-C interop.
  *
- * Copyright:   Copyright (C) 2015-2022 by The D Language Foundation, All Rights Reserved
+ * Copyright:   Copyright (C) 2015-2023 by The D Language Foundation, All Rights Reserved
  * Authors:     $(LINK2 https://www.digitalmars.com, Walter Bright)
  * License:     $(LINK2 https://www.boost.org/LICENSE_1_0.txt, Boost License 1.0)
  * Source:      $(LINK2 https://github.com/dlang/dmd/blob/master/src/dmd/objc_glue.d, _objc_glue.d)
@@ -520,7 +520,7 @@ static:
      */
     Symbol* symbolName(const(char)[] name, SC sclass, type* t)
     {
-        return symbol_name(name.ptr, cast(uint) name.length, sclass, t);
+        return symbol_name(name, sclass, t);
     }
 
     /**
@@ -716,9 +716,9 @@ static:
 
             // create symbol
             __gshared size_t selectorCount = 0;
-            char[42] nameString;
-            sprintf(nameString.ptr, "L_OBJC_SELECTOR_REFERENCES_%llu", cast(ulong) selectorCount);
-            auto symbol = symbol_name(nameString.ptr, SC.static_, type_fake(TYnptr));
+            char[42] nameString = void;
+            const len = sprintf(nameString.ptr, "L_OBJC_SELECTOR_REFERENCES_%llu", cast(ulong) selectorCount);
+            auto symbol = symbol_name(nameString[0 .. len], SC.static_, type_fake(TYnptr));
 
             symbol.Sdt = dtb.finish();
             symbol.Sseg = seg;

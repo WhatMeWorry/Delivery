@@ -1,7 +1,7 @@
 /**
  * Convert statements to Intermediate Representation (IR) for the back-end.
  *
- * Copyright:   Copyright (C) 1999-2022 by The D Language Foundation, All Rights Reserved
+ * Copyright:   Copyright (C) 1999-2023 by The D Language Foundation, All Rights Reserved
  * Authors:     $(LINK2 https://www.digitalmars.com, Walter Bright)
  * License:     $(LINK2 https://www.boost.org/LICENSE_1_0.txt, Boost License 1.0)
  * Source:      $(LINK2 https://github.com/dlang/dmd/blob/master/src/tocsym.d, _s2ir.d)
@@ -39,6 +39,7 @@ import dmd.globals;
 import dmd.glue;
 import dmd.id;
 import dmd.init;
+import dmd.location;
 import dmd.mtype;
 import dmd.statement;
 import dmd.stmtstate;
@@ -217,7 +218,7 @@ private extern (C++) class S2irVisitor : Visitor
         //printf("PragmaStatement.toIR()\n");
         if (s.ident == Id.startaddress)
         {
-            assert(s.args && s.args.dim == 1);
+            assert(s.args && s.args.length == 1);
             Expression e = (*s.args)[0];
             Dsymbol sa = getDsymbol(e);
             FuncDeclaration f = sa.isFuncDeclaration();
@@ -454,7 +455,7 @@ private extern (C++) class S2irVisitor : Visitor
          */
         mystate.defaultBlock = s.sdefault ? block_calloc(blx) : mystate.breakBlock;
 
-        const numcases = s.cases ? s.cases.dim : 0;
+        const numcases = s.cases ? s.cases.length : 0;
 
         /* allocate a block for each case
          */
@@ -1007,7 +1008,7 @@ private extern (C++) class S2irVisitor : Visitor
             bswitch.Belem = el_combine(el_combine(e1, e2),
                                         el_combine(e3, el_var(shandler)));
 
-            const numcases = s.catches.dim;
+            const numcases = s.catches.length;
             bswitch.Bswitch = cast(targ_llong *) Mem.check(.malloc((targ_llong).sizeof * (numcases + 1)));
             bswitch.Bswitch[0] = numcases;
             bswitch.appendSucc(defaultblock);
@@ -1613,6 +1614,8 @@ void insertFinallyBlockCalls(block *startblock)
                 // Rewrite into a BCgoto => BCretexp
                 elem *e = b.Belem;
                 tym_t ty = tybasic(e.Ety);
+                if (ty == TYvoid)
+                    goto case BCret;
                 if (!bcretexp)
                 {
                     bcretexp = dmd.backend.global.block_calloc();

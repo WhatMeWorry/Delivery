@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <!--
-    Copyright (c) 1999-2022 by the D Language Foundation
+    Copyright (c) 1999-2023 by the D Language Foundation
     All Rights Reserved.
     https://dlang.org/foundation_overview.html
   -->
@@ -40,7 +40,6 @@
 <ul class='expand-content'>    <li><a href='https://dlang.org/blog'>Blog</a></li>
     <li><a href='../orgs-using-d.html'>Orgs using D</a></li>
     <li><a href='https://twitter.com/search?q=%23dlang'>Twitter</a></li>
-    <li><a href='../calendar.html'>Calendar</a></li>
     <li class="menu-divider"><a href='https://forum.dlang.org'>Forums</a></li>
     <li><a href='irc://irc.libera.chat/d'>IRC</a></li>
     <li><a href='https://discord.gg/bMZk9Q4'>Community Discord</a></li>
@@ -75,7 +74,7 @@
     <div id="search-box">        <form method="get" action="https://google.com/search">
             <input type="hidden" id="domains" name="domains" value="dlang.org">
             <input type="hidden" id="sourceid" name="sourceid" value="google-search">
-            <span id="search-query"><input id="q" name="q" placeholder="Search"></span><span id="search-dropdown"><span class="helper">                <select id="sitesearch" name="sitesearch" size="1">
+            <span id="search-query"><input id="q" name="q" placeholder="Google Search"></span><span id="search-dropdown"><span class="helper">                <select id="sitesearch" name="sitesearch" size="1">
                     <option value="dlang.org">Entire Site</option>
                     <option selected value="dlang.org/spec">Language</option>
                     <option  value="dlang.org/phobos">Library</option>
@@ -741,7 +740,7 @@
     <a href="../spec/lex.html#IntegerLiteral"><i>IntegerLiteral</i></a>
     <a href="../spec/lex.html#FloatLiteral"><i>FloatLiteral</i></a>
     <span id="CharacterLiteral"><a class="anchor" title="Permalink to this section" id="" href="#"></a></span><span id="character-literal"><a class="anchor" title="Permalink to this section" id="" href="#"></a></span><a href="../spec/lex.html#CharacterLiteral"><i>CharacterLiteral</i></a>
-    <a href="#StringLiterals"><i>StringLiterals</i></a>
+    <a href="../spec/lex.html#StringLiteral"><i>StringLiteral</i></a>
     <a href="#ArrayLiteral"><i>ArrayLiteral</i></a>
     <a href="#AssocArrayLiteral"><i>AssocArrayLiteral</i></a>
     <a href="#FunctionLiteral"><i>FunctionLiteral</i></a>
@@ -762,9 +761,12 @@
     <a href="#SpecialKeyword"><i>SpecialKeyword</i></a>
     <a href="#TraitsExpression"><i>TraitsExpression</i></a>
 </pre>
-<pre class="bnf notranslate"><a id="StringLiterals"><span class="gname">StringLiterals</span></a>:
-    <a href="../spec/lex.html#StringLiteral"><i>StringLiteral</i></a>
-    <i>StringLiterals</i> <a href="../spec/lex.html#StringLiteral"><i>StringLiteral</i></a>
+<pre class="bnf notranslate"><a id="StringLiteral"><span class="gname">StringLiteral</span></a>:
+    <a href="../spec/lex.html#WysiwygString"><i>WysiwygString</i></a>
+    <a href="../spec/lex.html#AlternateWysiwygString"><i>AlternateWysiwygString</i></a>
+    <a href="../spec/lex.html#DoubleQuotedString"><i>DoubleQuotedString</i></a>
+    <a href="../spec/lex.html#DelimitedString"><i>DelimitedString</i></a>
+    <a href="../spec/lex.html#TokenString"><i>TokenString</i></a>
 </pre>
 <pre class="bnf notranslate"><a id="ArrayLiteral"><span class="gname">ArrayLiteral</span></a>:
     <span class="d_inlinecode donthyphenate notranslate">[</span> <i>ArrayMemberInitializations</i><sub>opt</sub> <span class="d_inlinecode donthyphenate notranslate">]</span>
@@ -1150,8 +1152,8 @@
 <div class="blankline"></div>
 <a id="AnonStructDeclaration"><span class="gname">AnonStructDeclaration</span></a>:
     <span class="d_inlinecode donthyphenate notranslate">struct</span> <a href="#AggregateBody"><i>AggregateBody</i></a>
-<div class="blankline"></div>
-<a id="UnionDeclaration"><span class="gname">UnionDeclaration</span></a>:
+</pre>
+<pre class="bnf notranslate"><a id="UnionDeclaration"><span class="gname">UnionDeclaration</span></a>:
     <span class="d_inlinecode donthyphenate notranslate">union</span> <a href="../spec/lex.html#Identifier"><i>Identifier</i></a> <span class="d_inlinecode donthyphenate notranslate">;</span>
     <span class="d_inlinecode donthyphenate notranslate">union</span> <a href="../spec/lex.html#Identifier"><i>Identifier</i></a> <a href="#AggregateBody"><i>AggregateBody</i></a>
     <a href="#UnionTemplateDeclaration"><i>UnionTemplateDeclaration</i></a>
@@ -1159,8 +1161,8 @@
 <div class="blankline"></div>
 <a id="AnonUnionDeclaration"><span class="gname">AnonUnionDeclaration</span></a>:
     <span class="d_inlinecode donthyphenate notranslate">union</span> <a href="#AggregateBody"><i>AggregateBody</i></a>
-<div class="blankline"></div>
-<a id="AggregateBody"><span class="gname">AggregateBody</span></a>:
+</pre>
+<pre class="bnf notranslate"><a id="AggregateBody"><span class="gname">AggregateBody</span></a>:
     <span class="d_inlinecode donthyphenate notranslate">{</span> <a href="#DeclDefs"><i>DeclDefs</i></a><sub>opt</sub> <span class="d_inlinecode donthyphenate notranslate">}</span>
 </pre>
 <pre class="bnf notranslate"><a id="StructInitializer"><span class="gname">StructInitializer</span></a>:
@@ -1619,23 +1621,19 @@
     <a href="#StaticIfCondition"><i>StaticIfCondition</i></a>
 </pre>
 <pre class="bnf notranslate"><a id="VersionCondition"><span class="gname">VersionCondition</span></a>:
-    <span class="d_inlinecode donthyphenate notranslate">version (</span> <a href="../spec/lex.html#IntegerLiteral"><i>IntegerLiteral</i></a> <span class="d_inlinecode donthyphenate notranslate">)</span>
     <span class="d_inlinecode donthyphenate notranslate">version (</span> <a href="../spec/lex.html#Identifier"><i>Identifier</i></a> <span class="d_inlinecode donthyphenate notranslate">)</span>
     <span class="d_inlinecode donthyphenate notranslate">version (</span> <span class="d_inlinecode donthyphenate notranslate">unittest</span> <span class="d_inlinecode donthyphenate notranslate">)</span>
     <span class="d_inlinecode donthyphenate notranslate">version (</span> <span class="d_inlinecode donthyphenate notranslate">assert</span> <span class="d_inlinecode donthyphenate notranslate">)</span>
 </pre>
 <pre class="bnf notranslate"><a id="VersionSpecification"><span class="gname">VersionSpecification</span></a>:
     <span class="d_inlinecode donthyphenate notranslate">version =</span> <a href="../spec/lex.html#Identifier"><i>Identifier</i></a> <span class="d_inlinecode donthyphenate notranslate">;</span>
-    <span class="d_inlinecode donthyphenate notranslate">version =</span> <a href="../spec/lex.html#IntegerLiteral"><i>IntegerLiteral</i></a> <span class="d_inlinecode donthyphenate notranslate">;</span>
 </pre>
 <pre class="bnf notranslate"><a id="DebugCondition"><span class="gname">DebugCondition</span></a>:
     <span class="d_inlinecode donthyphenate notranslate">debug</span>
-    <span class="d_inlinecode donthyphenate notranslate">debug (</span> <a href="../spec/lex.html#IntegerLiteral"><i>IntegerLiteral</i></a> <span class="d_inlinecode donthyphenate notranslate">)</span>
     <span class="d_inlinecode donthyphenate notranslate">debug (</span> <a href="../spec/lex.html#Identifier"><i>Identifier</i></a> <span class="d_inlinecode donthyphenate notranslate">)</span>
 </pre>
 <pre class="bnf notranslate"><a id="DebugSpecification"><span class="gname">DebugSpecification</span></a>:
     <span class="d_inlinecode donthyphenate notranslate">debug =</span> <a href="../spec/lex.html#Identifier"><i>Identifier</i></a> <span class="d_inlinecode donthyphenate notranslate">;</span>
-    <span class="d_inlinecode donthyphenate notranslate">debug =</span> <a href="../spec/lex.html#IntegerLiteral"><i>IntegerLiteral</i></a> <span class="d_inlinecode donthyphenate notranslate">;</span>
 </pre>
 <pre class="bnf notranslate"><a id="StaticIfCondition"><span class="gname">StaticIfCondition</span></a>:
     <span class="d_inlinecode donthyphenate notranslate">static if (</span> <a href="#AssignExpression"><i>AssignExpression</i></a> <span class="d_inlinecode donthyphenate notranslate">)</span>
@@ -1652,7 +1650,7 @@
     <a href="#StaticForeach"><i>StaticForeach</i></a> <a href="#NoScopeNonEmptyStatement"><i>NoScopeNonEmptyStatement</i></a>
 </pre>
 <pre class="bnf notranslate"><a id="StaticAssert"><span class="gname">StaticAssert</span></a>:
-    <span class="d_inlinecode donthyphenate notranslate">static assert (</span> <a href="#AssertArguments"><i>AssertArguments</i></a> <span class="d_inlinecode donthyphenate notranslate">) ;</span>
+    <span class="d_inlinecode donthyphenate notranslate">static assert (</span> <a href="#ArgumentList"><i>ArgumentList</i></a> <span class="d_inlinecode donthyphenate notranslate">) ;</span>
 </pre>
 <h2><a class="anchor" title="Permalink to this section" id="traits" href="#traits">Traits</a></h2>
 <pre class="bnf notranslate"><a id="TraitsExpression"><span class="gname">TraitsExpression</span></a>:
@@ -2511,8 +2509,8 @@ on-off-switch:
 
 
 
-        <div class="smallprint" id="copyright">Copyright &copy; 1999-2022 by the <a href="../foundation_overview.html">D Language Foundation</a> | Page generated by
-<a href="../spec/ddoc.html">Ddoc</a> on Mon Nov 14 18:07:00 2022
+        <div class="smallprint" id="copyright">Copyright &copy; 1999-2023 by the <a href="../foundation_overview.html">D Language Foundation</a> | Page generated by
+<a href="../spec/ddoc.html">Ddoc</a> on Wed Mar  1 14:57:11 2023
 </div>
     </div>
 </div>

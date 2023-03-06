@@ -2,7 +2,7 @@
  * Compiler implementation of the
  * $(LINK2 https://www.dlang.org, D programming language).
  *
- * Copyright:   Copyright (C) 2009-2022 by The D Language Foundation, All Rights Reserved
+ * Copyright:   Copyright (C) 2009-2023 by The D Language Foundation, All Rights Reserved
  * Authors:     $(LINK2 https://www.digitalmars.com, Walter Bright)
  * License:     $(LINK2 https://www.boost.org/LICENSE_1_0.txt, Boost License 1.0)
  * Source:      $(LINK2 https://github.com/dlang/dmd/blob/master/src/dmd/backend/mscoffobj.d, backend/mscoffobj.d)
@@ -1232,7 +1232,7 @@ private void emitSectionBrace(const(char)* segname, const(char)* symname, int at
     /* Create symbol sym_beg that sits just before the .seg$B section
      */
     strcat(strcpy(name.ptr, symname), "_beg");
-    Symbol *beg = symbol_name(name.ptr, SC.global, tspvoid);
+    Symbol *beg = symbol_name(name[0 .. strlen(name.ptr)], SC.global, tspvoid);
     beg.Sseg = seg_bg;
     beg.Soffset = 0;
     symbuf.write((&beg)[0 .. 1]);
@@ -1242,7 +1242,7 @@ private void emitSectionBrace(const(char)* segname, const(char)* symname, int at
     /* Create symbol sym_end that sits just after the .seg$B section
      */
     strcat(strcpy(name.ptr, symname), "_end");
-    Symbol *end = symbol_name(name.ptr, SC.global, tspvoid);
+    Symbol *end = symbol_name(name[0 .. strlen(name.ptr)], SC.global, tspvoid);
     end.Sseg = seg_en;
     end.Soffset = 0;
     symbuf.write((&end)[0 .. 1]);
@@ -1959,7 +1959,7 @@ int MsCoffObj_external_def(const(char)* name)
 {
     //printf("MsCoffObj_external_def('%s')\n",name);
     assert(name);
-    Symbol *s = symbol_name(name, SC.extern_, tspvoid);
+    Symbol *s = symbol_name(name[0 .. strlen(name)], SC.extern_, tspvoid);
     symbuf.write((&s)[0 .. 1]);
     return 0;
 }

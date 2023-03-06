@@ -4,7 +4,7 @@
  * Compiler implementation of the
  * $(LINK2 https://www.dlang.org, D programming language).
  *
- * Copyright:   Copyright (C) 2012-2022 by The D Language Foundation, All Rights Reserved
+ * Copyright:   Copyright (C) 2012-2023 by The D Language Foundation, All Rights Reserved
  * Authors:     $(LINK2 https://www.digitalmars.com, Walter Bright)
  * License:     $(LINK2 https://www.boost.org/LICENSE_1_0.txt, Boost License 1.0)
  * Source:      $(LINK2 https://github.com/dlang/dmd/blob/master/src/dmd/backend/pdata.d, backend/pdata.d)
@@ -78,7 +78,7 @@ public void win64_pdata(Symbol *sf)
     memcpy(pdata_name, "$pdata$".ptr, 7);
     memcpy(pdata_name + 7, sf.Sident.ptr, sflen + 1);      // include terminating 0
 
-    Symbol *spdata = symbol_name(pdata_name,SC.static_,tstypes[TYint]);
+    Symbol *spdata = symbol_name(pdata_name[0 .. 7 + sflen],SC.static_,tstypes[TYint]);
     symbol_keep(spdata);
     symbol_debug(spdata);
 
@@ -122,7 +122,7 @@ private Symbol *win64_unwind(Symbol *sf)
     memcpy(unwind_name, "$unwind$".ptr, 8);
     memcpy(unwind_name + 8, sf.Sident.ptr, sflen + 1);     // include terminating 0
 
-    Symbol *sunwind = symbol_name(unwind_name,SC.static_,tstypes[TYint]);
+    Symbol *sunwind = symbol_name(unwind_name[0 .. 8 + sflen],SC.static_,tstypes[TYint]);
     symbol_keep(sunwind);
     symbol_debug(sunwind);
 

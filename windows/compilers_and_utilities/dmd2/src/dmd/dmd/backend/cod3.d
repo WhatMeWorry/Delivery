@@ -10,7 +10,7 @@
  * $(LINK2 https://www.dlang.org, D programming language).
  *
  * Copyright:   Copyright (C) 1994-1998 by Symantec
- *              Copyright (C) 2000-2022 by The D Language Foundation, All Rights Reserved
+ *              Copyright (C) 2000-2023 by The D Language Foundation, All Rights Reserved
  * Authors:     $(LINK2 https://www.digitalmars.com, Walter Bright)
  * License:     $(LINK2 https://www.boost.org/LICENSE_1_0.txt, Boost License 1.0)
  * Source:      $(LINK2 https://github.com/dlang/dmd/blob/master/src/dmd/backend/cod3.d, backend/cod3.d)
@@ -1368,7 +1368,7 @@ version (MARS)
 @trusted
 regm_t allocretregs(const tym_t ty, type* t, const tym_t tyf, out reg_t reg1, out reg_t reg2)
 {
-    //printf("allocretregs()\n");
+    //printf("allocretregs() ty: %s\n", tym_str(ty));
     reg1 = reg2 = NOREG;
 
     if (!(config.exe & EX_posix))
@@ -1506,6 +1506,10 @@ regm_t allocretregs(const tym_t ty, type* t, const tym_t tyf, out reg_t reg1, ou
             {
                 assert(tyfb == TYjfunc && I32);
                 return ST01;
+            }
+            else if (tysimd(tym))
+            {
+                return rralloc.xmm();
             }
             assert(I64 || tyfloating(tym));
             goto case 4;
@@ -4089,7 +4093,7 @@ void prolog_gen_win64_varargs(ref CodeBuilder cdb)
 @trusted
 void prolog_loadparams(ref CodeBuilder cdb, tym_t tyf, bool pushalloc, out regm_t namedargs)
 {
-    //printf("prolog_loadparams()\n");
+    //printf("prolog_loadparams() %s\n", funcsym_p.Sident.ptr);
     debug
     for (SYMIDX si = 0; si < globsym.length; si++)
     {

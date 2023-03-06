@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <!--
-    Copyright (c) 1999-2022 by the D Language Foundation
+    Copyright (c) 1999-2023 by the D Language Foundation
     All Rights Reserved.
     https://dlang.org/foundation_overview.html
   -->
@@ -40,7 +40,6 @@
 <ul class='expand-content'>    <li><a href='https://dlang.org/blog'>Blog</a></li>
     <li><a href='../orgs-using-d.html'>Orgs using D</a></li>
     <li><a href='https://twitter.com/search?q=%23dlang'>Twitter</a></li>
-    <li><a href='../calendar.html'>Calendar</a></li>
     <li class="menu-divider"><a href='https://forum.dlang.org'>Forums</a></li>
     <li><a href='irc://irc.libera.chat/d'>IRC</a></li>
     <li><a href='https://discord.gg/bMZk9Q4'>Community Discord</a></li>
@@ -75,7 +74,7 @@
     <div id="search-box">        <form method="get" action="https://google.com/search">
             <input type="hidden" id="domains" name="domains" value="dlang.org">
             <input type="hidden" id="sourceid" name="sourceid" value="google-search">
-            <span id="search-query"><input id="q" name="q" placeholder="Search"></span><span id="search-dropdown"><span class="helper">                <select id="sitesearch" name="sitesearch" size="1">
+            <span id="search-query"><input id="q" name="q" placeholder="Google Search"></span><span id="search-dropdown"><span class="helper">                <select id="sitesearch" name="sitesearch" size="1">
                     <option value="dlang.org">Entire Site</option>
                     <option selected value="dlang.org/spec">Language</option>
                     <option  value="dlang.org/phobos">Library</option>
@@ -218,36 +217,38 @@
 <div class="blankline"></div>
 <div class="blankline"></div>
         <p>If the <i>EnumBaseType</i> is not explicitly set, and the first
-        <i>EnumMember</i> has an <a href="../spec/expression.html#AssignExpression"><i>AssignExpression</i></a>, it is set to the type of that
-        <a href="../spec/expression.html#AssignExpression"><i>AssignExpression</i></a>. Otherwise, it defaults to
+        <i>EnumMember</i> has an <em>AssignExpression</em>, it is set to the type of that
+        <em>AssignExpression</em>. Otherwise, it defaults to
         type <span class="d_inlinecode donthyphenate notranslate">int</span>.</p>
 <div class="blankline"></div>
         <p>Named enum members may not have individual <i>Type</i>s.
         </p>
-<div class="blankline"></div>
 <div class="blankline"></div>
         <p>A named enum member can be implicitly cast to its <a href="#EnumBaseType"><i>EnumBaseType</i></a>,
         but <i>EnumBaseType</i> types
         cannot be implicitly cast to an enum type.
         </p>
 <div class="blankline"></div>
-        <p>The value of an <a href="#EnumMember"><i>EnumMember</i></a> is given by its <a href="../spec/expression.html#AssignExpression"><i>AssignExpression</i></a>.
-        If there is no <a href="../spec/expression.html#AssignExpression"><i>AssignExpression</i></a> and it is the first <i>EnumMember</i>,
+        <p>The value of an <a href="#EnumMember"><i>EnumMember</i></a> is given by its <em>AssignExpression</em> if present.
+        If there is no <em>AssignExpression</em> and it is the first <i>EnumMember</i>,
         its value is <a href="#EnumBaseType"><i>EnumBaseType</i></a><span class="d_inlinecode donthyphenate notranslate">.init</span>.
+        If there is no <em>AssignExpression</em> and it is not the first <i>EnumMember</i>,
+        it is given the value of the previous <i>EnumMember</i><span class="d_inlinecode donthyphenate notranslate">+1</span>:</p>
+
+<ul><li>If the value of the previous <i>EnumMember</i> is <a href="#EnumBaseType"><i>EnumBaseType</i></a><span class="d_inlinecode donthyphenate notranslate">.max</span>,
+          it is an error. This prevents value overflow. It is an error if the previous
+          member cannot be compared with <em>EnumBaseType</em><span class="d_inlinecode donthyphenate notranslate">.max</span> at compile-time.</li>
+<li>It is an error if the base type does not define a compile-time
+          evaluable <span class="d_inlinecode donthyphenate notranslate">+1</span> operation.</li>
+<li>If the value of the previous <i>EnumMember</i><span class="d_inlinecode donthyphenate notranslate">+1</span> is the same as the
+          value of the previous <i>EnumMember</i>, it is an error. (This can happen
+          with floating point types).
+</li>
+</ul>
+        <p>All <i>EnumMember</i>s are in scope for the <em>AssignExpression</em>s.
         </p>
 <div class="blankline"></div>
-        <p>If there is no <a href="../spec/expression.html#AssignExpression"><i>AssignExpression</i></a> and it is not the first <i>EnumMember</i>,
-        it is given the value of the previous <i>EnumMember</i><span class="d_inlinecode donthyphenate notranslate">+1</span>.
-        If the value of the previous <i>EnumMember</i> is <a href="#EnumBaseType"><i>EnumBaseType</i></a><span class="d_inlinecode donthyphenate notranslate">.max</span>,
-        it is an error.
-        If the value of the previous <i>EnumMember</i><span class="d_inlinecode donthyphenate notranslate">+1</span> is the same as the
-        value of the previous <i>EnumMember</i>, it is an error. (This can happen
-        with floating point types.)
-        </p>
-<div class="blankline"></div>
-        <p>All <i>EnumMember</i>s are in scope for the <a href="../spec/expression.html#AssignExpression"><i>AssignExpression</i></a>s.
-        </p>
-<div class="blankline"></div>
+<div class="runnable-examples">
 <pre class="d_code notranslate"><span class="d_keyword">enum</span> A = 3;
 <span class="d_keyword">enum</span> B
 {
@@ -266,7 +267,8 @@
     E2      <span class="d_comment">// error, C.D is C.max
 </span>}
 </pre>
-<div class="blankline"></div>
+
+</div>
 <div class="blankline"></div>
         <p>An empty enum body (For example <span class="d_inlinecode donthyphenate notranslate">enum E;</span>) signifies an opaque
         enum - the enum members are unknown.</p>
@@ -337,22 +339,24 @@ X.init   <span class="d_comment">// is X.A
         <p>Enums must have at least one member.
         </p>
 <div class="blankline"></div>
-        <p>The value of an <i>EnumMember</i> is given by its <a href="../spec/expression.html#AssignExpression"><i>AssignExpression</i></a>.
-        If there is no <a href="../spec/expression.html#AssignExpression"><i>AssignExpression</i></a> and it is the first <i>EnumMember</i>,
+        <p>The value of an <i>EnumMember</i> is given by its <em>AssignExpression</em> if present.
+        If there is no <em>AssignExpression</em> and it is the first <i>EnumMember</i>,
         its value is the <span class="d_inlinecode donthyphenate notranslate">.init</span> property of the <i>EnumMember</i>'s type.
-        </p>
-<div class="blankline"></div>
-        <p>If there is no <a href="../spec/expression.html#AssignExpression"><i>AssignExpression</i></a> and it is not the first <i>EnumMember</i>,
-        it is given the value of the previous <i>EnumMember</i><span class="d_inlinecode donthyphenate notranslate">+1</span>.
-        If the value of the previous <i>EnumMember</i> is the <span class="d_inlinecode donthyphenate notranslate">.max</span> property
-        if the previous <i>EnumMember</i>'s type,
-        it is an error.
-        If the value of the previous <i>EnumMember</i><span class="d_inlinecode donthyphenate notranslate">+1</span> is the same as the
-        value of the previous <i>EnumMember</i>, it is an error. (This can happen
-        with floating point types.)
-        </p>
-<div class="blankline"></div>
-        <p>All <i>EnumMember</i>s are in scope for the <a href="../spec/expression.html#AssignExpression"><i>AssignExpression</i></a>s.
+        If there is no <em>AssignExpression</em> and it is not the first <i>EnumMember</i>,
+        it is given the value of the previous <i>EnumMember</i><span class="d_inlinecode donthyphenate notranslate">+1</span>:</p>
+
+<ul><li>If the value of the previous <i>EnumMember</i> is the <span class="d_inlinecode donthyphenate notranslate">.max</span> property
+          of the previous <i>EnumMember</i>'s type, it is an error.
+          This prevents value overflow. It is an error if the previous
+          member cannot be compared with its <span class="d_inlinecode donthyphenate notranslate">.max</span> property at compile-time.</li>
+<li>It is an error if the type of the previous member does not define a compile-time
+          evaluable <span class="d_inlinecode donthyphenate notranslate">+1</span> operation.</li>
+<li>If the value of the previous <i>EnumMember</i><span class="d_inlinecode donthyphenate notranslate">+1</span> is the same as the
+          value of the previous <i>EnumMember</i>, it is an error. (This can happen
+          with floating point types).
+</li>
+</ul>
+        <p>All <i>EnumMember</i>s are in scope for the <em>AssignExpression</em>s.
         </p>
 <div class="blankline"></div>
 <pre class="d_code notranslate"><span class="d_keyword">enum</span> { A, B = 5+7, C, D = 8+C, E }
@@ -428,8 +432,8 @@ X.init   <span class="d_comment">// is X.A
 
 
 
-        <div class="smallprint" id="copyright">Copyright &copy; 1999-2022 by the <a href="../foundation_overview.html">D Language Foundation</a> | Page generated by
-<a href="../spec/ddoc.html">Ddoc</a> on Mon Nov 14 18:07:02 2022
+        <div class="smallprint" id="copyright">Copyright &copy; 1999-2023 by the <a href="../foundation_overview.html">D Language Foundation</a> | Page generated by
+<a href="../spec/ddoc.html">Ddoc</a> on Wed Mar  1 14:57:11 2023
 </div>
     </div>
 </div>

@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <!--
-    Copyright (c) 1999-2022 by the D Language Foundation
+    Copyright (c) 1999-2023 by the D Language Foundation
     All Rights Reserved.
     https://dlang.org/foundation_overview.html
   -->
@@ -40,7 +40,6 @@
 <ul class='expand-content'>    <li><a href='https://dlang.org/blog'>Blog</a></li>
     <li><a href='../orgs-using-d.html'>Orgs using D</a></li>
     <li><a href='https://twitter.com/search?q=%23dlang'>Twitter</a></li>
-    <li><a href='../calendar.html'>Calendar</a></li>
     <li class="menu-divider"><a href='https://forum.dlang.org'>Forums</a></li>
     <li><a href='irc://irc.libera.chat/d'>IRC</a></li>
     <li><a href='https://discord.gg/bMZk9Q4'>Community Discord</a></li>
@@ -75,7 +74,7 @@
     <div id="search-box">        <form method="get" action="https://google.com/search">
             <input type="hidden" id="domains" name="domains" value="dlang.org">
             <input type="hidden" id="sourceid" name="sourceid" value="google-search">
-            <span id="search-query"><input id="q" name="q" placeholder="Search"></span><span id="search-dropdown"><span class="helper">                <select id="sitesearch" name="sitesearch" size="1">
+            <span id="search-query"><input id="q" name="q" placeholder="Google Search"></span><span id="search-dropdown"><span class="helper">                <select id="sitesearch" name="sitesearch" size="1">
                     <option value="dlang.org">Entire Site</option>
                     <option selected value="dlang.org/spec">Language</option>
                     <option  value="dlang.org/phobos">Library</option>
@@ -147,6 +146,10 @@
 <div class="page-contents quickindex">    <div class="page-contents-header">        <b>Contents</b>
     </div>
     <ol>    <li><a href="#intro">Introduction</a></li>
+    <li><a href="#members">Members</a><ol>        <li><a href="#struct-members">Struct Members</a></li>
+        <li><a href="#union-members">Union Members</a></li>
+        <li><a href="#recursive-types">Recursive Structs and Unions</a></li>
+    </ol></li>
     <li><a href="#struct_layout">Struct Layout</a></li>
     <li><a href="#POD">Plain Old Data</a></li>
     <li><a href="#opaque_struct_unions">Opaque Structs and Unions</a></li>
@@ -184,8 +187,8 @@
 <h2><a class="anchor" title="Permalink to this section" id="intro" href="#intro">Introduction</a></h2>
 <div class="blankline"></div>
     <p>Whereas <a href="../spec/class.html">classes</a> are reference types,
-    structs are value types.
-    Structs and unions are simple aggregations of data and their
+    structs and unions are value types.
+    Structs are simple aggregations of data and their
     associated operations on that data.
     </p>
 <div class="blankline"></div>
@@ -197,8 +200,8 @@
 <div class="blankline"></div>
 <a id="AnonStructDeclaration"><span class="gname">AnonStructDeclaration</span></a>:
     <span class="d_inlinecode donthyphenate notranslate">struct</span> <a href="#AggregateBody"><i>AggregateBody</i></a>
-<div class="blankline"></div>
-<a id="UnionDeclaration"><span class="gname">UnionDeclaration</span></a>:
+</pre>
+<pre class="bnf notranslate"><a id="UnionDeclaration"><span class="gname">UnionDeclaration</span></a>:
     <span class="d_inlinecode donthyphenate notranslate">union</span> <a href="../spec/lex.html#Identifier"><i>Identifier</i></a> <span class="d_inlinecode donthyphenate notranslate">;</span>
     <span class="d_inlinecode donthyphenate notranslate">union</span> <a href="../spec/lex.html#Identifier"><i>Identifier</i></a> <a href="#AggregateBody"><i>AggregateBody</i></a>
     <a href="../spec/template.html#UnionTemplateDeclaration"><i>UnionTemplateDeclaration</i></a>
@@ -206,8 +209,8 @@
 <div class="blankline"></div>
 <a id="AnonUnionDeclaration"><span class="gname">AnonUnionDeclaration</span></a>:
     <span class="d_inlinecode donthyphenate notranslate">union</span> <a href="#AggregateBody"><i>AggregateBody</i></a>
-<div class="blankline"></div>
-<a id="AggregateBody"><span class="gname">AggregateBody</span></a>:
+</pre>
+<pre class="bnf notranslate"><a id="AggregateBody"><span class="gname">AggregateBody</span></a>:
     <span class="d_inlinecode donthyphenate notranslate">{</span> <a href="../spec/module.html#DeclDefs"><i>DeclDefs</i></a><sub>opt</sub> <span class="d_inlinecode donthyphenate notranslate">}</span>
 </pre>
 <div class="blankline"></div>
@@ -219,7 +222,8 @@
     <span class="d_keyword">int</span> i;
 }
 
-<span class="d_keyword">void</span> main() {
+<span class="d_keyword">void</span> main()
+{
     S a;
     a.i = 3;
 
@@ -235,11 +239,39 @@
     <p>For local variables, a struct instance is allocated on the stack
     by default. To allocate on the heap, use <span class="d_inlinecode donthyphenate notranslate">new</span>:</p>
 <pre class="d_code notranslate">S* p = <span class="d_keyword">new</span> S;
+<span class="d_keyword">assert</span>(p.i == 0);
 </pre>
 <div class="blankline"></div>
+    <p>A struct can contain multiple fields which are stored sequentially.
+    Conversely, multiple fields in a union use overlapping storage.</p>
+<div class="blankline"></div>
+<div class="runnable-examples">
+<pre class="d_code notranslate"><span class="d_keyword">union</span> U
+{
+    <span class="d_keyword">ubyte</span> i;
+    <span class="d_keyword">char</span> c;
+}
+
+<span class="d_keyword">void</span> main()
+{
+    U u;
+    u.i = 3;
+    <span class="d_keyword">assert</span>(u.c == '\x03');
+    u.c++;
+    <span class="d_keyword">assert</span>(u.i == 4);
+}
+</pre>
+
+</div>
+<div class="blankline"></div>
+<h2><a class="anchor" title="Permalink to this section" id="members" href="#members">Members</a></h2>
+<div class="blankline"></div>
+<h3><a class="anchor" title="Permalink to this section" id="struct-members" href="#struct-members">Struct Members</a></h3>
+<div class="blankline"></div>
     <p>A struct definition can contain:</p>
-    <ul>        <li>fields</li>
-        <li><a href="../spec/attribute.html#static">static</a> fields</li>
+    <ul>        <li>Fields</li>
+        <li><a href="../spec/attribute.html#static">Static</a> fields</li>
+        <li><a href="#anonymous">Anonymous Structs and Unions</a></li>
         <li><a href="../spec/class.html#member-functions">member functions</a>
         <ul>            <li>static member functions</li>
             <li><a href="#struct-constructor">Constructors</a></li>
@@ -248,7 +280,7 @@
             <li><a href="../spec/operatoroverloading.html">Operator Overloading</a></li>
         </ul>
         <li><a href="../spec/class.html#alias-this">Alias This</a></li>
-        <li>other declarations (see <a href="../spec/module.html#DeclDef"><i>DeclDef</i></a>)</li>
+        <li>Other declarations (see <a href="../spec/module.html#DeclDef"><i>DeclDef</i></a>)</li>
         </li>
     </ul>
 <div class="blankline"></div>
@@ -256,15 +288,48 @@
     the implementation is free to make bit copies of the struct
     as convenient.</p>
 <div class="blankline"></div>
-    <p>Structs and unions may not contain an instance of themselves,
-    however, they may contain a pointer to the same type.
-    </p>
-<div class="blankline"></div>
     <div class="spec-boxes best-practice"><b>Best Practices:</b>     <ol>    <li>Bit fields are supported with the
     <a href="https://dlang.org/phobos/std_bitmanip.html#bitfields">bitfields</a> template.</li>
     </ol></div>
 
 
+<div class="blankline"></div>
+<h3><a class="anchor" title="Permalink to this section" id="union-members" href="#union-members">Union Members</a></h3>
+<div class="blankline"></div>
+    <p>A union definition can contain:</p>
+    <ul>        <li>Fields</li>
+        <li><a href="../spec/attribute.html#static">Static</a> fields</li>
+        <li><a href="#anonymous">Anonymous Structs and Unions</a></li>
+        <li><a href="../spec/class.html#member-functions">member functions</a>
+        <ul>            <li>static member functions</li>
+            <li><a href="#UnionConstructor">Constructors</a></li>
+            <li><a href="../spec/operatoroverloading.html">Operator Overloading</a></li>
+        </ul>
+        <li><a href="../spec/class.html#alias-this">Alias This</a></li>
+        <li>Other declarations (see <a href="../spec/module.html#DeclDef"><i>DeclDef</i></a>)</li>
+        </li>
+    </ul>
+<div class="blankline"></div>
+<h3><a class="anchor" title="Permalink to this section" id="recursive-types" href="#recursive-types">Recursive Structs and Unions</a></h3>
+<div class="blankline"></div>
+    <p>Structs and unions may not contain a non-static instance of themselves,
+    however, they may contain a pointer to the same type.
+    </p>
+<div class="blankline"></div>
+    <div class="runnable-examples">
+<pre class="d_code notranslate"><span class="d_keyword">struct</span> S
+{
+    S* ptr;     <span class="d_comment">// OK
+</span>    S[] slice;  <span class="d_comment">// OK
+</span>
+    S s;        <span class="d_comment">// error
+</span>    S[2] array; <span class="d_comment">// error
+</span>
+    <span class="d_keyword">static</span> S global; <span class="d_comment">// OK
+</span>}
+</pre>
+    
+</div>
 <div class="blankline"></div>
 <div class="blankline"></div>
 <h2><a class="anchor" title="Permalink to this section" id="struct_layout" href="#struct_layout">Struct Layout</a></h2>
@@ -373,8 +438,6 @@ S x; <span class="d_comment">// x.a is set to 4, x.b to 0
 </div>
 <div class="blankline"></div>
         <p>The default initializers are evaluated at compile time.</p>
-<div class="blankline"></div>
-        <p>The default initializers may not contain references to mutable data.</p>
 <div class="blankline"></div>
 <h3><a class="anchor" title="Permalink to this section" id="static_struct_init" href="#static_struct_init">Static Initialization of Structs</a></h3>
 <div class="blankline"></div>
@@ -1169,9 +1232,23 @@ S m = S(1);
     <p>Copy constructors are used to initialize a <span class="d_inlinecode donthyphenate notranslate">struct</span> instance from
     another <span class="d_inlinecode donthyphenate notranslate">struct</span> of the same type.</p>
 <div class="blankline"></div>
-    <p>A constructor declaration is a copy constructor declaration if and only if it is a constructor
-    declaration that takes only one non-default parameter by reference that is
-    of the same type as <span class="d_inlinecode donthyphenate notranslate">typeof(this)</span>, followed by any number of default parameters:</p>
+    <p>A constructor declaration is a copy constructor declaration if it meets
+    the following requirements:</p>
+<div class="blankline"></div>
+    <ul>    <li>It takes exactly one parameter without a
+    <a href="../spec/function.html#function-default-args">default argument</a>,
+    followed by any number of parameters with default arguments.</li>
+<div class="blankline"></div>
+    <li>Its first parameter is a
+    <a href="../spec/function.html#ref-params"><span class="d_inlinecode donthyphenate notranslate">ref</span> parameter</a>.</li>
+<div class="blankline"></div>
+    <li>The type of its first parameter is the same type as
+    <a href="../spec/type.html#typeof"><span class="d_inlinecode donthyphenate notranslate">typeof(this)</span></a>, optionally with one or more
+    <a href="../spec/const3.html">type qualifiers</a> applied to it.</li>
+<div class="blankline"></div>
+    <li>It is not a
+    <a href="../spec/template.html#template_ctors">template constructor declaration</a>.</li>
+    </ul>
 <div class="blankline"></div>
 <pre class="d_code notranslate"><span class="d_keyword">struct</span> A
 {
@@ -2086,8 +2163,8 @@ A gun()
 
 
 
-        <div class="smallprint" id="copyright">Copyright &copy; 1999-2022 by the <a href="../foundation_overview.html">D Language Foundation</a> | Page generated by
-<a href="../spec/ddoc.html">Ddoc</a> on Mon Nov 14 18:07:02 2022
+        <div class="smallprint" id="copyright">Copyright &copy; 1999-2023 by the <a href="../foundation_overview.html">D Language Foundation</a> | Page generated by
+<a href="../spec/ddoc.html">Ddoc</a> on Wed Mar  1 14:57:11 2023
 </div>
     </div>
 </div>

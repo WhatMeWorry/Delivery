@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <!--
-    Copyright (c) 1999-2022 by the D Language Foundation
+    Copyright (c) 1999-2023 by the D Language Foundation
     All Rights Reserved.
     https://dlang.org/foundation_overview.html
   -->
@@ -49,7 +49,6 @@
 <ul class='expand-content'>    <li><a href='https://dlang.org/blog'>Blog</a></li>
     <li><a href='../orgs-using-d.html'>Orgs using D</a></li>
     <li><a href='https://twitter.com/search?q=%23dlang'>Twitter</a></li>
-    <li><a href='../calendar.html'>Calendar</a></li>
     <li class="menu-divider"><a href='https://forum.dlang.org'>Forums</a></li>
     <li><a href='irc://irc.libera.chat/d'>IRC</a></li>
     <li><a href='https://discord.gg/bMZk9Q4'>Community Discord</a></li>
@@ -84,7 +83,7 @@
     <div id="search-box">        <form method="get" action="https://google.com/search">
             <input type="hidden" id="domains" name="domains" value="dlang.org">
             <input type="hidden" id="sourceid" name="sourceid" value="google-search">
-            <span id="search-query"><input id="q" name="q" placeholder="Search"></span><span id="search-dropdown"><span class="helper">                <select id="sitesearch" name="sitesearch" size="1">
+            <span id="search-query"><input id="q" name="q" placeholder="Google Search"></span><span id="search-dropdown"><span class="helper">                <select id="sitesearch" name="sitesearch" size="1">
                     <option value="dlang.org">Entire Site</option>
                     <option  value="dlang.org/spec">Language</option>
                     <option  value="dlang.org/phobos">Library</option>
@@ -106,6 +105,11 @@ Log</option>
     </p>
     </div>
     <ul><li><a id="pending" href="pending.html">Nightly</a> <span class="hide-from-nav"> (preview) - upcoming changes from <span class="d_inlinecode donthyphenate notranslate">master</span></span></li>
+<li><a id="2.102.2" href="2.102.2.html">2.102.2</a><span class="hide-from-nav"> (Mar 01, 2023)</span></li>
+<li><a id="2.102.1" href="2.102.1.html">2.102.1</a><span class="hide-from-nav"> (Feb 15, 2023)</span></li>
+<li><a id="2.102.0" href="2.102.0.html">2.102.0</a><span class="hide-from-nav"> (Feb 01, 2023)</span></li>
+<li><a id="2.101.2" href="2.101.2.html">2.101.2</a><span class="hide-from-nav"> (Jan 01, 2023)</span></li>
+<li><a id="2.101.1" href="2.101.1.html">2.101.1</a><span class="hide-from-nav"> (Dec 15, 2022)</span></li>
 <li><a id="2.101.0" href="2.101.0.html">2.101.0</a><span class="hide-from-nav"> (Nov 14, 2022)</span></li>
 <li><a id="2.100.2" href="2.100.2.html">2.100.2</a><span class="hide-from-nav"> (Sep 10, 2022)</span></li>
 <li><a id="2.100.1" href="2.100.1.html">2.100.1</a><span class="hide-from-nav"> (Jul 15, 2022)</span></li>
@@ -274,29 +278,31 @@ Log</option>
 
 
 <ul>    <li>New release are published every <i>two</i> months, on the first day of every even month.</li>
-    <li>Two weeks before a new release <span class="d_inlinecode donthyphenate notranslate">master</span> is merged into <span class="d_inlinecode donthyphenate notranslate">stable</span> and a first beta is released.</li>
+    <li>One month before a new release <span class="d_inlinecode donthyphenate notranslate">master</span> is merged into <span class="d_inlinecode donthyphenate notranslate">stable</span> and a first beta is released.</li>
     <li>Point releases are published unscheduled when important issues or regressions get fixed.</li>
 </ul>
 
-<p>The release schedule for 2022 is as follows:</p>
+<p>The release schedule for 2023 is as follows:</p>
 
-    <div class="release-schedule">        <table>            <tr class="release-schedule-beta"><td>2022-02-15</td><td>2.099.0-beta.1</td><td>first beta for 2.099.0</td></tr>
-            <tr class="release-schedule-beta"><td>2022-03-01</td><td>2.099.0-beta.1</td><td>first beta for 2.099.0</td></tr>
-            <tr class="release-schedule-beta"><td>2022-04-15</td><td>2.100.0-beta.1</td><td>first beta for 2.100.0</td></tr>
-            <tr class="release-schedule-minor"><td>2022-05-01</td><td>2.100.0</td><td>minor release</td></tr>
-            <tr class="release-schedule-beta"><td>2022-07-15</td><td>2.101.0-beta.1</td><td>first beta for 2.101.0</td></tr>
-            <tr class="release-schedule-minor"><td>2022-08-01</td><td>2.101.0</td><td>minor release</td></tr>
-            <tr class="release-schedule-beta"><td>2022-09-15</td><td>2.102.0-beta.1</td><td>first beta for 2.102.0</td></tr>
-            <tr class="release-schedule-minor"><td>2022-10-01</td><td>2.102.0</td><td>minor release</td></tr>
-            <tr class="release-schedule-beta"><td>2022-11-15</td><td>2.103.0-beta.1</td><td>first beta for 2.103.0</td></tr>
-            <tr class="release-schedule-minor"><td>2022-12-01</td><td>2.103.0</td><td>minor release</td></tr>
+    <div class="release-schedule">        <table>            <tr class="release-schedule-beta"><td>2022-01-01</td><td>2.102.0-beta.1</td><td>first beta for 2.102.0</td></tr>
+            <tr class="release-schedule-minor"><td>2022-02-01</td><td>2.102.0</td><td>minor release</td></tr>
+            <tr class="release-schedule-beta"><td>2022-03-01</td><td>2.103.0-beta.1</td><td>first beta for 2.103.0</td></tr>
+            <tr class="release-schedule-minor"><td>2022-04-01</td><td>2.103.0</td><td>minor release</td></tr>
+            <tr class="release-schedule-beta"><td>2022-05-01</td><td>2.104.0-beta.1</td><td>first beta for 2.104.0</td></tr>
+            <tr class="release-schedule-minor"><td>2022-06-01</td><td>2.104.0</td><td>minor release</td></tr>
+            <tr class="release-schedule-beta"><td>2022-07-01</td><td>2.105.0-beta.1</td><td>first beta for 2.105.0</td></tr>
+            <tr class="release-schedule-minor"><td>2022-08-01</td><td>2.105.0</td><td>minor release</td></tr>
+            <tr class="release-schedule-beta"><td>2022-09-01</td><td>2.106.0-beta.1</td><td>first beta for 2.106.0</td></tr>
+            <tr class="release-schedule-minor"><td>2022-10-01</td><td>2.106.0</td><td>minor release</td></tr>
+            <tr class="release-schedule-beta"><td>2022-11-01</td><td>2.107.0-beta.1</td><td>first beta for 2.107.0</td></tr>
+            <tr class="release-schedule-minor"><td>2022-12-01</td><td>2.107.0</td><td>minor release</td></tr>
         </table>
     </div>
 
 
 
-        <div class="smallprint" id="copyright">Copyright &copy; 1999-2022 by the <a href="../foundation_overview.html">D Language Foundation</a> | Page generated by
-<a href="../spec/ddoc.html">Ddoc</a> on Mon Nov 14 18:07:20 2022
+        <div class="smallprint" id="copyright">Copyright &copy; 1999-2023 by the <a href="../foundation_overview.html">D Language Foundation</a> | Page generated by
+<a href="../spec/ddoc.html">Ddoc</a> on Wed Mar  1 14:57:14 2023
 </div>
     </div>
 </div>

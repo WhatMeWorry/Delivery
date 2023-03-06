@@ -2,7 +2,7 @@
  * Instruction tables for inline assembler.
  *
  * Copyright:   Copyright (C) 1985-1998 by Symantec
- *              Copyright (C) 2000-2022 by The D Language Foundation, All Rights Reserved
+ *              Copyright (C) 2000-2023 by The D Language Foundation, All Rights Reserved
  * License:     $(LINK2 https://www.boost.org/LICENSE_1_0.txt, Boost License 1.0)
  * Source:      $(LINK2 https://github.com/dlang/dmd/blob/master/src/dmd/backend/ptrntab.d, backend/ptrntab.d)
  * Documentation:  https://dlang.org/phobos/dmd_backend_ptrntab.html
@@ -5833,14 +5833,14 @@ extern (C++) OP *asm_op_lookup(const(char)* s)
 @trusted
 private int binary(const(char)* p, const OP[] table)
 {
-    int low = 0;
+    uint low = 0;
     char cp = *p;
-    int high = cast(int)(table.length) - 1;
+    uint high = cast(uint)(table.length) - 1;
     p++;
 
     while (low <= high)
     {
-        const mid = (low + high) >> 1;
+        const mid = low + ((high - low) >> 1);
         int cond = table[mid].str[0] - cp;
         if (cond == 0)
             cond = strcmp(table[mid].str.ptr + 1,p);

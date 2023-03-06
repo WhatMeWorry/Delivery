@@ -2,7 +2,7 @@
  * Other global optimizations
  *
  * Copyright:   Copyright (C) 1986-1998 by Symantec
- *              Copyright (C) 2000-2022 by The D Language Foundation, All Rights Reserved
+ *              Copyright (C) 2000-2023 by The D Language Foundation, All Rights Reserved
  * Authors:     $(LINK2 https://www.digitalmars.com, Walter Bright)
  * License:     Distributed under the Boost Software License, Version 1.0.
  *              https://www.boost.org/LICENSE_1_0.txt
@@ -358,7 +358,7 @@ private void conpropwalk(elem *n,vec_t IN)
             case OPne:
             case OPeqeq:
                 // Collect compare elems and their rd's in the rellist list
-                if (tyintegral(n.EV.E1.Ety))
+                if (tyintegral(n.EV.E1.Ety) && !tyvector(n.Ety))
                 {   //printf("appending to eqeqlist\n"); elem_print(n);
                     auto pdata = eqeqlist.push();
                     pdata.emplace(n,thisblock);

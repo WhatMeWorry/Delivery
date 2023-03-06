@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <!--
-    Copyright (c) 1999-2022 by the D Language Foundation
+    Copyright (c) 1999-2023 by the D Language Foundation
     All Rights Reserved.
     https://dlang.org/foundation_overview.html
   -->
@@ -40,7 +40,6 @@
 <ul class='expand-content'>    <li><a href='https://dlang.org/blog'>Blog</a></li>
     <li><a href='../orgs-using-d.html'>Orgs using D</a></li>
     <li><a href='https://twitter.com/search?q=%23dlang'>Twitter</a></li>
-    <li><a href='../calendar.html'>Calendar</a></li>
     <li class="menu-divider"><a href='https://forum.dlang.org'>Forums</a></li>
     <li><a href='irc://irc.libera.chat/d'>IRC</a></li>
     <li><a href='https://discord.gg/bMZk9Q4'>Community Discord</a></li>
@@ -75,7 +74,7 @@
     <div id="search-box">        <form method="get" action="https://google.com/search">
             <input type="hidden" id="domains" name="domains" value="dlang.org">
             <input type="hidden" id="sourceid" name="sourceid" value="google-search">
-            <span id="search-query"><input id="q" name="q" placeholder="Search"></span><span id="search-dropdown"><span class="helper">                <select id="sitesearch" name="sitesearch" size="1">
+            <span id="search-query"><input id="q" name="q" placeholder="Google Search"></span><span id="search-dropdown"><span class="helper">                <select id="sitesearch" name="sitesearch" size="1">
                     <option value="dlang.org">Entire Site</option>
                     <option  value="dlang.org/spec">Language</option>
                     <option  value="dlang.org/phobos">Library</option>
@@ -97,6 +96,11 @@ Log</option>
     </p>
     </div>
     <ul><li><a id="pending" href="pending.html">Nightly</a> <span class="hide-from-nav"> (preview) - upcoming changes from <span class="d_inlinecode donthyphenate notranslate">master</span></span></li>
+<li><a id="2.102.2" href="2.102.2.html">2.102.2</a><span class="hide-from-nav"> (Mar 01, 2023)</span></li>
+<li><a id="2.102.1" href="2.102.1.html">2.102.1</a><span class="hide-from-nav"> (Feb 15, 2023)</span></li>
+<li><a id="2.102.0" href="2.102.0.html">2.102.0</a><span class="hide-from-nav"> (Feb 01, 2023)</span></li>
+<li><a id="2.101.2" href="2.101.2.html">2.101.2</a><span class="hide-from-nav"> (Jan 01, 2023)</span></li>
+<li><a id="2.101.1" href="2.101.1.html">2.101.1</a><span class="hide-from-nav"> (Dec 15, 2022)</span></li>
 <li><a id="2.101.0" href="2.101.0.html">2.101.0</a><span class="hide-from-nav"> (Nov 14, 2022)</span></li>
 <li><a id="2.100.2" href="2.100.2.html">2.100.2</a><span class="hide-from-nav"> (Sep 10, 2022)</span></li>
 <li><a id="2.100.1" href="2.100.1.html">2.100.1</a><span class="hide-from-nav"> (Jul 15, 2022)</span></li>
@@ -264,16 +268,17 @@ Log</option>
         
 
 
-<div class="changelog-nav">previous version: <a href="2.100.2.html">2.100.2</a></div>
+<div class="changelog-nav">previous version: <a href="2.100.2.html">2.100.2</a>
+&ndash; next version: <a href="2.101.1.html">2.101.1</a></div>
 
 
 <div class="version"><p><b><font size="4"><a href="https://downloads.dlang.org/releases/2.x/2.101.0">Download D 2.101.0</a></font></b><br>
 <small>released Nov 14, 2022</small>
 </p>
 
-<div class="changelog-header-stats">2.101.0 comes with 40 major changes and 64 fixed Bugzilla issues.
+<div class="changelog-header-stats">2.101.0 comes with 40 major changes and 209 fixed Bugzilla issues.
         A huge thanks goes to the
-        <a href="#contributors">63 contributors</a>
+        <a href="#contributors">72 contributors</a>
         who made 2.101.0 possible.</div>
 
 <div class="bugsfixed"><h4>Compiler changes</h4> <ol>
@@ -1037,11 +1042,158 @@ builds and tests.
 <br><em class="big"><a class="anchor" title="Permalink to this section" id="bugfix-list" href="#bugfix-list">List of all bug fixes and enhancements in D 2.101.0:</a></em>
 
 <div class="bugsfixed"><h4>DMD Compiler regression fixes</h4> <ol>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=20809">Bugzilla 20809</a>: return statement might access memory from destructed temporary</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=21197">Bugzilla 21197</a>: Wrong lifetime inference with DIP1000 in dmd 2.093.0</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23019">Bugzilla 23019</a>: Missing filename when -of points to an existing directory</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23076">Bugzilla 23076</a>: SIMD assert fail with -inline -O converting float to short</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23247">Bugzilla 23247</a>: Deprecation: argument 0.0L for format specification "%La" must be double, not real</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23271">Bugzilla 23271</a>: <span class="d_inlinecode donthyphenate notranslate">goto</span> skips declaration of variable <span class="d_inlinecode donthyphenate notranslate">bugred.A.test.__appendtmp4</span></li>
 <li><a href="https://issues.dlang.org/show_bug.cgi?id=23291">Bugzilla 23291</a>: Members of arrays of shared classes cannot be compared</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23337">Bugzilla 23337</a>: Wrongly elided postblit/copy ctor for array construction (_d_arrayctor lowering)</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23386">Bugzilla 23386</a>: Segfault on enum member UDA inside template</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23431">Bugzilla 23431</a>: [REG 2.101.0][ICE] Segmentation fault in Dsymbol::toParent() (this=0x0) at dmd/dsymbol.d:561</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23433">Bugzilla 23433</a>: [REG 2.081][ICE] Segmentation fault in dmd.blockexit.checkThrow at at src/dmd/blockexit.d:557</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23439">Bugzilla 23439</a>: [REG 2.098] Error: CTFE internal error: literal 'assert(false, "Accessed expression of type noreturn")'</li>
  </ol></div>
 <div class="bugsfixed"><h4>DMD Compiler bug fixes</h4> <ol>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=2">Bugzilla 2</a>: Hook up new dmd command line arguments</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=9161">Bugzilla 9161</a>: Linker error on linux if struct has @disabled ~this();</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=13123">Bugzilla 13123</a>: Disallow throwing contracts for nothrow functions</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=13732">Bugzilla 13732</a>: Regular templates can use "template this", and they allow any type to be passed</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=14694">Bugzilla 14694</a>: Functions nested within functions need their body in the generated .di file</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=15525">Bugzilla 15525</a>: SEGV running semantic analysis on non-root decl that has errors.</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=16575">Bugzilla 16575</a>: [ICE] extern(C++) function with D specific types</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=17764">Bugzilla 17764</a>: [scope][DIP1000] Escape checker defeated by composition transformations</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=18973">Bugzilla 18973</a>:  @disable on const toHash causes unresolved symbol error</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=19178">Bugzilla 19178</a>: Static initialization of 2d static arrays in structs produces garbage or doesn't compile sometimes</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=19285">Bugzilla 19285</a>: false positive GC inferred</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=20365">Bugzilla 20365</a>: Copy constructor not invoked on static arrays of structs but the postblit works</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=20823">Bugzilla 20823</a>: [DIP 1000] un-@safe code fails with dip1000</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=21314">Bugzilla 21314</a>: ICE on extern(c++) static class variables</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=21416">Bugzilla 21416</a>: betterC mode program with C++ interface fails to link</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=21432">Bugzilla 21432</a>: [CTFE] Cannot declare enum array in function scope</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=21477">Bugzilla 21477</a>: TypeInfo errors in betterC are cryptic</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=21676">Bugzilla 21676</a>: [ICE][SIMD] DMD crashing with SIMD + optimizations + inlining</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=21956">Bugzilla 21956</a>: ice on foreach over an AA of noreturn</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=22108">Bugzilla 22108</a>: DIP1000 parameter mistakenly interpreted as return scope instead of scope</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=22134">Bugzilla 22134</a>: Deprecate returning a discarded void value from a function</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=22351">Bugzilla 22351</a>: extern(C++) function contravariant in D, but not C++</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=22390">Bugzilla 22390</a>: Compiler crash when iterating empty array of bottom types</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=22429">Bugzilla 22429</a>: importC: designator-list not supported yet</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=22610">Bugzilla 22610</a>: ImportC: 3 extra initializer(s) for struct __tag21</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=22626">Bugzilla 22626</a>: Can't use synchronized member functions with -nosharedaccess</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=22652">Bugzilla 22652</a>: importC: Braceless initializer of nested struct is rejected.</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=22664">Bugzilla 22664</a>: Disassembler mistakes rdtscp for invlpg  ECX</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=22674">Bugzilla 22674</a>: ImportC: compatible types declared in different translation units are not treated equivalent in D.</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=22680">Bugzilla 22680</a>:  @safe hole with destructors</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=22706">Bugzilla 22706</a>: Bad error on explicit instantiation of function template with auto ref parameter</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=22724">Bugzilla 22724</a>: ImportC: VC extension __pragma(pack) is not implemented</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=22784">Bugzilla 22784</a>: pragma(printf) applies to nested functions</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=22865">Bugzilla 22865</a>: __traits(compiles) affects inferrence of attributes</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=22875">Bugzilla 22875</a>: importC: cannot assign const typedef with pointers to non-const one</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=22925">Bugzilla 22925</a>: importC: multi-dimensional array is not a static and cannot have static initializer</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=22952">Bugzilla 22952</a>: Compiler fails to find package.d modules via -mv map</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=22973">Bugzilla 22973</a>: importC: sizeof with array and pointer access gives array type has incomplete element type</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23006">Bugzilla 23006</a>: importC: dmd segfaults on static initializer for multi-dimensional array inside struct</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23007">Bugzilla 23007</a>: importC: dmd segfaults for extra braces in array initializer</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23009">Bugzilla 23009</a>: [CODEGEN][SIMD] SIMD + optimizations + inlining + double</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23010">Bugzilla 23010</a>: mixed in aliaseqs used as type dont initualize</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23012">Bugzilla 23012</a>: importC: asm label to set symbol name not applied from forward declaration</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23018">Bugzilla 23018</a>: importC: syntax error for sizeof with postfix operator on parenthesized expression</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23022">Bugzilla 23022</a>: [dip1000] typesafe variadic parameter should not infer return</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23027">Bugzilla 23027</a>: ImportC: Array of struct is not a static and cannot have static initializer</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23030">Bugzilla 23030</a>: importC: errors using typedef struct after first use as const</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23037">Bugzilla 23037</a>: importC: type with only type-qualifier doesn't work</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23038">Bugzilla 23038</a>: importC: sizeof inside struct has struct members in scope</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23039">Bugzilla 23039</a>: importC: declaration with array length has itself in scope</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23042">Bugzilla 23042</a>:  -betterC still includes RTInfo</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23044">Bugzilla 23044</a>: importC: comma expression with function call parsed as declaration</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23045">Bugzilla 23045</a>: importC: casted function type is missing extern(C)</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23047">Bugzilla 23047</a>: [ICE][SIMD] Do not SROA vector types</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23050">Bugzilla 23050</a>: Incorrect disassembly of code with -vasm and 0xBE and 0xBF opcodes</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23054">Bugzilla 23054</a>: importC: struct compound-literal assigned by pointer has wrong storage duration</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23056">Bugzilla 23056</a>: importC: dmd asserts for missing return statement in CTFE function</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23057">Bugzilla 23057</a>: importC: dmd segfault on invalid syntax</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23063">Bugzilla 23063</a>: It is possible to return a noreturn value</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23068">Bugzilla 23068</a>: [betterC] BetterC does not respect -checkaction=halt</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23073">Bugzilla 23073</a>: [dip1000] scope inference from pure doesn't consider self-assignment</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23088">Bugzilla 23088</a>: spurious case of "<span class="d_inlinecode donthyphenate notranslate">expression</span> has no effect"</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23105">Bugzilla 23105</a>: <span class="d_inlinecode donthyphenate notranslate">__trait(getMember)</span> and <span class="d_inlinecode donthyphenate notranslate">mixin()</span> of the same code as a string behave differently</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23112">Bugzilla 23112</a>: code passes @nogc, allocates anyway</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23123">Bugzilla 23123</a>:  -vasm wrong result for cmpxchg16b</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23135">Bugzilla 23135</a>: Covariance rules for C++ member functions mismatch D</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23138">Bugzilla 23138</a>: Overrides of member functions of an inherited class ignores attribute "downcast"</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23159">Bugzilla 23159</a>: [betterC] scope(failure) use in betterC gives confusing error</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23167">Bugzilla 23167</a>: inaccurate diagnostic for internal tuple bound violation</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23168">Bugzilla 23168</a>: [DIP1000] return scope wrongly rewritten for structs with no indirections</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23169">Bugzilla 23169</a>: [DIP1000] Mangling does not distinguish return and return scope</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23173">Bugzilla 23173</a>: "Error: signed integer overflow" for compiler generated string of <span class="d_inlinecode donthyphenate notranslate">long.min</span></li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23174">Bugzilla 23174</a>: Can't alias tuple when it's part of dot expression following a struct literal</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23176">Bugzilla 23176</a>:  -vasm misses immediates for some SSE2 instructions</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23178">Bugzilla 23178</a>: Unknown error using alias to <span class="d_inlinecode donthyphenate notranslate">__traits</span> evaluated as expression</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23192">Bugzilla 23192</a>: Can't iterate aggregate fields with static foreach inside a member function</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23205">Bugzilla 23205</a>: Can't declare mixin template inside a function</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23206">Bugzilla 23206</a>: ImportC: __declspec(noreturn) does not compile</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23207">Bugzilla 23207</a>: dmd hangs compiling druntime/src/core/stdc/errno.c</li>
 <li><a href="https://issues.dlang.org/show_bug.cgi?id=23213">Bugzilla 23213</a>: ImportC - variable length array does not compile</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23214">Bugzilla 23214</a>: ImportC: typedef with unsigned types does not compile</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23217">Bugzilla 23217</a>: ImportC: extra initializer(s) error for array of structs</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23222">Bugzilla 23222</a>: vcg-ast segfaults on aliases to parent module</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23223">Bugzilla 23223</a>: Aliases to modules print the modules contents into ast dump</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23224">Bugzilla 23224</a>: ImportC: memory model switch is not passed to C preprocessor</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23225">Bugzilla 23225</a>: OpenBSD: cpp invocation cannot find files</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23230">Bugzilla 23230</a>: cannot implicitly convert expression define of type char[7] to char</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23235">Bugzilla 23235</a>: [DIP1000] typesafe variadic parameters should automatically be scope</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23236">Bugzilla 23236</a>: can't initialize a @mustuse member in constructor</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23241">Bugzilla 23241</a>: __traits getMember breaks compilation when hit an alias</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23249">Bugzilla 23249</a>: Deprecation: argument &p for format specification "%m" must be char*, not char**</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23251">Bugzilla 23251</a>: Deprecation: format specifier "%[a-z]" is invalid</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23252">Bugzilla 23252</a>: Deprecation: format specifier "%[]]" is invalid</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23254">Bugzilla 23254</a>: Deprecation: format specifier "%S" and "%C" are invalid</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23256">Bugzilla 23256</a>: must supply -mscrtlib manually when compiling for Windows</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23262">Bugzilla 23262</a>: typesafe variadic function parameter cannot infer return</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23293">Bugzilla 23293</a>: ImportC: _Bool bit fields layout does not match gcc</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23308">Bugzilla 23308</a>: Can't resolve overload of varargs function if one parameter is the result of a ternary expression</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23327">Bugzilla 23327</a>: [ICE] SEGV in AssocArray!(Identifier, Dsymbol).AssocArray.opIndex(const(Identifier)) at src/dmd/root/aav.d:313</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23331">Bugzilla 23331</a>: implicit cast from noreturn crashes compiler in various ways</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23338">Bugzilla 23338</a>: braceless subarray initalizers for struct fields fails</li>
 <li><a href="https://issues.dlang.org/show_bug.cgi?id=23340">Bugzilla 23340</a>: std.path: expandTilde erroneously raises onOutOfMemory on failed getpwam_r()</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23342">Bugzilla 23342</a>: ImportC: Array compound literals use the GC</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23343">Bugzilla 23343</a>: ImportC: functions declared with asm label to set symbol name gets extra underscore prepended</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23345">Bugzilla 23345</a>: ImportC: out of order designated initializers initialize to wrong value</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23346">Bugzilla 23346</a>: ImportC: pragma pack is not popped</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23347">Bugzilla 23347</a>: ImportC: pragma pack causes asm label to set symbol name to be ignored</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23348">Bugzilla 23348</a>: not handling braceless sub structs in initializers</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23351">Bugzilla 23351</a>: A bunch of Mayonix's dmd-segfaulting programs</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23355">Bugzilla 23355</a>: invalid template parameter loses error location in some cases</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23357">Bugzilla 23357</a>: ImportC: compatible types with definitions leads to redeclaration error when used from D.</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23368">Bugzilla 23368</a>: Throwing a null exception at compile time crashes the compiler</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23379">Bugzilla 23379</a>: Cast of expressions with type noreturn result in ice</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23380">Bugzilla 23380</a>: [dip1000] class parameter should not be treated as ref qua lifetime</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23406">Bugzilla 23406</a>: [seg fault] enums can cause compile time seg faults with assignments using alias this</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23461">Bugzilla 23461</a>: dmd: src/dmd/backend/cod1.d:2037: Assertion false failed</li>
+ </ol></div>
+<div class="bugsfixed"><h4>DMD Compiler enhancements</h4> <ol>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=7372">Bugzilla 7372</a>: Error provides too little information to diagnose the problem (error: undefined identifier)</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=14690">Bugzilla 14690</a>: pragma(inline, true) functions must have their bodies emitted in the .di file</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=16701">Bugzilla 16701</a>: Remove Restriction of "package.d" Source File Module Forced to All Lowercase</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=17575">Bugzilla 17575</a>: named mixin template error message</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=21243">Bugzilla 21243</a>: Allow lambdas to return auto ref</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=21673">Bugzilla 21673</a>: [SIMD][Win64] Wrong codegen for _mm_move_ss</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=22911">Bugzilla 22911</a>: dtoh: make include directives sorted for generated headers</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23079">Bugzilla 23079</a>: [dip1000] be more lenient when taking address of <span class="d_inlinecode donthyphenate notranslate">ref</span> return</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23141">Bugzilla 23141</a>: Improve -release switch description</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23142">Bugzilla 23142</a>: Scope should not apply to unittests</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23143">Bugzilla 23143</a>: ImportC: forward enum declarations need to be supported</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23165">Bugzilla 23165</a>: lambda functions are not inlined</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23191">Bugzilla 23191</a>: [dip1000] scope parameter can be returned in @system code</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23216">Bugzilla 23216</a>: Better Error Message For foreach_reverse Without Bidirectional Range</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23284">Bugzilla 23284</a>: Enhance floating point not representable error message</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23295">Bugzilla 23295</a>: [dip1000] explain why scope inference failed</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23306">Bugzilla 23306</a>:  @disable new() ought not disable <span class="d_inlinecode donthyphenate notranslate">scope A = new A</span></li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23369">Bugzilla 23369</a>: Confusing error message for duplicate import</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23376">Bugzilla 23376</a>: Allow multi-code-point HTML entities</li>
+<li><a href="https://issues.dlang.org/show_bug.cgi?id=23384">Bugzilla 23384</a>: Suggest calling matching base class method when hidden</li>
  </ol></div>
 <div class="bugsfixed"><h4>Phobos regression fixes</h4> <ol>
 <li><a href="https://issues.dlang.org/show_bug.cgi?id=23245">Bugzilla 23245</a>: [REG 2.099] std.format ignores non-const toString method of static array element</li>
@@ -1120,9 +1272,10 @@ builds and tests.
  </ol></div>
 
 </div>
-<h3><a class="anchor" title="Permalink to this section" id="contributors" href="#contributors">Contributors to this release (63)</a></h3>
+<h3><a class="anchor" title="Permalink to this section" id="contributors" href="#contributors">Contributors to this release (72)</a></h3>
 <p>A huge thanks goes to all the awesome people who made this release possible.</p>
 <ul>    <li>Adam D. Ruppe</li>
+    <li>Adela Vais</li>
     <li>aG0aep6G</li>
     <li>Andrea Fontana</li>
     <li>Andrej Mitrovic</li>
@@ -1130,6 +1283,9 @@ builds and tests.
     <li>Ate Eskola</li>
     <li>Atila Neves</li>
     <li>Bastiaan Veelo</li>
+    <li>Ben Jones</li>
+    <li>bistcuite</li>
+    <li>Boris Carvajal</li>
     <li>Brian Callahan</li>
     <li>Carsten Schlote</li>
     <li>chloekek</li>
@@ -1151,8 +1307,11 @@ builds and tests.
     <li>Iulia Dumitru</li>
     <li>james</li>
     <li>Jan Jurzitza</li>
+    <li>Jasmine Hegman</li>
     <li>Joe</li>
     <li>João Lourenço</li>
+    <li>Lucian Danescu</li>
+    <li>lucica28</li>
     <li>Luís Ferreira</li>
     <li>Martin Kinkelin</li>
     <li>Martin Nowak</li>
@@ -1160,12 +1319,14 @@ builds and tests.
     <li>Max Haughton</li>
     <li>mhh</li>
     <li>Mike Parker</li>
+    <li>MoonlightSentinel</li>
     <li>Nicholas Wilson</li>
     <li>Nick Treleaven</li>
     <li>Paul Backus</li>
     <li>Per Nordlöw</li>
     <li>Petar Kirov</li>
     <li>Quirin F. Schroll</li>
+    <li>Rainer Schuetze</li>
     <li>Razvan Nitu</li>
     <li>Robert burner Schadek</li>
     <li>Roy Margalit</li>
@@ -1188,11 +1349,12 @@ builds and tests.
 </ul>
 
 
-<div class="changelog-nav">previous version: <a href="2.100.2.html">2.100.2</a></div>
+<div class="changelog-nav">previous version: <a href="2.100.2.html">2.100.2</a>
+&ndash; next version: <a href="2.101.1.html">2.101.1</a></div>
 
 
-        <div class="smallprint" id="copyright">Copyright &copy; 1999-2022 by the <a href="../foundation_overview.html">D Language Foundation</a> | Page generated by
-<a href="../spec/ddoc.html">Ddoc</a> on Mon Nov 14 18:07:20 2022
+        <div class="smallprint" id="copyright">Copyright &copy; 1999-2023 by the <a href="../foundation_overview.html">D Language Foundation</a> | Page generated by
+<a href="../spec/ddoc.html">Ddoc</a> on Wed Mar  1 14:57:14 2023
 </div>
     </div>
 </div>

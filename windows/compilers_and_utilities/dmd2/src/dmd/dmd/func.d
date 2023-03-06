@@ -8,7 +8,7 @@
  * - `invariant`
  * - `unittest`
  *
- * Copyright:   Copyright (C) 1999-2022 by The D Language Foundation, All Rights Reserved
+ * Copyright:   Copyright (C) 1999-2023 by The D Language Foundation, All Rights Reserved
  * Authors:     $(LINK2 https://www.digitalmars.com, Walter Bright)
  * License:     $(LINK2 https://www.boost.org/LICENSE_1_0.txt, Boost License 1.0)
  * Source:      $(LINK2 https://github.com/dlang/dmd/blob/master/src/dmd/func.d, _func.d)
@@ -43,6 +43,7 @@ import dmd.hdrgen;
 import dmd.id;
 import dmd.identifier;
 import dmd.init;
+import dmd.location;
 import dmd.mtype;
 import dmd.objc;
 import dmd.root.aav;
@@ -640,7 +641,7 @@ extern (C++) class FuncDeclaration : Declaration
     }
 
     /*************************************************
-     * Find index of function in vtbl[0..dim] that
+     * Find index of function in vtbl[0..length] that
      * this function overrides.
      * Prefer an exact match to a covariant one.
      * Params:
@@ -777,7 +778,7 @@ extern (C++) class FuncDeclaration : Declaration
         {
             foreach (b; cd.interfaces)
             {
-                auto v = findVtblIndex(&b.sym.vtbl, cast(int)b.sym.vtbl.dim);
+                auto v = findVtblIndex(&b.sym.vtbl, cast(int)b.sym.vtbl.length);
                 if (v >= 0)
                     return b;
             }
@@ -1810,7 +1811,7 @@ extern (C++) class FuncDeclaration : Declaration
         if (!isVirtual())
             return false;
         // If it's a final method, and does not override anything, then it is not virtual
-        if (isFinalFunc() && foverrides.dim == 0)
+        if (isFinalFunc() && foverrides.length == 0)
         {
             return false;
         }
@@ -1967,7 +1968,7 @@ extern (C++) class FuncDeclaration : Declaration
                 if (fdthis != this)
                 {
                     bool found = false;
-                    for (size_t i = 0; i < siblingCallers.dim; ++i)
+                    for (size_t i = 0; i < siblingCallers.length; ++i)
                     {
                         if (siblingCallers[i] == fdthis)
                             found = true;
@@ -2033,12 +2034,12 @@ extern (C++) class FuncDeclaration : Declaration
         if (requiresClosure)
             goto Lyes;
 
-        for (size_t i = 0; i < closureVars.dim; i++)
+        for (size_t i = 0; i < closureVars.length; i++)
         {
             VarDeclaration v = closureVars[i];
             //printf("\tv = %s\n", v.toChars());
 
-            for (size_t j = 0; j < v.nestedrefs.dim; j++)
+            for (size_t j = 0; j < v.nestedrefs.length; j++)
             {
                 FuncDeclaration f = v.nestedrefs[j];
                 assert(f != this);
@@ -2167,7 +2168,7 @@ extern (C++) class FuncDeclaration : Declaration
      */
     final bool hasNestedFrameRefs()
     {
-        if (closureVars.dim)
+        if (closureVars.length)
             return true;
 
         /* If a virtual function has contracts, assume its variables are referenced
@@ -2181,9 +2182,9 @@ extern (C++) class FuncDeclaration : Declaration
         if (fdrequire || fdensure)
             return true;
 
-        if (foverrides.dim && isVirtualMethod())
+        if (foverrides.length && isVirtualMethod())
         {
-            for (size_t i = 0; i < foverrides.dim; i++)
+            for (size_t i = 0; i < foverrides.length; i++)
             {
                 FuncDeclaration fdv = foverrides[i];
                 if (fdv.hasNestedFrameRefs())
@@ -2406,7 +2407,7 @@ extern (C++) class FuncDeclaration : Declaration
              * becomes:
              *   in { { statements1... } { statements2... } ... }
              */
-            assert(frequires.dim);
+            assert(frequires.length);
             auto loc = (*frequires)[0].loc;
             auto s = new Statements;
             foreach (r; *frequires)
@@ -2425,7 +2426,7 @@ extern (C++) class FuncDeclaration : Declaration
              *   out(__result) { { ref id1 = __result; { statements1... } }
              *                   { ref id2 = __result; { statements2... } } ... }
              */
-            assert(fensures.dim);
+            assert(fensures.length);
             auto loc = (*fensures)[0].ensure.loc;
             auto s = new Statements;
             foreach (r; *fensures)
@@ -2924,89 +2925,100 @@ Expression addInvariant(AggregateDeclaration ad, VarDeclaration vthis)
  */
 extern (D) int overloadApply(Dsymbol fstart, scope int delegate(Dsymbol) dg, Scope* sc = null)
 {
-    Dsymbol next;
-    for (auto d = fstart; d; d = next)
+    Dsymbols visited;
+
+    int overloadApplyRecurse(Dsymbol fstart, scope int delegate(Dsymbol) dg, Scope* sc)
     {
-        import dmd.access : checkSymbolAccess;
-        if (auto od = d.isOverDeclaration())
+        // Detect cyclic calls.
+        if (visited.contains(fstart))
+            return 0;
+        visited.push(fstart);
+
+        Dsymbol next;
+        for (auto d = fstart; d; d = next)
         {
-            /* The scope is needed here to check whether a function in
-               an overload set was added by means of a private alias (or a
-               selective import). If the scope where the alias is created
-               is imported somewhere, the overload set is visible, but the private
-               alias is not.
-            */
-            if (sc)
+            import dmd.access : checkSymbolAccess;
+            if (auto od = d.isOverDeclaration())
             {
-                if (checkSymbolAccess(sc, od))
+                /* The scope is needed here to check whether a function in
+                   an overload set was added by means of a private alias (or a
+                   selective import). If the scope where the alias is created
+                   is imported somewhere, the overload set is visible, but the private
+                   alias is not.
+                */
+                if (sc)
                 {
-                    if (int r = overloadApply(od.aliassym, dg, sc))
+                    if (checkSymbolAccess(sc, od))
+                    {
+                        if (int r = overloadApplyRecurse(od.aliassym, dg, sc))
+                            return r;
+                    }
+                }
+                else if (int r = overloadApplyRecurse(od.aliassym, dg, sc))
+                    return r;
+                next = od.overnext;
+            }
+            else if (auto fa = d.isFuncAliasDeclaration())
+            {
+                if (fa.hasOverloads)
+                {
+                    if (int r = overloadApplyRecurse(fa.funcalias, dg, sc))
                         return r;
                 }
+                else if (auto fd = fa.toAliasFunc())
+                {
+                    if (int r = dg(fd))
+                        return r;
+                }
+                else
+                {
+                    d.error("is aliased to a function");
+                    break;
+                }
+                next = fa.overnext;
             }
-            else if (int r = overloadApply(od.aliassym, dg, sc))
-                return r;
-            next = od.overnext;
-        }
-        else if (auto fa = d.isFuncAliasDeclaration())
-        {
-            if (fa.hasOverloads)
+            else if (auto ad = d.isAliasDeclaration())
             {
-                if (int r = overloadApply(fa.funcalias, dg, sc))
-                    return r;
+                if (sc)
+                {
+                    if (checkSymbolAccess(sc, ad))
+                        next = ad.toAlias();
+                }
+                else
+                   next = ad.toAlias();
+                if (next == ad)
+                    break;
+                if (next == fstart)
+                    break;
             }
-            else if (auto fd = fa.toAliasFunc())
+            else if (auto td = d.isTemplateDeclaration())
+            {
+                if (int r = dg(td))
+                    return r;
+                next = td.overnext;
+            }
+            else if (auto fd = d.isFuncDeclaration())
             {
                 if (int r = dg(fd))
                     return r;
+                next = fd.overnext;
+            }
+            else if (auto os = d.isOverloadSet())
+            {
+                foreach (ds; os.a)
+                    if (int r = dg(ds))
+                        return r;
             }
             else
             {
                 d.error("is aliased to a function");
                 break;
+                // BUG: should print error message?
             }
-            next = fa.overnext;
         }
-        else if (auto ad = d.isAliasDeclaration())
-        {
-            if (sc)
-            {
-                if (checkSymbolAccess(sc, ad))
-                    next = ad.toAlias();
-            }
-            else
-               next = ad.toAlias();
-            if (next == ad)
-                break;
-            if (next == fstart)
-                break;
-        }
-        else if (auto td = d.isTemplateDeclaration())
-        {
-            if (int r = dg(td))
-                return r;
-            next = td.overnext;
-        }
-        else if (auto fd = d.isFuncDeclaration())
-        {
-            if (int r = dg(fd))
-                return r;
-            next = fd.overnext;
-        }
-        else if (auto os = d.isOverloadSet())
-        {
-            foreach (ds; os.a)
-                if (int r = dg(ds))
-                    return r;
-        }
-        else
-        {
-            d.error("is aliased to a function");
-            break;
-            // BUG: should print error message?
-        }
+        return 0;
     }
-    return 0;
+    return overloadApplyRecurse(fstart, dg, sc);
 }
 
 /**
@@ -3133,7 +3145,7 @@ FuncDeclaration resolveFuncCall(const ref Loc loc, Scope* sc, Dsymbol s,
             printf("\tthis: %s\n", tthis.toChars());
         if (fargs)
         {
-            for (size_t i = 0; i < fargs.dim; i++)
+            for (size_t i = 0; i < fargs.length; i++)
             {
                 Expression arg = (*fargs)[i];
                 assert(arg.type);
@@ -3352,45 +3364,39 @@ if (is(Decl == TemplateDeclaration) || is(Decl == FuncDeclaration))
 {
     // max num of overloads to print (-v overrides this).
     enum int DisplayLimit = 5;
-    int displayed;
     const(char)* constraintsTip;
-
     // determine if the first candidate was printed
-    bool printed = false;
+    int printed;
 
-    overloadApply(declaration, (Dsymbol s)
+    bool matchSymbol(Dsymbol s, bool print, bool single_candidate = false)
     {
-        Dsymbol nextOverload;
-
         if (auto fd = s.isFuncDeclaration())
         {
             // Don't print overloads which have errors.
             // Not that if the whole overload set has errors, we'll never reach
             // this point so there's no risk of printing no candidate
             if (fd.errors || fd.type.ty == Terror)
-                return 0;
+                return false;
             // Don't print disabled functions, or `deprecated` outside of deprecated scope
             if (fd.storage_class & STC.disable || (fd.isDeprecated() && !showDeprecated))
-                return 0;
-
-            const single_candidate = fd.overnext is null;
+                return false;
+            if (!print)
+                return true;
             auto tf = cast(TypeFunction) fd.type;
             .errorSupplemental(fd.loc,
                     printed ? "                `%s%s`" :
                     single_candidate ? "Candidate is: `%s%s`" : "Candidates are: `%s%s`",
                     fd.toPrettyChars(),
                 parametersTypeToChars(tf.parameterList));
-            printed = true;
-            nextOverload = fd.overnext;
         }
         else if (auto td = s.isTemplateDeclaration())
         {
             import dmd.staticcond;
 
+            if (!print)
+                return true;
             const tmsg = td.toCharsNoConstraints();
             const cmsg = td.getConstraintEvalError(constraintsTip);
-
-            const single_candidate = td.overnext is null;
 
             // add blank space if there are multiple candidates
             // the length of the blank space is `strlen("Candidates are: ")`
@@ -3401,7 +3407,6 @@ if (is(Decl == TemplateDeclaration) || is(Decl == FuncDeclaration))
                         printed ? "                `%s`\n%s" :
                         single_candidate ? "Candidate is: `%s`\n%s" : "Candidates are: `%s`\n%s",
                         tmsg, cmsg);
-                printed = true;
             }
             else
             {
@@ -3409,26 +3414,38 @@ if (is(Decl == TemplateDeclaration) || is(Decl == FuncDeclaration))
                         printed ? "                `%s`" :
                         single_candidate ? "Candidate is: `%s`" : "Candidates are: `%s`",
                         tmsg);
-                printed = true;
             }
-            nextOverload = td.overnext;
         }
-
-        if (global.params.verbose || ++displayed < DisplayLimit)
-            return 0;
-
-        // Too many overloads to sensibly display.
-        // Just show count of remaining overloads.
-        int num = 0;
-        overloadApply(nextOverload, (s) { ++num; return 0; });
-
-        if (num > 0)
-            .errorSupplemental(loc, "... (%d more, -v to show) ...", num);
-        return 1;   // stop iterating
+        return true;
+    }
+    // determine if there's > 1 candidate
+    int count = 0;
+    overloadApply(declaration, (s) {
+        if (matchSymbol(s, false))
+            count++;
+        return count > 1;
     });
+    int skipped = 0;
+    overloadApply(declaration, (s) {
+        if (global.params.verbose || printed < DisplayLimit)
+        {
+            if (matchSymbol(s, true, count == 1))
+                printed++;
+        }
+        else
+        {
+            // Too many overloads to sensibly display.
+            // Just show count of remaining overloads.
+            if (matchSymbol(s, false))
+                skipped++;
+        }
+        return 0;
+    });
+    if (skipped > 0)
+        .errorSupplemental(loc, "... (%d more, -v to show) ...", skipped);
 
     // Nothing was displayed, all overloads are either disabled or deprecated
-    if (!displayed)
+    if (!printed)
         .errorSupplemental(loc, "All possible candidates are marked as `deprecated` or `@disable`");
     // should be only in verbose mode
     if (constraintsTip)
@@ -3570,7 +3587,7 @@ private void markAsNeedingClosure(Dsymbol f, FuncDeclaration outerFunc)
     for (Dsymbol sx = f; sx && sx != outerFunc; sx = sx.toParentP(outerFunc))
     {
         FuncDeclaration fy = sx.isFuncDeclaration();
-        if (fy && fy.closureVars.dim)
+        if (fy && fy.closureVars.length)
         {
             /* fy needs a closure if it has closureVars[],
              * because the frame pointer in the closure will be accessed.
@@ -3608,7 +3625,7 @@ private bool checkEscapingSiblings(FuncDeclaration f, FuncDeclaration outerFunc,
 
     //printf("checkEscapingSiblings(f = %s, outerfunc = %s)\n", f.toChars(), outerFunc.toChars());
     bool bAnyClosures = false;
-    for (size_t i = 0; i < f.siblingCallers.dim; ++i)
+    for (size_t i = 0; i < f.siblingCallers.length; ++i)
     {
         FuncDeclaration g = f.siblingCallers[i];
         if (g.isThis() || g.tookAddressOf)
@@ -4351,18 +4368,29 @@ bool setUnsafe(Scope* sc,
     bool gag = false, Loc loc = Loc.init, const(char)* fmt = null,
     RootObject arg0 = null, RootObject arg1 = null, RootObject arg2 = null)
 {
-    // TODO:
-    // For @system variables, unsafe initializers at global scope should mark
-    // the variable @system, see https://dlang.org/dips/1035
-
-    if (!sc.func)
-        return false;
-
     if (sc.intypeof)
         return false; // typeof(cast(int*)0) is safe
 
     if (sc.flags & SCOPE.debug_) // debug {} scopes are permissive
         return false;
+
+    if (!sc.func)
+    {
+        if (sc.varDecl)
+        {
+            if (sc.varDecl.storage_class & STC.safe)
+            {
+                .error(loc, fmt, arg0 ? arg0.toChars() : "", arg1 ? arg1.toChars() : "", arg2 ? arg2.toChars() : "");
+                return true;
+            }
+            else if (!(sc.varDecl.storage_class & STC.system))
+            {
+                sc.varDecl.storage_class |= STC.system;
+            }
+        }
+        return false;
+    }
+
 
     if (sc.flags & SCOPE.compile) // __traits(compiles, x)
     {
@@ -4413,6 +4441,8 @@ bool setUnsafePreview(Scope* sc, FeatureState fs, bool gag, Loc loc, const(char)
     }
     else
     {
+        if (!sc.func)
+            return false;
         if (sc.func.isSafeBypassingInference())
         {
             if (!gag)

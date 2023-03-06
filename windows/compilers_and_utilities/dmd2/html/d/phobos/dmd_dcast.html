@@ -1261,6 +1261,93 @@
 
 </div>
 
+</li><li class="ddoc_member">
+  <div class="ddoc_member_header">
+  <div class="ddoc_header_anchor">
+  <a href="#specialNoreturnCast" id="specialNoreturnCast"><code class="code">specialNoreturnCast</code></a>
+</div>
+</div><div class="ddoc_decl">
+  <section class="section">
+    <div class="declaration">
+      <h4>Declaration</h4>
+      <div class="dlang">
+        <p class="para">
+          <code class="code">
+            <span class="ddoc_anchor" id="specialNoreturnCast"></span>Expression <code class="code">specialNoreturnCast</code>(Expression <code class="code">toBeCasted</code>, Type <code class="code">to</code>);
+
+          </code>
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="ddoc_decl">
+  <section class="section ddoc_sections">
+  <div class="ddoc_summary">
+  <p class="para">
+    A helper function <code class="code">to</code> "cast" from expressions of type noreturn <code class="code">to</code>
+ any other type - noreturn is implicitly convertible <code class="code">to</code> any other type.
+ However, the dmd backend does not like a naive cast from a noreturn expression
+ (particularly an <code class="code">assert(0)</code>) so this function generates:
+
+  </p>
+</div>
+<div class="ddoc_description">
+  <h4>Discussion</h4>
+  <p class="para">
+    <code class="code">(assert(0), value)</code> instead of <code class="code">cast(<code class="code">to</code>)(assert(0))</code>.
+<br><br>
+ <code class="code">value</code> is currently <code class="code"><code class="code">to</code>.init</code> however it cannot be read so could be made simpler.
+
+  </p>
+</div>
+<div class="ddoc_params">
+  <h4>Parameters</h4>
+  <table cellspacing="0" cellpadding="5" border="0" class="graybox">
+    <tbody>
+      <tr class="ddoc_param_row">
+  <td scope="ddoc_param_id">
+  <code class="code">
+    <em class="term">Expression <code class="code">toBeCasted</code></em>
+  </code>
+</td>
+<td>
+  <div class="ddoc_param_desc">
+    <p class="para">
+      Expression of type noreturn <code class="code">to</code> cast
+    </p>
+  </div>
+</td>
+</tr>
+<tr class="ddoc_param_row">
+  <td scope="ddoc_param_id">
+  <code class="code">
+    <em class="term">Type <code class="code">to</code></em>
+  </code>
+</td>
+<td>
+  <div class="ddoc_param_desc">
+    <p class="para">
+      Type <code class="code">to</code> cast the expression <code class="code">to</code>.
+    </p>
+  </div>
+</td>
+</tr>
+
+    </tbody>
+  </table>
+</div>
+<div class="ddoc_returns">
+  <h4>Return Value</h4>
+  <p class="para">
+    A CommaExp, upon any failure ErrorExp will be returned.
+  </p>
+</div>
+
+</section>
+
+</div>
+
 </li>
 </ul>
   </div>

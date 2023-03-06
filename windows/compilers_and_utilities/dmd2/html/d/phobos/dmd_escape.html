@@ -1039,7 +1039,7 @@ DIP 1021
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="checkParamArgumentEscape"></span>bool <code class="code">checkParamArgumentEscape</code>(Scope* <code class="code">sc</code>, FuncDeclaration <code class="code">fdc</code>, Parameter <code class="code">par</code>, VarDeclaration <code class="code">vPar</code>, STC <code class="code">parStc</code>, Expression <code class="code">arg</code>, bool <code class="code">assertmsg</code>, bool <code class="code">gag</code>);
+            <span class="ddoc_anchor" id="checkParamArgumentEscape"></span>bool <code class="code">checkParamArgumentEscape</code>(Scope* <code class="code">sc</code>, FuncDeclaration <code class="code">fdc</code>, Identifier <code class="code">parId</code>, VarDeclaration <code class="code">vPar</code>, STC <code class="code">parStc</code>, Expression <code class="code">arg</code>, bool <code class="code">assertmsg</code>, bool <code class="code">gag</code>);
 
           </code>
         </p>
@@ -1051,8 +1051,8 @@ DIP 1021
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Function parameter <code class="code"><code class="code">par</code></code> is being initialized to <code class="code"><code class="code">arg</code></code>,
- and <code class="code"><code class="code">par</code></code> may escape.
+    Function parameter <code class="code">par</code> is being initialized to <code class="code"><code class="code">arg</code></code>,
+ and <code class="code">par</code> may escape.
  Detect if scoped values can escape this way.
  Print error messages when these are detected.
 
@@ -1093,13 +1093,13 @@ DIP 1021
 <tr class="ddoc_param_row">
   <td scope="ddoc_param_id">
   <code class="code">
-    <em class="term">Parameter <code class="code">par</code></em>
+    <em class="term">Identifier <code class="code">parId</code></em>
   </code>
 </td>
 <td>
   <div class="ddoc_param_desc">
     <p class="para">
-      function parameter (<code class="code">this</code> if <code class="code">null</code>)
+      name of function parameter for error messages
     </p>
   </div>
 </td>
@@ -1113,7 +1113,7 @@ DIP 1021
 <td>
   <div class="ddoc_param_desc">
     <p class="para">
-      <code class="code">VarDeclaration</code> corresponding to <code class="code"><code class="code">par</code></code>
+      <code class="code">VarDeclaration</code> corresponding to <code class="code">par</code>
     </p>
   </div>
 </td>

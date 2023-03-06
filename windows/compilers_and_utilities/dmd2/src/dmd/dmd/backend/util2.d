@@ -7,7 +7,7 @@
  * $(LINK2 https://www.dlang.org, D programming language).
  *
  * Copyright:   Copyright (C) 1984-1998 by Symantec
- *              Copyright (C) 2000-2022 by The D Language Foundation, All Rights Reserved
+ *              Copyright (C) 2000-2023 by The D Language Foundation, All Rights Reserved
  * Authors:     $(LINK2 https://www.digitalmars.com, Walter Bright)
  * License:     $(LINK2 https://www.boost.org/LICENSE_1_0.txt, Boost License 1.0)
  * Source:      $(LINK2 https://github.com/dlang/dmd/blob/master/src/dmd/backend/util2.d, backend/util2.d)
@@ -18,7 +18,6 @@ module dmd.backend.util2;
 import core.stdc.stdio;
 import core.stdc.stdlib;
 import core.stdc.string;
-import core.stdc.stdint : uint64_t;
 
 import dmd.backend.cc;
 import dmd.backend.cdef;
@@ -217,7 +216,7 @@ else
 
     while (low <= high)
     {
-        int mid = (low + high) >> 1;
+        int mid = low + ((high - low) >> 1);
         int cond = table[mid][0] - cp;
         if (cond == 0)
             cond = strcmp(table[mid] + 1,p);
@@ -245,7 +244,7 @@ int binary(const(char)* p, size_t len, const(char)** table, int high)
 
     while (low <= high)
     {
-        int mid = (low + high) >> 1;
+        int mid = low + ((high - low) >> 1);
         int cond = table[mid][0] - cp;
 
         if (cond == 0)
@@ -269,7 +268,7 @@ int binary(const(char)* p, size_t len, const(char)** table, int high)
  * If c is a power of 2, return that power else -1.
  */
 
-int ispow2(uint64_t c)
+int ispow2(ulong c)
 {       int i;
 
         if (c == 0 || (c & (c - 1)))

@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <!--
-    Copyright (c) 1999-2022 by the D Language Foundation
+    Copyright (c) 1999-2023 by the D Language Foundation
     All Rights Reserved.
     https://dlang.org/foundation_overview.html
   -->
@@ -40,7 +40,6 @@
 <ul class='expand-content'>    <li><a href='https://dlang.org/blog'>Blog</a></li>
     <li><a href='../orgs-using-d.html'>Orgs using D</a></li>
     <li><a href='https://twitter.com/search?q=%23dlang'>Twitter</a></li>
-    <li><a href='../calendar.html'>Calendar</a></li>
     <li class="menu-divider"><a href='https://forum.dlang.org'>Forums</a></li>
     <li><a href='irc://irc.libera.chat/d'>IRC</a></li>
     <li><a href='https://discord.gg/bMZk9Q4'>Community Discord</a></li>
@@ -75,7 +74,7 @@
     <div id="search-box">        <form method="get" action="https://google.com/search">
             <input type="hidden" id="domains" name="domains" value="dlang.org">
             <input type="hidden" id="sourceid" name="sourceid" value="google-search">
-            <span id="search-query"><input id="q" name="q" placeholder="Search"></span><span id="search-dropdown"><span class="helper">                <select id="sitesearch" name="sitesearch" size="1">
+            <span id="search-query"><input id="q" name="q" placeholder="Google Search"></span><span id="search-dropdown"><span class="helper">                <select id="sitesearch" name="sitesearch" size="1">
                     <option value="dlang.org">Entire Site</option>
                     <option selected value="dlang.org/spec">Language</option>
                     <option  value="dlang.org/phobos">Library</option>
@@ -394,8 +393,19 @@ must be of the same type:
 <div class="blankline"></div>
     <p><i>AliasDeclaration</i>s create a symbol name that refers to another symbol.
         That symbol name can be used anywhere that the aliased symbol may appear.
+        The following symbols can be aliased:
     </p>
-<div class="blankline"></div>
+<ul><li><a href="#alias-type">Types</a></li>
+<li><a href="#alias-variable">Variables</a></li>
+<li>Constants</li>
+<li>Modules</li>
+<li>Packages</li>
+<li>Functions</li>
+<li>Function Literals</li>
+<li>Templates</li>
+<li>Template Instantiations
+</li>
+</ul>
 <h3><a class="anchor" title="Permalink to this section" id="alias-type" href="#alias-type">Type Aliases</a></h3>
 <div class="blankline"></div>
 <pre class="d_code notranslate"><span class="d_keyword">alias</span> myint = abc.Foo.bar;
@@ -440,6 +450,7 @@ must be of the same type:
         <p>        The following alias declarations are valid:
         </p>
 <div class="blankline"></div>
+<div class="runnable-examples">
 <pre class="d_code notranslate"><span class="d_keyword">template</span> Foo2(T) { <span class="d_keyword">alias</span> t = T; }
 <span class="d_keyword">alias</span> t1 = Foo2!(<span class="d_keyword">int</span>);
 <span class="d_keyword">alias</span> t2 = Foo2!(<span class="d_keyword">int</span>).t;
@@ -451,6 +462,8 @@ t1.t v1;  <span class="d_comment">// v1 is type int
 </span>t3 v3;    <span class="d_comment">// v3 is type int
 </span>t4 v4;    <span class="d_comment">// v4 is type int
 </span></pre>
+
+</div>
 <div class="blankline"></div>
         <p>        Aliased symbols are useful as a shorthand for a long qualified
         symbol name, or as a way to redirect references from one symbol
@@ -467,11 +480,13 @@ t1.t v1;  <span class="d_comment">// v1 is type int
 }
 </pre>
 <div class="blankline"></div>
-        <p>        Aliasing can be used to <span class="d_inlinecode donthyphenate notranslate">import</span> a symbol from an import into the
-        current scope:
+        <p>        Aliasing can be used to <a href="../spec/module.html#import-declaration"><span class="d_inlinecode donthyphenate notranslate">import</span></a>
+        a symbol from an imported module or package into the current scope:
         </p>
 <div class="blankline"></div>
-<pre class="d_code notranslate"><span class="d_keyword">alias</span> strlen = string.strlen;
+<pre class="d_code notranslate"><span class="d_keyword">static</span> <span class="d_keyword">import</span> string;
+...
+<span class="d_keyword">alias</span> strlen = string.strlen;
 </pre>
 <div class="blankline"></div>
 <h3><a class="anchor" title="Permalink to this section" id="alias-overload" href="#alias-overload">Aliasing an Overload Set</a></h3>
@@ -702,7 +717,7 @@ storage within the module. They must be defined in some other object file with a
 matching name which is then linked in.</p>
 <div class="blankline"></div>
 <p>An <span class="d_inlinecode donthyphenate notranslate">extern</span> declaration can optionally be followed by an <span class="d_inlinecode donthyphenate notranslate">extern</span>
-<a href="attribute.html#linkage">linkage attribute</a>. If there is no linkage
+<a href="../spec/attribute.html#linkage">linkage attribute</a>. If there is no linkage
 attribute it defaults to <span class="d_inlinecode donthyphenate notranslate">extern(D)</span>:</p>
 <div class="blankline"></div>
 <pre class="d_code notranslate"><span class="d_comment">// variable allocated and initialized in this module with C linkage
@@ -924,8 +939,8 @@ ImmutableInt z;     <span class="d_comment">// typeof(z) == immutable(int)
 <div class="blankline"></div>
 
 
-        <div class="smallprint" id="copyright">Copyright &copy; 1999-2022 by the <a href="../foundation_overview.html">D Language Foundation</a> | Page generated by
-<a href="../spec/ddoc.html">Ddoc</a> on Mon Nov 14 18:07:00 2022
+        <div class="smallprint" id="copyright">Copyright &copy; 1999-2023 by the <a href="../foundation_overview.html">D Language Foundation</a> | Page generated by
+<a href="../spec/ddoc.html">Ddoc</a> on Wed Mar  1 14:57:11 2023
 </div>
     </div>
 </div>

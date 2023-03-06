@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <!--
-    Copyright (c) 1999-2022 by the D Language Foundation
+    Copyright (c) 1999-2023 by the D Language Foundation
     All Rights Reserved.
     https://dlang.org/foundation_overview.html
   -->
@@ -40,7 +40,6 @@
 <ul class='expand-content'>    <li><a href='https://dlang.org/blog'>Blog</a></li>
     <li><a href='../orgs-using-d.html'>Orgs using D</a></li>
     <li><a href='https://twitter.com/search?q=%23dlang'>Twitter</a></li>
-    <li><a href='../calendar.html'>Calendar</a></li>
     <li class="menu-divider"><a href='https://forum.dlang.org'>Forums</a></li>
     <li><a href='irc://irc.libera.chat/d'>IRC</a></li>
     <li><a href='https://discord.gg/bMZk9Q4'>Community Discord</a></li>
@@ -75,7 +74,7 @@
     <div id="search-box">        <form method="get" action="https://google.com/search">
             <input type="hidden" id="domains" name="domains" value="dlang.org">
             <input type="hidden" id="sourceid" name="sourceid" value="google-search">
-            <span id="search-query"><input id="q" name="q" placeholder="Search"></span><span id="search-dropdown"><span class="helper">                <select id="sitesearch" name="sitesearch" size="1">
+            <span id="search-query"><input id="q" name="q" placeholder="Google Search"></span><span id="search-dropdown"><span class="helper">                <select id="sitesearch" name="sitesearch" size="1">
                     <option value="dlang.org">Entire Site</option>
                     <option selected value="dlang.org/spec">Language</option>
                     <option  value="dlang.org/phobos">Library</option>
@@ -745,8 +744,6 @@ matrix[2][5] = 3.14; <span class="d_comment">// Assignment to bottom right eleme
         the number of bytes per array element.</td></tr>
         <tr><td><span class="d_inlinecode donthyphenate notranslate">.length</span></td><td>Returns the number of elements in the array.
         This is a fixed quantity for static arrays. It is of type <span class="d_inlinecode donthyphenate notranslate">size_t</span>.</td></tr>
-        <tr><td><span class="d_inlinecode donthyphenate notranslate">.capacity</span></td><td>Returns the number of elements that can be appended to the array without reallocating.
-        <span class="d_inlinecode donthyphenate notranslate">.capacity</span> is always <span class="d_inlinecode donthyphenate notranslate">0</span> for static arrays because their size cannot be modified.</td></tr>
         <tr><td><span class="d_inlinecode donthyphenate notranslate">.ptr</span></td><td>Returns a pointer to the first element of the array.</td></tr>
         <tr><td><span class="d_inlinecode donthyphenate notranslate">.dup</span></td><td>Create a dynamic array of the same size and copy the contents of the array into it. The copy will have any immutability or const stripped. If this conversion is invalid the call will not compile.</td></tr>
         <tr><td><span class="d_inlinecode donthyphenate notranslate">.idup</span></td><td>Create a dynamic array of the same size and copy the contents of the array into it. The copy is typed as being immutable. If this conversion is invalid the call will not compile.</td></tr>
@@ -775,7 +772,8 @@ foo(ia.tupleof); <span class="d_comment">// same as `foo(1, 2, 3);`
         which is 8 in 32-bit builds and 16 on 64-bit builds.</td></tr>
         <tr><td><span class="d_inlinecode donthyphenate notranslate">.length</span></td><td>Get/set number of elements in the
         array. It is of type <span class="d_inlinecode donthyphenate notranslate">size_t</span>.</td></tr>
-        <tr><td><span class="d_inlinecode donthyphenate notranslate">.capacity</span></td><td>Returns the number of elements that can be appended to the array without reallocating.</td></tr>
+        <tr><td><span class="d_inlinecode donthyphenate notranslate">.capacity</span></td><td>Returns the number of elements that can be appended to the array without reallocating.
+            See <a href="#capacity-reserve">here</a> for details.</td></tr>
         <tr><td><span class="d_inlinecode donthyphenate notranslate">.ptr</span></td><td>Returns a pointer to the first element of the array.</td></tr>
         <tr><td><span class="d_inlinecode donthyphenate notranslate">.dup</span></td><td>Create a dynamic array of the same size and copy the contents of the array into it. The copy will have any immutability or const stripped. If this conversion is invalid the call will not compile.</td></tr>
         <tr><td><span class="d_inlinecode donthyphenate notranslate">.idup</span></td><td>Create a dynamic array of the same size and copy the contents of the array into it. The copy is typed as being immutable. If this conversion is invalid the call will not compile.</td></tr>
@@ -830,7 +828,7 @@ p.dup;    <span class="d_comment">// error, length not known
         is larger and either:</p>
 
 <ul><li>The array was not <a href="../spec/garbage.html#op_involving_gc">allocated by the GC</a>.</li>
-<li>There is no spare <a href="#capacity-reserve">capacity</a> in the array.</li>
+<li>There is no spare <a href="#capacity-reserve">capacity</a> for the array.</li>
 <li>Resizing in place would overwrite valid data still accessible in another slice.
 </li>
 </ul>
@@ -926,24 +924,88 @@ array.length = i;
 <div class="blankline"></div>
 <h3><a class="anchor" title="Permalink to this section" id="capacity-reserve" href="#capacity-reserve"><span class="d_inlinecode donthyphenate notranslate">capacity</span> and <span class="d_inlinecode donthyphenate notranslate">reserve</span></a></h3>
 <div class="blankline"></div>
-        <p>The <span class="d_inlinecode donthyphenate notranslate">capacity</span> property gives the maximum length the array
-        can grow to without reallocating. The spare capacity for array <em>a</em>
-        is <span class="d_inlinecode donthyphenate notranslate">a.capacity - a.length</span>.</p>
+        <p>The <span class="d_inlinecode donthyphenate notranslate">capacity</span> property gives the maximum length a dynamic array
+        can grow to without reallocating. If the array does not point to
+        GC-allocated memory, the capacity will be zero.
+        The spare capacity for an array <em>a</em> is <span class="d_inlinecode donthyphenate notranslate">a.capacity - a.length</span>.</p>
+<div class="blankline"></div>
+        <p>By default, <span class="d_inlinecode donthyphenate notranslate">capacity</span> will be zero if an element has been stored after the slice.</p>
+<div class="blankline"></div>
+        <div class="runnable-examples">
+<pre class="d_code notranslate"><span class="d_keyword">int</span>[] a;
+<span class="d_keyword">assert</span>(a.capacity == 0);
+a.length = 3; <span class="d_comment">// may allocate spare capacity too
+</span><span class="d_keyword">assert</span>(a.capacity &gt;= 3);
+<span class="d_keyword">auto</span> b = a[1..3];
+<span class="d_keyword">assert</span>(b.capacity &gt;= 2); <span class="d_comment">// either a or b can append into any spare capacity
+</span>b = a[0..2];
+<span class="d_keyword">assert</span>(b.capacity == 0);
+</pre>
+        
+</div>
+<div class="blankline"></div>
+        <div class="spec-boxes rationale"><b>Rationale:</b> This behaviour helps prevent accidental overwriting of
+        elements in another slice. It is also necessary to protect immutable
+        elements from being overwritten.</div>
+
+
+<div class="blankline"></div>
         <p>The <span class="d_inlinecode donthyphenate notranslate">reserve</span>
-        function expands an array's capacity for use by the append operator.</p>
+        function expands an array's capacity for use by the
+        <a href="#array-appending">append operator</a> or <span class="d_inlinecode donthyphenate notranslate">.length</span> assignment.</p>
 <div class="blankline"></div>
 <div class="runnable-examples">
 <pre class="d_code notranslate"><span class="d_keyword">int</span>[] array;
-size_t cap = array.reserve(10); <span class="d_comment">// request
+<span class="d_keyword">const</span> size_t cap = array.reserve(10); <span class="d_comment">// request
 </span><span class="d_keyword">assert</span>(cap &gt;= 10); <span class="d_comment">// allocated may be more than request
-</span>
+</span><span class="d_keyword">assert</span>(array.ptr != <span class="d_keyword">null</span>);
+
 <span class="d_keyword">int</span>[] copy = array;
-array ~= [1, 2, 3, 4, 5]; <span class="d_comment">// grow in place
-</span><span class="d_keyword">assert</span>(cap == array.capacity);
-<span class="d_keyword">assert</span>(copy.ptr == array.ptr);
+<span class="d_keyword">assert</span>(copy.capacity == cap); <span class="d_comment">// array and copy have same capacity
+</span>array ~= [1, 2, 3, 4, 5]; <span class="d_comment">// grow in place
+</span><span class="d_keyword">assert</span>(cap == array.capacity); <span class="d_comment">// array memory was not reallocated
+</span><span class="d_keyword">assert</span>(copy.ptr == array.ptr);
+<span class="d_keyword">assert</span>(copy.capacity == 0);
+copy ~= 0; <span class="d_comment">// new allocation
+</span><span class="d_keyword">assert</span>(copy.ptr != array.ptr);
 </pre>
 
 </div>
+        <p>Above, <span class="d_inlinecode donthyphenate notranslate">copy</span>'s length remains zero but it points to the same
+        memory allocated by the <span class="d_inlinecode donthyphenate notranslate">reserve</span> call. Because <span class="d_inlinecode donthyphenate notranslate">array</span> is then appended
+        to, <span class="d_inlinecode donthyphenate notranslate">copy.ptr + 0</span> no longer points to unused memory - instead that
+        is the address of <span class="d_inlinecode donthyphenate notranslate">array[0]</span>. So <span class="d_inlinecode donthyphenate notranslate">copy.capacity</span> will be zero to
+        prevent any appending to <span class="d_inlinecode donthyphenate notranslate">copy</span> from overwriting elements in <span class="d_inlinecode donthyphenate notranslate">array</span>.</p>
+<div class="blankline"></div>
+        <div class="spec-boxes note"><b>Note:</b> The runtime uses the number of appended elements to track the
+        start of the spare capacity for the memory allocation.</div>
+<div class="blankline"></div>
+        <p>When an array with spare capacity has its length reduced, or is
+        assigned a slice of itself that ends before the previous last element,
+        the capacity will be zero.</p>
+<div class="blankline"></div>
+        <p>The <span class="d_inlinecode donthyphenate notranslate">@system</span> function <a href="../phobos/object.html#.assumeSafeAppend""><span class="d_inlinecode donthyphenate notranslate">assumeSafeAppend</span></a> allows the
+        capacity to be regained, but care must be taken not to overwrite
+        immutable elements that may exist in a longer slice.</p>
+<div class="blankline"></div>
+        <div class="runnable-examples">
+<pre class="d_code notranslate"><span class="d_keyword">int</span>[] a = [1, 2, 3];
+a.length--;
+<span class="d_keyword">assert</span>(a.capacity == 0);
+a.assumeSafeAppend();
+<span class="d_keyword">assert</span>(a.capacity &gt;= 3);
+</pre>
+        
+</div>
+<div class="blankline"></div>
+        <div class="spec-boxes note"><b>Note:</b> Accessing <span class="d_inlinecode donthyphenate notranslate">.capacity</span> may require the runtime to
+        acquire a global lock and perform a cache lookup.</div>
+<div class="blankline"></div>
+        <div class="spec-boxes best-practice"><b>Best Practices:</b> Avoid intensive use of <span class="d_inlinecode donthyphenate notranslate">.capacity</span> in performance-sensitive code.
+        Instead, track the capacity locally when building an array via a unique reference.</div>
+
+
+<div class="blankline"></div>
 <div class="blankline"></div>
 <h3><a class="anchor" title="Permalink to this section" id="func-as-property" href="#func-as-property">Functions as Array Properties</a></h3>
 <div class="blankline"></div>
@@ -1381,8 +1443,8 @@ writefln(<span class="d_string">"the string is '%s'"</span>, str);
 
 
 
-        <div class="smallprint" id="copyright">Copyright &copy; 1999-2022 by the <a href="../foundation_overview.html">D Language Foundation</a> | Page generated by
-<a href="../spec/ddoc.html">Ddoc</a> on Mon Nov 14 18:07:01 2022
+        <div class="smallprint" id="copyright">Copyright &copy; 1999-2023 by the <a href="../foundation_overview.html">D Language Foundation</a> | Page generated by
+<a href="../spec/ddoc.html">Ddoc</a> on Wed Mar  1 14:57:11 2023
 </div>
     </div>
 </div>

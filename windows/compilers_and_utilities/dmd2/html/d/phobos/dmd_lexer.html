@@ -854,7 +854,7 @@
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="Lexer.this"></span>pure nothrow this(const(char)* <code class="code">filename</code>, const(char)* <code class="code">base</code>, size_t <code class="code">begoffset</code>, size_t <code class="code">endoffset</code>, bool <code class="code">doDocComment</code>, bool <code class="code">commentToken</code>);
+            <span class="ddoc_anchor" id="Lexer.this"></span>pure nothrow this(const(char)* <code class="code">filename</code>, const(char)* <code class="code">base</code>, size_t <code class="code">begoffset</code>, size_t <code class="code">endoffset</code>, bool <code class="code">doDocComment</code>, bool <code class="code">commentToken</code>, const(char)[] <code class="code">vendor</code> = "DLF", uint <code class="code">versionNumber</code> = 1);
 
           </code>
         </p>
@@ -959,6 +959,34 @@
   </div>
 </td>
 </tr>
+<tr class="ddoc_param_row">
+  <td scope="ddoc_param_id">
+  <code class="code">
+    <em class="term">const(char)[] <code class="code">vendor</code></em>
+  </code>
+</td>
+<td>
+  <div class="ddoc_param_desc">
+    <p class="para">
+      name of the <code class="code">vendor</code>
+    </p>
+  </div>
+</td>
+</tr>
+<tr class="ddoc_param_row">
+  <td scope="ddoc_param_id">
+  <code class="code">
+    <em class="term">uint <code class="code">versionNumber</code></em>
+  </code>
+</td>
+<td>
+  <div class="ddoc_param_desc">
+    <p class="para">
+      version of the caller
+    </p>
+  </div>
+</td>
+</tr>
 
     </tbody>
   </table>
@@ -980,7 +1008,39 @@
       <div class="dlang">
         <p class="para">
           <code class="code">
-            <span class="ddoc_anchor" id="Lexer.this.2"></span>nothrow this();
+            <span class="ddoc_anchor" id="Lexer.this.2"></span>nothrow this(const(char)* <code class="code">filename</code>, const(char)* <code class="code">base</code>, size_t <code class="code">begoffset</code>, size_t <code class="code">endoffset</code>, bool <code class="code">doDocComment</code>, bool <code class="code">commentToken</code>, bool <code class="code">whitespaceToken</code>);
+
+          </code>
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="ddoc_decl">
+  <section class="section ddoc_sections">
+  <div class="ddoc_summary">
+  <p class="para">
+    Alternative entry point for DMDLIB, adds <code class="code"><code class="code">whitespaceToken</code></code>
+  </p>
+</div>
+
+</section>
+
+</div>
+
+</li><li class="ddoc_member">
+  <div class="ddoc_member_header">
+  <div class="ddoc_header_anchor">
+  <a href="#Lexer.this" id="Lexer.this"><code class="code">this</code></a>
+</div>
+</div><div class="ddoc_decl">
+  <section class="section">
+    <div class="declaration">
+      <h4>Declaration</h4>
+      <div class="dlang">
+        <p class="para">
+          <code class="code">
+            <span class="ddoc_anchor" id="Lexer.this.3"></span>nothrow this();
 
           </code>
         </p>
@@ -1058,6 +1118,38 @@
   <p class="para">
     Set up for next #define line.
  p should be at start of next line.
+  </p>
+</div>
+
+</section>
+
+</div>
+
+</li><li class="ddoc_member">
+  <div class="ddoc_member_header">
+  <div class="ddoc_header_anchor">
+  <a href="#Lexer.empty" id="Lexer.empty"><code class="code">empty</code></a>
+</div>
+</div><div class="ddoc_decl">
+  <section class="section">
+    <div class="declaration">
+      <h4>Declaration</h4>
+      <div class="dlang">
+        <p class="para">
+          <code class="code">
+            <span class="ddoc_anchor" id="Lexer.empty"></span>final const pure nothrow @nogc @property @safe bool <code class="code">empty</code>();
+
+          </code>
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="ddoc_decl">
+  <section class="section ddoc_sections">
+  <div class="ddoc_summary">
+  <p class="para">
+    Range interface
   </p>
 </div>
 

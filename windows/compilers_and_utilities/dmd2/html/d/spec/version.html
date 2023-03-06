@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <!--
-    Copyright (c) 1999-2022 by the D Language Foundation
+    Copyright (c) 1999-2023 by the D Language Foundation
     All Rights Reserved.
     https://dlang.org/foundation_overview.html
   -->
@@ -40,7 +40,6 @@
 <ul class='expand-content'>    <li><a href='https://dlang.org/blog'>Blog</a></li>
     <li><a href='../orgs-using-d.html'>Orgs using D</a></li>
     <li><a href='https://twitter.com/search?q=%23dlang'>Twitter</a></li>
-    <li><a href='../calendar.html'>Calendar</a></li>
     <li class="menu-divider"><a href='https://forum.dlang.org'>Forums</a></li>
     <li><a href='irc://irc.libera.chat/d'>IRC</a></li>
     <li><a href='https://discord.gg/bMZk9Q4'>Community Discord</a></li>
@@ -75,7 +74,7 @@
     <div id="search-box">        <form method="get" action="https://google.com/search">
             <input type="hidden" id="domains" name="domains" value="dlang.org">
             <input type="hidden" id="sourceid" name="sourceid" value="google-search">
-            <span id="search-query"><input id="q" name="q" placeholder="Search"></span><span id="search-dropdown"><span class="helper">                <select id="sitesearch" name="sitesearch" size="1">
+            <span id="search-query"><input id="q" name="q" placeholder="Google Search"></span><span id="search-dropdown"><span class="helper">                <select id="sitesearch" name="sitesearch" size="1">
                     <option value="dlang.org">Entire Site</option>
                     <option selected value="dlang.org/spec">Language</option>
                     <option  value="dlang.org/phobos">Library</option>
@@ -210,7 +209,6 @@
 <h2><a class="anchor" title="Permalink to this section" id="version" href="#version">Version Condition</a></h2>
 <div class="blankline"></div>
 <pre class="bnf notranslate"><a id="VersionCondition"><span class="gname">VersionCondition</span></a>:
-    <span class="d_inlinecode donthyphenate notranslate">version (</span> <a href="../spec/lex.html#IntegerLiteral"><i>IntegerLiteral</i></a> <span class="d_inlinecode donthyphenate notranslate">)</span>
     <span class="d_inlinecode donthyphenate notranslate">version (</span> <a href="../spec/lex.html#Identifier"><i>Identifier</i></a> <span class="d_inlinecode donthyphenate notranslate">)</span>
     <span class="d_inlinecode donthyphenate notranslate">version (</span> <span class="d_inlinecode donthyphenate notranslate">unittest</span> <span class="d_inlinecode donthyphenate notranslate">)</span>
     <span class="d_inlinecode donthyphenate notranslate">version (</span> <span class="d_inlinecode donthyphenate notranslate">assert</span> <span class="d_inlinecode donthyphenate notranslate">)</span>
@@ -220,15 +218,14 @@
         with a single source file.
         </p>
 <div class="blankline"></div>
-        <p>The <i>VersionCondition</i> is satisfied if the <i>IntegerLiteral</i>
-        is greater than or equal to the current <i>version level</i>,
-        or if <i>Identifier</i> matches a <i>version identifier</i>.
+        <p>The <i>VersionCondition</i> is satisfied if <i>Identifier</i>
+        matches a <i>version identifier</i>.
         </p>
 <div class="blankline"></div>
-        <p>The <i>version level</i> and <i>version identifier</i> can
-        be set on the command line by the <span class="d_inlinecode donthyphenate notranslate">-version</span> switch
-        or in the module itself with a <a href="#VersionSpecification"><i>VersionSpecification</i></a>,
-        or they can be predefined by the compiler.
+        <p>The <i>version identifier</i> can be set on the command line
+        by the <span class="d_inlinecode donthyphenate notranslate">-version</span> switch or in the module itself with a
+        <a href="#VersionSpecification"><i>VersionSpecification</i></a>, or they can be predefined
+        by the compiler.
         </p>
 <div class="blankline"></div>
         <p>Version identifiers are in their own unique name space, they do
@@ -267,7 +264,6 @@ x = i;      <span class="d_comment">// uses the i declared above
 <div class="blankline"></div>
 <pre class="bnf notranslate"><a id="VersionSpecification"><span class="gname">VersionSpecification</span></a>:
     <span class="d_inlinecode donthyphenate notranslate">version =</span> <a href="../spec/lex.html#Identifier"><i>Identifier</i></a> <span class="d_inlinecode donthyphenate notranslate">;</span>
-    <span class="d_inlinecode donthyphenate notranslate">version =</span> <a href="../spec/lex.html#IntegerLiteral"><i>IntegerLiteral</i></a> <span class="d_inlinecode donthyphenate notranslate">;</span>
 </pre>
 <div class="blankline"></div>
         <p>The version specification makes it straightforward to group
@@ -339,11 +335,7 @@ x = i;      <span class="d_comment">// uses the i declared above
         to version:
         </p>
 <div class="blankline"></div>
-<pre class="d_code notranslate"><span class="d_keyword">version</span>(<b><i>n</i></b>) <span class="d_comment">// add in version code if version level is &gt;= n
-</span>{
-    ... <span class="d_keyword">version</span> code ...
-}
-
+<pre class="d_code notranslate">
 <span class="d_keyword">version</span>(<b><i>identifier</i></b>) <span class="d_comment">// add in version code if version
 </span>                         <span class="d_comment">// keyword is identifier
 </span>{
@@ -351,8 +343,8 @@ x = i;      <span class="d_comment">// uses the i declared above
 }
 </pre>
 <div class="blankline"></div>
-        <p>These are presumably set by the command line as
-        <span class="d_inlinecode donthyphenate notranslate">-version=n</span> and <span class="d_inlinecode donthyphenate notranslate">-version=identifier</span>.
+        <p>This is presumably set by the command line as
+        <span class="d_inlinecode donthyphenate notranslate">-version=identifier</span>.
         </p>
 <div class="blankline"></div>
 <div class="blankline"></div>
@@ -464,7 +456,7 @@ x = i;      <span class="d_comment">// uses the i declared above
                 (command line switch <a href="../dmd.html#switch-betterC"><em class="tt">-betterC</em></a>) is being generated</td></tr>
         <tr><td><span class="d_inlinecode donthyphenate notranslate">D_Exceptions</span> </td><td>Exception handling is supported.  Evaluates to <span class="d_inlinecode donthyphenate notranslate">false</span> when compiling with
                 command line switch <a href="../dmd.html#switch-betterC"><em class="tt">-betterC</em></a></td></tr>
-        <tr><td><span class="d_inlinecode donthyphenate notranslate">D_ModuleInfo</span> </td><td><span class="d_inlinecode donthyphenate notranslate">ModuleInfo</span> is supported.  Evaluates to <span class="d_inlinecode donthyphenate notranslate">false</span> when compiling with
+        <tr><td><span class="d_inlinecode donthyphenate notranslate">D_ModuleInfo</span> </td><td><a href="../abi.html#ModuleInfo"><em class="tt">ModuleInfo</em></a> is supported.  Evaluates to <span class="d_inlinecode donthyphenate notranslate">false</span> when compiling with
                 command line switch <a href="../dmd.html#switch-betterC"><em class="tt">-betterC</em></a></td></tr>
         <tr><td><span class="d_inlinecode donthyphenate notranslate">D_TypeInfo</span> </td><td>Runtime type information (a.k.a <span class="d_inlinecode donthyphenate notranslate">TypeInfo</span>) is supported.  Evaluates to <span class="d_inlinecode donthyphenate notranslate">false</span> when compiling with
                 command line switch <a href="../dmd.html#switch-betterC"><em class="tt">-betterC</em></a></td></tr>
@@ -554,7 +546,6 @@ x = i;      <span class="d_comment">// uses the i declared above
 <div class="blankline"></div>
 <pre class="bnf notranslate"><a id="DebugCondition"><span class="gname">DebugCondition</span></a>:
     <span class="d_inlinecode donthyphenate notranslate">debug</span>
-    <span class="d_inlinecode donthyphenate notranslate">debug (</span> <a href="../spec/lex.html#IntegerLiteral"><i>IntegerLiteral</i></a> <span class="d_inlinecode donthyphenate notranslate">)</span>
     <span class="d_inlinecode donthyphenate notranslate">debug (</span> <a href="../spec/lex.html#Identifier"><i>Identifier</i></a> <span class="d_inlinecode donthyphenate notranslate">)</span>
 </pre>
 <div class="blankline"></div>
@@ -569,12 +560,7 @@ x = i;      <span class="d_comment">// uses the i declared above
         </p>
 <div class="blankline"></div>
         <p>The <span class="d_inlinecode donthyphenate notranslate">debug</span> condition is satisfied when the <span class="d_inlinecode donthyphenate notranslate">-debug</span> switch is
-        passed to the compiler or when the debug level is &gt;= 1.
-        </p>
-<div class="blankline"></div>
-        <p>The <span class="d_inlinecode donthyphenate notranslate">debug (</span> <i>IntegerLiteral</i> <span class="d_inlinecode donthyphenate notranslate">)</span> condition is satisfied
-        when the debug
-        level is <span class="d_inlinecode donthyphenate notranslate">&gt;=</span> <i>IntegerLiteral</i>.
+        passed to the compiler.
         </p>
 <div class="blankline"></div>
         <p>The <span class="d_inlinecode donthyphenate notranslate">debug (</span> <i>Identifier</i> <span class="d_inlinecode donthyphenate notranslate">)</span> condition is satisfied
@@ -615,10 +601,9 @@ x = i;      <span class="d_comment">// uses the i declared above
 <div class="blankline"></div>
 <pre class="bnf notranslate"><a id="DebugSpecification"><span class="gname">DebugSpecification</span></a>:
     <span class="d_inlinecode donthyphenate notranslate">debug =</span> <a href="../spec/lex.html#Identifier"><i>Identifier</i></a> <span class="d_inlinecode donthyphenate notranslate">;</span>
-    <span class="d_inlinecode donthyphenate notranslate">debug =</span> <a href="../spec/lex.html#IntegerLiteral"><i>IntegerLiteral</i></a> <span class="d_inlinecode donthyphenate notranslate">;</span>
 </pre>
 <div class="blankline"></div>
-        <p>Debug identifiers and levels are set either by the command line switch
+        <p>Debug identifiers are set either by the command line switch
         <span class="d_inlinecode donthyphenate notranslate">-debug</span> or by a <i>DebugSpecification</i>.
         </p>
 <div class="blankline"></div>
@@ -641,12 +626,11 @@ x = i;      <span class="d_comment">// uses the i declared above
         debug:
         </p>
 <div class="blankline"></div>
-<pre class="d_code notranslate"><span class="d_keyword">debug</span>(IntegerLiteral) { } <span class="d_comment">// add in debug code if debug level is &gt;= IntegerLiteral
-</span><span class="d_keyword">debug</span>(identifier) { } <span class="d_comment">// add in debug code if debug keyword is identifier
+<pre class="d_code notranslate"><span class="d_keyword">debug</span>(identifier) { } <span class="d_comment">// add in debug code if debug keyword is identifier
 </span></pre>
 <div class="blankline"></div>
         <p>These are presumably set by the command line as
-        <span class="d_inlinecode donthyphenate notranslate">-debug=</span><i>n</i> and <span class="d_inlinecode donthyphenate notranslate">-debug=</span><i>identifier</i>.
+        and <span class="d_inlinecode donthyphenate notranslate">-debug=</span><i>identifier</i>.
         </p>
 <div class="blankline"></div>
 <h2><a class="anchor" title="Permalink to this section" id="staticif" href="#staticif">Static If Condition</a></h2>
@@ -873,13 +857,18 @@ Int!(32) a;  <span class="d_comment">// a is an int
 <h2><span id="StaticAssert"><a class="anchor" title="Permalink to this section" id="static-assert" href="#static-assert">Static Assert</a></span></h2>
 <div class="blankline"></div>
 <pre class="bnf notranslate"><a id="StaticAssert"><span class="gname">StaticAssert</span></a>:
-    <span class="d_inlinecode donthyphenate notranslate">static assert (</span> <a href="../spec/expression.html#AssertArguments"><i>AssertArguments</i></a> <span class="d_inlinecode donthyphenate notranslate">) ;</span>
+    <span class="d_inlinecode donthyphenate notranslate">static assert (</span> <a href="../spec/expression.html#ArgumentList"><i>ArgumentList</i></a> <span class="d_inlinecode donthyphenate notranslate">) ;</span>
 </pre>
 <div class="blankline"></div>
         <p>The first <a href="../spec/expression.html#AssignExpression"><i>AssignExpression</i></a> is evaluated at compile time, and converted
         to a boolean value. If the value is true, the static assert
         is ignored. If the value is false, an error diagnostic is issued
         and the compile fails.
+        </p>
+<div class="blankline"></div>
+        <p>On failure, any subsequent <i>AssignExpression</i>s will each be
+        converted to string and then concatenated. The resulting string will
+        be printed out along with the error diagnostic.
         </p>
 <div class="blankline"></div>
         <p>Unlike <a href="../spec/expression.html#AssertExpression"><i>AssertExpression</i></a>s, <i>StaticAssert</i>s are always
@@ -908,10 +897,6 @@ Int!(32) a;  <span class="d_comment">// a is an int
         configurations not supported in the code.
         </p>
 <div class="blankline"></div>
-        <p>The optional second <a href="../spec/expression.html#AssignExpression"><i>AssignExpression</i></a> can be used to supply
-        additional information, such as a text string, that will be
-        printed out along with the error diagnostic.
-        </p>
 
 <div style="float: left"><i class="fa fa-angle-left" aria-hidden="true"></i> <a href="../spec/contracts.html">Contract Programming</a></div>
 <div style="float: right"><a href="../spec/traits.html">Traits</a> <i class="fa fa-angle-right" aria-hidden="true"></i></div>
@@ -919,8 +904,8 @@ Int!(32) a;  <span class="d_comment">// a is an int
 
 
 
-        <div class="smallprint" id="copyright">Copyright &copy; 1999-2022 by the <a href="../foundation_overview.html">D Language Foundation</a> | Page generated by
-<a href="../spec/ddoc.html">Ddoc</a> on Mon Nov 14 18:07:04 2022
+        <div class="smallprint" id="copyright">Copyright &copy; 1999-2023 by the <a href="../foundation_overview.html">D Language Foundation</a> | Page generated by
+<a href="../spec/ddoc.html">Ddoc</a> on Wed Mar  1 14:57:11 2023
 </div>
     </div>
 </div>

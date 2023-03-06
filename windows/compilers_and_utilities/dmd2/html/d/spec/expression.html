@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <!--
-    Copyright (c) 1999-2022 by the D Language Foundation
+    Copyright (c) 1999-2023 by the D Language Foundation
     All Rights Reserved.
     https://dlang.org/foundation_overview.html
   -->
@@ -40,7 +40,6 @@
 <ul class='expand-content'>    <li><a href='https://dlang.org/blog'>Blog</a></li>
     <li><a href='../orgs-using-d.html'>Orgs using D</a></li>
     <li><a href='https://twitter.com/search?q=%23dlang'>Twitter</a></li>
-    <li><a href='../calendar.html'>Calendar</a></li>
     <li class="menu-divider"><a href='https://forum.dlang.org'>Forums</a></li>
     <li><a href='irc://irc.libera.chat/d'>IRC</a></li>
     <li><a href='https://discord.gg/bMZk9Q4'>Community Discord</a></li>
@@ -75,7 +74,7 @@
     <div id="search-box">        <form method="get" action="https://google.com/search">
             <input type="hidden" id="domains" name="domains" value="dlang.org">
             <input type="hidden" id="sourceid" name="sourceid" value="google-search">
-            <span id="search-query"><input id="q" name="q" placeholder="Search"></span><span id="search-dropdown"><span class="helper">                <select id="sitesearch" name="sitesearch" size="1">
+            <span id="search-query"><input id="q" name="q" placeholder="Google Search"></span><span id="search-dropdown"><span class="helper">                <select id="sitesearch" name="sitesearch" size="1">
                     <option value="dlang.org">Entire Site</option>
                     <option selected value="dlang.org/spec">Language</option>
                     <option  value="dlang.org/phobos">Library</option>
@@ -206,7 +205,7 @@
         <li><a href="#import_expressions">Import Expressions</a></li>
         <li><a href="#new_expressions">New Expressions</a></li>
         <li><a href="#typeid_expressions">Typeid Expressions</a></li>
-        <li><a href="#is_expression">IsExpression</a></li>
+        <li><a href="#is_expression">Is Expressions</a></li>
         <li><a href="#specialkeywords">Special Keywords</a></li>
     </ol></li>
     <li><a href="#associativity">Associativity and Commutativity</a></li>
@@ -762,8 +761,8 @@ test ? a = b : c = 2;   <span class="d_comment">// Deprecated
         <a href="https://dlang.org/spec/operatoroverloading.html#equals"><span class="d_inlinecode donthyphenate notranslate">opEquals()</span> member function</a>.
         If an <span class="d_inlinecode donthyphenate notranslate">opEquals()</span> is not provided, equality is defined as
         the logical product of all equality
-        results of the corresponding object fields.</p>
-    
+        results of the corresponding object fields.
+    </p>
 <div class="blankline"></div>
         <div class="spec-boxes implementation-defined"><b>Implementation Defined:</b> The contents of any alignment gaps in the struct object.</div>
 
@@ -1729,7 +1728,7 @@ and abort the program.
     <a href="../spec/lex.html#IntegerLiteral"><i>IntegerLiteral</i></a>
     <a href="../spec/lex.html#FloatLiteral"><i>FloatLiteral</i></a>
     <span id="CharacterLiteral"><a class="anchor" title="Permalink to this section" id="" href="#"></a></span><span id="character-literal"><a class="anchor" title="Permalink to this section" id="" href="#"></a></span><a href="../spec/lex.html#CharacterLiteral"><i>CharacterLiteral</i></a>
-    <a href="#StringLiterals"><i>StringLiterals</i></a>
+    <a href="../spec/lex.html#StringLiteral"><i>StringLiteral</i></a>
     <a href="#ArrayLiteral"><i>ArrayLiteral</i></a>
     <a href="#AssocArrayLiteral"><i>AssocArrayLiteral</i></a>
     <a href="#FunctionLiteral"><i>FunctionLiteral</i></a>
@@ -1819,9 +1818,12 @@ and abort the program.
 <div class="blankline"></div>
 <h3><a class="anchor" title="Permalink to this section" id="string_literals" href="#string_literals">String Literals</a></h3>
 <div class="blankline"></div>
-<pre class="bnf notranslate"><a id="StringLiterals"><span class="gname">StringLiterals</span></a>:
-    <a href="../spec/lex.html#StringLiteral"><i>StringLiteral</i></a>
-    <i>StringLiterals</i> <a href="../spec/lex.html#StringLiteral"><i>StringLiteral</i></a>
+<pre class="bnf notranslate"><a id="StringLiteral"><span class="gname">StringLiteral</span></a>:
+    <a href="../spec/lex.html#WysiwygString"><i>WysiwygString</i></a>
+    <a href="../spec/lex.html#AlternateWysiwygString"><i>AlternateWysiwygString</i></a>
+    <a href="../spec/lex.html#DoubleQuotedString"><i>DoubleQuotedString</i></a>
+    <a href="../spec/lex.html#DelimitedString"><i>DelimitedString</i></a>
+    <a href="../spec/lex.html#TokenString"><i>TokenString</i></a>
 </pre>
 <div class="blankline"></div>
     <p>String literals can implicitly convert to any
@@ -1865,6 +1867,11 @@ and abort the program.
         The 0 is not included in the <span class="d_inlinecode donthyphenate notranslate">.length</span> property of the
         string literal.
     </p>
+<div class="blankline"></div>
+    <p>Concatenation of string literals requires the use of the
+        <span class="d_inlinecode donthyphenate notranslate">~</span> operator, and is resolved at compile time.
+        C style implicit concatenation without an intervening operator is
+        error prone and not supported in D.</p>
 <div class="blankline"></div>
 <h3><a class="anchor" title="Permalink to this section" id="array_literals" href="#array_literals">Array Literals</a></h3>
 <div class="blankline"></div>
@@ -2590,7 +2597,7 @@ bar = <span class="d_keyword">new</span> <span class="d_keyword">int</span>[][][
         
 </div>
 <div class="blankline"></div>
-<h3><a class="anchor" title="Permalink to this section" id="is_expression" href="#is_expression">IsExpression</a></h3>
+<h3><a class="anchor" title="Permalink to this section" id="is_expression" href="#is_expression">Is Expressions</a></h3>
 <div class="blankline"></div>
 <pre class="bnf notranslate"><a id="IsExpression"><span class="gname">IsExpression</span></a>:
     <span class="d_inlinecode donthyphenate notranslate">is (</span> <a href="../spec/type.html#Type"><i>Type</i></a> <span class="d_inlinecode donthyphenate notranslate">)</span>
@@ -2631,7 +2638,7 @@ bar = <span class="d_keyword">new</span> <span class="d_keyword">int</span>[][][
     <ul>    <li>checking for valid types</li>
     <li>comparing types for equivalence</li>
     <li>determining if one type can be implicitly converted to another</li>
-    <li>deducing the subtypes of a type</li>
+    <li>deducing the subtypes of a type using pattern matching</li>
     </ul>
     <p>        The result of an <i>IsExpression</i> is a boolean of value <span class="d_inlinecode donthyphenate notranslate">true</span>
         if the condition is satisfied. If the condition is not satisfied,
@@ -2644,7 +2651,7 @@ bar = <span class="d_keyword">new</span> <span class="d_keyword">int</span>[][][
     </p>
 <div class="blankline"></div>
     <p><i>TypeSpecialization</i> is the type that <i>Type</i> is being
-        compared against.
+        pattern matched against.
     </p>
 <div class="blankline"></div>
     <p><i>IsExpression</i>s may be used in conjunction with <span class="d_inlinecode donthyphenate notranslate">typeof</span> to check
@@ -2780,7 +2787,8 @@ bar = <span class="d_keyword">new</span> <span class="d_keyword">int</span>[][][
         <i>TypeSpecialization</i> is only allowed to be a <i>Type</i>.
         The <i>Identifier</i> is declared to be either an alias of the
         <i>TypeSpecialization</i> or, if <i>TypeSpecialization</i> is
-        dependent on <i>Identifier</i>, the deduced type.
+        dependent on <i>Identifier</i>, the <i>TypeSpecialization</i> forms
+        a pattern from which the type of <i>Identifier</i> is deduced.
         </p>
 <div class="blankline"></div>
     <div class="runnable-examples">
@@ -2798,8 +2806,8 @@ bar = <span class="d_keyword">new</span> <span class="d_keyword">int</span>[][][
     <div class="runnable-examples">
 <pre class="d_code notranslate"><span class="d_keyword">alias</span> Abc = <span class="d_keyword">long</span>*;
 
-<span class="d_keyword">static</span> <span class="d_keyword">if</span> (<span class="d_keyword">is</span>(Abc U : U*))
-{
+<span class="d_keyword">static</span> <span class="d_keyword">if</span> (<span class="d_keyword">is</span>(Abc U : U*)) <span class="d_comment">// Abc is matched against the pattern U*
+</span>{
     U u;
 }
 <span class="d_keyword">static</span> <span class="d_keyword">assert</span>(<span class="d_keyword">is</span>(U == <span class="d_keyword">long</span>));
@@ -2818,7 +2826,8 @@ bar = <span class="d_keyword">new</span> <span class="d_keyword">int</span>[][][
         correct and is the same as <i>TypeSpecialization</i>.
         The <i>Identifier</i> is declared to be either an alias of the
         <i>TypeSpecialization</i> or, if <i>TypeSpecialization</i> is
-        dependent on <i>Identifier</i>, the deduced type.
+        dependent on <i>Identifier</i>, the <i>TypeSpecialization</i> forms
+        a pattern from which the type of <i>Identifier</i> is deduced.
         </p>
 <div class="blankline"></div>
     <div class="runnable-examples">
@@ -2934,8 +2943,8 @@ bar = <span class="d_keyword">new</span> <span class="d_keyword">int</span>[][][
 <div class="runnable-examples">
 <pre class="d_code notranslate"><span class="d_keyword">alias</span> AA = <span class="d_keyword">long</span>[string];
 
-<span class="d_keyword">static</span> <span class="d_keyword">if</span> (<span class="d_keyword">is</span>(AA T : T[U], U : string))
-{
+<span class="d_keyword">static</span> <span class="d_keyword">if</span> (<span class="d_keyword">is</span>(AA T : T[U], U : string)) <span class="d_comment">// T[U] is the pattern
+</span>{
     <span class="d_keyword">pragma</span>(msg, T);  <span class="d_comment">// long
 </span>    <span class="d_keyword">pragma</span>(msg, U);  <span class="d_comment">// string
 </span>}
@@ -2949,8 +2958,8 @@ bar = <span class="d_keyword">new</span> <span class="d_keyword">int</span>[][][
 <p><b>Example:</b> Matching a Static Array</p>
 <div class="blankline"></div>
 <div class="runnable-examples">
-<pre class="d_code notranslate"><span class="d_keyword">static</span> <span class="d_keyword">if</span> (<span class="d_keyword">is</span>(<span class="d_keyword">int</span>[10] W : W[len], <span class="d_keyword">int</span> len))
-{
+<pre class="d_code notranslate"><span class="d_keyword">static</span> <span class="d_keyword">if</span> (<span class="d_keyword">is</span>(<span class="d_keyword">int</span>[10] W : W[len], <span class="d_keyword">int</span> len)) <span class="d_comment">// W[len] is the pattern
+</span>{
     <span class="d_keyword">static</span> <span class="d_keyword">assert</span>(len == 10);
 }
 <span class="d_keyword">static</span> <span class="d_keyword">assert</span>(<span class="d_keyword">is</span>(W == <span class="d_keyword">int</span>));
@@ -3038,11 +3047,11 @@ file full path: '/example/test.d'
 <div style="float: left"><i class="fa fa-angle-left" aria-hidden="true"></i> <a href="../spec/pragma.html">Pragmas</a></div>
 <div style="float: right"><a href="../spec/statement.html">Statements</a> <i class="fa fa-angle-right" aria-hidden="true"></i></div>
 <div style="clear:both"></div>
-)
 
 
-        <div class="smallprint" id="copyright">Copyright &copy; 1999-2022 by the <a href="../foundation_overview.html">D Language Foundation</a> | Page generated by
-<a href="../spec/ddoc.html">Ddoc</a> on Mon Nov 14 18:07:01 2022
+
+        <div class="smallprint" id="copyright">Copyright &copy; 1999-2023 by the <a href="../foundation_overview.html">D Language Foundation</a> | Page generated by
+<a href="../spec/ddoc.html">Ddoc</a> on Wed Mar  1 14:57:11 2023
 </div>
     </div>
 </div>

@@ -5,7 +5,7 @@
  * $(LINK2 https://www.dlang.org, D programming language).
  *
  * Copyright:   Copyright (C) 1994-1998 by Symantec
- *              Copyright (C) 2000-2022 by The D Language Foundation, All Rights Reserved
+ *              Copyright (C) 2000-2023 by The D Language Foundation, All Rights Reserved
  * Authors:     $(LINK2 https://www.digitalmars.com, Walter Bright)
  * License:     $(LINK2 https://www.boost.org/LICENSE_1_0.txt, Boost License 1.0)
  * Source:      $(LINK2 https://github.com/dlang/dmd/blob/master/src/dmd/backend/nteh.d, backend/nteh.d)
@@ -213,7 +213,7 @@ version (MARS)
 {
     if (!(bx.funcsym.Sfunc.Fflags3 & Fnteh)) // if haven't already done it
     {   bx.funcsym.Sfunc.Fflags3 |= Fnteh;
-        s = symbol_name(s_name_context,SC.bprel,tstypes[TYint]);
+        s = symbol_name(s_name_context[0 .. strlen(s_name_context)],SC.bprel,tstypes[TYint]);
         s.Soffset = -5 * 4;            // -6 * 4 for C __try, __except, __finally
         s.Sflags |= SFLfree | SFLnodebug;
         type_setty(&s.Stype,mTYvolatile | TYint);
@@ -229,13 +229,13 @@ else
             s_context = scope_search(s_name_context_tag, CPP ? SCTglobal : SCTglobaltag);
         symbol_debug(s_context);
 
-        s = symbol_name(s_name_context,SC.bprel,s_context.Stype);
+        s = symbol_name(s_name_context[0 .. strlen(s_name_context)],SC.bprel,s_context.Stype);
         s.Soffset = -6 * 4;            // -5 * 4 for C++
         s.Sflags |= SFLfree;
         symbol_add(s);
         type_setty(&s.Stype,mTYvolatile | TYstruct);
 
-        s = symbol_name(s_name_ecode,SC.auto_,type_alloc(mTYvolatile | TYint));
+        s = symbol_name(s_name_ecode[0 .. strlen(s_name_context)],SC.auto_,type_alloc(mTYvolatile | TYint));
         s.Sflags |= SFLfree;
         symbol_add(s);
     }
