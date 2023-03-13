@@ -60,12 +60,12 @@ enum width = 800;  enum height = 600;
 
 void main(string[] argv)
 {
-    load_GLFW_Library();
+    //load_GLFW_Library();
 
-    load_openGL_Library(); 
+    //load_openGL_Library(); 
 
     load_FreeImage_Library(); 
-
+/+
     auto winMain = glfwCreateWindow(width, height, "01_10_walk_around", null, null);
 
     glfwMakeContextCurrent(winMain); 
@@ -243,6 +243,7 @@ glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
 
     glfwTerminate();   // Clear any resources allocated by GLFW.
     return;
+	+/
 }
 
 

@@ -1,0 +1,115 @@
+
+From ..\Delivery\apps directory with Windows Explorer, created directory 00_03_freeimage_debug
+
+cd to newly created 00_03_freeimage_debug
+
+Run:
+c:\Users\Admin\Documents\GitHub\Delivery\windows\compilers_and_utilities\dmd2\windows\bin64\dub.exe init
+
+Package recipe format (sdl/json) [json]: sdl
+Name [00_03_freeimage_debug]:
+Description [A minimal D application.]:
+Author name [Admin]: Kyle Heaser
+License [proprietary]:
+Copyright string [Copyright ┬⌐ 2023, Kyle Heaser]:
+Add dependency (leave empty to skip) []:
+     Success created empty project in C:\Users\Admin\Documents\GitHub\Delivery\apps\00_03_freeimage_debug
+             Package successfully created in .
+			 
+
+C:\Users\Admin\Documents\GitHub\Delivery\apps\00_03_freeimage_debug>type dub.sdl
+name "00_03_freeimage_debug"
+description "A minimal D application."
+authors "Kyle Heaser"
+copyright "Copyright ┬⌐ 2023, Kyle Heaser"
+license "proprietary"
+
+
+C:\Users\Admin\Documents\GitHub\Delivery\apps\00_03_freeimage_debug>type .gitignore
+.dub
+docs.json
+__dummy.html
+docs/
+/00_03_freeimage_debug
+00_03_freeimage_debug.so
+00_03_freeimage_debug.dylib
+00_03_freeimage_debug.dll
+00_03_freeimage_debug.a
+00_03_freeimage_debug.lib
+00_03_freeimage_debug-test-*
+*.exe
+*.pdb
+*.o
+*.obj
+*.lst 
+
+// DUB ADD command inserts specified package into .sdl or .json file
+
+C:\Users\Admin\Documents\GitHub\Delivery\apps\00_03_freeimage_debug>c:\Users\Admin\Documents\GitHub\Delivery\windows\compilers_and_utilities\dmd2\windows\bin64\dub.exe add bindbc-freeimage
+             Adding dependency bindbc-freeimage ~>1.0.2
+
+
+			 
+C:\Users\Admin\Documents\GitHub\Delivery\apps\00_03_freeimage_debug>type dub.sdl
+name "00_03_freeimage_debug"
+description "A minimal D application."
+authors "Kyle Heaser"
+copyright "Copyright ┬⌐ 2023, Kyle Heaser"
+license "proprietary"
+dependency "bindbc-freeimage" version="~>1.0.2"
+
+
+// DUB BUILD compiles, etc.
+
+C:\Users\Admin\Documents\GitHub\Delivery\apps\00_03_freeimage_debug>c:\Users\Admin\Documents\GitHub\Delivery\windows\compilers_and_utilities\dmd2\windows\bin64\dub.exe build
+    Fetching bindbc-loader 1.0.3 (getting selected version)
+    Starting Performing "debug" build using c:\Users\Admin\Documents\GitHub\Delivery\windows\compilers_and_utilities\dmd2\windows\bin64\dmd.exe for x86_64.
+    Building bindbc-loader 1.0.3: building configuration [noBC]
+    Building bindbc-freeimage 1.0.2: building configuration [dynamic]
+    Building 00_03_freeimage_debug ~master: building configuration [application]
+     Linking 00_03_freeimage_debug
+
+
+// DUB RUN to execute the program	 
+	 
+	 
+C:\Users\Admin\Documents\GitHub\Delivery\apps\00_03_freeimage_debug>c:\Users\Admin\Documents\GitHub\Delivery\windows\compilers_and_utilities\dmd2\windows\bin64\dub.exe run
+    Starting Performing "debug" build using c:\Users\Admin\Documents\GitHub\Delivery\windows\compilers_and_utilities\dmd2\windows\bin64\dmd.exe for x86_64.
+  Up-to-date bindbc-loader 1.0.3: target for configuration [noBC] is up to date.
+  Up-to-date bindbc-freeimage 1.0.2: target for configuration [dynamic] is up to date.
+  Up-to-date 00_03_freeimage_debug ~master: target for configuration [application] is up to date.
+    Finished To force a rebuild of up-to-date targets, run again with --force
+     Running 00_03_freeimage_debug.exe
+Error Program exited with code -1073741515
+
+Had to move msvcr120.dll into the same directory as .exe file.
+
+// THIS WORKS!   
+
+C:\Users\Admin\Documents\GitHub\Delivery\apps\00_03_freeimage_debug>00_03_freeimage_debug.exe
+Edit source/app.d to start your project.
+
+
+// ADD SOME more details to the .sdl file so it will work with runloop.exe and rundub.exe utilities
+
+buildType   "release"
+targetType  "executable"
+mainSourceFile "/source/app.d"
+targetPath "./../bin"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

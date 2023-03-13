@@ -6,7 +6,7 @@ license "proprietary"
 buildType   "release"
 targetType  "executable"
 mainSourceFile "/source/app.d"
-targetPath "./bin" 
+targetPath "./../bin" 
 
 dependency "bindbc-opengl"    version="~>1.0.3"
 versions "GL_46"
