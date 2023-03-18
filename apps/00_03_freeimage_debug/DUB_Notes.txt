@@ -98,12 +98,62 @@ mainSourceFile "/source/app.d"
 targetPath "./../bin"
 
 
+// NEED TO SPECIFY version of FreeImage Library in the dub.sdl file.
+
+versions "FI_318"
+
+
+// HERE WE OUTPUT THE CONTENTS =================================================================
+
+
+C:\Users\Admin\Documents\GitHub\Delivery\apps\00_03_freeimage_debug>type dub.sdl
+name "00_03_freeimage_debug"
+description "A minimal D application."
+authors "Kyle Heaser"
+copyright "Copyright ┬⌐ 2023, Kyle Heaser"
+license "proprietary"
+
+buildType   "release"
+targetType  "executable"
+mainSourceFile "/source/app.d"
+targetPath "./../bin"
+
+dependency "bindbc-freeimage" version="~>1.0.2"
+versions "FI_318"
 
 
 
 
 
+// AFTER LOTS OF CHANGES BUILD STARTED TO FAIL =============================================
 
+C:\Users\Admin\Documents\GitHub\Delivery\apps\00_03_freeimage_debug>C:\Users\Admin\Documents\GitHub\Delivery\windows\compilers_and_utilities\dmd2\windows\bin64\dub build app.d
+     Warning Package 'app.d' was neither found locally nor online.
+
+C:\Users\Admin\Documents\GitHub\Delivery\apps\00_03_freeimage_debug>C:\Users\Admin\Documents\GitHub\Delivery\windows\compilers_and_utilities\dmd2\windows\bin64\dub list
+Packages present in the system and known to dub:
+  00_03_freeimage_debug ~master: C:\Users\Admin\Documents\GitHub\Delivery\apps\00_03_freeimage_debug\
+  bindbc-freeimage 1.0.2: C:\Users\Admin\AppData\Local\dub\packages\bindbc-freeimage-1.0.2\bindbc-freeimage\
+  bindbc-glfw 1.0.1: C:\Users\Admin\AppData\Local\dub\packages\bindbc-glfw-1.0.1\bindbc-glfw\
+  bindbc-glfw 1.0.2: C:\Users\Admin\AppData\Local\dub\packages\bindbc-glfw-1.0.2\bindbc-glfw\
+  bindbc-loader 1.0.3: C:\Users\Admin\AppData\Local\dub\packages\bindbc-loader-1.0.3\bindbc-loader\
+  bindbc-opengl 1.0.5: C:\Users\Admin\AppData\Local\dub\packages\bindbc-opengl-1.0.5\bindbc-opengl\
+
+
+C:\Users\Admin\Documents\GitHub\Delivery\apps\00_03_freeimage_debug>C:\Users\Admin\Documents\GitHub\Delivery\windows\compilers_and_utilities\dmd2\windows\bin64\dmd.exe app.d
+app.d(3): Error: unable to read module `freeimage`
+app.d(3):        Expected 'bindbc\freeimage.d' or 'bindbc\freeimage\package.d' in one of the following import paths:
+import path[0] = C:\Users\Admin\Documents\GitHub\Delivery\windows\compilers_and_utilities\dmd2\windows\bin64\..\..\src\phobos
+import path[1] = C:\Users\Admin\Documents\GitHub\Delivery\windows\compilers_and_utilities\dmd2\windows\bin64\..\..\src\druntime\import
+
+C:\Users\Admin\Documents\GitHub\Delivery\apps\00_03_freeimage_debug>C:\Users\Admin\Documents\GitHub\Delivery\windows\compilers_and_utilities\dmd2\windows\bin64\dub build
+    Starting Performing "debug" build using C:\Users\Admin\Documents\GitHub\Delivery\windows\compilers_and_utilities\dmd2\windows\bin64\dmd.exe for x86_64.
+  Up-to-date bindbc-loader 1.0.3: target for configuration [noBC] is up to date.
+  Up-to-date bindbc-freeimage 1.0.2: target for configuration [dynamic] is up to date.
+  Up-to-date bindbc-glfw 1.0.2: target for configuration [dynamic] is up to date.
+    Building 00_03_freeimage_debug ~master: building configuration [application]
+source\app.d(58,21): Error: undefined identifier `loadFreeImage`
+source\app.d(61,11): Error: undefined identifier `loadFreeImage`
 
 
 

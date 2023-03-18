@@ -48,7 +48,7 @@ void main(char[][] args)
 				
                 // auto pid = spawnShell(`..\duball.exe run --compiler="` ~ compiler ~ `" --arch=x86_64 --force`);
 				
-                auto pid = spawnShell(`..\rundub.exe run --compiler=dmd --arch=x86_64 --force`);	
+                auto pid = spawnShell(`..\rundub.exe run --compiler=dmd --arch=x86_64 --verbose --force`);	
                 //auto pid = spawnShell(`time /T`);				
             } 
             else version(OSX)
