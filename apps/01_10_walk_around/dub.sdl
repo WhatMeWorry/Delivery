@@ -13,7 +13,7 @@ targetPath "./../bin"
 //versions "GL_46"
 //dependency "bindbc-glfw"      version="~>1.0.1"
 //versions "GLFW_33"
-//dependency "gl3n"             version="~>1.4.1"
+dependency "gl3n"             version="~>1.4.1"
 
 
 dependency "bindbc-loader" version="~>1.0.2"

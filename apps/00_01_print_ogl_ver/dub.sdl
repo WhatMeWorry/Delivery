@@ -6,7 +6,7 @@ license "proprietary"
 buildType   "release"
 targetType  "executable"
 mainSourceFile "/source/app.d"
-targetPath "./../bin" 
+targetPath "./bin" 
 
 dependency "bindbc-opengl"    version="~>1.0.3"
 versions "GL_46"
@@ -15,19 +15,10 @@ versions "GLFW_33"
 
 
 // If common is not an independent project (it has no dub configuration) 
-// then you can use `sourcePaths` (or `sourceFiles`) in the dub configuration 
+// then you can use sourcePaths (or sourceFiles) in the dub configuration 
 // of any projects that need it.
 
-
 importPaths "../dynamic_libs"   // no errors.  So path is relative to location of this dub.sdl
-
-
-//importPaths "C:/Users/kheaser/Delivery/apps/dynamic_libs"
-
-//importFiles "../dynamic_libs.glfw"
-
-//sourcePaths "../dynamic_libs"  // this command will tell compiler to compile all the source files in folder.
-                                 // Any bad source (even ones not being imported by project) will abend compilation.  
 
 sourceFiles "../dynamic_libs/glfw"
 sourceFiles "../dynamic_libs/opengl"

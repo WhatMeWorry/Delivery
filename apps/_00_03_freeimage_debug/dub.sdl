@@ -1,0 +1,12 @@
+name "00_03_freeimage_debug"
+
+
+platforms  "windows"
+versions   "DesktopApp"
+
+dependency "bindbc-glfw" version="~>1.0.0"
+dependency "bindbc-freeimage" version="~>1.0.0"
+versions "FI_318"
+
+//versions "BindFI_Static"
+libs "freeimage"

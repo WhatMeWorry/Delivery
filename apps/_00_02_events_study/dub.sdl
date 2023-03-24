@@ -17,7 +17,7 @@ versions "GLFW_33"
 // then you can use `sourcePaths` (or `sourceFiles`) in the dub configuration 
 // of any projects that need it.
 
-importPaths ".."  // importPaths "../"  also works as well
+importPaths ".."    // importPaths "../"  also works as well
 
 
 sourceFiles "../common/mytoolbox.d"

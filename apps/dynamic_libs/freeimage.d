@@ -16,10 +16,7 @@ void load_FreeImage_Library()
     import std.file : getcwd;  
     writeln("Within Load_FreeImage_Library() - present working directory is: ", getcwd());	
 
-    //immutable FISupport fiLib = loadFreeImage("./../../windows/dynamic_libraries/FreeImage.dll");
-    immutable FISupport fiLib = loadFreeImage("FreeImage.dll");  // defaults to FreeImage.dll
-
-    writeln("FreeImage version detected on this system is ****** ", fiLib);
+    immutable FISupport fiLib = loadFreeImage(`./../../windows/dynamic_libraries/FreeImage.dll`);  // defaults to FreeImage.dll
 
     if (fiLib == fiSupport.fi317)
     {
