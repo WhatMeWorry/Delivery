@@ -43,16 +43,64 @@ void drawHexagon(Delta delta, GLfloat halfRise, GLfloat quarRun, GLfloat halfRun
     board ~= [x, y + halfRise, 0.0];                       
 }
 
-const GLfloat howWide = .50;  // .50 is an arbitrary constant, a fraction of the range [-1.0, 1.0] or distance 2.0
-                              // which because of the hex board stagger makes a row of 5 (not 4) hexes.
+//      _________      _________      _________      _________
+//     /         \    /         \    /         \    /         \ 
+//    /           \  /           \  /           \  /           \ 
+//   /____width____\/____width____\/____width____\/____width____\    
+//   \             /\             /\             /\             /
+//    \           /  \           /  \           /  \           /
+//     \_________/    \_________/    \_________/    \_________/ 
+// -1.0           -.50            0.0            0.50          1.0
+
+
+// width is the length from one vertex to the vertex opposite.
+// Because the hex board has staggered columns, width = .50 makes a row of 5 columns (not 4) of hexes.
+//                  _________               _________
+//                 /         \             /         \
+//                /           \           /           \
+//      _________/             \_________/             \_________
+//     /         \             /         \             /         \ 
+//    /           \           /           \           /           \ 
+//   /____width____\_________/____width____\_________/____width____\    
+//   \             /         \             /         \             /
+//    \           /           \           /           \           /
+//     \_________/____width____\_________/             \_________/
+//               \             /         \             /
+//                \           /           \           /
+//                 \_________/             \_________/ 
+// -1.0           -.50            0.0            0.50          1.0
+
+
+// apothem - a line from the center of a regular polygon at right angles to any of its sides.
+// radius - is the line (distance) from the center to any vertex of a regular polygon
+
+// The hex polygon is not square. The hex apothem is 0.866 the length of the hex radius.
+//      _________ 
+//     /    |    \                
+//    /     |<apothem 
+//   /______|______\    
+//   \          ^radius
+//    \           /
+//     \_________/ 
+
+
+// The diameter of a polygon is the largest distance between any pair of vertices. In other words, 
+// it is the length of the longest polygon diagonal
+
+
+
+
+const GLfloat width = 0.30;  // width is a user defined constant in NDC units. Because of this, width needs to be between [0.0, 2.0)
+                            // which because of the hex board stagger makes a row of 5 (not 4) hexes.
+                            // A width of 2.0, would display a single hex which would fill the full width of the window and 0.866 of the windows height.
 void main(string[] argv)
 {
     Delta delta;
 
-    delta.run  = howWide;
-    delta.rise = delta.run * 0.866;  // a hex is only .866 as tall as a unit 1.0 hex is wide
-
+    delta.run  = width;
+    delta.rise = delta.run * 0.866;  // a hex is only .8660 as tall as a unit 1.0 hex is wide
     GLfloat halfRun  = delta.run  * 0.5;
+    
     GLfloat quarRun  = delta.run  * 0.25;
     GLfloat halfRise = delta.rise / 2.0;
 
@@ -113,6 +161,7 @@ void main(string[] argv)
         }
         x = startX;       
         y += delta.rise;
+
     }  
 
 
