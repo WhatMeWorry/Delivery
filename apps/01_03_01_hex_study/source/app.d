@@ -3,6 +3,7 @@ module app;  // 01_03_01_hex_study
 
 
 import std.stdio;     // writeln
+import core.stdc.stdlib: exit;
 
 import shaders;       // without - Error: undefined identifier Shader, createProgramFromShaders, ...
 import event_handler; // without - Error: undefined identifier onKeyEvent, onFrameBufferResize, handleEvent
@@ -10,10 +11,6 @@ import mytoolbox;     // without - Error: no property bytes for type float[]
  
 import dynamic_libs.glfw;    // without - Error: undefined identifier load_GLFW_Library, glfwCreateWindow
 import dynamic_libs.opengl;  // without - Error: undefined identifier load_openGL_Library
-
-
-
-
 
 
 GLfloat[] board;
@@ -31,44 +28,84 @@ struct Delta
     //GLfloat ratio;  // rise/run 
 }
 
+void quitOrContinue()
+{		
+    writeln("Press Enter key to continue or Q/q to quit");
+    char c;
+    readf("%c", &c);
+    if ((c == 'Q') || (c == 'q'))
+    {
+        exit(0);	
+    }
+    return;
+}	
 
-void drawHexagon(Delta delta, GLfloat halfRise, GLfloat quarRun, GLfloat halfRun)
+
+// OpenGL by default determines a triangle to be facing towards the camera if the triangle's vertexes are 
+// ordered in a counterclockwise order from the perspective of the camera
+
+void defineHexagon(Delta delta, GLfloat halfRise, GLfloat quarRun, GLfloat radius)
 {
     // initialize each hexagon 
-    board ~= [x + quarRun, y, 0.0];
-    board ~= [x + quarRun + halfRun, y, 0.0];
-    board ~= [x + delta.run, y + halfRise, 0.0];
-    board ~= [x + quarRun + halfRun, y + delta.rise, 0.0]; 
-    board ~= [x + quarRun, y + delta.rise, 0.0];
-    board ~= [x, y + halfRise, 0.0];                       
+    board ~= [x + quarRun,          y,              0.0];
+    board ~= [x + quarRun + radius, y,              0.0];
+    board ~= [x + delta.run,        y + halfRise,   0.0];
+    board ~= [x + quarRun + radius, y + delta.rise, 0.0]; 
+    board ~= [x + quarRun,          y + delta.rise, 0.0];
+    board ~= [x,                    y + halfRise,   0.0];                       
 }
 
+// https://www.redblobgames.com/
+// https://www.redblobgames.com/grids/hexagons/
+
+//  if diameter = 0.5 and the hexagons were laid out horizontally with flat-top orientatation,
+//  on a normalized device coordinated, four hexagons could fit. However, our hexboard
+//  will have the hexagons staggered so they become form fitting.
 //      _________      _________      _________      _________
 //     /         \    /         \    /         \    /         \ 
 //    /           \  /           \  /           \  /           \ 
-//   /____width____\/____width____\/____width____\/____width____\    
+//   /__diameter___\/__diameter___\/___diameter__\/__diameter___\    
 //   \             /\             /\             /\             /
 //    \           /  \           /  \           /  \           /
 //     \_________/    \_________/    \_________/    \_________/ 
 // -1.0           -.50            0.0            0.50          1.0
 
+// The x and y axis is in Normalized Device Coordinates (NDC). Both lie between -1.0 and 1.0
+// 
 
-// width is the length from one vertex to the vertex opposite.
-// Because the hex board has staggered columns, width = .50 makes a row of 5 columns (not 4) of hexes.
+
+// diameter is the length from one vertex to the vertex opposite.
+// Because the hex board has staggered columns, diameter = .50 makes a row of 5 columns (not 4) of hexes.
 //                  _________               _________
 //                 /         \             /         \
 //                /           \           /           \
-//      _________/             \_________/             \_________
+//      _________/             \_________/___diameter__\_________
 //     /         \             /         \             /         \ 
 //    /           \           /           \           /           \ 
-//   /____width____\_________/____width____\_________/____width____\    
+//   /__diameter___\_________/___diameter__\_________/___diameter__\    
 //   \             /         \             /         \             /
 //    \           /           \           /           \           /
-//     \_________/____width____\_________/             \_________/
+//     \_________/___diameter__\_________/             \_________/
 //               \             /         \             /
 //                \           /           \           /
 //                 \_________/             \_________/ 
 // -1.0           -.50            0.0            0.50          1.0
+
+
+//     -.134  _ _ \____|____/ 
+//                /    |    \             
+//               /     |     \
+//              /      |      \  
+//              \      |      /   
+//               \     | perpendicular
+//     -.567 _ _  \____|____/ 
+//                /    |    \             
+//               /     |     \
+//              /      |      \  
+//              \      |      /   
+//               \     | perpendicular
+//     -1.0 _ _ _ \____|____/ 
+//
 
 
 // apothem - a line from the center of a regular polygon at right angles to any of its sides.
@@ -82,27 +119,49 @@ void drawHexagon(Delta delta, GLfloat halfRise, GLfloat quarRun, GLfloat halfRun
 //   \          ^radius
 //    \           /
 //     \_________/ 
-
+//
+//    
 
 // The diameter of a polygon is the largest distance between any pair of vertices. In other words, 
-// it is the length of the longest polygon diagonal
+// it is the length of the longest polygon diagonal.
+//
+// diameter = 2 * radius
+// perpendicular = 2 * apothem
+//      _________          _________ 
+//     /         \        /    |    \             
+//    /           \      /     |     \
+//   /_____________\    /      |      \  
+//   \  diameter   /    \      |      /   
+//    \           /      \     | perpendicular
+//     \_________/        \____|____/ 
+//
+//    
 
 
-
-
-const GLfloat width = 0.30;  // width is a user defined constant in NDC units. Because of this, width needs to be between [0.0, 2.0)
-                            // which because of the hex board stagger makes a row of 5 (not 4) hexes.
-                            // A width of 2.0, would display a single hex which would fill the full width of the window and 0.866 of the windows height.
+const GLfloat diameter = 0.30;  // diameter is a user defined constant in NDC units, so needs to be between [0.0, 2.0)
+                                // which because of the hex board stagger makes a row of 5 (not 4) hexes.
+                                // A diameter of 2.0, would display a single hex which would fill the full width 
+                                // of the window and 0.866 of the windows height.
 void main(string[] argv)
 {
     Delta delta;
 
-    delta.run  = width;
+    delta.run  = diameter;
     delta.rise = delta.run * 0.866;  // a hex is only .8660 as tall as a unit 1.0 hex is wide
-    GLfloat halfRun  = delta.run  * 0.5;
+	
+
+
     
+	GLfloat perpendicular = diameter * .866;
+	GLfloat apothem = perpendicular *0.5;
+	
+	GLfloat radius = diameter * 0.5;	
+	
+    GLfloat halfRise = delta.rise * 0.5;  
+	
+	
     GLfloat quarRun  = delta.run  * 0.25;
-    GLfloat halfRise = delta.rise / 2.0;
+    GLfloat halfSide = perpendicular * 0.25;
 
     load_GLFW_Library();
 
@@ -143,13 +202,18 @@ void main(string[] argv)
     ];
 
 
-    bool stagger = false; 
+	// ///////////////////////////
+    // DEFINE HEX BOARD VERTICES
+	// //////////////////////////
+    
+	bool stagger = false; 
 
     while(y < 1.0)
     {
+	    //writeln("y = ", y);
         while(x < 1.0)
         {
-            drawHexagon(delta, halfRise, quarRun, halfRun);
+            defineHexagon(delta, halfRise, quarRun, radius);
             stagger = !stagger;
 
             if (stagger)
@@ -157,11 +221,13 @@ void main(string[] argv)
             else 
                 y -= halfRise;   
 
-            x += quarRun + halfRun;  
+            x += quarRun + radius;  
         }
-        x = startX;       
+        x = startX;        		
         y += delta.rise;
-
+		
+		//quitOrContinue();
+		
     }  
 
 
