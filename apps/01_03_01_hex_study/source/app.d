@@ -44,15 +44,24 @@ void quitOrContinue()
 // OpenGL by default determines a triangle to be facing towards the camera if the triangle's vertexes are 
 // ordered in a counterclockwise order from the perspective of the camera
 
-void defineHexagon(Delta delta, GLfloat halfRise, GLfloat quarRun, GLfloat radius)
+//      5_________4
+//      /         \                
+//     /           \
+//   6/             \3    
+//    \             /
+//     \           /
+//   |_ \_________/ 
+// (x,y) 1        2
+ 
+void defineHexagon(GLfloat perpendicular, GLfloat diameter, GLfloat apothem, GLfloat halfRadius, GLfloat radius)
 {
     // initialize each hexagon 
-    board ~= [x + quarRun,          y,              0.0];
-    board ~= [x + quarRun + radius, y,              0.0];
-    board ~= [x + delta.run,        y + halfRise,   0.0];
-    board ~= [x + quarRun + radius, y + delta.rise, 0.0]; 
-    board ~= [x + quarRun,          y + delta.rise, 0.0];
-    board ~= [x,                    y + halfRise,   0.0];                       
+    board ~= [x + halfRadius,          y,                 0.0];  // 1
+    board ~= [x + halfRadius + radius, y,                 0.0];  // 2
+    board ~= [x + diameter,            y + apothem,       0.0];  // 3
+    board ~= [x + halfRadius + radius, y + perpendicular, 0.0];  // 4
+    board ~= [x + halfRadius,          y + perpendicular, 0.0];  // 5
+    board ~= [x,                       y + apothem,       0.0];  // 6                         
 }
 
 // https://www.redblobgames.com/
@@ -138,31 +147,21 @@ void defineHexagon(Delta delta, GLfloat halfRise, GLfloat quarRun, GLfloat radiu
 //    
 
 
-const GLfloat diameter = 0.30;  // diameter is a user defined constant in NDC units, so needs to be between [0.0, 2.0)
-                                // which because of the hex board stagger makes a row of 5 (not 4) hexes.
-                                // A diameter of 2.0, would display a single hex which would fill the full width 
-                                // of the window and 0.866 of the windows height.
+
 void main(string[] argv)
 {
-    Delta delta;
+    immutable GLfloat diameter = 0.30;  // diameter is a user defined constant in NDC units, so needs to be between [0.0, 2.0)
+                                    // which because of the hex board stagger makes a row of 5 (not 4) hexes.
+                                    // A diameter of 2.0, would display a single hex which would fill the full width 
+                                    // of the window and 0.866 of the windows height.
 
-    delta.run  = diameter;
-    delta.rise = delta.run * 0.866;  // a hex is only .8660 as tall as a unit 1.0 hex is wide
-	
-
-
-    
-	GLfloat perpendicular = diameter * .866;
-	GLfloat apothem = perpendicular *0.5;
-	
-	GLfloat radius = diameter * 0.5;	
-	
-    GLfloat halfRise = delta.rise * 0.5;  
+    immutable GLfloat radius = diameter * 0.5;	
+    immutable GLfloat halfRadius = radius * 0.5;	
+									
+    immutable GLfloat perpendicular = diameter * 0.866;	
+    immutable GLfloat apothem = perpendicular * 0.5;
 	
 	
-    GLfloat quarRun  = delta.run  * 0.25;
-    GLfloat halfSide = perpendicular * 0.25;
-
     load_GLFW_Library();
 
     load_openGL_Library();  
@@ -208,25 +207,23 @@ void main(string[] argv)
     
 	bool stagger = false; 
 
-    while(y < 1.0)
+    while(y <= 1.0)
     {
-	    //writeln("y = ", y);
-        while(x < 1.0)
+        while(x <= 1.0)
         {
-            defineHexagon(delta, halfRise, quarRun, radius);
+            defineHexagon(perpendicular, diameter, apothem, halfRadius, radius);
             stagger = !stagger;
 
             if (stagger)
-                y += halfRise;
+                y += apothem;
             else 
-                y -= halfRise;   
+                y -= apothem;   
 
-            x += quarRun + radius;  
+            x += halfRadius + radius;  
         }
-        x = startX;        		
-        y += delta.rise;
-		
-		//quitOrContinue();
+		break;
+        //x = startX;        		
+        //y += perpendicular;
 		
     }  
 
