@@ -13,20 +13,71 @@ import dynamic_libs.glfw;    // without - Error: undefined identifier load_GLFW_
 import dynamic_libs.opengl;  // without - Error: undefined identifier load_openGL_Library
 
 
+
+bool isOdd(uint value)
+{
+    if ((value % 2) == 0)
+        return false;
+    else
+        return true;
+}
+
+bool isEven(uint value)
+{
+    if ((value % 2) == 0)
+        return true;
+    else
+        return false;
+}
+
+struct D3_point
+{
+    GLfloat x;
+    GLfloat y; 
+    GLfloat z;
+}
+
+struct Hex
+{
+    D3_point[6] points;
+	bool selected;
+}
+
+struct HexBoard
+{
+    enum uint rows = 3;  // length (in hexes) of a row
+    enum uint cols = 2;  // length (in hexes) of a column
+
+    Hex[cols][rows]  board;  // Note: call with board[rows][cols];
+
+    void displayHexBoard()
+    {
+        foreach(r; 0..rows)
+        {
+            foreach(c; 0..cols)
+            {
+                foreach(p; 0..6)
+                {
+                    writeln("board(r,c) ) ", board[r][c].points[p] );                   
+                }				 	
+            }
+        }			
+    }
+}
+
+
+
+
+
+
+
 GLfloat[] board;
 
-// start at the bottom left corner of the NDC
-GLfloat x = -1.0;
-GLfloat y = -1.0;
-GLfloat startX = -1.0;   // NDC Normalized Device Coordinates start at -1.0 and ends at 1.0 for all axes
-GLfloat startY = -1.0;   // the board will be drawn starting from the lower left corner of screen
+
  
-struct Delta
-{
-    GLfloat rise;
-    GLfloat run;
-    //GLfloat ratio;  // rise/run 
-}
+ 
+//alias isEven = unaryFun!("(a & 1) == 0");
+
 
 void quitOrContinue()
 {		
@@ -52,16 +103,60 @@ void quitOrContinue()
 //     \           /
 //   |_ \_________/ 
 // (x,y) 1        2
+
+                              // x, y is the lower left corner of the rectangle touching all vertices
+D3_point[6] defineHexVertices(GLfloat x, GLfloat y, GLfloat perpendicular, GLfloat diameter, GLfloat apothem, GLfloat halfRadius, GLfloat radius)
+{
+    D3_point[6] points;
+	
+	//hex.points[0] = [x + halfRadius,          y,                 0.0];  // 1
+	points[0].x = x + halfRadius;
+	points[0].y = y;	
+	points[0].z = 0.0;	
+	
+    //hex.points[1] = [x + halfRadius + radius, y,                 0.0];  // 2
+	points[1].x = x + halfRadius + radius;
+	points[1].y = y;
+	points[1].z = 0.0;		
+		
+    //hex.points[2] = [x + diameter,            y + apothem,       0.0];  // 3
+	points[2].x = x + diameter;
+	points[2].y = y + apothem;
+	points[2].z = 0.0;		
+	
+    //hex.points[3] = [x + halfRadius + radius, y + perpendicular, 0.0];  // 4
+	points[3].x = x + halfRadius + radius;
+	points[3].y = y + perpendicular;
+	points[3].z = 0.0;		
+	
+    //hex.points[4] = [x + halfRadius,          y + perpendicular, 0.0];  // 5
+	points[4].x = x + halfRadius;
+	points[4].y = y + perpendicular;
+	points[4].z = 0.0;	
+	
+    //hex.points[5] = [x,                       y + apothem,       0.0];  // 6     	
+	points[5].x = x;
+	points[5].y = y + apothem;
+	points[5].z = 0.0;	
+	
+    return points;
+} 
+
+
+
+
  
 void defineHexagon(GLfloat perpendicular, GLfloat diameter, GLfloat apothem, GLfloat halfRadius, GLfloat radius)
 {
     // initialize each hexagon 
+	/+
     board ~= [x + halfRadius,          y,                 0.0];  // 1
     board ~= [x + halfRadius + radius, y,                 0.0];  // 2
     board ~= [x + diameter,            y + apothem,       0.0];  // 3
     board ~= [x + halfRadius + radius, y + perpendicular, 0.0];  // 4
     board ~= [x + halfRadius,          y + perpendicular, 0.0];  // 5
-    board ~= [x,                       y + apothem,       0.0];  // 6                         
+    board ~= [x,                       y + apothem,       0.0];  // 6
+    +/	
 }
 
 // https://www.redblobgames.com/
@@ -86,19 +181,18 @@ void defineHexagon(GLfloat perpendicular, GLfloat diameter, GLfloat apothem, GLf
 // diameter is the length from one vertex to the vertex opposite.
 // Because the hex board has staggered columns, diameter = .50 makes a row of 5 columns (not 4) of hexes.
 //                  _________               _________
-//                 /         \             /         \
-//                /           \           /           \
-//      _________/             \_________/___diameter__\_________
+//                 /         \             /         \             /
+//                /           \           /           \           /
+//      _________/___diameter__\_________/___diameter__\_________/
 //     /         \             /         \             /         \ 
 //    /           \           /           \           /           \ 
 //   /__diameter___\_________/___diameter__\_________/___diameter__\    
 //   \             /         \             /         \             /
 //    \           /           \           /           \           /
 //     \_________/___diameter__\_________/             \_________/
-//               \             /         \             /
-//                \           /           \           /
-//                 \_________/             \_________/ 
-// -1.0           -.50            0.0            0.50          1.0
+//   +
+// -1.0           -.50            0.0            0.50              1.0
+
 
 
 //     -.134  _ _ \____|____/ 
@@ -150,10 +244,17 @@ void defineHexagon(GLfloat perpendicular, GLfloat diameter, GLfloat apothem, GLf
 
 void main(string[] argv)
 {
-    immutable GLfloat diameter = 0.30;  // diameter is a user defined constant in NDC units, so needs to be between [0.0, 2.0)
-                                    // which because of the hex board stagger makes a row of 5 (not 4) hexes.
-                                    // A diameter of 2.0, would display a single hex which would fill the full width 
-                                    // of the window and 0.866 of the windows height.
+
+    HexBoard hexBoard;
+
+
+
+
+
+    immutable GLfloat diameter = 0.30; // diameter is a user defined constant in NDC units, so needs to be between [0.0, 2.0)
+                                       // which because of the hex board stagger makes a row of 5 (not 4) hexes.
+                                       // A diameter of 2.0, would display a single hex which would fill the full width 
+                                       // of the window and 0.866 of the windows height.
 
     immutable GLfloat radius = diameter * 0.5;	
     immutable GLfloat halfRadius = radius * 0.5;	
@@ -201,12 +302,93 @@ void main(string[] argv)
     ];
 
 
-	// ///////////////////////////
+
+    // DEFINE HEXBOARD USING ROW/COLUMN of a 2 dimensional array (albeit staggered) 
+
+    // start at the bottom left corner of the NDC
+    GLfloat x = -1.0;
+    GLfloat y = -1.0;
+    GLfloat startX = -1.0;   // NDC Normalized Device Coordinates start at -1.0 and ends at 1.0 for all axes
+    GLfloat startY = -1.0;   // the board will be drawn starting from the lower left corner of screen
+
+    hexBoard.displayHexBoard();		
+
+    foreach(row; 0..hexBoard.rows)
+    {
+        foreach(col; 0..hexBoard.cols)
+        {	
+            hexBoard.board[row][col].points = defineHexVertices(x, y, perpendicular, diameter, apothem, halfRadius, radius);
+			
+            if (col.isEven)
+            {
+                y += apothem;
+            }
+            else
+            {			
+                y -= apothem;   
+            }
+            x += halfRadius + radius;  
+        }
+
+        x = startX;    
+        if (hexBoard.cols.isOdd)
+        {
+            y -= apothem;
+        }
+        		
+        y += perpendicular;
+		
+    }  
+
+    hexBoard.displayHexBoard();		
+
+
+
+
+    // ///////////////////////////
     // DEFINE HEX BOARD VERTICES
-	// //////////////////////////
-    
+    // //////////////////////////
+ 
+
+/+ 
 	bool stagger = false; 
 
+    // start at the bottom left corner of the NDC
+    GLfloat x = -1.0;
+    GLfloat y = -1.0;
+    GLfloat startX = -1.0;   // NDC Normalized Device Coordinates start at -1.0 and ends at 1.0 for all axes
+    GLfloat startY = -1.0;   // the board will be drawn starting from the lower left corner of screen
+
+    uint row = 0;
+    uint col = 0;
+
+    while((y <= 1.0 ) || (col <= hexBoard.cols))
+    {
+        while((x <= 1.0) || (row <= hexBoard.rows))
+        {	
+            hexBoard.board[row][col].points = defineHexVertices(x, y, perpendicular, diameter, apothem, halfRadius, radius);
+           
+            hexBoard.displayHexBoard();		   
+            stagger = !stagger;
+
+            if (stagger)
+                y += apothem;
+            else 
+                y -= apothem;   
+
+            x += halfRadius + radius;  
+        }
+        break;
+        //x = startX;        		
+        //y += perpendicular;
+		
+    }  
++/	
+	
+	
+	
+	
+/+
     while(y <= 1.0)
     {
         while(x <= 1.0)
@@ -221,17 +403,37 @@ void main(string[] argv)
 
             x += halfRadius + radius;  
         }
-		break;
+        break;
         //x = startX;        		
-        //y += perpendicular;
-		
+        //y += perpendicular;		
     }  
-
++/
 
     writeln("board = ", board);
     writeln("board.length = ", board.length);
 
-    vertices = board;
+    //vertices = board;
+
+    foreach(row; 0..hexBoard.rows)
+    {
+        foreach(col; 0..hexBoard.cols)
+        {
+            foreach(p; 0..6)
+            {
+                vertices ~= hexBoard.board[row][col].points[p].x;  
+                vertices ~= hexBoard.board[row][col].points[p].y;
+                vertices ~= hexBoard.board[row][col].points[p].z;				
+            }				 
+        }
+    }  	
+	
+	
+	
+	
+	
+	
+	
+	
 
     GLuint VBO, VAO;
     glGenVertexArrays(1, &VAO);
