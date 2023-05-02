@@ -4,7 +4,7 @@ module app;  // 01_03_01_hex_study
 
 import std.stdio;     // writeln
 import core.stdc.stdlib: exit;
-
+import std.math.rounding: floor;
 import shaders;       // without - Error: undefined identifier Shader, createProgramFromShaders, ...
 import event_handler; // without - Error: undefined identifier onKeyEvent, onFrameBufferResize, handleEvent
 import mytoolbox;     // without - Error: no property bytes for type float[]
@@ -12,22 +12,147 @@ import mytoolbox;     // without - Error: no property bytes for type float[]
 import dynamic_libs.glfw;    // without - Error: undefined identifier load_GLFW_Library, glfwCreateWindow
 import dynamic_libs.opengl;  // without - Error: undefined identifier load_openGL_Library
 
+//              GLFW Cursor Coordinates (integer)
+//    (x, y)
+//    (1,1)-------------(800,1)
+//      |                   |
+//      |                   |
+//      |                   |
+//      |                   |
+//      |                   |
+//      |                   |
+//      |                   |
+//      |                   |
+//    (1,800)-----------(800,800)
+//
+//
+//              Normalized Device Coordinates (NDC) (floats)    
+//    (x, y)   
+// (-1.0,1.0)-----------(1.0,1.0)
+//      |                   |
+//      |                   |
+//      |                   |
+//      |     (0.0,0.0)     |
+//      |         +         |
+//      |                   |
+//      |                   |
+//      |                   |
+//      |                   |
+// (-1.0,-1.0)-----------(1.0,-1.0)
+//  
+
+//         HexBoard 2 Dimensional array layout
+//                    
+//    /           \    (1,1)  /           \    (1,3)  /           \
+//   /    (1,0)    \_________/    (1,2)    \_________/             \
+//   \             /         \             /         \     (1,4)   /
+//    \           /           \           /           \           /
+//     \_________/    (0,1)    \_________/    (0,3)    \_________/
+//     /         \             /         \             /         \ 
+//    /           \           /           \           /           \ 
+//   /     (0,0)   \_________/    (0,2)    \_________/     (0,4)   \    
+//   \             /         \             /         \             /
+//    \           /           \           /           \           /
+//     \_________/             \_________/             \_________/
+
+
+//   Grid Rows
+//
+//    /           \    GridRow = 3        \           /           \
+//   /_____________\_________/_____________\_________/_____________\
+//   \             /         \             /         \             /
+//    \           /           \       GridRow = 2     \           /
+//   __\_________/_____________\_________/_____________\_________/__
+//     /         \             /         \             /         \ 
+//    /           \        GridRow = 1    \           /           \ 
+//   /_____________\_________/_____________\_________/_____________\    
+//   \             /         \             /         \             /
+//    \         Grid Row = 0  \           /           \           /
+//   __\_________/_____________\_________/_____________\_________/__
+
+//   Grid Columns
+//
+//   | / grid    | \         | /         | \         | /         | \
+//   |/  column  |  \________|/          |  \__grid__|/          |  \
+//   |\     0    |  /        |\          |  /column  |\          |  /
+//   | \         | /         | \         | /      3  | \         | /
+//   |  \________|/    grid  |  \________|/          |  \________|/__
+//   |  /        |\  column  |  /        |\          | grid      |\ 
+//   | /         | \     1   | /         | \         | / column  | \ 
+//   |/          |  \________|/  grid    |  \________|/      4   |  \    
+//   |\          |  /        |\  column  |  /        |\          |  /
+//   | \         | /         | \     2   | /         | \         | /
+//   |  \________|/__________|__\________|/__________|__\________|/__
+//      
+
+extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, int mods) nothrow
+{
+    try  // try is needed because of the nothrow
+    {
+        switch(button)
+        {
+            case GLFW_MOUSE_BUTTON_LEFT:
+                if (action == GLFW_PRESS)
+                {
+                    double xPos, yPos;
+                    glfwGetCursorPos(winMain, &xPos, &yPos);
+                    writeln("x and y cursor position = ", xPos, " ", yPos);
+
+                    double NDCx = (xPos / (winWidth / 2.0)) - 1.0;  // xPos/(winWidth/2.0) gives values from 0.0 to 2.0
+                                                                    // - 1.0   maps 0.0 to 2.0 to -1.0 to 1.0 	
+                    double NDCy = -((yPos / (winHeight / 2.0)) - 1.0); // xPos/(winHeight/2.0) gives values from 0.0 to 2.0
+                                                                    // - 1.0   maps 0.0 to 2.0 to -1.0 to 1.0 	
+                    // The minus sign is needed because screen coordinates are flipped horizontally from NDC coordinates																	
+                    writeln("NDC x,y = ", NDCx, ",", NDCy);										
+
+                    // Take the bottom of the edge of the scree (ie -1.0)  Any screen click on the screen is going to be Bigger in value.
+					// So that the mouse click and subtract the edge.  
+					
+                    double offsetX = NDCx - 1.0;
+					
+                    double offsetFromBottom = NDCy - (-1.0);
+                    writeln("offset From Bottom = ", offsetFromBottom);		
+	
+ 	                double gridRow = floor(offsetFromBottom / apothem) + 1.0;
+                    writeln("gridRow = ", gridRow);	
+
+
+                    double offsetFromLeft = NDCx - (-1.0);
+                    writeln("offset From Left = ", offsetFromLeft);							
+                     
+ 	                double gridCol = floor(offsetFromLeft / (radius + halfRadius)) + 1.0;
+                    writeln("gridCol = ", gridCol);						
+	
+                    //double gridCol = floor(NDCx / radius + halfRadius);
+                    //writeln("gridCol = ", gridCol);	
+                    //double gridRow = floor(NDCy / apothem);
+                    //writeln("gridRow = ", gridRow);	
+					
+                }
+                else if (action == GLFW_RELEASE)
+                {
+                    //mouseButtonLeftDown = false;
+                }
+			    break;
+		    default: assert(0);
+        }
+    }
+    catch(Exception e)
+    {
+    }
+}
+
+
 
 
 bool isOdd(uint value)
 {
-    if ((value % 2) == 0)
-        return false;
-    else
-        return true;
+    return(!(value % 2) == 0); 
 }
 
 bool isEven(uint value)
 {
-    if ((value % 2) == 0)
-        return true;
-    else
-        return false;
+    return((value % 2) == 0);   
 }
 
 struct D3_point
@@ -39,16 +164,55 @@ struct D3_point
 
 struct Hex
 {
-    D3_point[6] points;
+    D3_point[6] points;  // each hex is made up of 6 vertices
 	bool selected;
 }
 
+
+//         rows = 1;  cols = 5;
+//                    
+//                  _________               _________              
+//                 /         \             /         \     
+//                /           \           /           \       
+//      _________/    (0,1)    \_________/    (0,3)    \_________
+//     /         \             /         \             /         \ 
+//    /           \           /           \           /           \ 
+//   /     (0,0)   \_________/    (0,2)    \_________/     (0,4)   \    
+//   \             /         \             /         \             /
+//    \           /           \           /           \           /
+//     \_________/             \_________/             \_________/
+
+
+//         rows = 3; cols = 1;
+//      _________
+//     /         \                  
+//    /           \
+//   /    (2,0)    \
+//   \             /
+//    \           /
+//     \_________/          
+//     /         \                  
+//    /           \
+//   /    (1,0)    \
+//   \             /
+//    \           /
+//     \_________/ 
+//     /         \
+//    /           \ 
+//   /    (0,0)    \
+//   \             /
+//    \           /
+//     \_________/
+
+
 struct HexBoard
 {
-    enum uint rows = 3;  // length (in hexes) of a row
-    enum uint cols = 2;  // length (in hexes) of a column
+    enum uint rows = 5;  // number of rows on the board [1..n]
+    enum uint cols = 4;  // number of columns on the bord [1..n]
+	
+	double topOfHexesDrawn;
 
-    Hex[cols][rows]  board;  // Note: call with board[rows][cols];
+    Hex[cols][rows] board;  // Note: call with board[rows][cols];  // REVERSE ORDER!
 
     void displayHexBoard()
     {
@@ -56,9 +220,10 @@ struct HexBoard
         {
             foreach(c; 0..cols)
             {
+			
                 foreach(p; 0..6)
                 {
-                    writeln("board(r,c) ) ", board[r][c].points[p] );                   
+                    //writeln("board(r,c) ) ", board[r][c].points[p] );                   
                 }				 	
             }
         }			
@@ -66,17 +231,6 @@ struct HexBoard
 }
 
 
-
-
-
-
-
-GLfloat[] board;
-
-
- 
- 
-//alias isEven = unaryFun!("(a & 1) == 0");
 
 
 void quitOrContinue()
@@ -109,32 +263,26 @@ D3_point[6] defineHexVertices(GLfloat x, GLfloat y, GLfloat perpendicular, GLflo
 {
     D3_point[6] points;
 	
-	//hex.points[0] = [x + halfRadius,          y,                 0.0];  // 1
 	points[0].x = x + halfRadius;
 	points[0].y = y;	
 	points[0].z = 0.0;	
-	
-    //hex.points[1] = [x + halfRadius + radius, y,                 0.0];  // 2
+
 	points[1].x = x + halfRadius + radius;
 	points[1].y = y;
 	points[1].z = 0.0;		
 		
-    //hex.points[2] = [x + diameter,            y + apothem,       0.0];  // 3
 	points[2].x = x + diameter;
 	points[2].y = y + apothem;
 	points[2].z = 0.0;		
 	
-    //hex.points[3] = [x + halfRadius + radius, y + perpendicular, 0.0];  // 4
 	points[3].x = x + halfRadius + radius;
 	points[3].y = y + perpendicular;
 	points[3].z = 0.0;		
 	
-    //hex.points[4] = [x + halfRadius,          y + perpendicular, 0.0];  // 5
 	points[4].x = x + halfRadius;
 	points[4].y = y + perpendicular;
 	points[4].z = 0.0;	
 	
-    //hex.points[5] = [x,                       y + apothem,       0.0];  // 6     	
 	points[5].x = x;
 	points[5].y = y + apothem;
 	points[5].z = 0.0;	
@@ -238,29 +386,47 @@ void defineHexagon(GLfloat perpendicular, GLfloat diameter, GLfloat apothem, GLf
 //    \           /      \     | perpendicular
 //     \_________/        \____|____/ 
 //
-//    
+  
+  
+uint winWidth = 800;
+uint winHeight = 800;
 
-
-
+immutable GLfloat diameter = 0.3; // diameter is a user defined constant in NDC units, so needs to be between [0.0, 2.0)
+                                  // which because of the hex board stagger makes a row of 5 (not 4) hexes.
+                                  // A diameter of 2.0, would display a single hex which would fill the full width 
+                                  // of the window and 0.866 of the windows height.
+								  
+immutable GLfloat radius = diameter * 0.5;	
+immutable GLfloat halfRadius = radius * 0.5;	
+									
+immutable GLfloat perpendicular = diameter * 0.866;	
+immutable GLfloat apothem = perpendicular * 0.5;
+	
 void main(string[] argv)
 {
-
+    writeln("******************************************************");
+	
     HexBoard hexBoard;
 
+    if (hexBoard.cols == 1)
+        hexBoard.topOfHexesDrawn = hexBoard.rows * perpendicular;  // degenerate case  	
+    else
+        hexBoard.topOfHexesDrawn = (hexBoard.rows * perpendicular) + apothem;    
 
+    hexBoard.topOfHexesDrawn -= 1.0;  // adjust for the NDC starting at -1.0 instead of 0.0
+	
 
-
-
-    immutable GLfloat diameter = 0.30; // diameter is a user defined constant in NDC units, so needs to be between [0.0, 2.0)
-                                       // which because of the hex board stagger makes a row of 5 (not 4) hexes.
-                                       // A diameter of 2.0, would display a single hex which would fill the full width 
-                                       // of the window and 0.866 of the windows height.
-
-    immutable GLfloat radius = diameter * 0.5;	
-    immutable GLfloat halfRadius = radius * 0.5;	
-									
-    immutable GLfloat perpendicular = diameter * 0.866;	
-    immutable GLfloat apothem = perpendicular * 0.5;
+    //writeln("hexBoard.rows = ", hexBoard.rows);
+    //writeln("hexBoard.cols = ", hexBoard.cols);	
+    //writeln("perpendicular = ", perpendicular);	
+    //writeln("hexBoard.topOfHexesDrawn = ", hexBoard.topOfHexesDrawn);
+	
+	double offsetFromHexesBottom = hexBoard.topOfHexesDrawn - (-1.0);
+    writeln("offset From Hexes Bottom = ", offsetFromHexesBottom);		
+	
+ 	double gridRows = offsetFromHexesBottom / apothem;
+    writeln("gridRows = ", gridRows);	
+    
 	
 	
     load_GLFW_Library();
@@ -272,7 +438,7 @@ void main(string[] argv)
 
     // window must be square
 
-    auto winMain = glfwCreateWindow(800, 800, "01_03_01_hex_study", null, null);
+    auto winMain = glfwCreateWindow(winWidth, winHeight, "01_03_01_hex_study", null, null);
 
     glfwMakeContextCurrent(winMain); 
 
@@ -280,6 +446,8 @@ void main(string[] argv)
 
                 glfwSetKeyCallback(winMain, &onKeyEvent);
     glfwSetFramebufferSizeCallback(winMain, &onFrameBufferResize);
+        glfwSetMouseButtonCallback(winMain, &mouseButtonCallback);
+
 
     Shader[] shaders =
     [
@@ -302,14 +470,14 @@ void main(string[] argv)
     ];
 
 
-
+    // ///////////////////////////
     // DEFINE HEXBOARD USING ROW/COLUMN of a 2 dimensional array (albeit staggered) 
-
+    // ///////////////////////////
+	
     // start at the bottom left corner of the NDC
     GLfloat x = -1.0;
     GLfloat y = -1.0;
     GLfloat startX = -1.0;   // NDC Normalized Device Coordinates start at -1.0 and ends at 1.0 for all axes
-    GLfloat startY = -1.0;   // the board will be drawn starting from the lower left corner of screen
 
     hexBoard.displayHexBoard();		
 
@@ -336,83 +504,17 @@ void main(string[] argv)
             y -= apothem;
         }
         		
-        y += perpendicular;
-		
+        y += perpendicular;	
     }  
 
-    hexBoard.displayHexBoard();		
+    //hexBoard.displayHexBoard();		
 
 
 
+    // Take the hexboard comprising a 2 dimensional array of hex objects and
+	// convert it to a 1 dimensional array vertices.
 
-    // ///////////////////////////
-    // DEFINE HEX BOARD VERTICES
-    // //////////////////////////
- 
-
-/+ 
-	bool stagger = false; 
-
-    // start at the bottom left corner of the NDC
-    GLfloat x = -1.0;
-    GLfloat y = -1.0;
-    GLfloat startX = -1.0;   // NDC Normalized Device Coordinates start at -1.0 and ends at 1.0 for all axes
-    GLfloat startY = -1.0;   // the board will be drawn starting from the lower left corner of screen
-
-    uint row = 0;
-    uint col = 0;
-
-    while((y <= 1.0 ) || (col <= hexBoard.cols))
-    {
-        while((x <= 1.0) || (row <= hexBoard.rows))
-        {	
-            hexBoard.board[row][col].points = defineHexVertices(x, y, perpendicular, diameter, apothem, halfRadius, radius);
-           
-            hexBoard.displayHexBoard();		   
-            stagger = !stagger;
-
-            if (stagger)
-                y += apothem;
-            else 
-                y -= apothem;   
-
-            x += halfRadius + radius;  
-        }
-        break;
-        //x = startX;        		
-        //y += perpendicular;
-		
-    }  
-+/	
-	
-	
-	
-	
-/+
-    while(y <= 1.0)
-    {
-        while(x <= 1.0)
-        {
-            defineHexagon(perpendicular, diameter, apothem, halfRadius, radius);
-            stagger = !stagger;
-
-            if (stagger)
-                y += apothem;
-            else 
-                y -= apothem;   
-
-            x += halfRadius + radius;  
-        }
-        break;
-        //x = startX;        		
-        //y += perpendicular;		
-    }  
-+/
-
-    writeln("board = ", board);
-    writeln("board.length = ", board.length);
-
-    //vertices = board;
+    //vertices = board;  // obsolete
 
     foreach(row; 0..hexBoard.rows)
     {
@@ -426,12 +528,7 @@ void main(string[] argv)
             }				 
         }
     }  	
-	
-	
-	
-	
-	
-	
+    
 	
 	
 
