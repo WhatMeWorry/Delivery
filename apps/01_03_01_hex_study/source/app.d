@@ -1,7 +1,7 @@
 
 module app;  // 01_03_01_hex_study
 
-
+import std.conv: roundTo;
 import std.stdio;     // writeln
 import core.stdc.stdlib: exit;
 import std.math.rounding: floor;
@@ -58,20 +58,24 @@ import dynamic_libs.opengl;  // without - Error: undefined identifier load_openG
 
 //   Grid Rows
 //
-//    /           \    GridRow = 3        \           /           \
+//    /           \    grid row 3         \           /           \
 //   /_____________\_________/_____________\_________/_____________\
 //   \             /         \             /         \             /
-//    \           /           \       GridRow = 2     \           /
+//    \           /           \       grid row = 2    \           /
 //   __\_________/_____________\_________/_____________\_________/__
 //     /         \             /         \             /         \ 
-//    /           \        GridRow = 1    \           /           \ 
+//    /           \        grid row 1     \           /           \ 
 //   /_____________\_________/_____________\_________/_____________\    
 //   \             /         \             /         \             /
-//    \         Grid Row = 0  \           /           \           /
+//    \         grid row 0    \           /           \           /
 //   __\_________/_____________\_________/_____________\_________/__
+
+
 
 //   Grid Columns
 //
+//   |  \________|/          |  \________|/          |  \________|/__
+//   |  /        |\          |  /        |\          |  /        |\ 
 //   | / grid    | \         | /         | \         | /         | \
 //   |/  column  |  \________|/          |  \__grid__|/          |  \
 //   |\     0    |  /        |\          |  /column  |\          |  /
@@ -113,21 +117,130 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
                     double offsetFromBottom = NDCy - (-1.0);
                     writeln("offset From Bottom = ", offsetFromBottom);		
 	
- 	                double gridRow = floor(offsetFromBottom / apothem) + 1.0;
+ 	                //uint gridRow = roundTo!uint(floor((offsetFromBottom / apothem) + 1.0));
+					uint gridRow = roundTo!uint(floor(offsetFromBottom / apothem));
                     writeln("gridRow = ", gridRow);	
 
 
                     double offsetFromLeft = NDCx - (-1.0);
                     writeln("offset From Left = ", offsetFromLeft);							
                      
- 	                double gridCol = floor(offsetFromLeft / (radius + halfRadius)) + 1.0;
-                    writeln("gridCol = ", gridCol);						
-	
-                    //double gridCol = floor(NDCx / radius + halfRadius);
-                    //writeln("gridCol = ", gridCol);	
-                    //double gridRow = floor(NDCy / apothem);
-                    //writeln("gridRow = ", gridRow);	
-					
+ 	                //uint gridCol = roundTo!uint(floor((offsetFromLeft / (radius + halfRadius)) + 1.0));
+					uint gridCol = roundTo!uint(floor(offsetFromLeft / (radius + halfRadius)));
+                    writeln("gridCol = ", gridCol);	
+
+
+//   Grid Quandrants
+// Quadrant is defined by (gridRow, gridCol) pair.
+// Quad UL = (odd, even) 
+//      LL = (even, even)
+//      UR = (odd, odd)
+//      LR = (even, odd)
+//      
+//
+//   |__\________|/__________|__\________|/          |  \________|/__
+//   |  /        |\          |  /        |\          |  /        |\ 
+//   | Upper Left|Upper Right| Upper Left|Upper Right| Upper Left| Upper Right
+//   |/__________|__\________|/__________|__\________|/__________|__\
+//   |\          |  /        |\          |  /        |\          |  /
+//   | Lower Left|Lower Right|Lower Left |Lower Right| Lower Left| Lower Right
+//   |__\________|/__________|__\________|/__________|__\________|/__
+//   |  /        |\          |  /        |\          |  /        |\ 
+//   |Upper Left |Upper Right| Upper Left|Upper Right| Upper Left| Upper Right
+//   |/__________|__\________|/__________|__\________|/__________|  \    
+//   |\          |  /        |\          |  /        |\          |  /
+//   |Lower Left |Lower Right| Lower Left|Lower Right| Lower Left| Lower Right
+//   |__\________|/__________|__\________|/__________|__\________|/__
+
+
+enum Quads { UL, UR, LL, LR }
+Quads quadrant;
+
+                    if (gridRow.isEven)
+					{
+					    if (gridCol.isEven)
+                            quadrant = Quads.LL; // (e,e)
+                        else
+                            quadrant = Quads.LR; // (e,o)					
+					}
+                    else // gridRow isOdd
+					{
+					    if (gridCol.isEven)
+                            quadrant = Quads.UL; // (o,e)
+                        else
+                            quadrant = Quads.UR; // (o,o)					
+					}
+
+                    writeln("quadrant = ", quadrant);
+
+                    /+
+                    if (isEven(gridRow) && isEven(gridCol))   // DONE : Upper Left Quadrant
+                    {       
+                        // gridRow is always going to be even, so just divide by 2
+                        row = gridRow / 2;
+                        col = gridCol;
+      
+                        // Form B and C are the most degenerate because they a completely empty rectanles
+      
+                        if ( isEven(maxCols) && (gridCol == maxGridCols-1) && (gridRow == 0))
+                        {
+                            console.log("FORM B");
+                            selectedHex = 0;
+                        }
+      
+                        else if ( (maxCols >= 2) && 
+                                  (gridCol == 0) && 
+                                  (gridRow == maxGridRows-1) )
+                        {
+                            console.log("FORM C");
+                            selectedHex = 0;          
+                        } 
+                        else if ( (col == maxCols) ||   // along the right edge of hex board
+                                  ((gridRow == maxGridRows-1) && isEven(gridCol))  // or bottom edge
+                                )
+                        {  
+                            console.log("FORM D or FORM F");
+                            centerX = hexBoard[row-1][col-1].center.x + threeFourths;
+                            centerY = hexBoard[row-1][col-1].center.y + halfHexHeight;  
+
+                            if (clickedInUpperLeftTriangle(mouseX, mouseY, centerX, centerY))
+                            { 
+                                console.log("    Inside Hex");
+                                selectedHex = hexBoard[row-1][col-1];
+                            }
+                            else
+                            {
+                                console.log("    Outside Hex");
+                                selectedHex = 0;               
+                            }
+                        }
+                        else
+                        {     
+                            centerX = hexBoard[row][col].center.x;
+                            centerY = hexBoard[row][col].center.y;
+          
+                            if (clickedInUpperLeftTriangle(mouseX, mouseY, centerX, centerY))
+                            { 
+                                if (row == 0 || col == 0)
+                                {
+                                    console.log("FORM A - Outside Hex");
+                                    selectedHex = 0;          
+                                }
+                                else
+                                {
+                                    console.log("FORM E - Inside Small Triangle");
+                                    selectedHex = hexBoard[row-1][col-1];
+                                }
+                            } 
+                            else
+                            {
+                                console.log("FORM A - Inside Hex");
+                                selectedHex = hexBoard[row][col];
+                            }  
+                        }
+                    }
+					+/
+
                 }
                 else if (action == GLFW_RELEASE)
                 {
@@ -391,7 +504,7 @@ void defineHexagon(GLfloat perpendicular, GLfloat diameter, GLfloat apothem, GLf
 uint winWidth = 800;
 uint winHeight = 800;
 
-immutable GLfloat diameter = 0.3; // diameter is a user defined constant in NDC units, so needs to be between [0.0, 2.0)
+immutable GLfloat diameter = 0.63; // diameter is a user defined constant in NDC units, so needs to be between [0.0, 2.0)
                                   // which because of the hex board stagger makes a row of 5 (not 4) hexes.
                                   // A diameter of 2.0, would display a single hex which would fill the full width 
                                   // of the window and 0.866 of the windows height.
