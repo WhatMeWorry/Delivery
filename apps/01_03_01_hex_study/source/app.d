@@ -89,6 +89,179 @@ import dynamic_libs.opengl;  // without - Error: undefined identifier load_openG
 //   |  \________|/__________|__\________|/__________|__\________|/__
 //      
 
+
+
+bool isOdd(uint value)
+{
+    return(!(value % 2) == 0); 
+}
+
+bool isEven(uint value)
+{
+    return((value % 2) == 0);   
+}
+
+struct D3_point
+{
+    GLfloat x;
+    GLfloat y; 
+    GLfloat z;
+}
+
+struct Hex
+{
+    D3_point[6] points;  // each hex is made up of 6 vertices
+	bool selected;
+	D3_point hexCenter;  // each hex has a center
+}
+
+
+//         rows = 1;  cols = 5;
+//                    
+//                  _________               _________              
+//                 /         \             /         \     
+//                /           \           /           \       
+//      _________/    (0,1)    \_________/    (0,3)    \_________
+//     /         \             /         \             /         \ 
+//    /           \           /           \           /           \ 
+//   /     (0,0)   \_________/    (0,2)    \_________/     (0,4)   \    
+//   \             /         \             /         \             /
+//    \           /           \           /           \           /
+//     \_________/             \_________/             \_________/
+
+
+//         rows = 3; cols = 1;
+//      _________
+//     /         \                  
+//    /           \
+//   /    (2,0)    \
+//   \             /
+//    \           /
+//     \_________/          
+//     /         \                  
+//    /           \
+//   /    (1,0)    \
+//   \             /
+//    \           /
+//     \_________/ 
+//     /         \
+//    /           \ 
+//   /    (0,0)    \
+//   \             /
+//    \           /
+//     \_________/
+
+
+struct HexBoard
+{
+    enum uint rows = 5;  // number of rows on the board [1..n]
+    enum uint cols = 4;  // number of columns on the bord [1..n]
+	
+	double topOfHexesDrawn;
+
+    Hex[cols][rows] board;  // Note: call with board[rows][cols];  // REVERSE ORDER!
+
+    void displayHexBoard()
+    {
+        foreach(r; 0..rows)
+        {
+            foreach(c; 0..cols)
+            {
+                writeln("board[", r, "][", c, "].hexCenter ", board[r][c].hexCenter );    
+				
+                foreach(p; 0..6)
+                {
+                    //writeln("board(r,c) ) ", board[r][c].points[p] );                   
+                }				 	
+            }
+        }			
+    }
+}
+
+HexBoard hexBoard;
+
+
+void quitOrContinue()
+{		
+    writeln("Press Enter key to continue or Q/q to quit");
+    char c;
+    readf("%c", &c);
+    if ((c == 'Q') || (c == 'q'))
+    {
+        exit(0);	
+    }
+    return;
+}	
+
+
+// OpenGL by default determines a triangle to be facing towards the camera if the triangle's vertexes are 
+// ordered in a counterclockwise order from the perspective of the camera
+
+//      4_________3
+//      /         \                
+//     /           \
+//   5/             \2    
+//    \             /
+//     \           /
+//   |_ \_________/ 
+// (x,y) 0        1
+
+
+
+
+
+
+
+
+
+//   |__\________|/          |__\________|/          |__\________|/__
+//   |XX/        |\          |XX/        |\          |XX/        |\ 
+//   |X/         | \         |X/         | \         |X/         | \ 
+//   |/          |__\________|/          |__\________|/          |__\    
+//   |\          |XX/        |\          |XX/        |\          |XX/
+//   | \         |X/         | \         |X/         | \         |X/
+//   |  \________|/__________|__\________|/__________|__\________|/__
+
+               
+//   |XXXXX/           |
+//   |XXXX/            | opposite
+//   |XXX/hypotenuse   |
+//   |XX/              |
+//   |X/ 60 degs       + mouse click   
+//   |/___adjacent_____|
+//   +         
+//   leftPoint
+
+bool clickedInUpperLeftTriangle(double mX, double mY, double hexCenterX, double hexCenterY)
+{
+    double leftPointX = hexCenterX - radius;
+    double leftPointY = hexCenterY;    
+
+    double adjacent = mX - leftPointX;  // mouse click x in UL quadrant will always be greater the the bottom left corner x
+
+    double opposite = mY - leftPointY;  // mouse click y in UL quadrant will always be greater the the bottom left corner y
+ 
+    // tan(theta) = opposite / adjacent
+    // tan(60) = 1.7320508
+	
+    double angle = opposite / adjacent;
+	
+    writeln("angle = ", angle);
+
+    enum tanOf60 = 1.7320508;
+	
+	if (angle > tanOf60)
+        return true;
+    else
+        return false;	
+}
+
+
+
+
+
+
+
 extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, int mods) nothrow
 {
     try  // try is needed because of the nothrow
@@ -138,7 +311,7 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
 //      LR = (even, odd)
 //      
 //
-//   |__\________|/__________|__\________|/          |  \________|/__
+//   |__\________|/__________|__\________|/__________|__\________|/__
 //   |  /        |\          |  /        |\          |  /        |\ 
 //   | Upper Left|Upper Right| Upper Left|Upper Right| Upper Left| Upper Right
 //   |/__________|__\________|/__________|__\________|/__________|__\
@@ -153,8 +326,10 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
 //   |__\________|/__________|__\________|/__________|__\________|/__
 
 
-enum Quads { UL, UR, LL, LR }
-Quads quadrant;
+                    // We can exclude 3/4 of the hexBoard just by finding the quadrant that was mouse clicked on
+
+                    enum Quads { UL, UR, LL, LR }
+                    Quads quadrant;
 
                     if (gridRow.isEven)
 					{
@@ -173,13 +348,28 @@ Quads quadrant;
 
                     writeln("quadrant = ", quadrant);
 
-                    /+
-                    if (isEven(gridRow) && isEven(gridCol))   // DONE : Upper Left Quadrant
+                    int row = -1;
+                    int col = -1;					
+
+  
+                    if (quadrant == Quads.UL)   // Upper Left Quadrant
                     {       
-                        // gridRow is always going to be even, so just divide by 2
                         row = gridRow / 2;
                         col = gridCol;
-      
+
+                        writeln("(row,col) = ", row, " ", col);   
+
+                        double centerX = hexBoard.board[row][col].hexCenter.x;
+                        double centerY = hexBoard.board[row][col].hexCenter.y; 
+
+                        writeln("centerX, centerY = ", centerX, ", ", centerY);
+                        writeln("NDCx, NDCy = ", NDCx, ", ", NDCy);  						
+                        if (clickedInUpperLeftTriangle(NDCx, NDCy, centerX, centerY))	
+                            writeln("click is outside hex");
+					    else 
+                            writeln("click is inside hex ");						
+                        						
+	                    /+
                         // Form B and C are the most degenerate because they a completely empty rectanles
       
                         if ( isEven(maxCols) && (gridCol == maxGridCols-1) && (gridRow == 0))
@@ -238,8 +428,9 @@ Quads quadrant;
                                 selectedHex = hexBoard[row][col];
                             }  
                         }
+						+/
                     }
-					+/
+					
 
                 }
                 else if (action == GLFW_RELEASE)
@@ -258,118 +449,6 @@ Quads quadrant;
 
 
 
-bool isOdd(uint value)
-{
-    return(!(value % 2) == 0); 
-}
-
-bool isEven(uint value)
-{
-    return((value % 2) == 0);   
-}
-
-struct D3_point
-{
-    GLfloat x;
-    GLfloat y; 
-    GLfloat z;
-}
-
-struct Hex
-{
-    D3_point[6] points;  // each hex is made up of 6 vertices
-	bool selected;
-}
-
-
-//         rows = 1;  cols = 5;
-//                    
-//                  _________               _________              
-//                 /         \             /         \     
-//                /           \           /           \       
-//      _________/    (0,1)    \_________/    (0,3)    \_________
-//     /         \             /         \             /         \ 
-//    /           \           /           \           /           \ 
-//   /     (0,0)   \_________/    (0,2)    \_________/     (0,4)   \    
-//   \             /         \             /         \             /
-//    \           /           \           /           \           /
-//     \_________/             \_________/             \_________/
-
-
-//         rows = 3; cols = 1;
-//      _________
-//     /         \                  
-//    /           \
-//   /    (2,0)    \
-//   \             /
-//    \           /
-//     \_________/          
-//     /         \                  
-//    /           \
-//   /    (1,0)    \
-//   \             /
-//    \           /
-//     \_________/ 
-//     /         \
-//    /           \ 
-//   /    (0,0)    \
-//   \             /
-//    \           /
-//     \_________/
-
-
-struct HexBoard
-{
-    enum uint rows = 5;  // number of rows on the board [1..n]
-    enum uint cols = 4;  // number of columns on the bord [1..n]
-	
-	double topOfHexesDrawn;
-
-    Hex[cols][rows] board;  // Note: call with board[rows][cols];  // REVERSE ORDER!
-
-    void displayHexBoard()
-    {
-        foreach(r; 0..rows)
-        {
-            foreach(c; 0..cols)
-            {
-			
-                foreach(p; 0..6)
-                {
-                    //writeln("board(r,c) ) ", board[r][c].points[p] );                   
-                }				 	
-            }
-        }			
-    }
-}
-
-
-
-
-void quitOrContinue()
-{		
-    writeln("Press Enter key to continue or Q/q to quit");
-    char c;
-    readf("%c", &c);
-    if ((c == 'Q') || (c == 'q'))
-    {
-        exit(0);	
-    }
-    return;
-}	
-
-
-// OpenGL by default determines a triangle to be facing towards the camera if the triangle's vertexes are 
-// ordered in a counterclockwise order from the perspective of the camera
-
-//      5_________4
-//      /         \                
-//     /           \
-//   6/             \3    
-//    \             /
-//     \           /
-//   |_ \_________/ 
-// (x,y) 1        2
 
                               // x, y is the lower left corner of the rectangle touching all vertices
 D3_point[6] defineHexVertices(GLfloat x, GLfloat y, GLfloat perpendicular, GLfloat diameter, GLfloat apothem, GLfloat halfRadius, GLfloat radius)
@@ -403,7 +482,16 @@ D3_point[6] defineHexVertices(GLfloat x, GLfloat y, GLfloat perpendicular, GLflo
     return points;
 } 
 
-
+D3_point defineHexCenter(GLfloat x, GLfloat y, GLfloat apothem, GLfloat radius)
+{
+    D3_point center;
+	
+	center.x = x + radius;
+	center.y = y + apothem;
+    center.z = 0.0;
+	
+    return center;
+} 
 
 
  
@@ -519,7 +607,7 @@ void main(string[] argv)
 {
     writeln("******************************************************");
 	
-    HexBoard hexBoard;
+
 
     if (hexBoard.cols == 1)
         hexBoard.topOfHexesDrawn = hexBoard.rows * perpendicular;  // degenerate case  	
@@ -592,7 +680,7 @@ void main(string[] argv)
     GLfloat y = -1.0;
     GLfloat startX = -1.0;   // NDC Normalized Device Coordinates start at -1.0 and ends at 1.0 for all axes
 
-    hexBoard.displayHexBoard();		
+    //hexBoard.displayHexBoard();		
 
     foreach(row; 0..hexBoard.rows)
     {
@@ -600,6 +688,8 @@ void main(string[] argv)
         {	
             hexBoard.board[row][col].points = defineHexVertices(x, y, perpendicular, diameter, apothem, halfRadius, radius);
 			
+            hexBoard.board[row][col].hexCenter = defineHexCenter(x, y, apothem, radius);
+            hexBoard.board[row][col].selected = false;			
             if (col.isEven)
             {
                 y += apothem;
@@ -620,7 +710,7 @@ void main(string[] argv)
         y += perpendicular;	
     }  
 
-    //hexBoard.displayHexBoard();		
+    hexBoard.displayHexBoard();		
 
 
 
