@@ -232,7 +232,7 @@ void quitOrContinue()
 //   +         
 //   leftPoint
 
-bool clickedInUpperLeftTriangle(double mX, double mY, double hexCenterX, double hexCenterY)
+bool clickedIn_UPPER_LEFT_Triangle(double mX, double mY, double hexCenterX, double hexCenterY)
 {
     double leftPointX = hexCenterX - radius;
     double leftPointY = hexCenterY;    
@@ -249,15 +249,31 @@ bool clickedInUpperLeftTriangle(double mX, double mY, double hexCenterX, double 
     writeln("angle = ", angle);
 
     enum tanOf60 = 1.7320508;
-	
-	if (angle > tanOf60)
-        return true;
-    else
-        return false;	
+
+    return(angle > tanOf60);
 }
 
 
+bool clickedIn_LOWER_LEFT_Triangle(double mX, double mY, double hexCenterX, double hexCenterY)
+{
+    double leftPointX = hexCenterX - radius;
+    double leftPointY = hexCenterY;    
 
+    double adjacent = mX - leftPointX;  // mouse click x in UL quadrant will always be greater the the bottom left corner x
+
+    double opposite = mY - leftPointY;  // mouse click y in UL quadrant will always be greater the the bottom left corner y
+ 
+    // tan(theta) = opposite / adjacent
+    // tan(60) = 1.7320508
+	
+    double angle = opposite / adjacent;
+	
+    writeln("angle = ", angle);
+
+    enum tanOf60 = 1.7320508;
+
+    return(angle > tanOf60);
+}
 
 
 
@@ -353,8 +369,8 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
 
   
                     if (quadrant == Quads.UL)   // Upper Left Quadrant
-                    {       
-                        row = gridRow / 2;
+                    { 					
+                        row = (gridRow-1) / 2;  // UL gridRows = {1, 3, 5, 7,...} mapped to row = {0, 1, 2, 3,...}
                         col = gridCol;
 
                         writeln("(row,col) = ", row, " ", col);   
@@ -364,11 +380,73 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
 
                         writeln("centerX, centerY = ", centerX, ", ", centerY);
                         writeln("NDCx, NDCy = ", NDCx, ", ", NDCy);  						
-                        if (clickedInUpperLeftTriangle(NDCx, NDCy, centerX, centerY))	
+                        if (clickedIn_UPPER_LEFT_Triangle(NDCx, NDCy, centerX, centerY))
+                        {
                             writeln("click is outside hex");
+                            if(col == 0)
+							{
+                                // clicked on the left edge of the 
+                                writeln("clicked outside on the left side of hex board");
+                            }
+                            else
+                            {
+                               col = col - 1;							
+                            }
+                        }						
 					    else 
                             writeln("click is inside hex ");						
-                        						
+ 
+                        writeln("(row, col) = (", row, ", ", col, ")");  
+					}	
+						
+                    if (quadrant == Quads.LR)    // Lower Right Quadrant
+                    {
+                        if (gridRow == 0)
+                        {
+                            writeln("Handle bottom of board, 5/6 th area is off boards");
+                        }
+                        else   // handle rest of the board
+                        {
+					        row = (gridRow/2) - 1;    // LR gridRows = {2, 4, 6, 8,...}  mapped to row = {0, 1, 2, 3,...}
+                            col = gridCol;	          //                 0 is excluded by previous lines of code					
+						
+                            writeln("(row,col) = ", row, " ", col);
+ 
+                            double centerX = hexBoard.board[row][col].hexCenter.x;
+                            double centerY = hexBoard.board[row][col].hexCenter.y;
+
+                            if (clickedIn_UPPER_LEFT_Triangle(NDCx, NDCy, centerX, centerY))
+                            {
+							    row = row + 1;
+                                col = col - 1;
+                            }						
+                            writeln("(row,col) = ", row, " ", col);
+                        }						
+					}							
+						
+						
+                    if (quadrant == Quads.UR)    // Upper Right Quadrant
+                    {
+
+ 
+					        row = (gridRow-1) / 2;    // UR gridRows = {1, 3, 5, 7,...} mapped to row = {0, 1, 2, 3,...}
+                            col = gridCol;					
+						
+                            writeln("(row,col) = ", row, " ", col);
+ 
+                            double centerX = hexBoard.board[row][col].hexCenter.x;
+                            double centerY = hexBoard.board[row][col].hexCenter.y;
+
+                            if (clickedIn_LOWER_LEFT_Triangle(NDCx, NDCy, centerX, centerY))
+                            {
+                                col = col - 1;
+                            }						
+                            writeln("(row,col) = ", row, " ", col);
+ 				
+					}													
+						
+						
+						
 	                    /+
                         // Form B and C are the most degenerate because they a completely empty rectanles
       
@@ -429,7 +507,7 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
                             }  
                         }
 						+/
-                    }
+                    
 					
 
                 }
