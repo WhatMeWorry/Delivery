@@ -2,7 +2,7 @@
 module app;  // 01_03_01_hex_study
 
 import std.conv: roundTo;
-import std.stdio;     // writeln
+import std.stdio: writeln, readf;
 import core.stdc.stdlib: exit;
 
 import std.math.rounding: floor;
@@ -18,13 +18,13 @@ import dynamic_libs.opengl;  // without - Error: undefined identifier load_openG
 //              GLFW Cursor Coordinates (integer)
 //    (x, y)
 //    (1,1)-------------(800,1)
-//      |                   |
-//      |                   |
-//      |                   |
-//      |                   |
-//      |                   |
-//      |                   |
-//      |                   |
+//      | mouse             |
+//      | clicking inside   |
+//      | the window will   |  (notice how to counting
+//      | return            |   starts in the upper
+//      | coordinates       |   left hand corner)
+//      | within these      |
+//      | ranges            |
 //      |                   |
 //    (1,800)-----------(800,800)
 //
@@ -34,7 +34,7 @@ import dynamic_libs.opengl;  // without - Error: undefined identifier load_openG
 // (-1.0,1.0)-----------(1.0,1.0)
 //      |                   |
 //      |                   |
-//      |                   |
+//      |                   |  OpenGL uses NDC coordinate.
 //      |     (0.0,0.0)     |
 //      |         +         |
 //      |                   |
@@ -157,12 +157,13 @@ struct Hex
 
 struct HexBoard
 {
-    enum uint rows = 5;  // number of rows on the board [0..rows-1]
-    enum uint cols = 4;  // number of columns on the bord [0..cols-1]
+    enum uint rows = 7;  // number of rows on the board [0..rows-1]
+    enum uint cols = 7;  // number of columns on the bord [0..cols-1]
 	
-	double topOfHexesDrawn;
+	double topEdge;
+    double rightEdge;
 
-    Hex[cols][rows] board;  // Note: call with board[rows][cols];  // REVERSE ORDER!
+    Hex[cols][rows] hexes;  // Note: call with hexes[rows][cols];  // REVERSE ORDER!    
 
     void displayHexBoard()
     {
@@ -170,18 +171,52 @@ struct HexBoard
         {
             foreach(c; 0..cols)
             {
-                writeln("board[", r, "][", c, "].hexCenter ", board[r][c].hexCenter );    
+                writeln("hexes[", r, "][", c, "].hexCenter ", hexes[r][c].hexCenter );    
 				
                 foreach(p; 0..6)
                 {
-                    //writeln("board(r,c) ) ", board[r][c].points[p] );                   
+                    //writeln("hexes(r,c) ) ", hexes[r][c].points[p] );                   
                 }				 	
             }
         }			
     }
 }
 
+
 HexBoard hexBoard;
+
+// The hexboard's layout is started in the lower left hand corner.
+// If the window is bigger than the hexboard, you will see empty
+// band of space along the window top and/or window right edge.
+// Mouse clicking on these bands will cause the program to abend
+// during execution with an array index out-of-bounds error.
+// we use the 
+
+//  left edge of window                                 + right edge of hexboard
+//  |                                                   |
+//  V_______________________top edge of window__________|_______ 
+//  |                                                   |       |
+//  |                                                   |       |
+//  |                                                   |       |
+//  |___________________________________________________|_______|_____top edge of hexboard                                                         |
+//  |\             /         \             /         \  |       | 
+//  | \           /           \           /           \ |       |
+//  |  \_________/             \_________/             \|       |
+//  |  /         \             /         \             /|       | 
+//  | /           \           /           \           / |       |right edge of window
+//  |/             \_________/             \_________/  |       |
+//  |\             /         \             /         \  |       |
+//  | \           /           \           /           \ |       |
+//  |  \_________/             \_________/             \|       |
+//  |  /         \             /         \             /|       |
+//  | /           \           /           \           / |       |
+//  |/             \_________/             \_________/  |       |    
+//  |\             /         \             /         \  |       |
+//  | \           /           \           /           \ |       |
+//  |__\_________/_____________\_________/_____________\|_______|
+//                          bottom edge of window
+
+
 
 
 void quitOrContinue()
@@ -250,7 +285,7 @@ bool clickedIn_UPPER_LEFT_Triangle(double mX, double mY, double hexCenterX, doub
 	
     double angle = opposite / adjacent;
 	
-    writeln("angle = ", angle);
+    //writeln("angle = ", angle);
 
     enum tanOf60 = 1.7320508;
 
@@ -300,14 +335,14 @@ bool clickedIn_LOWER_LEFT_Triangle(double mX, double mY, double hexCenterX, doub
 
     double adjacent = abs(mY - leftPointY);  // mouse click y in UR quadrant will always be below (lesser than) the leftPointY
 
-    writeln("opposite = ", opposite);
-    writeln("adjacent = ", adjacent);	
+    //writeln("opposite = ", opposite);
+    //writeln("adjacent = ", adjacent);	
     // tan(theta) = opposite / adjacent
     // tan(30) = 0.5773502
 	
     double angle = opposite / adjacent;
 	
-    writeln("angle = ", angle);
+    //writeln("angle = ", angle);
 
     enum tanOf30 = 0.5773502;
 
@@ -340,12 +375,10 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
                     // Take the bottom of the edge of the scree (ie -1.0)  Any screen click on the screen is going to be Bigger in value.
 					// So that the mouse click and subtract the edge.  
 					
-                    double offsetX = NDCx - 1.0;
 					
                     double offsetFromBottom = NDCy - (-1.0);
                     //writeln("offset From Bottom = ", offsetFromBottom);		
 	
- 	                //uint gridRow = roundTo!uint(floor((offsetFromBottom / apothem) + 1.0));
 					uint gridRow = roundTo!uint(floor(offsetFromBottom / apothem));
                     //writeln("gridRow = ", gridRow);	
 
@@ -353,24 +386,20 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
                     double offsetFromLeft = NDCx - (-1.0);
                     //writeln("offset From Left = ", offsetFromLeft);							
                      
- 	                //uint gridCol = roundTo!uint(floor((offsetFromLeft / (radius + halfRadius)) + 1.0));
 					uint gridCol = roundTo!uint(floor(offsetFromLeft / (radius + halfRadius)));
                     //writeln("gridCol = ", gridCol);	
 
-                    uint temp;
-                    if (gridRow.isEven)
-                        temp = gridRow/2;
-				    else
-					    temp = (gridRow-1)/2;
-						
-                    writeln("temp = ", temp);
-                    writeln("temp = ", hexBoard.rows-1);					
-                    					
-                    if ((temp > (hexBoard.rows-1)) || (gridCol > (hexBoard.cols-1)))
+                    //writeln("hexBoard.rightEdge = ", hexBoard.rightEdge);
+					//writeln("NDCx = ", NDCx);
+                    if (NDCx > hexBoard.rightEdge)
                     {
-                        writeln("You have clicked either too far right or too far up on the hexboard");
-                        writeln("This will cause an array out of bounds runtime error");						
-                        break;
+                        writeln("Clicked outside of the hex board's right edge");
+                        return;						
+                    }
+                    if (NDCy > hexBoard.topEdge)
+                    {
+                        writeln("Clicked above the hex board's top edge");
+                        return;						
                     }
 
 
@@ -417,7 +446,7 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
                             quadrant = Quads.UR; // (o,o)					
 					}
 
-                    writeln("quadrant = ", quadrant);
+                    //writeln("quadrant = ", quadrant);
 
                     int row = -1;
                     int col = -1;					
@@ -431,8 +460,8 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
 
                         //writeln("(row,col) = ", row, " ", col);   
 
-                        double centerX = hexBoard.board[row][col].hexCenter.x;
-                        double centerY = hexBoard.board[row][col].hexCenter.y; 
+                        double centerX = hexBoard.hexes[row][col].hexCenter.x;
+                        double centerY = hexBoard.hexes[row][col].hexCenter.y; 
 
                         //writeln("centerX, centerY = ", centerX, ", ", centerY);
                         //writeln("NDCx, NDCy = ", NDCx, ", ", NDCy);  						
@@ -441,7 +470,7 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
                             if(col == 0)
 							{
                                 // clicked on the left edge of the 
-                                writeln("clicked outside on the left side of hex board");
+                                //writeln("clicked outside on the left side of hex board");
                                 row = -1; col = -1;
                             }
                             else
@@ -458,18 +487,18 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
                     {
                         if (gridRow == 0)  // degenerate case, only for very bottom row on hexboard
                         {
-                            writeln("Handle bottom of board, 5/6th area is off board");
+                            //writeln("Handle bottom of board, 5/6th area is off board");
 							
 							row = 0; col = gridCol;
-                            double centerX = hexBoard.board[row][col].hexCenter.x;
-                            double centerY = hexBoard.board[row][col].hexCenter.y;
+                            double centerX = hexBoard.hexes[row][col].hexCenter.x;
+                            double centerY = hexBoard.hexes[row][col].hexCenter.y;
 							
 							centerY = centerY - perpendicular;
 						
                             if (clickedIn_UPPER_LEFT_Triangle(NDCx, NDCy, centerX, centerY))
                             {
                                 col = col - 1;
-								writeln("clicked in little triangle");
+								//writeln("clicked in little triangle");
                             }
                             else
                             {
@@ -484,8 +513,8 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
 						
                             //writeln("(row,col) = ", row, " ", col);
  
-                            double centerX = hexBoard.board[row][col].hexCenter.x;
-                            double centerY = hexBoard.board[row][col].hexCenter.y;
+                            double centerX = hexBoard.hexes[row][col].hexCenter.x;
+                            double centerY = hexBoard.hexes[row][col].hexCenter.y;
 
                             if (clickedIn_UPPER_LEFT_Triangle(NDCx, NDCy, centerX, centerY))
                             {
@@ -505,8 +534,8 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
 						
                             //writeln("(row,col) = ", row, " ", col);
  
-                            double centerX = hexBoard.board[row][col].hexCenter.x;
-                            double centerY = hexBoard.board[row][col].hexCenter.y;
+                            double centerX = hexBoard.hexes[row][col].hexCenter.x;
+                            double centerY = hexBoard.hexes[row][col].hexCenter.y;
 
                             if (clickedIn_LOWER_LEFT_Triangle(NDCx, NDCy, centerX, centerY))
                             {
@@ -523,24 +552,20 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
                         row = gridRow / 2;    // LL gridRows = {0, 2, 4, 6,...} mapped to row = {0, 1, 2, 3,...}
                         col = gridCol;	
 
-                        writeln("(gridRow,gridCol) = ", gridRow, " ", gridCol);	
-                        writeln("(row,col) = ", row, " ", col);	
+                        //writeln("(gridRow,gridCol) = ", gridRow, " ", gridCol);	
+                        //writeln("(row,col) = ", row, " ", col);	
 
-                        double centerX = hexBoard.board[row][col].hexCenter.x;
-                        double centerY = hexBoard.board[row][col].hexCenter.y;
+                        double centerX = hexBoard.hexes[row][col].hexCenter.x;
+                        double centerY = hexBoard.hexes[row][col].hexCenter.y;
 
-                        writeln("debug 1 centerX = ", centerX);
-                        writeln("debug 1 centerX = ", centerY);						
                         if (clickedIn_LOWER_LEFT_Triangle(NDCx, NDCy, centerX, centerY))
-                        {
-						    writeln("debug 2"); 
+                        { 
                             if (gridRow == 0 || gridCol == 0)  // degenerate case, clicked on left side or 
                             {                                  // bottom of hexboard outside of any hex
                                 row = -1, col = -1;
                             }
                             else
                             {
-                                writeln("debug 3"); 
                                 row = row -1;
                                 col = col - 1;								
                             }
@@ -615,19 +640,6 @@ D3_point defineHexCenter(GLfloat x, GLfloat y, GLfloat apothem, GLfloat radius)
 } 
 
 
- 
-void defineHexagon(GLfloat perpendicular, GLfloat diameter, GLfloat apothem, GLfloat halfRadius, GLfloat radius)
-{
-    // initialize each hexagon 
-	/+
-    board ~= [x + halfRadius,          y,                 0.0];  // 1
-    board ~= [x + halfRadius + radius, y,                 0.0];  // 2
-    board ~= [x + diameter,            y + apothem,       0.0];  // 3
-    board ~= [x + halfRadius + radius, y + perpendicular, 0.0];  // 4
-    board ~= [x + halfRadius,          y + perpendicular, 0.0];  // 5
-    board ~= [x,                       y + apothem,       0.0];  // 6
-    +/	
-}
 
 // https://www.redblobgames.com/
 // https://www.redblobgames.com/grids/hexagons/
@@ -713,7 +725,7 @@ void defineHexagon(GLfloat perpendicular, GLfloat diameter, GLfloat apothem, GLf
 uint winWidth = 800;
 uint winHeight = 800;
 
-immutable GLfloat diameter = 0.63; // diameter is a user defined constant in NDC units, so needs to be between [0.0, 2.0)
+immutable GLfloat diameter = 0.43; // diameter is a user defined constant in NDC units, so needs to be between [0.0, 2.0)
                                   // which because of the hex board stagger makes a row of 5 (not 4) hexes.
                                   // A diameter of 2.0, would display a single hex which would fill the full width 
                                   // of the window and 0.866 of the windows height.
@@ -726,36 +738,24 @@ immutable GLfloat apothem = perpendicular * 0.5;
 	
 void main(string[] argv)
 {
-    writeln("******************************************************");
-	
+    // the topEdge will cut off half of the hex tops for odd columns but it is better
+    // than causing an array index out of bounds run time error.
 
-
-    if (hexBoard.cols == 1)
-        hexBoard.topOfHexesDrawn = hexBoard.rows * perpendicular;  // degenerate case, just one column 	
-    else
-        hexBoard.topOfHexesDrawn = (hexBoard.rows * perpendicular) + apothem;    
-
-    hexBoard.topOfHexesDrawn -= 1.0;  // adjust for the NDC starting at -1.0 instead of 0.0
+    // top edge = bottom edge of board + all the rows in board
+    // NDC bottom edge = -1.0
 	
+    hexBoard.topEdge = -1.0 + (hexBoard.rows * perpendicular);
 
-    //writeln("hexBoard.rows = ", hexBoard.rows);
-    //writeln("hexBoard.cols = ", hexBoard.cols);	
-    //writeln("perpendicular = ", perpendicular);	
-    //writeln("hexBoard.topOfHexesDrawn = ", hexBoard.topOfHexesDrawn);
+    // right edge = left edge of board + all the columns in board gives 
+    // NDC left edge = -1.0
 	
-	double offsetFromHexesBottom = hexBoard.topOfHexesDrawn - (-1.0);
-    writeln("offset From Hexes Bottom = ", offsetFromHexesBottom);		
-	
- 	double gridRows = offsetFromHexesBottom / apothem;
-    writeln("gridRows = ", gridRows);	
-    
+    hexBoard.rightEdge = -1.0 + (hexBoard.cols * (radius + halfRadius)); 
 	
 	
     load_GLFW_Library();
 
     load_openGL_Library();  
 
-    //load_libraries();
 
 
     // window must be square
@@ -807,10 +807,10 @@ void main(string[] argv)
     {
         foreach(col; 0..hexBoard.cols)
         {	
-            hexBoard.board[row][col].points = defineHexVertices(x, y, perpendicular, diameter, apothem, halfRadius, radius);
+            hexBoard.hexes[row][col].points = defineHexVertices(x, y, perpendicular, diameter, apothem, halfRadius, radius);
 			
-            hexBoard.board[row][col].hexCenter = defineHexCenter(x, y, apothem, radius);
-            hexBoard.board[row][col].selected = false;			
+            hexBoard.hexes[row][col].hexCenter = defineHexCenter(x, y, apothem, radius);
+            hexBoard.hexes[row][col].selected = false;			
             if (col.isEven)
             {
                 y += apothem;
@@ -838,7 +838,7 @@ void main(string[] argv)
     // Take the hexboard comprising a 2 dimensional array of hex objects and
 	// convert it to a 1 dimensional array vertices.
 
-    //vertices = board;  // obsolete
+    //vertices = hexes;  // obsolete
 
     foreach(row; 0..hexBoard.rows)
     {
@@ -846,9 +846,9 @@ void main(string[] argv)
         {
             foreach(p; 0..6)
             {
-                vertices ~= hexBoard.board[row][col].points[p].x;  
-                vertices ~= hexBoard.board[row][col].points[p].y;
-                vertices ~= hexBoard.board[row][col].points[p].z;				
+                vertices ~= hexBoard.hexes[row][col].points[p].x;  
+                vertices ~= hexBoard.hexes[row][col].points[p].y;
+                vertices ~= hexBoard.hexes[row][col].points[p].z;				
             }				 
         }
     }  	
