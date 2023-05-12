@@ -20,7 +20,7 @@ import dynamic_libs.opengl;  // without - Error: undefined identifier load_openG
 //    (1,1)-------------(800,1)
 //      | mouse             |
 //      | clicking inside   |
-//      | the window will   |  (notice how to counting
+//      | the window will   |  (notice how the counting
 //      | return            |   starts in the upper
 //      | coordinates       |   left hand corner)
 //      | within these      |
@@ -43,6 +43,14 @@ import dynamic_libs.opengl;  // without - Error: undefined identifier load_openG
 //      |                   |
 // (-1.0,-1.0)-----------(1.0,-1.0)
 //  
+
+
+    enum double leftEdge   = -1.0;
+    enum double rightEdge  =  1.0; 
+    enum double bottomEdge = -1.0;	
+    enum double topEdge    =  1.0;
+ 
+
 
 //         HexBoard 2 Dimensional array layout
 //                    
@@ -157,8 +165,8 @@ struct Hex
 
 struct HexBoard
 {
-    enum uint rows = 7;  // number of rows on the board [0..rows-1]
-    enum uint cols = 7;  // number of columns on the bord [0..cols-1]
+    enum uint rows = 6;  // number of rows on the board [0..rows-1]
+    enum uint cols = 6;  // number of columns on the bord [0..cols-1]
 	
 	double topEdge;
     double rightEdge;
@@ -271,14 +279,14 @@ void quitOrContinue()
 //   +         
 //   leftPoint
 
+/+
 bool clickedIn_UPPER_LEFT_Triangle(double mX, double mY, double hexCenterX, double hexCenterY)
 {
     double leftPointX = hexCenterX - radius;
     double leftPointY = hexCenterY;    
 
-    double adjacent = mX - leftPointX;  // mouse click x in UL quadrant will always be greater the the bottom left corner x
-
-    double opposite = mY - leftPointY;  // mouse click y in UL quadrant will always be greater the the bottom left corner y
+    double adjacent = mX - leftPointX;  // mouse click x in UL and LR quadrants will always be greater the the bottom left corner x
+    double opposite = mY - leftPointY;  // mouse click y in UL and LR quadrants will always be greater the the bottom left corner y
  
     // tan(theta) = opposite / adjacent
     // tan(60) = 1.7320508
@@ -291,11 +299,7 @@ bool clickedIn_UPPER_LEFT_Triangle(double mX, double mY, double hexCenterX, doub
 
     return(angle > tanOf60);
 }
-
-
-
-
-
++/
 
 //   |  /        |\          |  /        |\          |  /        |\ 
 //   | /         |X\         | /         |X\         | /         |X\ 
@@ -311,7 +315,7 @@ bool clickedIn_UPPER_LEFT_Triangle(double mX, double mY, double hexCenterX, doub
 //   |XX\________|/__________|XX\________|/__________|XX\________|/__
 
 //
-//   leftPoint
+//   + leftPoint
 //   |\      
 //   | \
 //   |  \ 
@@ -322,32 +326,54 @@ bool clickedIn_UPPER_LEFT_Triangle(double mX, double mY, double hexCenterX, doub
 // adjacent  \
 //   |        \
 //   |         \     
-//   |_opposite_\
-       
+//   |_opposite_\ 
+//               + rightPoint       
 
+/+
 bool clickedIn_LOWER_LEFT_Triangle(double mX, double mY, double hexCenterX, double hexCenterY)
 {
     double leftPointX = hexCenterX - radius;
-    double leftPointY = hexCenterY;    
+    double leftPointY = hexCenterY;
 
+    //double rightPointX = hexCenterX - (radius / 2.0);
+    //double rightPointY = hexCenterY - apothem;    
 
-    double opposite = abs(mX - leftPointX);  // mouse click x in UR quadrant will always be to the right (greater than the bottom leftPointX
+    double opposite = mX - leftPointX;  // mouse click x in LL and UR quadrants will always be less than the top left corner x
+    double adjacent = mY - leftPointY;  // mouse click y in LL and UR quadrants will always be less than the top left corner x
 
-    double adjacent = abs(mY - leftPointY);  // mouse click y in UR quadrant will always be below (lesser than) the leftPointY
-
-    //writeln("opposite = ", opposite);
-    //writeln("adjacent = ", adjacent);	
     // tan(theta) = opposite / adjacent
     // tan(30) = 0.5773502
 	
     double angle = opposite / adjacent;
 	
-    //writeln("angle = ", angle);
+    writeln("angle = ", angle);
 
     enum tanOf30 = 0.5773502;
 
     return(angle < tanOf30);
 }
++/
+
+
+bool clickedInSmallTriangle(double mX, double mY, double hexCenterX, double hexCenterY)
+{
+    double leftPointX = hexCenterX - radius;
+    double leftPointY = hexCenterY;    
+
+    double adjacent = mX - leftPointX;  // mouse click x in UL and LR quadrants will always be greater the the bottom left corner x
+    double opposite = mY - leftPointY;  // mouse click y in UL and LR quadrants will always be greater the the bottom left corner y
+ 
+    // tan(theta) = opposite / adjacent
+    // tan(60) = 1.7320508
+	
+    double angle = opposite / adjacent;
+
+    if (angle >= 0.0)            
+        return (angle > tanOf60);  // if angle is positive
+    else                           
+        return (angle < tanOf300);	
+}
+
 
 
 
@@ -365,17 +391,15 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
                     glfwGetCursorPos(winMain, &xPos, &yPos);
                     //writeln("x and y cursor position = ", xPos, " ", yPos);
 
-                    double NDCx = (xPos / (winWidth / 2.0)) - 1.0;  // xPos/(winWidth/2.0) gives values from 0.0 to 2.0
+                    double NDCx =   (xPos /  (winWidth / 2.0)) - 1.0;  // xPos/(winWidth/2.0) gives values from 0.0 to 2.0
                                                                     // - 1.0   maps 0.0 to 2.0 to -1.0 to 1.0 	
-                    double NDCy = -((yPos / (winHeight / 2.0)) - 1.0); // xPos/(winHeight/2.0) gives values from 0.0 to 2.0
+                    double NDCy = -((yPos / (winHeight / 2.0)) - 1.0); // yPos/(winHeight/2.0) gives values from 0.0 to 2.0
                                                                     // - 1.0   maps 0.0 to 2.0 to -1.0 to 1.0 	
                     // The minus sign is needed because screen coordinates are flipped horizontally from NDC coordinates																	
-                    //writeln("NDC x,y = ", NDCx, ",", NDCy);										
-
+ 							
                     // Take the bottom of the edge of the scree (ie -1.0)  Any screen click on the screen is going to be Bigger in value.
 					// So that the mouse click and subtract the edge.  
-					
-					
+										
                     double offsetFromBottom = NDCy - (-1.0);
                     //writeln("offset From Bottom = ", offsetFromBottom);		
 	
@@ -389,8 +413,6 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
 					uint gridCol = roundTo!uint(floor(offsetFromLeft / (radius + halfRadius)));
                     //writeln("gridCol = ", gridCol);	
 
-                    //writeln("hexBoard.rightEdge = ", hexBoard.rightEdge);
-					//writeln("NDCx = ", NDCx);
                     if (NDCx > hexBoard.rightEdge)
                     {
                         writeln("Clicked outside of the hex board's right edge");
@@ -402,29 +424,26 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
                         return;						
                     }
 
-
-//   Grid Quandrants
-// Quadrant is defined by (gridRow, gridCol) pair.
-// Quad UL = (odd, even) 
-//      LL = (even, even)
-//      UR = (odd, odd)
-//      LR = (even, odd)
-//      
-//
-//   |__\________|/__________|__\________|/__________|__\________|/__
-//   |  /        |\          |  /        |\          |  /        |\ 
-//   | Upper Left|Upper Right| Upper Left|Upper Right| Upper Left| Upper Right
-//   |/__________|__\________|/__________|__\________|/__________|__\
-//   |\          |  /        |\          |  /        |\          |  /
-//   | Lower Left|Lower Right|Lower Left |Lower Right| Lower Left| Lower Right
-//   |__\________|/__________|__\________|/__________|__\________|/__
-//   |  /        |\          |  /        |\          |  /        |\ 
-//   |Upper Left |Upper Right| Upper Left|Upper Right| Upper Left| Upper Right
-//   |/__________|__\________|/__________|__\________|/__________|  \    
-//   |\          |  /        |\          |  /        |\          |  /
-//   |Lower Left |Lower Right| Lower Left|Lower Right| Lower Left| Lower Right
-//   |__\________|/__________|__\________|/__________|__\________|/__
-
+                    //   Grid Quandrants
+                    // Quadrant is defined by (gridRow, gridCol) pair.
+                    // Quad UL = (odd, even) 
+                    //      LL = (even, even)
+                    //      UR = (odd, odd)
+                    //      LR = (even, odd)      
+                    //
+                    //   |__\________|/__________|__\________|/__________|__\________|/__
+                    //   |  /        |\          |  /        |\          |  /        |\ 
+                    //   | Upper Left|Upper Right| Upper Left|Upper Right| Upper Left| Upper Right
+                    //   |/__________|__\________|/__________|__\________|/__________|__\
+                    //   |\          |  /        |\          |  /        |\          |  /
+                    //   | Lower Left|Lower Right|Lower Left |Lower Right| Lower Left| Lower Right
+                    //   |__\________|/__________|__\________|/__________|__\________|/__
+                    //   |  /        |\          |  /        |\          |  /        |\ 
+                    //   |Upper Left |Upper Right| Upper Left|Upper Right| Upper Left| Upper Right
+                    //   |/__________|__\________|/__________|__\________|/__________|  \    
+                    //   |\          |  /        |\          |  /        |\          |  /
+                    //   |Lower Left |Lower Right| Lower Left|Lower Right| Lower Left| Lower Right
+                    //   |__\________|/__________|__\________|/__________|__\________|/__
 
                     // We can exclude 3/4 of the hexBoard just by finding the quadrant that was mouse clicked on
 
@@ -446,31 +465,23 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
                             quadrant = Quads.UR; // (o,o)					
 					}
 
-                    //writeln("quadrant = ", quadrant);
-
-                    int row = -1;
+                    int row = -1;  // -1 means row and column is invalid
                     int col = -1;					
 
-//================================= UL ========================================= 
+                    //================================= UL ========================================= 
   
                     if (quadrant == Quads.UL)   // Upper Left Quadrant
                     { 					
                         row = (gridRow-1) / 2;  // UL gridRows = {1, 3, 5, 7,...} mapped to row = {0, 1, 2, 3,...}
                         col = gridCol;
 
-                        //writeln("(row,col) = ", row, " ", col);   
-
                         double centerX = hexBoard.hexes[row][col].hexCenter.x;
                         double centerY = hexBoard.hexes[row][col].hexCenter.y; 
 
-                        //writeln("centerX, centerY = ", centerX, ", ", centerY);
-                        //writeln("NDCx, NDCy = ", NDCx, ", ", NDCy);  						
-                        if (clickedIn_UPPER_LEFT_Triangle(NDCx, NDCy, centerX, centerY))
+                        if (clickedInSmallTriangle(NDCx, NDCy, centerX, centerY))
                         {
                             if(col == 0)
 							{
-                                // clicked on the left edge of the 
-                                //writeln("clicked outside on the left side of hex board");
                                 row = -1; col = -1;
                             }
                             else
@@ -478,87 +489,72 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
                                col = col - 1;							
                             }
                         }							
-                        writeln("(row, col) = (", row, ", ", col, ")");  
 					}	
 
-//================================= LR ========================================= 
+                    //================================= LR ========================================= 
 						
                     if (quadrant == Quads.LR)    // Lower Right Quadrant
                     {
-                        if (gridRow == 0)  // degenerate case, only for very bottom row on hexboard
+                        if (gridRow >= 1)  
                         {
-                            //writeln("Handle bottom of board, 5/6th area is off board");
-							
+					        row = (gridRow/2) - 1;    // LR gridRows = {2, 4, 6, 8,...}  mapped to row = {0, 1, 2, 3,...}
+                            col = gridCol;	          //                0 handled by else block below				
+ 
+                            double centerX = hexBoard.hexes[row][col].hexCenter.x;
+                            double centerY = hexBoard.hexes[row][col].hexCenter.y;
+
+							if (clickedInSmallTriangle(NDCx, NDCy, centerX, centerY))
+                            {
+							    row = row + 1;
+                                col = col - 1;
+                            }						    
+                        }
+                        else   // degenerate case, only for very bottom row on hexboard
+                        {							
 							row = 0; col = gridCol;
                             double centerX = hexBoard.hexes[row][col].hexCenter.x;
                             double centerY = hexBoard.hexes[row][col].hexCenter.y;
 							
 							centerY = centerY - perpendicular;
 						
-                            if (clickedIn_UPPER_LEFT_Triangle(NDCx, NDCy, centerX, centerY))
+                            if (clickedInSmallTriangle(NDCx, NDCy, centerX, centerY))
                             {
                                 col = col - 1;
-								//writeln("clicked in little triangle");
                             }
                             else
                             {
                                 row = -1; col = -1;							
                             }
-                            							
                         }
-                        else   // handle rest of the board
-                        {
-					        row = (gridRow/2) - 1;    // LR gridRows = {2, 4, 6, 8,...}  mapped to row = {0, 1, 2, 3,...}
-                            col = gridCol;	          //                0 is excluded by previous lines of code					
-						
-                            //writeln("(row,col) = ", row, " ", col);
- 
-                            double centerX = hexBoard.hexes[row][col].hexCenter.x;
-                            double centerY = hexBoard.hexes[row][col].hexCenter.y;
-
-                            if (clickedIn_UPPER_LEFT_Triangle(NDCx, NDCy, centerX, centerY))
-                            {
-							    row = row + 1;
-                                col = col - 1;
-                            }						    
-                        }
-                        writeln("(row,col) = ", row, " ", col);						
 					}							
 
-//================================= UR =========================================						
+                    //================================= UR =========================================						
 						
                     if (quadrant == Quads.UR)    // Upper Right Quadrant
                     { 
-					        row = (gridRow-1) / 2;    // UR gridRows = {1, 3, 5, 7,...} mapped to row = {0, 1, 2, 3,...}
-                            col = gridCol;					
-						
-                            //writeln("(row,col) = ", row, " ", col);
+					    row = (gridRow-1) / 2;    // UR gridRows = {1, 3, 5, 7,...} mapped to row = {0, 1, 2, 3,...}
+                        col = gridCol;					
  
-                            double centerX = hexBoard.hexes[row][col].hexCenter.x;
-                            double centerY = hexBoard.hexes[row][col].hexCenter.y;
+                        double centerX = hexBoard.hexes[row][col].hexCenter.x;
+                        double centerY = hexBoard.hexes[row][col].hexCenter.y;
 
-                            if (clickedIn_LOWER_LEFT_Triangle(NDCx, NDCy, centerX, centerY))
-                            {
-                                col = col - 1;
-                            }						
-                            writeln("(row,col) = ", row, " ", col);
- 				
+						if (clickedInSmallTriangle(NDCx, NDCy, centerX, centerY))
+                        {
+                            col = col - 1;
+                        }						
 					}													
 						
-//================================= LL =========================================						
+                    //================================= LL =========================================						
 						
                     if (quadrant == Quads.LL)    // Lower Left Quadrant
                     { 
-                        row = gridRow / 2;    // LL gridRows = {0, 2, 4, 6,...} mapped to row = {0, 1, 2, 3,...}
+                        row = gridRow / 2;    // gridRows = {0, 2, 4, 6,...} mapped to row = {0, 1, 2, 3,...}
                         col = gridCol;	
-
-                        //writeln("(gridRow,gridCol) = ", gridRow, " ", gridCol);	
-                        //writeln("(row,col) = ", row, " ", col);	
 
                         double centerX = hexBoard.hexes[row][col].hexCenter.x;
                         double centerY = hexBoard.hexes[row][col].hexCenter.y;
 
-                        if (clickedIn_LOWER_LEFT_Triangle(NDCx, NDCy, centerX, centerY))
+                        if (clickedInSmallTriangle(NDCx, NDCy, centerX, centerY))
                         { 
                             if (gridRow == 0 || gridCol == 0)  // degenerate case, clicked on left side or 
                             {                                  // bottom of hexboard outside of any hex
@@ -566,18 +562,13 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
                             }
                             else
                             {
-                                row = row -1;
+                                row = row - 1;
                                 col = col - 1;								
                             }
                         }
-                        else
-                        {
-                            // do nothing
-                            // row and col should be correct							
-                        }	
-                        writeln("(row,col) = ", row, " ", col);						
-                    }					
-
+                    }
+					
+                    writeln("(row,col) = ", row, " ", col);	
                 }
                 else if (action == GLFW_RELEASE)
                 {
@@ -725,20 +716,27 @@ D3_point defineHexCenter(GLfloat x, GLfloat y, GLfloat apothem, GLfloat radius)
 uint winWidth = 800;
 uint winHeight = 800;
 
-immutable GLfloat diameter = 0.43; // diameter is a user defined constant in NDC units, so needs to be between [0.0, 2.0)
+immutable double diameter = 0.43; // diameter is a user defined constant in NDC units, so needs to be between [0.0, 2.0)
                                   // which because of the hex board stagger makes a row of 5 (not 4) hexes.
                                   // A diameter of 2.0, would display a single hex which would fill the full width 
                                   // of the window and 0.866 of the windows height.
 								  
-immutable GLfloat radius = diameter * 0.5;	
-immutable GLfloat halfRadius = radius * 0.5;	
+immutable double radius        = (diameter * 0.5);	
+immutable double halfRadius    = (radius * 0.5);	
 									
-immutable GLfloat perpendicular = diameter * 0.866;	
-immutable GLfloat apothem = perpendicular * 0.5;
+immutable double perpendicular = (diameter * 0.866);	
+immutable double apothem       = (perpendicular * 0.5);
+					
+//enum Tans = { tanOf60 = 1.7320508f, tanOf30 = 0.5773502f } 
+ 
+immutable double tanOf60  =  1.7320508;
+immutable double tanOf300 = -1.7320508;
+
+
 	
 void main(string[] argv)
 {
-    // the topEdge will cut off half of the hex tops for odd columns but it is better
+    // the topEdge will cut off half of the hex tops for odd columns but this is better
     // than causing an array index out of bounds run time error.
 
     // top edge = bottom edge of board + all the rows in board
@@ -792,17 +790,15 @@ void main(string[] argv)
     ];
 
 
-    // ///////////////////////////
-    // DEFINE HEXBOARD USING ROW/COLUMN of a 2 dimensional array (albeit staggered) 
-    // ///////////////////////////
+
+    // DEFINE HEX BOARD
+ 	
+    // start at the bottom left corner of the window, drawing from left to right,
+    // bottom to top.
 	
-    // start at the bottom left corner of the NDC
-    GLfloat x = -1.0;
-    GLfloat y = -1.0;
-    GLfloat startX = -1.0;   // NDC Normalized Device Coordinates start at -1.0 and ends at 1.0 for all axes
-
-    //hexBoard.displayHexBoard();		
-
+    double x = leftEdge;      // NDC Normalized Device Coordinates start at -1.0 and ends at 1.0 for the window
+    double y = bottomEdge;
+  
     foreach(row; 0..hexBoard.rows)
     {
         foreach(col; 0..hexBoard.cols)
@@ -821,8 +817,7 @@ void main(string[] argv)
             }
             x += halfRadius + radius;  
         }
-
-        x = startX;    
+        x = leftEdge;    
         if (hexBoard.cols.isOdd)
         {
             y -= apothem;
@@ -872,10 +867,12 @@ void main(string[] argv)
 	pragma(msg, "===== See in Compiler Output =====");
     pragma(msg, describeBuff);
 	
-    // The describeBuff is the following two lines of code:
-	// glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * GLfloat.sizeof, cast(const(void)*) (0 * GLfloat.sizeof));
-    // glEnableVertexAttribArray(0);	
+    /+ 
+    The describeBuff enum creates the following two lines of code:
 	
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * GLfloat.sizeof, cast(const(void)*) (0 * GLfloat.sizeof));
+    glEnableVertexAttribArray(0);	
+    +/
 	
 
     // Position attribute
@@ -926,6 +923,10 @@ void main(string[] argv)
     glfwTerminate();   // Clear any resources allocated by GLFW.
     return;
 }
+
+
+
+
 
 
 
