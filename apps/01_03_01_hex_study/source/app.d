@@ -22,9 +22,9 @@ import dynamic_libs.opengl;  // without - Error: undefined identifier load_openG
 //      | clicking inside   |
 //      | the window will   |  (notice how the counting
 //      | return            |   starts in the upper
-//      | coordinates       |   left hand corner)
-//      | within these      |
-//      | ranges            |
+//      | coordinates       |   left hand corner and
+//      | within these      |   ends in the lower right
+//      | ranges            |   corner)
 //      |                   |
 //    (1,800)-----------(800,800)
 //
@@ -46,9 +46,9 @@ import dynamic_libs.opengl;  // without - Error: undefined identifier load_openG
 
 struct D3_point
 {
-    double x;
-    double y; 
-    double z;
+    float x;
+    float y; 
+    float z;
 }
   
 D3_point NDC;        // will just use the x,y coordinates (not z)
@@ -163,10 +163,10 @@ struct Hex
 
 struct Edges
 {                // This is the hex board edges, not the window's
-    double top;
-    double bottom; 
-    double left;
-    double right;	
+    float top;  // The hex board can be smaller or larger than the window
+    float bottom; 
+    float left;
+    float right;	
 }
 
 struct HexBoard
@@ -179,15 +179,15 @@ struct HexBoard
     // diameter is a user defined constant in NDC units, so needs to be between [0.0, 2.0)
     // which because of the hex board stagger makes a row of 5 (not 4) hexes.
     // A diameter of 2.0, would display a single hex which would fill the full width 
-    // of the window and 0.866 of the windows height.
+    // of the window and 0.866 of the window's height.
 
-    double diameter;  // diameter, along with rows and cols are critical to definition of a HexBoard 
-
-    double radius;	
-    double halfRadius;	
+    float diameter;  // diameter is used to define all the other hex parameters 
+ 
+    float radius;	
+    float halfRadius;	
 									
-    double perpendicular;	
-    double apothem;
+    float perpendicular;	
+    float apothem;
 
     Hex[cols][rows] hexes;  // Note: call with hexes[rows][cols];  // REVERSE ORDER!    
 
@@ -281,8 +281,8 @@ void quitOrContinue()
 //           __________
 //           |......../         
 //           |......./        
-//           |....../           
-//           |...../           
+//           |....../  if angle > tan(60) then mouse clicked         
+//           |...../   inside the triangle         
 //  adjacent |..../            
 //           |.../             
 //           |../ 60 degrees   
@@ -322,19 +322,19 @@ void quitOrContinue()
 
 bool clickedInSmallTriangle(D3_point mouseClick, D3_point hexCenter)
 {
-    immutable double tanOf60  =  1.7320508;
-    immutable double tanOf300 = -1.7320508;
+    immutable float tanOf60  =  1.7320508;
+    immutable float tanOf300 = -1.7320508;
 
-    double leftPointX = hexCenter.x - hexBoard.radius;
-    double leftPointY = hexCenter.y;    
+    float leftPointX = hexCenter.x - hexBoard.radius;
+    float leftPointY = hexCenter.y;    
 
-    double adjacent = mouseClick.x - leftPointX;
-    double opposite = mouseClick.y - leftPointY;
+    float adjacent = mouseClick.x - leftPointX;
+    float opposite = mouseClick.y - leftPointY;
 	
     // tan(theta) = opposite / adjacent     
 	
-    double angle = opposite / adjacent;  // opposite is positive for hex sides /
-	                                     // opposite is negative for hex sides \
+    float angle = opposite / adjacent;  // opposite is positive for hex sides /  (leaning Southwest to Northeast)
+	                                     // opposite is negative for hex sides \  (leaning Northwest to Southeast)
     if (angle >= 0.0)            
         return (angle > tanOf60);    // angle is positive
     else                           
@@ -352,7 +352,8 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
                 if (action == GLFW_PRESS)
                 {
                     double xPos, yPos;
-                    glfwGetCursorPos(winMain, &xPos, &yPos);
+                    glfwGetCursorPos(winMain, &xPos, &yPos);  // glfwGetCursorPos returns double mouse position
+					
                     //writeln("x and y cursor position = ", xPos, " ", yPos);
 
                     NDC.x =   (xPos /  (winWidth / 2.0)) - 1.0;  // xPos/(winWidth/2.0) gives values from 0.0 to 2.0
@@ -364,11 +365,11 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
                     // Take the bottom of the edge of the screen (ie -1.0)  Any screen click on the screen is going to be Bigger in value.
 					// So that the mouse click and subtract the edge.  
 										
-                    double offsetFromBottom = NDC.y - (-1.0);
+                    float offsetFromBottom = NDC.y - (-1.0);
 	
 					uint gridRow = roundTo!uint(floor(offsetFromBottom / hexBoard.apothem));
 
-                    double offsetFromLeft = NDC.x - (-1.0);						
+                    float offsetFromLeft = NDC.x - (-1.0);						
                      
 					uint gridCol = roundTo!uint(floor(offsetFromLeft / (hexBoard.radius + hexBoard.halfRadius)));
 
@@ -564,7 +565,7 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
 // (x,y) 0        1
 
                               // x, y is the lower left corner of the rectangle touching all vertices
-D3_point[6] defineHexVertices(GLfloat x, GLfloat y, GLfloat perpendicular, GLfloat diameter, GLfloat apothem, GLfloat halfRadius, GLfloat radius)
+D3_point[6] defineHexVertices(float x, float y, float perpendicular, float diameter, float apothem, float halfRadius, float radius)
 {
     D3_point[6] points;
 	
@@ -595,7 +596,7 @@ D3_point[6] defineHexVertices(GLfloat x, GLfloat y, GLfloat perpendicular, GLflo
     return points;
 } 
 
-D3_point defineHexCenter(GLfloat x, GLfloat y, GLfloat apothem, GLfloat radius)
+D3_point defineHexCenter(float x, float y, float apothem, float radius)
 {
     D3_point center;
 	
@@ -767,7 +768,7 @@ void main(string[] argv)
     writeln("programID = ", programID);
 
     // Set up vertex data (and buffer(s)) and attribute pointers
-    GLfloat[] vertices = 
+    float[] vertices = 
     [
         //  Positions         Colors      Texture Coords 		
     ];
@@ -779,8 +780,8 @@ void main(string[] argv)
     // start at the bottom left corner of the window, drawing from left to right,
     // bottom to top.
 	
-    double x = hexBoard.edge.left;      // NDC Normalized Device Coordinates start at -1.0
-    double y = hexBoard.edge.bottom;    
+    float x = hexBoard.edge.left;      // NDC Normalized Device Coordinates start at -1.0
+    float y = hexBoard.edge.bottom;    
   
     foreach(row; 0..hexBoard.rows)
     {
@@ -846,8 +847,11 @@ void main(string[] argv)
 	
 
     GLuint VBO, VAO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
+    glGenVertexArrays(1, &VAO);  // Vertex Array Objects start at 1
+    glGenBuffers(1, &VBO);       // Vertex Buffer Objects start at 1
+
+    writeln("VAO = ", VAO);
+    writeln("VBO = ", VBO);
 
     // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
     glBindVertexArray(VAO);
@@ -856,17 +860,29 @@ void main(string[] argv)
     glBufferData(GL_ARRAY_BUFFER, vertices.bytes, vertices.ptr, GL_STATIC_DRAW);
 
 
+    /+
     enum describeBuff = defineVertexLayout!(int)([3]);
     mixin(describeBuff);
 	pragma(msg, "===== See in Compiler Output =====");
     pragma(msg, describeBuff);
-	
-    /+ 
+	 
     The describeBuff enum creates the following two lines of code:
 	
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * GLfloat.sizeof, cast(const(void)*) (0 * GLfloat.sizeof));
     glEnableVertexAttribArray(0);	
     +/
+	
+	
+	glVertexAttribPointer(
+	0,         // index of the vertex attribute to be modified.    
+    3,         // number of components per generic vertex attribute. Must be 1, 2, 3, 4.
+    GL_FLOAT,  // data type of each component in the array
+    GL_FALSE,  // normalized 
+    3 * GLfloat.sizeof, // byte offset between consecutive vertex attributes. If stride = 0 then tightly packed 
+    cast(const(void)*) (0 * GLfloat.sizeof)  // offset of the first component of the first vertex attribute
+	);
+	
+    glEnableVertexAttribArray(0);		
 	
 
     // Position attribute
