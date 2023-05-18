@@ -8,7 +8,7 @@ import std.math;
 import std.algorithm.iteration;  // sum
 import std.ascii;                // newline
 import std.conv;                 // to
-
+import core.stdc.stdlib: exit;
 
 
 /+
@@ -24,7 +24,8 @@ glEnableVertexAttribArray(2);
 
 string defineVertexLayout(T)(T[] arr, bool normalization = false)
 {
-    auto s = sum(arr);
+    //writeln(sum([1, 2, 3, 4])); ==> 10
+    auto s = sum(arr);  // add up all the elements in arr
     auto offset = 0;
     string    cmd1 = `glVertexAttribPointer(`;
     string    cmd2 = `glEnableVertexAttribArray(`;
@@ -111,6 +112,10 @@ void myLog(alias symbol)()
 //
 // void[] arr = someArray;   // int[] implicitly converts to void[].
 
+/////////////////////////////////////////////////////////////////////////////////////
+// DYNAMIC ARRAYS  dynamicArray.bytes  (returns number of bytes in dynamicArray
+/////////////////////////////////////////////////////////////////////////////////////
+
 int arrayByteSize(T)(T someArray) if (isDynamicArray!(T))
 {
     ubyte[] arr = cast(ubyte[]) someArray;
@@ -126,6 +131,43 @@ alias bytes            = arrayByteSize;
 alias sizeInBytes      = arrayByteSize;
 alias arraySizeInBytes = arrayByteSize;
 alias lengthInBytes    = arrayByteSize;
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+// DYNAMIC ARRAYS  dynamicArray.elements  (returns number of elements in dynamicArray
+/////////////////////////////////////////////////////////////////////////////////////
+
+int arrayElementCount(T)(T someArray) if (isDynamicArray!(T))
+{
+    //T[] arr = someArray;
+    auto arr = someArray;
+    //return cast(int) arr.length;
+    //return someArray.length;
+    return cast(int) arr.length;  // without cast get:   
+	                    // cannot implicitly convert expression `arr.length` of type `ulong` to `int`
+}
+
+int arrayElementCount(T)(T someArray) if (isStaticArray!(T))
+{
+    return someArray.length;
+}
+
+alias elements = arrayElementCount;
+
+
+
+
+void quitOrContinue()
+{		
+    writeln("Press Enter key to continue or Q/q to quit");
+    char c;
+    readf("%c", &c);
+    if ((c == 'Q') || (c == 'q'))
+    {
+        exit(0);	
+    }
+    return;
+}	
 
 
 void writeAndPause(string s)

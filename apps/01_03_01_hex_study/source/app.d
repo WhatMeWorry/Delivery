@@ -11,6 +11,7 @@ import std.math.algebraic: abs;
 import shaders;       // without - Error: undefined identifier Shader, createProgramFromShaders, ...
 import event_handler; // without - Error: undefined identifier onKeyEvent, onFrameBufferResize, handleEvent
 import mytoolbox;     // without - Error: no property bytes for type float[]
+                      // writeAndPause()  .bytes  .elements
  
 import dynamic_libs.glfw;    // without - Error: undefined identifier load_GLFW_Library, glfwCreateWindow
 import dynamic_libs.opengl;  // without - Error: undefined identifier load_openGL_Library
@@ -50,10 +51,17 @@ struct D3_point
     float y; 
     float z;
 }
+
+struct SelectedPair
+{
+    int row;
+    int col;
+}
   
 D3_point NDC;        // will just use the x,y coordinates (not z)
 D3_point hexCenter;  // will just use the x,y coordinates (not z)
 
+enum invalid = -1;  // -1 means a row or column is invalid
 
 //         HexBoard 2 Dimensional array layout
 //                    
@@ -120,7 +128,6 @@ bool isEven(uint value)
 struct Hex
 {
     D3_point[6] points;  // each hex is made up of 6 vertices
-    bool selected;       // set to true whenever mouse clicks on this particular hex
     D3_point center;     // each hex has a center
 }
 
@@ -189,7 +196,10 @@ struct HexBoard
     float perpendicular;	
     float apothem;
 
-    Hex[cols][rows] hexes;  // Note: call with hexes[rows][cols];  // REVERSE ORDER!    
+    Hex[cols][rows] hexes;  // Note: call with hexes[rows][cols];  // REVERSE ORDER!   
+
+    SelectedPair selected;	
+	D3_point[4] squarePts;
 
     void displayHexBoard()
     {
@@ -241,8 +251,6 @@ struct HexBoard
 //  | \           /           \           /           \ |       |
 //  |__\_________/_____________\_________/_____________\|_______|
 //                          bottom edge of window
-
-
 
 
 void quitOrContinue()
@@ -426,7 +434,7 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
                             quadrant = Quads.UR; // (o,o)					
 					}
 
-                    enum invalid = -1;  // -1 means a row or column is invalid
+
 
                     int row = invalid;
                     int col = invalid;					
@@ -533,8 +541,10 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
 
                     if ((row != invalid) && (col != invalid))
                     {
-                        writeln("hex(row,col) = ", row, " ", col, " has been selected");					
-                        hexBoard.hexes[row][col].selected = true;
+                        writeln("hex(row,col) = ", row, " ", col, " has been selected");	
+                        hexBoard.selected.row = row;
+                        hexBoard.selected.col = col;						
+                        //hexBoard.hexes[row][col].selected = true;
                     }						
                 }
                 else if (action == GLFW_RELEASE)
@@ -606,6 +616,86 @@ D3_point defineHexCenter(float x, float y, float apothem, float radius)
 	
     return center;
 } 
+
+
+
+D3_point[4] defineSelectedSquare(float x, float y, float perpendicular, float diameter, float apothem, float halfRadius, float radius)
+{
+    D3_point[4] points;
+	float offset = (apothem/2.0);
+	
+	points[0].x = x - offset;
+	points[0].y = y - offset;	
+	points[0].z = 0.0;	
+
+	points[1].x = x + offset;
+	points[1].y = y - offset;
+	points[1].z = 0.0;		
+		
+	points[2].x = x + offset;
+	points[2].y = y + offset;
+	points[2].z = 0.0;		
+	
+	points[3].x = x - offset;
+	points[3].y = y + offset;
+	points[3].z = 0.0;	
+	
+    return points;
+} 
+
+
+
+
+void drawSelectedSquare()
+{
+    int tRow = hexBoard.selected.row;
+    int tCol = hexBoard.selected.col;	
+
+    if ((hexBoard.selected.row == invalid) || (hexBoard.selected.col == invalid))
+        return;
+		
+    hexCenter = hexBoard.hexes[tRow][tCol].center;
+			
+    hexBoard.squarePts = defineSelectedSquare(hexCenter.x, hexCenter.y, hexBoard.perpendicular, hexBoard.diameter, 
+			                                  hexBoard.apothem, hexBoard.halfRadius, hexBoard.radius);
+			
+    selectedVertices.length = 0;  // delete contents of dynamic array
+ 
+    foreach(p; 0..4)  // for each point
+    {
+        selectedVertices ~= hexBoard.squarePts[p].x;  
+        selectedVertices ~= hexBoard.squarePts[p].y;
+        selectedVertices ~= hexBoard.squarePts[p].z; 
+    }
+
+    glBindVertexArray(VAO2);
+ 
+    glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+    glBufferData(GL_ARRAY_BUFFER, selectedVertices.bytes, selectedVertices.ptr, GL_STATIC_DRAW);			
+
+	glVertexAttribPointer(0,        // index of the vertex attribute to be modified.    
+                          3,        // number of components per generic vertex attribute. Must be 1, 2, 3, 4.
+                          GL_FLOAT, // data type of each component in the array
+                          GL_FALSE, // normalized 
+	                      0,        // byte offset between consecutive vertex attributes. If stride = 0 then tightly packed
+                          null);    // offset of the first component of the first vertex attribute
+								  
+    glEnableVertexAttribArray(0);
+	
+    int k = 0;
+    while (k < selectedVertices.length )
+    {
+        glDrawArrays(GL_LINE_LOOP, k, 4);
+        k += 4;
+    }
+
+    return;	
+}
+
+
+
+
+
 
 
 
@@ -687,18 +777,32 @@ D3_point defineHexCenter(float x, float y, float apothem, float radius)
 //   \  diameter   /    \      |      /   
 //    \           /      \     | perpendicular
 //     \_________/        \____|____/ 
-//
-  
+// 
   
 uint winWidth = 800;
 uint winHeight = 800;
 
-
 HexBoard hexBoard;
-				
+
+GLuint VBO, VBO2, VAO, VAO2;
+
+float[] selectedVertices = [ /+Positions+/ ];			
 	
 void main(string[] argv)
 {
+    // Dynamic Arrays
+	int[] intArrays = [ 0, 1, 2, 3, 4 ];
+	writeln("intArrays = ", intArrays);
+	writeln("intArrays.elements = ", intArrays.elements);	
+	writeln("intArrays.bytes = ", intArrays.bytes);
+
+	float[] floatArrays = [ 0.0, 1.0, 2.0, 3.0, 4.0 ];
+	writeln("floatArrays = ", floatArrays);
+	writeln("floatArrays.elements = ", floatArrays.elements);	
+	writeln("floatArrays.bytes = ", floatArrays.bytes);	
+
+
+
 
     // diameter is a user defined constant in NDC units, so needs to be between [0.0, 2.0)
     // which because of the hex board stagger makes a row of 5 (not 4) hexes.
@@ -712,6 +816,9 @@ void main(string[] argv)
 									
     hexBoard.perpendicular = (hexBoard.diameter * 0.866);	
     hexBoard.apothem       = (hexBoard.perpendicular * 0.5);
+	
+	hexBoard.selected.row = invalid;
+    hexBoard.selected.col = invalid;
 
     // the topEdge will cut off half of the hex tops for odd columns but this is better
     // than causing an array index out of bounds run time error.
@@ -773,7 +880,7 @@ void main(string[] argv)
         //  Positions         Colors      Texture Coords 		
     ];
 
-
+ 
 
     // DEFINE HEX BOARD
  	
@@ -798,8 +905,7 @@ void main(string[] argv)
             hexBoard.hexes[row][col].center = defineHexCenter(x, 
 			                                                  y, 
 															  hexBoard.apothem, 
-															  hexBoard.radius);
-            hexBoard.hexes[row][col].selected = false;			
+															  hexBoard.radius);		
             if (col.isEven)
             {
                 y += hexBoard.apothem;
@@ -826,9 +932,7 @@ void main(string[] argv)
 
 
     // Take the hexboard comprising a 2 dimensional array of hex objects and
-	// convert it to a 1 dimensional array vertices.
-
-    //vertices = hexes;  // obsolete
+	// convert it to a 1 dimensional array of vertices.
 
     foreach(row; 0..hexBoard.rows)
     {
@@ -846,9 +950,13 @@ void main(string[] argv)
 	
 	
 
-    GLuint VBO, VAO;
+ 
+	
     glGenVertexArrays(1, &VAO);  // Vertex Array Objects start at 1
+    glGenVertexArrays(1, &VAO2);
+	
     glGenBuffers(1, &VBO);       // Vertex Buffer Objects start at 1
+    glGenBuffers(1, &VBO2);   
 
     writeln("VAO = ", VAO);
     writeln("VBO = ", VBO);
@@ -878,8 +986,11 @@ void main(string[] argv)
     3,         // number of components per generic vertex attribute. Must be 1, 2, 3, 4.
     GL_FLOAT,  // data type of each component in the array
     GL_FALSE,  // normalized 
-    3 * GLfloat.sizeof, // byte offset between consecutive vertex attributes. If stride = 0 then tightly packed 
-    cast(const(void)*) (0 * GLfloat.sizeof)  // offset of the first component of the first vertex attribute
+    //3 * GLfloat.sizeof, // byte offset between consecutive vertex attributes. If stride = 0 then tightly packed
+                        // since we only have one vertex attribute, the is superflous. 	
+	0,
+    //cast(const(void)*) (0 * GLfloat.sizeof)  // offset of the first component of the first vertex attribute
+	null
 	);
 	
     glEnableVertexAttribArray(0);		
@@ -895,12 +1006,14 @@ void main(string[] argv)
 
     // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
     // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
-    glBindVertexArray(0); 
+    //glBindVertexArray(0); 
 
     glUseProgram(programID);
 
     // uncomment this call to draw in wireframe polygons.
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+    int previousRow = invalid; int previousCol = invalid;
 
     while (!glfwWindowShouldClose(winMain))    // Loop until the user closes the window
     {
@@ -915,22 +1028,33 @@ void main(string[] argv)
 
         glBindVertexArray(VAO);  // seeing as we only have a single VAO there's no need to bind it every time, 
 		                         // but we'll do so to keep things a bit more organized
-
         int i = 0;
         while (i < vertices.length )
         {
             glDrawArrays(GL_LINE_LOOP, i, 6);
             i += 6;
         }
+		
+        drawSelectedSquare();
+		
+        if ((hexBoard.selected.row != invalid) && (hexBoard.selected.col != invalid))
+        {
+		    if ((hexBoard.selected.row != previousRow) || (hexBoard.selected.col != previousCol))
+            {
+                writeln("selected [row][col] = ", hexBoard.selected.row, " ", hexBoard.selected.col); 
+           
+                previousRow = hexBoard.selected.row; 
+                previousCol = hexBoard.selected.col;  
+            }  			
+        }		
  
         // glBindVertexArray(0); // no need to unbind it every time 
- 
-        glfwSwapBuffers(winMain);
+        glfwSwapBuffers(winMain);   // OpenGL does not remember what you drew in the past after a glClear() or swapbuffers.
+		
     }
 
-
-
-    glfwTerminate();   // Clear any resources allocated by GLFW.
+    glfwTerminate();   // Clear any resources allocated by GLFW
+	
     return;
 }
 
