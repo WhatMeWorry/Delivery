@@ -1,5 +1,5 @@
 
-module app;  // 01_03_01_hex_study
+module app;  // 01_03_01_hex_study_vao
 
 import std.conv: roundTo;
 import std.stdio: writeln, readf;
@@ -12,6 +12,7 @@ import shaders;       // without - Error: undefined identifier Shader, createPro
 import event_handler; // without - Error: undefined identifier onKeyEvent, onFrameBufferResize, handleEvent
 import mytoolbox;     // without - Error: no property bytes for type float[]
                       // writeAndPause()  .bytes  .elements
+import openglAbstractionLayers;  // createHexBoardVAO
  
 import dynamic_libs.glfw;    // without - Error: undefined identifier load_GLFW_Library, glfwCreateWindow
 import dynamic_libs.opengl;  // without - Error: undefined identifier load_openGL_Library
@@ -178,8 +179,8 @@ struct Edges
 
 struct HexBoard
 {
-    enum uint rows = 5;  // number of rows on the board [0..rows-1]
-    enum uint cols = 5;  // number of columns on the bord [0..cols-1]
+    enum uint rows = 10;  // number of rows on the board [0..rows-1]
+    enum uint cols = 10;  // number of columns on the bord [0..cols-1]
 	
     Edges edge;
 
@@ -667,21 +668,13 @@ void drawSelectedSquare()
         selectedVertices ~= hexBoard.squarePts[p].y;
         selectedVertices ~= hexBoard.squarePts[p].z; 
     }
-
-    glBindVertexArray(VAO2);
  
-    glBindBuffer(GL_ARRAY_BUFFER, VBO2);
-    glBufferData(GL_ARRAY_BUFFER, selectedVertices.bytes, selectedVertices.ptr, GL_STATIC_DRAW);			
+    glDeleteVertexArrays(1, &VAO2);      // the VAO2 may hold the old (previously selected) hex / square 
 
-	glVertexAttribPointer(0,        // index of the vertex attribute to be modified.    
-                          3,        // number of components per generic vertex attribute. Must be 1, 2, 3, 4.
-                          GL_FLOAT, // data type of each component in the array
-                          GL_FALSE, // normalized 
-	                      0,        // byte offset between consecutive vertex attributes. If stride = 0 then tightly packed
-                          null);    // offset of the first component of the first vertex attribute
-								  
-    glEnableVertexAttribArray(0);
-	
+    VAO2 = createSquareVAO(selectedVertices);
+ 
+	glBindVertexArray(VAO2);  // Make the hexboard the active VAO
+		
     int k = 0;
     while (k < selectedVertices.length )
     {
@@ -786,7 +779,10 @@ HexBoard hexBoard;
 
 GLuint VBO, VBO2, VAO, VAO2;
 
-float[] selectedVertices = [ /+Positions+/ ];			
+// vertex data
+
+float[] vertices = [ /+  Positions  Colors   Texture Coords +/ ];
+float[] selectedVertices = [ /+ Positions +/ ];			
 	
 void main(string[] argv)
 {
@@ -809,7 +805,7 @@ void main(string[] argv)
     // A diameter of 2.0, would display a single hex which would fill the full width 
     // of the window and 0.866 of the windows height.
 
-    hexBoard.diameter      = 0.43;  
+    hexBoard.diameter      = 0.33;  
 								  
     hexBoard.radius        = (hexBoard.diameter * 0.5);	
     hexBoard.halfRadius    = (hexBoard.radius * 0.5);	
@@ -849,7 +845,7 @@ void main(string[] argv)
 
     // window must be square
 
-    auto winMain = glfwCreateWindow(winWidth, winHeight, "01_03_01_hex_study", null, null);
+    auto winMain = glfwCreateWindow(winWidth, winHeight, "01_03_01_hex_study_vao", null, null);
 
     glfwMakeContextCurrent(winMain); 
 
@@ -874,21 +870,13 @@ void main(string[] argv)
 
     writeln("programID = ", programID);
 
-    // Set up vertex data (and buffer(s)) and attribute pointers
-    float[] vertices = 
-    [
-        //  Positions         Colors      Texture Coords 		
-    ];
-
- 
-
     // DEFINE HEX BOARD
  	
     // start at the bottom left corner of the window, drawing from left to right,
-    // bottom to top.
+    // bottom to top using NDC (Normalized Device Coordinates) which range between -1.0, -1.0
 	
-    float x = hexBoard.edge.left;      // NDC Normalized Device Coordinates start at -1.0
-    float y = hexBoard.edge.bottom;    
+    float x = hexBoard.edge.left;   
+    float y = hexBoard.edge.bottom;
   
     foreach(row; 0..hexBoard.rows)
     {
@@ -947,66 +935,12 @@ void main(string[] argv)
         }
     }  	
     
-	
-	
-
  
 	
-    glGenVertexArrays(1, &VAO);  // Vertex Array Objects start at 1
-    glGenVertexArrays(1, &VAO2);
-	
-    glGenBuffers(1, &VBO);       // Vertex Buffer Objects start at 1
-    glGenBuffers(1, &VBO2);   
-
+    VAO = createHexBoardVAO(vertices);  // Called once
+ 
     writeln("VAO = ", VAO);
-    writeln("VBO = ", VBO);
-
-    // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, vertices.bytes, vertices.ptr, GL_STATIC_DRAW);
-
-
-    /+
-    enum describeBuff = defineVertexLayout!(int)([3]);
-    mixin(describeBuff);
-	pragma(msg, "===== See in Compiler Output =====");
-    pragma(msg, describeBuff);
-	 
-    The describeBuff enum creates the following two lines of code:
-	
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * GLfloat.sizeof, cast(const(void)*) (0 * GLfloat.sizeof));
-    glEnableVertexAttribArray(0);	
-    +/
-	
-	
-	glVertexAttribPointer(
-	0,         // index of the vertex attribute to be modified.    
-    3,         // number of components per generic vertex attribute. Must be 1, 2, 3, 4.
-    GL_FLOAT,  // data type of each component in the array
-    GL_FALSE,  // normalized 
-    //3 * GLfloat.sizeof, // byte offset between consecutive vertex attributes. If stride = 0 then tightly packed
-                        // since we only have one vertex attribute, the is superflous. 	
-	0,
-    //cast(const(void)*) (0 * GLfloat.sizeof)  // offset of the first component of the first vertex attribute
-	null
-	);
-	
-    glEnableVertexAttribArray(0);		
-	
-
-    // Position attribute
-    //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * GLfloat.sizeof, cast(const(void)*) 0);
-    //glEnableVertexAttribArray(0);
-
-    // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex 
-	// attribute's bound vertex buffer object so afterwards we can safely unbind
-    glBindBuffer(GL_ARRAY_BUFFER, 0); 
-
-    // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
-    // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
-    //glBindVertexArray(0); 
+    //writeln("VAO2 = ", VAO2);
 
     glUseProgram(programID);
 
@@ -1026,29 +960,38 @@ void main(string[] argv)
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glBindVertexArray(VAO);  // seeing as we only have a single VAO there's no need to bind it every time, 
-		                         // but we'll do so to keep things a bit more organized
+        glBindVertexArray(VAO);  // Make the hexboard the active VAO
         int i = 0;
         while (i < vertices.length )
         {
-            glDrawArrays(GL_LINE_LOOP, i, 6);
+            glDrawArrays(GL_LINE_LOOP, i, 6);  // mode, starting index, number of indices
             i += 6;
         }
-		
+
         drawSelectedSquare();
+	
+        //glBindVertexArray(VAO2); // Make the selected square the active VAO
+        //drawSelectedSquare();
 		
         if ((hexBoard.selected.row != invalid) && (hexBoard.selected.col != invalid))
         {
+            writeln("selected [row][col] = ", hexBoard.selected.row, " ", hexBoard.selected.col);
+        /+
 		    if ((hexBoard.selected.row != previousRow) || (hexBoard.selected.col != previousCol))
             {
                 writeln("selected [row][col] = ", hexBoard.selected.row, " ", hexBoard.selected.col); 
            
                 previousRow = hexBoard.selected.row; 
                 previousCol = hexBoard.selected.col;  
-            }  			
+				
+                //glBindVertexArray(VAO2); // Make the selected square the active VAO
+                drawSelectedSquare();
+              		
+                //writeAndPause("");				
+            }
+        +/  			
         }		
  
-        // glBindVertexArray(0); // no need to unbind it every time 
         glfwSwapBuffers(winMain);   // OpenGL does not remember what you drew in the past after a glClear() or swapbuffers.
 		
     }

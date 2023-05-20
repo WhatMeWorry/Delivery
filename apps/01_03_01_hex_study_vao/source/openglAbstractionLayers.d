@@ -1,5 +1,10 @@
 
+module openglAbstractionLayers;
 
+import dynamic_libs.opengl;  // GLuint, all the glXXXXX commands
+import mytoolbox;     // without - Error: no property bytes for type float[]
+                      // writeAndPause()  .bytes  .elements
+					  
 // Compatibillty and Core Profiles
 
 /+ 
@@ -73,12 +78,7 @@ binds all of its buffers.
 If you have multiple meshes in you game, you can simply assign a VAO per mesh and in order
 to switch between meshes you just need to bind the cooresponding VAO.
 
-
-
-
-
-
-
+// Original C++ code - Keep for reference
 
 void CreateCubeVAO()
 {
@@ -143,3 +143,67 @@ void CreateCubeVAO()
 }
 
 +/
+
+
+GLuint createHexBoardVAO(float[] vertices)
+{
+    GLuint hexBoardVAO;
+    glGenVertexArrays(1, &hexBoardVAO);
+    glBindVertexArray(hexBoardVAO); 
+
+    GLuint hexBoardVBO;
+    glGenBuffers(1, &hexBoardVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, hexBoardVBO);  
+    glBufferData(GL_ARRAY_BUFFER, cast(long) vertices.bytes, vertices.ptr, GL_STATIC_DRAW);  // upload (to GPU) the vertices
+
+    glEnableVertexAttribArray(0);	
+	
+	glVertexAttribPointer(
+    0,         // index of the vertex attribute to be modified.    
+    3,         // number of components per generic vertex attribute. Must be 1, 2, 3, 4.
+    GL_FLOAT,  // data type of each component in the array
+    GL_FALSE,  // normalized 
+    //3 * GLfloat.sizeof, // byte offset between consecutive vertex attributes. If stride = 0 then tightly packed
+                        // since we only have one vertex attribute, the is superflous. 	
+	0,
+    //cast(const(void)*) (0 * GLfloat.sizeof)  // offset of the first component of the first vertex attribute
+	null
+	);
+	
+    glBindVertexArray(0);                // zero means to unbind the current vertex array (object)
+    glDisableVertexAttribArray(0);       // disable all the enabled vertex attributes
+    glBindBuffer(GL_ARRAY_BUFFER, 0);    // unbind the current array buffer and index buffer
+	
+    return hexBoardVAO;  // The VAO was unbound but still exists
+}
+
+
+
+GLuint createSquareVAO(float[] verts)
+{
+    GLuint squareVAO;
+    glGenVertexArrays(1, &squareVAO);
+    glBindVertexArray(squareVAO); 
+
+    GLuint squareVBO;
+    glGenBuffers(1, &squareVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, squareVBO);  
+    glBufferData(GL_ARRAY_BUFFER, cast(long) verts.bytes, verts.ptr, GL_STATIC_DRAW);  // upload (to GPU) the verts
+
+    glEnableVertexAttribArray(0);	
+	
+	glVertexAttribPointer(
+    0,         // index of the vertex attribute to be modified.    
+    3,         // number of components per generic vertex attribute. Must be 1, 2, 3, 4.
+    GL_FLOAT,  // data type of each component in the array
+    GL_FALSE,  // normalized 
+	0,         // tightly packed
+	null       //cast(const(void)*) (0 * GLfloat.sizeof)  // offset of the first component of the first vertex attribute
+	);
+	
+    glBindVertexArray(0);                // zero means to unbind the current vertex array (object)
+    glDisableVertexAttribArray(0);       // disable all the enabled vertex attributes
+    glBindBuffer(GL_ARRAY_BUFFER, 0);    // unbind the current array buffer and index buffer
+	
+    return squareVAO;  // The VAO was unbound but still exists
+}
