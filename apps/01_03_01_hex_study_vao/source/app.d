@@ -171,10 +171,19 @@ struct Hex
 
 struct Edges
 {                // This is the hex board edges, not the window's
-    float top;  // The hex board can be smaller or larger than the window
+    float top;   // The hex board can be smaller or larger than the window
     float bottom; 
     float left;
     float right;	
+}
+
+struct HexLengths
+{
+    float diameter;  // diameter is used to define calculate all the other lengths in this structure
+    float radius;    	
+    float halfRadius;								
+    float perpendicular;	
+    float apothem;
 }
 
 struct HexBoard
@@ -189,13 +198,7 @@ struct HexBoard
     // A diameter of 2.0, would display a single hex which would fill the full width 
     // of the window and 0.866 of the window's height.
 
-    float diameter;  // diameter is used to define all the other hex parameters 
- 
-    float radius;	
-    float halfRadius;	
-									
-    float perpendicular;	
-    float apothem;
+    HexLengths hex;
 
     Hex[cols][rows] hexes;  // Note: call with hexes[rows][cols];  // REVERSE ORDER!   
 
@@ -334,7 +337,7 @@ bool clickedInSmallTriangle(D3_point mouseClick, D3_point hexCenter)
     immutable float tanOf60  =  1.7320508;
     immutable float tanOf300 = -1.7320508;
 
-    float leftPointX = hexCenter.x - hexBoard.radius;
+    float leftPointX = hexCenter.x - hexBoard.hex.radius;
     float leftPointY = hexCenter.y;    
 
     float adjacent = mouseClick.x - leftPointX;
@@ -376,11 +379,11 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
 										
                     float offsetFromBottom = NDC.y - (-1.0);
 	
-					uint gridRow = roundTo!uint(floor(offsetFromBottom / hexBoard.apothem));
+					uint gridRow = roundTo!uint(floor(offsetFromBottom / hexBoard.hex.apothem));
 
                     float offsetFromLeft = NDC.x - (-1.0);						
                      
-					uint gridCol = roundTo!uint(floor(offsetFromLeft / (hexBoard.radius + hexBoard.halfRadius)));
+					uint gridCol = roundTo!uint(floor(offsetFromLeft / (hexBoard.hex.radius + hexBoard.hex.halfRadius)));
 
 
                     if (NDC.x > hexBoard.edge.right)  // clicked to the right of the hex board's right edge
@@ -487,7 +490,7 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
 							
                             hexCenter = hexBoard.hexes[row][col].center;
 							
-							hexCenter.y = (hexCenter.y - hexBoard.perpendicular);
+							hexCenter.y = (hexCenter.y - hexBoard.hex.perpendicular);
 						
                             if (clickedInSmallTriangle(NDC, hexCenter))
                             {
@@ -545,7 +548,6 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
                         writeln("hex(row,col) = ", row, " ", col, " has been selected");	
                         hexBoard.selected.row = row;
                         hexBoard.selected.col = col;						
-                        //hexBoard.hexes[row][col].selected = true;
                     }						
                 }
                 else if (action == GLFW_RELEASE)
@@ -576,32 +578,33 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
 // (x,y) 0        1
 
                               // x, y is the lower left corner of the rectangle touching all vertices
-D3_point[6] defineHexVertices(float x, float y, float perpendicular, float diameter, float apothem, float halfRadius, float radius)
+//D3_point[6] defineHexVertices(float x, float y, float perpendicular, float diameter, float apothem, float halfRadius, float radius)
+D3_point[6] defineHexVertices(float x, float y, HexLengths hex)
 {
     D3_point[6] points;
 	
-	points[0].x = x + halfRadius;
+	points[0].x = x + hex.halfRadius;
 	points[0].y = y;	
 	points[0].z = 0.0;	
 
-	points[1].x = x + halfRadius + radius;
+	points[1].x = x + hex.halfRadius + hex.radius;
 	points[1].y = y;
 	points[1].z = 0.0;		
 		
-	points[2].x = x + diameter;
-	points[2].y = y + apothem;
+	points[2].x = x + hex.diameter;
+	points[2].y = y + hex.apothem;
 	points[2].z = 0.0;		
 	
-	points[3].x = x + halfRadius + radius;
-	points[3].y = y + perpendicular;
+	points[3].x = x + hex.halfRadius + hex.radius;
+	points[3].y = y + hex.perpendicular;
 	points[3].z = 0.0;		
 	
-	points[4].x = x + halfRadius;
-	points[4].y = y + perpendicular;
+	points[4].x = x + hex.halfRadius;
+	points[4].y = y + hex.perpendicular;
 	points[4].z = 0.0;	
 	
 	points[5].x = x;
-	points[5].y = y + apothem;
+	points[5].y = y + hex.apothem;
 	points[5].z = 0.0;	
 	
     return points;
@@ -620,10 +623,11 @@ D3_point defineHexCenter(float x, float y, float apothem, float radius)
 
 
 
-D3_point[4] defineSelectedSquare(float x, float y, float perpendicular, float diameter, float apothem, float halfRadius, float radius)
+//D3_point[4] defineSelectedSquare(float x, float y, float perpendicular, float diameter, float apothem, float halfRadius, float radius)
+D3_point[4] defineSelectedSquare(float x, float y, HexLengths hex)
 {
     D3_point[4] points;
-	float offset = (apothem/2.0);
+	float offset = (hex.apothem/2.0);
 	
 	points[0].x = x - offset;
 	points[0].y = y - offset;	
@@ -657,8 +661,10 @@ void drawSelectedSquare()
 		
     hexCenter = hexBoard.hexes[tRow][tCol].center;
 			
-    hexBoard.squarePts = defineSelectedSquare(hexCenter.x, hexCenter.y, hexBoard.perpendicular, hexBoard.diameter, 
-			                                  hexBoard.apothem, hexBoard.halfRadius, hexBoard.radius);
+    //hexBoard.squarePts = defineSelectedSquare(hexCenter.x, hexCenter.y, hexBoard.perpendicular, hexBoard.diameter, 
+    //                                          hexBoard.apothem, hexBoard.halfRadius, hexBoard.radius);
+    hexBoard.squarePts = defineSelectedSquare(hexCenter.x, hexCenter.y, hexBoard.hex);	
+	
 			
     selectedVertices.length = 0;  // delete contents of dynamic array
  
@@ -805,13 +811,13 @@ void main(string[] argv)
     // A diameter of 2.0, would display a single hex which would fill the full width 
     // of the window and 0.866 of the windows height.
 
-    hexBoard.diameter      = 0.33;  
+    hexBoard.hex.diameter      = 0.33;  
 								  
-    hexBoard.radius        = (hexBoard.diameter * 0.5);	
-    hexBoard.halfRadius    = (hexBoard.radius * 0.5);	
+    hexBoard.hex.radius        = (hexBoard.hex.diameter * 0.5);	
+    hexBoard.hex.halfRadius    = (hexBoard.hex.radius * 0.5);	
 									
-    hexBoard.perpendicular = (hexBoard.diameter * 0.866);	
-    hexBoard.apothem       = (hexBoard.perpendicular * 0.5);
+    hexBoard.hex.perpendicular = (hexBoard.hex.diameter * 0.866);	
+    hexBoard.hex.apothem       = (hexBoard.hex.perpendicular * 0.5);
 	
 	hexBoard.selected.row = invalid;
     hexBoard.selected.col = invalid;
@@ -826,7 +832,7 @@ void main(string[] argv)
 	
 	hexBoard.edge.bottom = -1.0;
 
-    hexBoard.edge.top = hexBoard.edge.bottom + (hexBoard.rows * hexBoard.perpendicular); 
+    hexBoard.edge.top = hexBoard.edge.bottom + (hexBoard.rows * hexBoard.hex.perpendicular); 
 
     // right edge = left edge of board + all the columns in board gives 
     // NDC left edge = -1.0
@@ -835,7 +841,7 @@ void main(string[] argv)
 
 	hexBoard.edge.left = -1.0;
 
-    hexBoard.edge.right = hexBoard.edge.left + (hexBoard.cols * (hexBoard.radius + hexBoard.halfRadius)); 	
+    hexBoard.edge.right = hexBoard.edge.left + (hexBoard.cols * (hexBoard.hex.radius + hexBoard.hex.halfRadius)); 	
 	
     load_GLFW_Library();
 
@@ -884,35 +890,39 @@ void main(string[] argv)
         {	
             hexBoard.hexes[row][col].points = defineHexVertices(x, 
 			                                                    y, 
+																hexBoard.hex,
+																/+
 																hexBoard.perpendicular, 
 			                                                    hexBoard.diameter, 
 															    hexBoard.apothem, 
 															    hexBoard.halfRadius, 
-															    hexBoard.radius);
+															    hexBoard.radius
+																+/
+																);
 			
             hexBoard.hexes[row][col].center = defineHexCenter(x, 
 			                                                  y, 
-															  hexBoard.apothem, 
-															  hexBoard.radius);		
+															  hexBoard.hex.apothem, 
+															  hexBoard.hex.radius);		
             if (col.isEven)
             {
-                y += hexBoard.apothem;
+                y += hexBoard.hex.apothem;
             }
             else
             {			
-                y -= hexBoard.apothem;   
+                y -= hexBoard.hex.apothem;   
             }
-            x += hexBoard.halfRadius + hexBoard.radius;  
+            x += hexBoard.hex.halfRadius + hexBoard.hex.radius;  
         }
 		
         x = hexBoard.edge.left;  // start a new row and column
 		
         if (hexBoard.cols.isOdd)
         {
-            y -= hexBoard.apothem;
+            y -= hexBoard.hex.apothem;
         }
         		
-        y += hexBoard.perpendicular;	
+        y += hexBoard.hex.perpendicular;	
     }  
 
     hexBoard.displayHexBoard();		
@@ -920,7 +930,7 @@ void main(string[] argv)
 
 
     // Take the hexboard comprising a 2 dimensional array of hex objects and
-	// convert it to a 1 dimensional array of vertices.
+	// convert it to a 1 dimensional (stream) array of vertices.
 
     foreach(row; 0..hexBoard.rows)
     {
@@ -947,8 +957,6 @@ void main(string[] argv)
     // uncomment this call to draw in wireframe polygons.
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    int previousRow = invalid; int previousCol = invalid;
-
     while (!glfwWindowShouldClose(winMain))    // Loop until the user closes the window
     {
         glfwPollEvents();  // Check if any events have been activiated (key pressed, mouse
@@ -967,33 +975,13 @@ void main(string[] argv)
             glDrawArrays(GL_LINE_LOOP, i, 6);  // mode, starting index, number of indices
             i += 6;
         }
-
-        drawSelectedSquare();
-	
-        //glBindVertexArray(VAO2); // Make the selected square the active VAO
-        //drawSelectedSquare();
 		
         if ((hexBoard.selected.row != invalid) && (hexBoard.selected.col != invalid))
         {
-            writeln("selected [row][col] = ", hexBoard.selected.row, " ", hexBoard.selected.col);
-        /+
-		    if ((hexBoard.selected.row != previousRow) || (hexBoard.selected.col != previousCol))
-            {
-                writeln("selected [row][col] = ", hexBoard.selected.row, " ", hexBoard.selected.col); 
-           
-                previousRow = hexBoard.selected.row; 
-                previousCol = hexBoard.selected.col;  
-				
-                //glBindVertexArray(VAO2); // Make the selected square the active VAO
-                drawSelectedSquare();
-              		
-                //writeAndPause("");				
-            }
-        +/  			
+            drawSelectedSquare();  // only draw selected square when a hex is valid
         }		
  
-        glfwSwapBuffers(winMain);   // OpenGL does not remember what you drew in the past after a glClear() or swapbuffers.
-		
+        glfwSwapBuffers(winMain);   // OpenGL does not remember what you drew in the past after a glClear() or swapbuffers.		
     }
 
     glfwTerminate();   // Clear any resources allocated by GLFW
