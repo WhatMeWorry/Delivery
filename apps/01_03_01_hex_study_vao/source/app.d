@@ -577,8 +577,7 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
 //   |_ \_________/ 
 // (x,y) 0        1
 
-                              // x, y is the lower left corner of the rectangle touching all vertices
-//D3_point[6] defineHexVertices(float x, float y, float perpendicular, float diameter, float apothem, float halfRadius, float radius)
+
 D3_point[6] defineHexVertices(float x, float y, HexLengths hex)
 {
     D3_point[6] points;
@@ -622,8 +621,6 @@ D3_point defineHexCenter(float x, float y, float apothem, float radius)
 } 
 
 
-
-//D3_point[4] defineSelectedSquare(float x, float y, float perpendicular, float diameter, float apothem, float halfRadius, float radius)
 D3_point[4] defineSelectedSquare(float x, float y, HexLengths hex)
 {
     D3_point[4] points;
@@ -661,8 +658,6 @@ void drawSelectedSquare()
 		
     hexCenter = hexBoard.hexes[tRow][tCol].center;
 			
-    //hexBoard.squarePts = defineSelectedSquare(hexCenter.x, hexCenter.y, hexBoard.perpendicular, hexBoard.diameter, 
-    //                                          hexBoard.apothem, hexBoard.halfRadius, hexBoard.radius);
     hexBoard.squarePts = defineSelectedSquare(hexCenter.x, hexCenter.y, hexBoard.hex);	
 	
 			
@@ -675,7 +670,7 @@ void drawSelectedSquare()
         selectedVertices ~= hexBoard.squarePts[p].z; 
     }
  
-    glDeleteVertexArrays(1, &VAO2);      // the VAO2 may hold the old (previously selected) hex / square 
+    glDeleteVertexArrays(1, &VAO2);      // the VAO2 may hold an old (previously selected) hex
 
     VAO2 = createSquareVAO(selectedVertices);
  
@@ -787,7 +782,7 @@ GLuint VBO, VBO2, VAO, VAO2;
 
 // vertex data
 
-float[] vertices = [ /+  Positions  Colors   Texture Coords +/ ];
+float[] vertices = [ /+ Positions +/ ];
 float[] selectedVertices = [ /+ Positions +/ ];			
 	
 void main(string[] argv)
@@ -802,9 +797,6 @@ void main(string[] argv)
 	writeln("floatArrays = ", floatArrays);
 	writeln("floatArrays.elements = ", floatArrays.elements);	
 	writeln("floatArrays.bytes = ", floatArrays.bytes);	
-
-
-
 
     // diameter is a user defined constant in NDC units, so needs to be between [0.0, 2.0)
     // which because of the hex board stagger makes a row of 5 (not 4) hexes.
@@ -822,32 +814,23 @@ void main(string[] argv)
 	hexBoard.selected.row = invalid;
     hexBoard.selected.col = invalid;
 
-    // the topEdge will cut off half of the hex tops for odd columns but this is better
-    // than causing an array index out of bounds run time error.
-
-    // top edge = bottom edge of board + all the rows in board
-    // NDC bottom edge = -1.0
-	
-    //hexBoard.topEdge = -1.0 + (hexBoard.rows * hexBoard.perpendicular);
-	
 	hexBoard.edge.bottom = -1.0;
 
-    hexBoard.edge.top = hexBoard.edge.bottom + (hexBoard.rows * hexBoard.hex.perpendicular); 
-
-    // right edge = left edge of board + all the columns in board gives 
-    // NDC left edge = -1.0
+    // find the top by starting at the bottom, and adding number of (# hex rows * height of the hexes)  
 	
-    //hexBoard.rightEdge = -1.0 + (hexBoard.cols * (hexBoard.radius + hexBoard.halfRadius)); 
-
+    // Note: edge.top will cut off half of the hex tops for odd columns but this is better
+    // than causing an array index out of bounds run time error.
+	
+    hexBoard.edge.top = hexBoard.edge.bottom + (hexBoard.rows * hexBoard.hex.perpendicular); 
+	
 	hexBoard.edge.left = -1.0;
 
     hexBoard.edge.right = hexBoard.edge.left + (hexBoard.cols * (hexBoard.hex.radius + hexBoard.hex.halfRadius)); 	
 	
+	
     load_GLFW_Library();
 
     load_openGL_Library();  
-
-
 
     // window must be square
 
@@ -890,15 +873,7 @@ void main(string[] argv)
         {	
             hexBoard.hexes[row][col].points = defineHexVertices(x, 
 			                                                    y, 
-																hexBoard.hex,
-																/+
-																hexBoard.perpendicular, 
-			                                                    hexBoard.diameter, 
-															    hexBoard.apothem, 
-															    hexBoard.halfRadius, 
-															    hexBoard.radius
-																+/
-																);
+																hexBoard.hex);
 			
             hexBoard.hexes[row][col].center = defineHexCenter(x, 
 			                                                  y, 
@@ -948,9 +923,6 @@ void main(string[] argv)
  
 	
     VAO = createHexBoardVAO(vertices);  // Called once
- 
-    writeln("VAO = ", VAO);
-    //writeln("VAO2 = ", VAO2);
 
     glUseProgram(programID);
 
@@ -962,20 +934,12 @@ void main(string[] argv)
         glfwPollEvents();  // Check if any events have been activiated (key pressed, mouse
                            // moved etc.) and call corresponding response functions  
         handleEvent(winMain);   
-        // Render
-        
-        // Clear the colorbuffer
+
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-
-        glBindVertexArray(VAO);  // Make the hexboard the active VAO
-        int i = 0;
-        while (i < vertices.length )
-        {
-            glDrawArrays(GL_LINE_LOOP, i, 6);  // mode, starting index, number of indices
-            i += 6;
-        }
 		
+        renderHexBoard(vertices, VAO);
+
         if ((hexBoard.selected.row != invalid) && (hexBoard.selected.col != invalid))
         {
             drawSelectedSquare();  // only draw selected square when a hex is valid

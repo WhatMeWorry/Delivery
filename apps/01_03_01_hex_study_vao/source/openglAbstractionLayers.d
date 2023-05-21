@@ -145,6 +145,26 @@ void CreateCubeVAO()
 +/
 
 
+
+      
+// Rendering can take place as non-indexed rendering or indexed rendering. 
+// All non-indexed drawing commands are of the form, gl*Draw*Arrays*, where the * values can 
+// be filled in with different words. All indexed drawing commands are of the form, gl*Draw*Elements*
+
+void renderHexBoard(float[] vertices, GLuint VAO)
+{
+    glBindVertexArray(VAO);  // if commented out, the following glDrawArrays don't work. Blank Screen!
+		
+    int i = 0;
+    while (i < vertices.length )
+    {
+        glDrawArrays(GL_LINE_LOOP, i, 6);  // mode, starting index, number of indices
+        i += 6;
+    }
+	
+    glBindVertexArray(0);   
+}
+
 GLuint createHexBoardVAO(float[] vertices)
 {
     GLuint hexBoardVAO;
@@ -164,7 +184,7 @@ GLuint createHexBoardVAO(float[] vertices)
     GL_FLOAT,  // data type of each component in the array
     GL_FALSE,  // normalized 
     //3 * GLfloat.sizeof, // byte offset between consecutive vertex attributes. If stride = 0 then tightly packed
-                        // since we only have one vertex attribute, the is superflous. 	
+                          // since we only have one vertex attribute, the stride is zero 	
 	0,
     //cast(const(void)*) (0 * GLfloat.sizeof)  // offset of the first component of the first vertex attribute
 	null
