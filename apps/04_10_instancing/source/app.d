@@ -106,7 +106,7 @@ void main(string[] argv)
     enum pattern = defineVertexLayout!(int)([2,3]);
     mixin(pattern);
     pragma(msg, pattern);
-
+	
     // also set instance data
     glEnableVertexAttribArray(2);
     glBindBuffer(GL_ARRAY_BUFFER, instanceVBO); // this attribute comes from a different vertex buffer

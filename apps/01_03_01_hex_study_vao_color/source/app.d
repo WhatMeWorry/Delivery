@@ -8,6 +8,8 @@ import core.stdc.stdlib: exit;
 import std.math.rounding: floor;
 import std.math.algebraic: abs;
 
+import std.random: uniform, Random, unpredictableSeed;
+
 import shaders;       // without - Error: undefined identifier Shader, createProgramFromShaders, ...
 import event_handler; // without - Error: undefined identifier onKeyEvent, onFrameBufferResize, handleEvent
 import mytoolbox;     // without - Error: no property bytes for type float[]
@@ -46,11 +48,18 @@ import dynamic_libs.opengl;  // without - Error: undefined identifier load_openG
 // (-1.0,-1.0)-----------(1.0,-1.0)
 //
 
-struct D3_point
+struct D3_Point
 {
     float x;
     float y; 
     float z;
+}
+
+struct D3_Color
+{
+    float r;
+    float g; 
+    float b;	
 }
 
 struct SelectedPair
@@ -59,8 +68,8 @@ struct SelectedPair
     int col;
 }
   
-D3_point NDC;        // will just use the x,y coordinates (not z)
-D3_point hexCenter;  // will just use the x,y coordinates (not z)
+D3_Point NDC;        // will just use the x,y coordinates (not z)
+D3_Point hexCenter;  // will just use the x,y coordinates (not z)
 
 enum invalid = -1;  // -1 means a row or column is invalid
 
@@ -126,10 +135,11 @@ bool isEven(uint value)
 
 
 
-struct Hex
+struct Hex  // every hex of the board has the following characteristics:
 {
-    D3_point[6] points;  // each hex is made up of 6 vertices
-    D3_point center;     // each hex has a center
+    D3_Point[6] points;  // each hex is made up of 6 vertices of position data
+    D3_Color[6] colors;  // each hex has 6 vertices of color data	
+    D3_Point center;     // each hex has a center
 }
 
 
@@ -188,8 +198,8 @@ struct HexLengths
 
 struct HexBoard
 {
-    enum uint rows = 10;  // number of rows on the board [0..rows-1]
-    enum uint cols = 10;  // number of columns on the bord [0..cols-1]
+    enum uint rows = 5;  // number of rows on the board [0..rows-1]
+    enum uint cols = 5;  // number of columns on the bord [0..cols-1]
 	
     Edges edge;
 
@@ -200,10 +210,11 @@ struct HexBoard
 
     HexLengths hex;
 
+                            // the hex board is made up of many hexes
     Hex[cols][rows] hexes;  // Note: call with hexes[rows][cols];  // REVERSE ORDER!   
 
     SelectedPair selected;	
-	D3_point[4] squarePts;
+	D3_Point[4] squarePts;
 
     void displayHexBoard()
     {
@@ -213,7 +224,7 @@ struct HexBoard
             {
                 writeln("hexes[", r, "][", c, "].center ", hexes[r][c].center );    
 				
-                foreach(p; 0..6)
+                foreach(p; 0..12)  // position then color
                 {
                     //writeln("hexes(r,c) ) ", hexes[r][c].points[p] );                   
                 }				 	
@@ -332,7 +343,7 @@ void quitOrContinue()
 //            opposite         
 
 
-bool clickedInSmallTriangle(D3_point mouseClick, D3_point hexCenter)
+bool clickedInSmallTriangle(D3_Point mouseClick, D3_Point hexCenter)
 {
     immutable float tanOf60  =  1.7320508;
     immutable float tanOf300 = -1.7320508;
@@ -578,30 +589,30 @@ extern(C) void mouseButtonCallback(GLFWwindow* winMain, int button, int action, 
 // (x,y) 0        1
 
 
-D3_point[6] defineHexVertices(float x, float y, HexLengths hex)
+D3_Point[6] defineHexVertices(float x, float y, HexLengths hex)
 {
-    D3_point[6] points;
+    D3_Point[6] points;
 	
 	points[0].x = x + hex.halfRadius;
 	points[0].y = y;	
-	points[0].z = 0.0;	
+	points[0].z = 0.0;		
 
 	points[1].x = x + hex.halfRadius + hex.radius;
 	points[1].y = y;
 	points[1].z = 0.0;		
-		
+
 	points[2].x = x + hex.diameter;
 	points[2].y = y + hex.apothem;
 	points[2].z = 0.0;		
-	
+
 	points[3].x = x + hex.halfRadius + hex.radius;
 	points[3].y = y + hex.perpendicular;
 	points[3].z = 0.0;		
-	
+
 	points[4].x = x + hex.halfRadius;
 	points[4].y = y + hex.perpendicular;
 	points[4].z = 0.0;	
-	
+
 	points[5].x = x;
 	points[5].y = y + hex.apothem;
 	points[5].z = 0.0;	
@@ -609,9 +620,44 @@ D3_point[6] defineHexVertices(float x, float y, HexLengths hex)
     return points;
 } 
 
-D3_point defineHexCenter(float x, float y, float apothem, float radius)
+
+D3_Color[6] defineHexColor(float x, float y, /+D3_Color color+/ float red)
 {
-    D3_point center;
+    D3_Color[6] points;
+	
+	points[0].r = red;
+	points[0].g = 0.0;	
+	points[0].b = 0.0;		
+
+	points[1].r = red;
+	points[1].g = 0.0;	
+	points[1].b = 0.0;		
+		
+	points[2].r = red;
+	points[2].g = 0.0;	
+	points[2].b = 0.0;		
+	
+	points[3].r = red;
+	points[3].g = 0.0;	
+	points[3].b = 0.0;		
+	
+	points[4].r = red;
+	points[4].g = 0.0;	
+	points[4].b = 0.0;		
+	
+	points[5].r = red;
+	points[5].g = 0.0;	
+	points[5].b = 0.0;		
+	
+    return points;
+} 
+
+
+
+
+D3_Point defineHexCenter(float x, float y, float apothem, float radius)
+{
+    D3_Point center;
 	
 	center.x = x + radius;
 	center.y = y + apothem;
@@ -621,9 +667,9 @@ D3_point defineHexCenter(float x, float y, float apothem, float radius)
 } 
 
 
-D3_point[4] defineSelectedSquare(float x, float y, HexLengths hex)
+D3_Point[4] defineSelectedSquare(float x, float y, HexLengths hex)
 {
-    D3_point[4] points;
+    D3_Point[4] points;
 	float offset = (hex.apothem/2.0);
 	
 	points[0].x = x - offset;
@@ -675,14 +721,17 @@ void drawSelectedSquare()
     VAO2 = createSquareVAO(selectedVertices);
  
 	glBindVertexArray(VAO2);  // Make the hexboard the active VAO
-		
+
+    /+		
     int k = 0;
     while (k < selectedVertices.length )
     {
         glDrawArrays(GL_LINE_LOOP, k, 4);
         k += 4;
     }
-
+    +/
+    glDrawArrays(GL_LINE_LOOP, 0, 4);
+		
     return;	
 }
 
@@ -782,28 +831,17 @@ GLuint VBO, VBO2, VAO, VAO2;
 
 // vertex data
 
-float[] vertices = [ /+ Positions +/ ];
+float[] vertices = [ /+ Positions Colors +/ ];
 float[] selectedVertices = [ /+ Positions +/ ];			
 	
 void main(string[] argv)
 {
-    // Dynamic Arrays
-	int[] intArrays = [ 0, 1, 2, 3, 4 ];
-	writeln("intArrays = ", intArrays);
-	writeln("intArrays.elements = ", intArrays.elements);	
-	writeln("intArrays.bytes = ", intArrays.bytes);
-
-	float[] floatArrays = [ 0.0, 1.0, 2.0, 3.0, 4.0 ];
-	writeln("floatArrays = ", floatArrays);
-	writeln("floatArrays.elements = ", floatArrays.elements);	
-	writeln("floatArrays.bytes = ", floatArrays.bytes);	
-
     // diameter is a user defined constant in NDC units, so needs to be between [0.0, 2.0)
     // which because of the hex board stagger makes a row of 5 (not 4) hexes.
     // A diameter of 2.0, would display a single hex which would fill the full width 
     // of the window and 0.866 of the windows height.
 
-    hexBoard.hex.diameter      = 0.33;  
+    hexBoard.hex.diameter      = 0.66;  
 								  
     hexBoard.hex.radius        = (hexBoard.hex.diameter * 0.5);	
     hexBoard.hex.halfRadius    = (hexBoard.hex.radius * 0.5);	
@@ -866,7 +904,9 @@ void main(string[] argv)
 	
     float x = hexBoard.edge.left;   
     float y = hexBoard.edge.bottom;
-  
+
+    auto rnd = Random(unpredictableSeed);
+
     foreach(row; 0..hexBoard.rows)
     {
         foreach(col; 0..hexBoard.cols)
@@ -878,7 +918,13 @@ void main(string[] argv)
             hexBoard.hexes[row][col].center = defineHexCenter(x, 
 			                                                  y, 
 															  hexBoard.hex.apothem, 
-															  hexBoard.hex.radius);		
+															  hexBoard.hex.radius);														  
+            // Generate a float in [0, 1]
+            float b = uniform!"[]"(0.0f, 1.0f, rnd);  // assert(0 <= b && b <= 1);
+            writeln("b = ", b);
+
+            hexBoard.hexes[row][col].colors = defineHexColor(x, y, /+b+/ 1.0);
+			
             if (col.isEven)
             {
                 y += hexBoard.hex.apothem;
@@ -904,22 +950,57 @@ void main(string[] argv)
 
 
 
-    // Take the hexboard comprising a 2 dimensional array of hex objects and
-	// convert it to a 1 dimensional (stream) array of vertices.
-
+    // take an array of position data xyzxyzxyz... and color data rgbrgbrgb...
+	// and interleave them into an array of xyzrgbxyzrgbxyzrgb...
+	
     foreach(row; 0..hexBoard.rows)
     {
         foreach(col; 0..hexBoard.cols)
         {
-            foreach(p; 0..6)
+            foreach(p; 0..6)  // each point consists of position data
             {
                 vertices ~= hexBoard.hexes[row][col].points[p].x;  
                 vertices ~= hexBoard.hexes[row][col].points[p].y;
-                vertices ~= hexBoard.hexes[row][col].points[p].z;				
-            }				 
+                vertices ~= hexBoard.hexes[row][col].points[p].z;
+                vertices ~= hexBoard.hexes[row][col].colors[p].r;  
+                vertices ~= hexBoard.hexes[row][col].colors[p].g;
+                vertices ~= hexBoard.hexes[row][col].colors[p].b;
+            }	
         }
     }  	
-    
+
+
+
+
+
+
+
+
+    // Take the hexboard comprising a 2 dimensional array of hex objects and
+	// convert it to a 1 dimensional (stream) array of vertices.
+
+    /+
+    foreach(row; 0..hexBoard.rows)
+    {
+        foreach(col; 0..hexBoard.cols)
+        {
+            foreach(p; 0..6)  // each point consists of position data
+            {
+                vertices ~= hexBoard.hexes[row][col].points[p].x;  
+                vertices ~= hexBoard.hexes[row][col].points[p].y;
+                vertices ~= hexBoard.hexes[row][col].points[p].z;
+            }	
+            foreach(p; 0..6)  // each point consists of color
+            {
+                vertices ~= hexBoard.hexes[row][col].colors[p].r;  
+                vertices ~= hexBoard.hexes[row][col].colors[p].g;
+                vertices ~= hexBoard.hexes[row][col].colors[p].b;
+            }	
+
+			
+        }
+    }  	
+    +/    
  
 	
     VAO = createHexBoardVAO(vertices);  // Called once
@@ -929,6 +1010,17 @@ void main(string[] argv)
     // uncomment this call to draw in wireframe polygons.
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+    // enum pattern = defineVertexLayout!(int)([3,3]);
+    // mixin(pattern);
+    // pragma(msg, pattern);
+
+    /+	
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * GLfloat.sizeof, cast(const(void)*) (0 * GLfloat.sizeof));
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * GLfloat.sizeof, cast(const(void)*) (3 * GLfloat.sizeof));
+    glEnableVertexAttribArray(1);	
+    +/
+	
     while (!glfwWindowShouldClose(winMain))    // Loop until the user closes the window
     {
         glfwPollEvents();  // Check if any events have been activiated (key pressed, mouse
