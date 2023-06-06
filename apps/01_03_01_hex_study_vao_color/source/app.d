@@ -1,5 +1,5 @@
 
-module app;  // 01_03_01_hex_study_vao
+module app;  // 01_03_01_hex_study_vao_color
 
 import std.conv: roundTo;
 import std.stdio: writeln, readf;
@@ -198,8 +198,8 @@ struct HexLengths
 
 struct HexBoard
 {
-    enum uint rows = 5;  // number of rows on the board [0..rows-1]
-    enum uint cols = 5;  // number of columns on the bord [0..cols-1]
+    enum uint rows = 3;  // number of rows on the board [0..rows-1]
+    enum uint cols = 3;  // number of columns on the bord [0..cols-1]
 	
     Edges edge;
 
@@ -215,6 +215,7 @@ struct HexBoard
 
     SelectedPair selected;	
 	D3_Point[4] squarePts;
+	
 
     void displayHexBoard()
     {
@@ -224,13 +225,19 @@ struct HexBoard
             {
                 writeln("hexes[", r, "][", c, "].center ", hexes[r][c].center );    
 				
-                foreach(p; 0..12)  // position then color
+                foreach(p; 0..6)  // position then color
                 {
-                    //writeln("hexes(r,c) ) ", hexes[r][c].points[p] );                   
+                    writeln("hexes(r,c).points ) ", hexes[r][c].points[p] );
+                    writeln("hexes(r,c).colors ) ", hexes[r][c].colors[p] );					
                 }				 	
             }
         }			
     }
+
+	
+
+	
+	
 }
 
 
@@ -694,6 +701,10 @@ D3_Point[4] defineSelectedSquare(float x, float y, HexLengths hex)
 
 
 
+
+
+
+
 void drawSelectedSquare()
 {
     int tRow = hexBoard.selected.row;
@@ -737,6 +748,62 @@ void drawSelectedSquare()
 
 
 
+void drawSolidHex(uint r, uint c, D3_Color color)
+{
+    //assert((r < rows) && (c < cols));
+		
+    D3_Point[6] hex = hexBoard.hexes[r][c].points;
+		
+    writeln("hex = ", hex);	
+	
+    D3_Color[] colors;		
+    D3_Point[] triStrip;
+		
+    triStrip ~= hex[0];
+    triStrip ~= hex[1];		
+    triStrip ~= hex[2];	
+
+    triStrip ~= hex[0];
+    triStrip ~= hex[2];		
+    triStrip ~= hex[5];	
+	
+    triStrip ~= hex[5];
+    triStrip ~= hex[2];		
+    triStrip ~= hex[3];
+
+    triStrip ~= hex[5];
+    triStrip ~= hex[3];		
+    triStrip ~= hex[4];	
+	
+	
+    solidVerts.length = 0;  // make sure array is empty
+ 
+    foreach(pt; triStrip)  // for each point
+    {
+        solidVerts ~= pt.x;  
+        solidVerts ~= pt.y;
+        solidVerts ~= pt.z; 
+    }
+	
+ 
+    foreach(i; 0..5)  // for each point
+    {
+        colorVerts ~= color;  
+    }
+			
+    GLuint solidVOA = createSolidHexVAO(solidVerts, colorVerts);
+
+    writeln("solidVOA = ", solidVOA);	
+ 
+	glBindVertexArray(solidVOA);  // Make the hexboard the active VAO
+
+
+    //glDrawArrays(GL_TRIANGLES, 0, 3); // works for 1 triangle
+	//glDrawArrays(GL_TRIANGLES, 0, 6);  // works for 2 triangles
+	glDrawArrays(GL_TRIANGLES, 0, 12);  // works for 4 triangles
+
+    return;	
+}
 
 
 
@@ -832,7 +899,9 @@ GLuint VBO, VBO2, VAO, VAO2;
 // vertex data
 
 float[] vertices = [ /+ Positions Colors +/ ];
-float[] selectedVertices = [ /+ Positions +/ ];			
+float[] selectedVertices = [ /+ Positions +/ ];	
+float[] solidVerts = [ /+ Positions +/ ];		
+float[] colorVerts = [ /+ Colors +/ ];
 	
 void main(string[] argv)
 {
@@ -841,7 +910,7 @@ void main(string[] argv)
     // A diameter of 2.0, would display a single hex which would fill the full width 
     // of the window and 0.866 of the windows height.
 
-    hexBoard.hex.diameter      = 0.66;  
+    hexBoard.hex.diameter      = 0.77;  
 								  
     hexBoard.hex.radius        = (hexBoard.hex.diameter * 0.5);	
     hexBoard.hex.halfRadius    = (hexBoard.hex.radius * 0.5);	
@@ -923,7 +992,8 @@ void main(string[] argv)
             float b = uniform!"[]"(0.0f, 1.0f, rnd);  // assert(0 <= b && b <= 1);
             writeln("b = ", b);
 
-            hexBoard.hexes[row][col].colors = defineHexColor(x, y, /+b+/ 1.0);
+
+            hexBoard.hexes[row][col].colors = defineHexColor(x, y, b /+1.0+/);
 			
             if (col.isEven)
             {
@@ -970,12 +1040,6 @@ void main(string[] argv)
     }  	
 
 
-
-
-
-
-
-
     // Take the hexboard comprising a 2 dimensional array of hex objects and
 	// convert it to a 1 dimensional (stream) array of vertices.
 
@@ -1002,13 +1066,15 @@ void main(string[] argv)
     }  	
     +/    
  
+    // feed the xyzrgbxyzrgb... into the function that makes the VAO 
 	
     VAO = createHexBoardVAO(vertices);  // Called once
 
     glUseProgram(programID);
 
     // uncomment this call to draw in wireframe polygons.
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //glPolygonMode(GL_FRONT_AND_BACK, /+GL_LINE+/ GL_FILL);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE_LOOP);	
 
     // enum pattern = defineVertexLayout!(int)([3,3]);
     // mixin(pattern);
@@ -1036,6 +1102,8 @@ void main(string[] argv)
         {
             drawSelectedSquare();  // only draw selected square when a hex is valid
         }		
+
+        drawSolidHex(1, 1);
  
         glfwSwapBuffers(winMain);   // OpenGL does not remember what you drew in the past after a glClear() or swapbuffers.		
     }

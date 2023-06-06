@@ -5,6 +5,8 @@ import dynamic_libs.opengl;  // GLuint, all the glXXXXX commands
 import mytoolbox;     // without - Error: no property bytes for type float[]
                       // writeAndPause()  .bytes  .elements
 					  
+import std.stdio;
+					  
 // Compatibillty and Core Profiles
 
 /+ 
@@ -174,33 +176,6 @@ void renderHexBoard(float[] vertices, GLuint VAO)
     glBindVertexArray(0);   
 }
 
-GLuint createHexBoardVAO(float[] vertices)
-{
-    GLuint hexBoardVAO;
-    glGenVertexArrays(1, &hexBoardVAO);
-    glBindVertexArray(hexBoardVAO); 
-
-    GLuint hexBoardVBO;
-    glGenBuffers(1, &hexBoardVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, hexBoardVBO);  
-    glBufferData(GL_ARRAY_BUFFER, cast(long) vertices.bytes, vertices.ptr, GL_STATIC_DRAW);  // upload (to GPU) the vertices
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * GLfloat.sizeof, cast(const(void)*) (0 * GLfloat.sizeof));
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * GLfloat.sizeof, cast(const(void)*) (3 * GLfloat.sizeof));
-    glEnableVertexAttribArray(1);	
-
-
-    //glEnableVertexAttribArray(0);	
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, null);  // before added color attribute
-	
-    glBindVertexArray(0);                // zero means to unbind the current vertex array (object)
-    glDisableVertexAttribArray(0);       // disable all the position attribute
-    glDisableVertexAttribArray(1);       // disable all the color attribute	
-    glBindBuffer(GL_ARRAY_BUFFER, 0);    // unbind the current array buffer and index buffer
-	
-    return hexBoardVAO;  // The VAO was unbound but still exists
-}
 
 
 
@@ -231,4 +206,96 @@ GLuint createSquareVAO(float[] verts)
     glBindBuffer(GL_ARRAY_BUFFER, 0);    // unbind the current array buffer and index buffer
 	
     return squareVAO;  // The VAO was unbound but still exists
+}
+
+
+
+GLuint createHexBoardVAO(float[] vertices)  // Pass in 1 interleaved data array
+{
+    GLuint hexBoardVAO;
+    glGenVertexArrays(1, &hexBoardVAO);
+    glBindVertexArray(hexBoardVAO); 
+
+    GLuint hexBoardVBO;                     // Need only one VBO since all data is interleaved within it
+    glGenBuffers(1, &hexBoardVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, hexBoardVBO);  
+    glBufferData(GL_ARRAY_BUFFER, cast(long) vertices.bytes, vertices.ptr, GL_STATIC_DRAW);  // upload (to GPU) the vertices
+	
+	
+	// we have fed the data interspersed: xyzrgbxyzrgb... in one contiguous array. Need to demarcate the interleaved data
+
+    // Before calling glVertexAttribPointer, you should bind the corresponding buffer (hexBoardVBO) right before (no 
+    // matter when that was actually created and filled), since the glVertexAttribPointer function sets the currently 
+    // bound GL_ARRAY_BUFFER as source buffer for this attribute 
+	
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * GLfloat.sizeof, cast(const(void)*) (0 * GLfloat.sizeof));
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * GLfloat.sizeof, cast(const(void)*) (3 * GLfloat.sizeof));
+    glEnableVertexAttribArray(1);	
+
+    // Note: the 1st parameter in glVertexAttribPointer cooresponds to the shader in variables
+	
+	// layout (location = 0) in vec3 aPos;
+    // layout (location = 1) in vec3 aColor;
+
+
+    //glEnableVertexAttribArray(0);	
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, null);  // before added color attribute
+	
+    glBindVertexArray(0);                // zero means to unbind the current vertex array (object)
+    glDisableVertexAttribArray(0);       // disable all the position attribute
+    glDisableVertexAttribArray(1);       // disable all the color attribute	
+    glBindBuffer(GL_ARRAY_BUFFER, 0);    // unbind the current array buffer and index buffer
+	
+    return hexBoardVAO;  // The VAO was unbound but still exists
+}
+
+GLuint createSolidHexVAO(float[] verts, float[] colors)   // vertices are already configured as triangle ...
+{
+    GLuint solidVAO;
+    glGenVertexArrays(1, &solidVAO);
+    glBindVertexArray(solidVAO); 
+	
+    writeln("===================== solidVAO = ", solidVAO);
+
+    GLuint solidVBO;
+    glGenBuffers(1, &solidVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, solidVBO);  
+    glBufferData(GL_ARRAY_BUFFER, cast(long) verts.bytes, verts.ptr, GL_STATIC_DRAW);  // upload (to GPU) the verts
+
+    glEnableVertexAttribArray(0);	// Vertex Shader:  layout (location = 0) in vec3 aPos;
+	
+	glVertexAttribPointer(
+    0,         // Vertex Shader:  layout (location = 0) in vec3 aPos;    
+    3,         // number of components per generic vertex attribute. Must be 1, 2, 3, 4.
+    GL_FLOAT,  // data type of each component in the array
+    GL_FALSE,  // normalized 
+	0,         // tightly packed
+	null       // cast(const(void)*) (0 * GLfloat.sizeof)  // offset of the first component of the first vertex attribute
+	);
+
+
+    GLuint colorVBO;
+    glGenBuffers(1, &colorVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, colorVBO);  
+    glBufferData(GL_ARRAY_BUFFER, cast(long) colors.bytes, colors.ptr, GL_STATIC_DRAW);  // upload (to GPU) the verts
+
+    glEnableVertexAttribArray(1);  // Vertex Shader: layout (location = 1) in vec3 aColor;
+	
+	glVertexAttribPointer(
+    0,         // Vertex Shader: layout (location = 1) in vec3 aColor;    
+    3,         // number of components per generic vertex attribute. Must be 1, 2, 3, 4.
+    GL_FLOAT,  // data type of each component in the array
+    GL_FALSE,  // normalized 
+	0,         // tightly packed
+	null       // cast(const(void)*) (0 * GLfloat.sizeof)  // offset of the first component of the first vertex attribute
+	);
+
+	
+    glBindVertexArray(0);                // zero means to unbind the current vertex array (object)
+    glDisableVertexAttribArray(0);       // disable all the enabled vertex attributes
+	glDisableVertexAttribArray(1);       // disable all the enabled vertex attributes
+    glBindBuffer(GL_ARRAY_BUFFER, 0);    // unbind the current array buffer and index buffer
+	
+    return solidVAO;  // The VAO was unbound but still exists
 }
