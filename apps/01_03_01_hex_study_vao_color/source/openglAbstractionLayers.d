@@ -157,14 +157,46 @@ void renderHexBoard(float[] vertices, GLuint VAO)
 {
     glBindVertexArray(VAO);  // if commented out, the following glDrawArrays don't work. Blank Screen!
 
-    /+		
-    int i = 0;
-    while (i < vertices.length )
-    {
-        glDrawArrays(GL_LINE_LOOP, i, 12);  // mode, starting index, number of indices
-        i += 12;
-    }
-    +/
+    /+
+    writeln("vertices = ", vertices);
+	
+    writeln("vertices.length = ", vertices.length);
+    writeln("vertices.elements = ", vertices.elements);	
+    writeln("vertices.bytes = ", vertices.bytes);	
+    writeln("vertices.length/6 = ", vertices.length/6);	
+	+/
+	
+	/+
+    have a 3x3 hexboard or 9 hexes total. 9 hex with 6 points apiece is 9*6 = 54 points.
+	each point has an xyz component or 54 * 3 = 162.  But the entire array shows 324 elements?
+    Remember the color component that is interleaved. So the color or rgb * 3 = 162 accounts for
+	the other 162 elements. Remember, the array looks like:
+    
+    xyzRGBxyzRGBxyzRGBxyzRGBxyzRGBxyzRGBxyzRGBxyzRGBxyzRGBxyzRGB...xyzRGB
+    1                                                                   324
+    
+    the the i in glDrawArrays below ranges from 0,6,12,...,312,318  
+	
+    So the glDrawArrays is doing BOTH THE POSITION AND COLOR COMPONENTS.
+	
+    vertices.length = 324
+    vertices.elements = 324
+    vertices.bytes = 1296
+    vertices.length/6 = 54
+    +/	
+
+    // If the vao/vbo consisted of just a simple primative(say triangle for example)
+    // we could just get by with:
+    // glBindVertexArray(VAO);	
+    // glDrawArrays(GL_TRIANGLES, 0, 3);
+    // but in out case we are doing an entire hex board so we need the vertices array
+    // and while loop present.
+
+    // glDrawArrays will draw from the currently bound vertex attribute arrays, which are "created" and 
+    // bound themselves with glVertexAttribPointer and glEnableVertexAttribArray, which do use the 
+    // currently bound vertex buffer. It doesn't matter if the vertex attributes are all from one buffer 
+    // or multiple buffers, and you don't need any particular vertex buffer to be bound when drawing; all 
+    // the glDraw* functions care about is which vertex attribute arrays are enabled.
 
     int i = 0;
     while (i < vertices.length )
@@ -255,8 +287,6 @@ GLuint createSolidHexVAO(float[] verts, float[] colors)   // vertices are alread
     GLuint solidVAO;
     glGenVertexArrays(1, &solidVAO);
     glBindVertexArray(solidVAO); 
-	
-    writeln("===================== solidVAO = ", solidVAO);
 
     GLuint solidVBO;
     glGenBuffers(1, &solidVBO);
@@ -283,7 +313,7 @@ GLuint createSolidHexVAO(float[] verts, float[] colors)   // vertices are alread
     glEnableVertexAttribArray(1);  // Vertex Shader: layout (location = 1) in vec3 aColor;
 	
 	glVertexAttribPointer(
-    0,         // Vertex Shader: layout (location = 1) in vec3 aColor;    
+    1,         // Vertex Shader: layout (location = 1) in vec3 aColor;  
     3,         // number of components per generic vertex attribute. Must be 1, 2, 3, 4.
     GL_FLOAT,  // data type of each component in the array
     GL_FALSE,  // normalized 

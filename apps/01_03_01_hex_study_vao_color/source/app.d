@@ -628,35 +628,16 @@ D3_Point[6] defineHexVertices(float x, float y, HexLengths hex)
 } 
 
 
-D3_Color[6] defineHexColor(float x, float y, /+D3_Color color+/ float red)
+D3_Color[6] defineHexColor(D3_Color color)
 {
-    D3_Color[6] points;
-	
-	points[0].r = red;
-	points[0].g = 0.0;	
-	points[0].b = 0.0;		
+    D3_Color[6] elements;
 
-	points[1].r = red;
-	points[1].g = 0.0;	
-	points[1].b = 0.0;		
-		
-	points[2].r = red;
-	points[2].g = 0.0;	
-	points[2].b = 0.0;		
+    foreach(i, e; elements)
+    {
+         elements[i] = color;   
+    }	
 	
-	points[3].r = red;
-	points[3].g = 0.0;	
-	points[3].b = 0.0;		
-	
-	points[4].r = red;
-	points[4].g = 0.0;	
-	points[4].b = 0.0;		
-	
-	points[5].r = red;
-	points[5].g = 0.0;	
-	points[5].b = 0.0;		
-	
-    return points;
+    return elements;
 } 
 
 
@@ -748,32 +729,32 @@ void drawSelectedSquare()
 
 
 
-void drawSolidHex(uint r, uint c, D3_Color color)
+void drawSolidHex(uint row, uint col, D3_Color color)
 {
-    //assert((r < rows) && (c < cols));
+    //assert((row < rows) && (col < cols));
 		
-    D3_Point[6] hex = hexBoard.hexes[r][c].points;
+    D3_Point[6] hex = hexBoard.hexes[row][col].points;
 		
-    writeln("hex = ", hex);	
+    //writeln("hex = ", hex);	
 	
     D3_Color[] colors;		
     D3_Point[] triStrip;
 		
-    triStrip ~= hex[0];
-    triStrip ~= hex[1];		
-    triStrip ~= hex[2];	
+    triStrip ~= hex[0];  colors ~= color;
+    triStrip ~= hex[1];  colors ~= color;		
+    triStrip ~= hex[2];  colors ~= color;	
 
-    triStrip ~= hex[0];
-    triStrip ~= hex[2];		
-    triStrip ~= hex[5];	
+    triStrip ~= hex[0];  colors ~= color;
+    triStrip ~= hex[2];  colors ~= color;		
+    triStrip ~= hex[5];  colors ~= color;	
 	
-    triStrip ~= hex[5];
-    triStrip ~= hex[2];		
-    triStrip ~= hex[3];
+    triStrip ~= hex[5];  colors ~= color;
+    triStrip ~= hex[2];  colors ~= color;		
+    triStrip ~= hex[3];  colors ~= color;
 
-    triStrip ~= hex[5];
-    triStrip ~= hex[3];		
-    triStrip ~= hex[4];	
+    triStrip ~= hex[5];  colors ~= color;
+    triStrip ~= hex[3];  colors ~= color;		
+    triStrip ~= hex[4];  colors ~= color;	
 	
 	
     solidVerts.length = 0;  // make sure array is empty
@@ -785,23 +766,25 @@ void drawSolidHex(uint r, uint c, D3_Color color)
         solidVerts ~= pt.z; 
     }
 	
- 
-    foreach(i; 0..5)  // for each point
+    colorVerts.length = 0;  // make sure array is empty
+	
+    foreach(c; colors)  // for each color
     {
-        colorVerts ~= color;  
-    }
+        colorVerts ~= c.r;  
+        colorVerts ~= c.g;
+        colorVerts ~= c.b; 
+    }	
+
 			
     GLuint solidVOA = createSolidHexVAO(solidVerts, colorVerts);
-
-    writeln("solidVOA = ", solidVOA);	
  
 	glBindVertexArray(solidVOA);  // Make the hexboard the active VAO
 
 
     //glDrawArrays(GL_TRIANGLES, 0, 3); // works for 1 triangle
 	//glDrawArrays(GL_TRIANGLES, 0, 6);  // works for 2 triangles
-	glDrawArrays(GL_TRIANGLES, 0, 12);  // works for 4 triangles
-
+	//glDrawArrays(GL_TRIANGLES, 0, 12);  // works for 4 triangles
+    glDrawArrays(GL_TRIANGLES, 0, 24);  // works for 4 triangles
     return;	
 }
 
@@ -990,10 +973,9 @@ void main(string[] argv)
 															  hexBoard.hex.radius);														  
             // Generate a float in [0, 1]
             float b = uniform!"[]"(0.0f, 1.0f, rnd);  // assert(0 <= b && b <= 1);
-            writeln("b = ", b);
 
-
-            hexBoard.hexes[row][col].colors = defineHexColor(x, y, b /+1.0+/);
+            D3_Color green = D3_Color(0.0f, 1.0f, 0.0f); 
+            hexBoard.hexes[row][col].colors = defineHexColor(green);
 			
             if (col.isEven)
             {
@@ -1016,7 +998,7 @@ void main(string[] argv)
         y += hexBoard.hex.perpendicular;	
     }  
 
-    hexBoard.displayHexBoard();		
+    //hexBoard.displayHexBoard();		
 
 
 
@@ -1103,7 +1085,9 @@ void main(string[] argv)
             drawSelectedSquare();  // only draw selected square when a hex is valid
         }		
 
-        drawSolidHex(1, 1);
+        D3_Color hexColor = D3_Color(1.0, 0.0, 0.0); 
+		
+        drawSolidHex(1, 1, hexColor);
  
         glfwSwapBuffers(winMain);   // OpenGL does not remember what you drew in the past after a glClear() or swapbuffers.		
     }
