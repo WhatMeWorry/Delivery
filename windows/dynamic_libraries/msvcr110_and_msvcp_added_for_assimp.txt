@@ -1,0 +1,12 @@
+
+
+After upgrading to a Windows 11 computer, the assimp.dll library would no longer load into the
+Delivery project.  Long story short, used a tool caled DependenciesGui.exe availabe at https://github.com/lucasg/Dependencies
+
+This tool revealed that assimp.dll requires MSVCR110.dll and MSVRP110.dll which was no longer present on my
+Win 11 machine.  I actually just used the .dll files that I found being used my the Microsoft Offie Suite and copied them
+both into c:\Windows\System32 and c:\Windows\SysWOW64 directories.  Too lazy to find which directory was being used.
+
+C:\Users\kheas>where /R c:\ MSVCR110.dll
+c:\Windows\System32\msvcr110.dll
+c:\Windows\SysWOW64\msvcr110.dll

@@ -1,0 +1,33 @@
+name "01_03_02_hex_resize"
+description "A minimal D application."
+authors "kheaser"
+copyright "Copyright © 2018, kheaser"
+license "proprietary"
+buildType   "release"
+targetType  "executable"
+mainSourceFile "/source/app.d"
+targetPath "./bin"
+
+dependency "bindbc-opengl"    version="~>1.0.3"
+versions "GL_46"
+dependency "bindbc-glfw"      version="~>1.0.1"
+versions "GLFW_33"
+dependency "gl3n"             version="~>1.4.1"
+
+// If common is not an independent project (it has no dub configuration) 
+// then you can use `sourcePaths` (or `sourceFiles`) in the dub configuration 
+// of any projects that need it.
+
+
+                                          // without -
+sourceFiles "../common/event_handler.d"   // source\app.d(11,8): Error: module `event_handler` is in file 'event_handler.d' which cannot be read
+                                          // line 11 in app.d is  import event_handler;
+sourceFiles "../common/shaders.d" 
+sourceFiles "../common/mytoolbox.d"
+sourceFiles "../common/cameraModule.d"
+sourceFiles "../common/projectionfuncs.d"
+sourceFiles "../common/monitor.d"
+
+sourceFiles "../dynamic_libs/glfw"    // without - Error: undefined identifier load_GLFW_Library
+sourceFiles "../dynamic_libs/opengl"  // without - Error: undefined identifier load_openGL_Library
+

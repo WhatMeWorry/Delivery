@@ -1,6 +1,7 @@
 # Compiled Object files
 *.o
 *.obj
+*.bak
 
 # Allow Wavefront .obj geometry definition files in models directory
 !/apps/models/*.obj  

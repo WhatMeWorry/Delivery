@@ -53,6 +53,16 @@ void load_Assimp_Library()
         import std.file : getcwd;
         writeln("present working subdirectory: ", getcwd());
 		// C:\Users\kheaser\Documents\GitHub\Delivery\apps\02_03_lighting_materials
+		
+        writefln("Inside function %s at file %s line %s",__FUNCTION__, __FILE_FULL_PATH__, __LINE__); 		
+
+        import std.file;
+        // Iterate the current directory in breadth
+        foreach (string name; dirEntries("./../../windows/dynamic_libraries", SpanMode.breadth))
+        {
+             writeln(name);
+        }
+	
         DerelictASSIMP3.load("./../../windows/dynamic_libraries/assimp.dll");
     }
     else
