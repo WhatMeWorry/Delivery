@@ -198,8 +198,8 @@ struct HexLengths
 
 struct HexBoard
 {
-    enum uint rows = 3;  // number of rows on the board [0..rows-1]
-    enum uint cols = 3;  // number of columns on the bord [0..cols-1]
+    enum uint rows = 7;  // number of rows on the board [0..rows-1]
+    enum uint cols = 7;  // number of columns on the bord [0..cols-1]
 	
     Edges edge;
 
@@ -872,8 +872,8 @@ void drawSolidHex(uint row, uint col, D3_Color color)
 //     \_________/        \____|____/ 
 // 
   
-uint winWidth = 800;
-uint winHeight = 800;
+uint winWidth = 1600;
+uint winHeight = 1600;
 
 HexBoard hexBoard;
 

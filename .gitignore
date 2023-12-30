@@ -3,6 +3,9 @@
 *.obj
 *.bak
 
+# we will be using .sdl files. Ignore the .json files.
+*.json
+
 # Allow Wavefront .obj geometry definition files in models directory
 !/apps/models/*.obj  
 

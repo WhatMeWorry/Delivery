@@ -16,8 +16,8 @@ import model;           // without - Error:  undefined identifier model
 
 import dynamic_libs.glfw;       // without - Error: undefined identifier load_GLFW_Library, glfwCreateWindow
 import dynamic_libs.opengl;     // without - Error: undefined identifier load_openGL_Library
-import dynamic_libs.freeimage;  // without - Error: undefined identifier load_FreeImage_Library
-import dynamic_libs.assimp;
+//import dynamic_libs.freeimage;  // without - Error: undefined identifier load_FreeImage_Library
+//import dynamic_libs.assimp;
 
 import gl3n.linalg : vec2;
 
